@@ -1,0 +1,48 @@
+---
+title: Set up a GitHub Account
+---
+
+## Goals
+
+After working through this guide, you should
+
+1. understand GitHub as a Git hosting service, and
+2. have access to a GitHub account associated with your UCR email.
+
+
+## What is GitHub?
+
+GitHub is one of several web-based platforms for version control.
+It specifically targets Git.
+
+- Provide a central hub for a Git repository.
+    + Share your work with others, or backup your local workspaces remotely.
+    + Serves as a hub for synchronizing changes and resolving conflicting edits.
+- Provide tools for discussing a project; e.g. issue tracking and documentation.
+- Both private and public options.
+- GitHub provides a few incentives for users with EDU email addresses.
+- Can also be used to create a personal website.
+
+
+
+## How to set up an account for this class
+
+:::::::::::::::::::::::::::::::: callout-important
+
+You can sign up using your favorite browser, but all the command line instructions need to be carried out within the class container!
+
+::::::::::::::::::::::::::::::::
+
+1. [Sign up](https://github.com/login) for a GitHub account **using your UCR email**.
+    + If you set up an account in the past, you may use that instead.
+    + Otherwise, please use your UCR email! It makes you eligible for the [GitHub Student Developer Pack](https://education.github.com/pack).
+2. [Checking for existing SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/checking-for-existing-ssh-keys?platform=linux).
+3. [How to generate an SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux).
+4. [How to add an SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=linux).
+5. [Verify that you can connect to GitHub's servers](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection?platform=linux).
+
+
+
+## Let us know your GitHub username!
+
+Fill out the [Google form](https://forms.gle/VS1nyp5Nuy9Utyed6) to record the username you wish to use for this course. It will be used to set up your private repository for this class.

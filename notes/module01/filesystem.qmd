@@ -1,0 +1,192 @@
+---
+title: The File System
+---
+
+## Additional Materials
+
+- [Software Carpentry](https://swcarpentry.github.io/shell-novice/02-filedir.html) has an excellent tutorial on navigating files and directories.
+
+
+
+## Goals
+
+1. Understand the organizational structure of a file system on Linux.
+2. Understand relative and absolute paths.
+3. Develop awareness of key locations on a Linux system and the class Docker image.
+4. Understand that programs, regardless of operating system, operate in a context.
+
+## Overview
+
+Files on computers are generally arranged in a hierarchical manner, specifically as a [**rooted tree**](https://en.wikipedia.org/wiki/Tree_(graph_theory)#Rooted_tree).
+The following is the output of `tree -L 1 /` on a machine with macOS Sequoia. This command displays a file system, one level deep, starting from the **root directory** `/`:
+
+```text
+/
+├── Applications
+├── bin
+├── cores
+├── dev
+├── etc -> private/etc
+├── home -> /System/Volumes/Data/home
+├── Library
+├── opt
+├── private
+├── sbin
+├── System
+├── tmp -> private/tmp
+├── Users
+├── usr
+├── var -> private/var
+└── Volumes
+
+17 directories, 0 files
+```
+
+[Everything is a file](https://en.wikipedia.org/wiki/Everything_is_a_file) in the Unix world, yet the output above clearly distinguishes between **files** and **directories**.
+Files are data on your computer.
+Directories are, too, but their role is to act as *folders* connecting one level of a tree to other parts in the system.
+In brief, directories are branches and files are leaves in the rooted tree structure.
+
+:::::::::::::::::::::::::::::::: callout-important
+### Symbolic Links
+
+You might notice a few of the labels in the `tree` output above have arrows; for example `home -> /System/Volumes/Data/home`.
+These are examples of **symbolic links**, which are files that point to a location elsewhere.
+Symbolic links are useful for introducing indirection and decoupling an interface from an implementation.
+
+- **Indirection**, as a concept, can be useful for creating shortcuts. For example, say you have multiple projects that need access to a particular resource nested deeply within your file system. A single symbolic link can provide access at a convenient location and allow each project to inherit access without writing out cumbersome paths.
+- To give another example, symbolic links can be used to manage versions of a resource. If two projects need access to two versions of `FANCY_DATASET`, each project can use its own symbolic link `FANCY_DATASET` which points to the appropriate version. This simplifies any scripts operating on that resource without having to introduce version information into the code.
+
+::::::::::::::::::::::::::::::::
+
+
+
+The following is mock output of `tree` on a directory named `repo`. Your Git repository for this class will resemble this structure over time.
+
+```text
+repo/
+├── hw/
+│   ├── hw1/
+│   │   ├── complex_data.arrow
+│   │   ├── fancy_algorithm.jl
+│   │   ├── report.qmd
+│   │   ├── Project.toml
+│   │   └── <other code or files>
+│   ├── hw2/
+│   │
+│   ...
+│   └── hw8/
+└── labs/
+    ├── lab1/
+    │   ├── report.qmd
+    │   ├── Project.toml
+    │   └── test.jl
+    ...
+    └── lab8
+```
+
+Here `repo/` is the top level, so we can say these files are rooted at `repo/`, but it is *not* **the root directory**.
+The *root directory* is unique because Unix/Linux file systems are generally rooted trees.
+By definition, there can only be one root that serves as the *absolute* top level.
+
+
+
+## Absolute vs Relative Paths
+
+Virtually every operating system operates on **file paths**.
+A file path is a sequence of names/labels of specific files/directories in a file system that point to a specific location.
+On Linux, file paths are formatted by the file separator `/`.
+Let's revisit the `repo/` example:
+
+```text
+repo/
+├── hw/
+│   ├── hw1/
+│   │   ├── complex_data.arrow
+│   │   ├── fancy_algorithm.jl
+│   │   ├── report.qmd
+│   │   ├── Project.toml
+│   │   └── <other code or files>
+│   ├── hw2/
+...
+```
+
+- The file path `repo/` leads from wherever `repo/` exists to `repo/`. Equivalently, `./repo`.
+- The file path `repo/hw` is similar, but points one directory down towards `hw/`. Equivalently, `./repo/hw`.
+- The file path `repo/hw/hw1/report.qmd` is a file path that leads from wherever `repo/` exists to `report.qmd`. Equivalently, `./reop/hw/hw1/report.qmd`.
+
+All these examples are **relative paths** because they depend on context.
+That context is `.`, a symbolic file path that points *here* which is wherever you might be.
+From *here* you can reference the parent directory using `..` which is whatever the parent might be.
+
+In contrast, **absolute paths** do not depend on context because they're absolute!
+On a Linux system, `/repo/hw/hw1/report.qmd` is an example of an absolute path (that probably does not exist).
+Let's modify the example so that `repo/` resides inside a `stat206/` directory somewhere on the file system:
+
+```text
+/
+├──Documents
+│   └──stat206
+│       └── repo
+...         ├── hw
+            │   ├── hw1/
+            │   │   ├── complex_data.arrow
+            │   │   ├── fancy_algorithm.jl
+            │   │   ├── report.qmd
+            │   │   ├── Project.toml
+            │   │   └── <other code or files>
+            │   ├── hw2/
+            ...
+```
+
+Here `/Documents/stat206/repo/` is an absolute path that references `repo`.
+On Linux, all absolute paths *must* begin with the root directory, `/`.
+This eliminates any ambiguity.
+
+### Use in Programming and Data Analysis
+
+In practice, we rarely, if ever, use absolute paths.
+Relative paths are preferred because two machines rarely share the same structure in their file systems.
+This is all the more relevant if we consider machines that have completely different operating systems.
+We conclude with the following advice that ought to ring true in many contexts.
+
+- Be thoughtful about how you organize files for a project. Stick to conventions, where possible, and aim for simplicity whenever guidance is scarce.
+- Prepend your file paths with `.` and `..` to communicate your intent in references. It might help you or other catch mistakes.
+- Place scripts close to the top level of a project's directory. This often simplifies relative paths.
+- Avoid *hard-coding* file separators into your code source files. Most programming languages provide tools to handle file separators correctly across operating systems.
+
+:::::::::::::::::::::::::::::::: callout-important
+### Aside: What about Windows?
+
+- There is no "root directory" in Windows, at least not in the same sense as Unix-like file systems.
+    Windows file systems use *drive letters* as the root node; for example, the `C:\` drive.
+    Unix-like/Linux-like systems support working with multiple drives, too, but do not anchor their file systems to specific drives.
+
+- Windows uses the backslash `\` as a file separator. It is one of the reasons (but not the only reason) we cannot hard-code file paths in scripts.
+
+::::::::::::::::::::::::::::::::
+
+
+
+## Special Locations on Linux File Systems
+
+Most operating systems exploit the hierarchical nature of file systems to organize sensitive information and tools so that permission settings can readily provide a level of security.
+The following are useful locations for you to be *aware* about:
+
+- `/`: The root directory. User accounts typically do not have file permissions here, *and you should keep it that way*.
+- `/usr`: Home to *user-level* resources. These are common to all users on a machine.
+    + `/usr/bin`: Home to essential **binaries**, or programs, for the operating system. Commands like `mv` and `cd` exist here.
+    + `/usr/lib`: Home to **libraries** required by applications. Can be source code, scripts, or compiled objects.
+- `/etc`: Home to system-wide configuration files.
+- `/home`: Contains the home directories for individual users. Your home directory on our Docker image is `/home/student`. Your shell sessions always start here.
+    + `~`: Same as `/home/${USERNAME}`.
+- `/var`: A *variable* directory that holds files changing continuously during operation; for example, log files for applications can be found here under `/var/log`.
+- `/tmp`: A volatile workspace for *temporary* files. Treat it as a workspace, as systems are typically configured to periodically clean up (delete files) this workspace.
+
+### Our Docker Image
+
+There are a few directories in the home directory `/home/student` that you should be aware of:
+
+- `/home/student/.config`: We will use this to store configuration files; for example, your Git identity.
+- `/home/student/.ssh`: We will use this to store keys for SSH authentication, mainly for GitHub.
+- `/home/student/.local`: We will use this to install software not included by default. *No need for `sudo`!*

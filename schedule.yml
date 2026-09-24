@@ -1,0 +1,260 @@
+- week: 0
+  days:
+    - date: "Thu Sept 24"
+      items:
+        - type: "Class"
+          id: "1a"
+          name: "The Unix Shell"
+          href: notes/module01/unix.qmd
+        - type: "Class"
+          id: "1b"
+          name: "The File System"
+          href: notes/module01/filesystem.qmd
+        - type: "Class"
+          id: "1c"
+          name: "Git"
+          href: notes/module01/git.qmd
+        - type: "Class"
+          id: "1d"
+          name: "Quarto"
+          href: notes/module01/quarto.qmd
+    - date: "Fri Sept 25"
+      items:
+        - type: "Lab"
+          id: "0"
+          name: "Getting Started"
+          href: labs/lab0-setup.html
+- week: 1
+  days:
+    - date: "Tue Sept 29"
+      items:
+        - type: "Class"
+          id: "2"
+          # name: "Introduction"
+          # href: index.qmd
+    - date: "Thu Oct 1"
+      items:
+        - type: "Class"
+          id: "3"
+          # name: "Introduction"
+          # href: index.qmd
+    - date: "Fri Oct 2"
+      items:
+        - type: "Lab"
+          id: "1"
+          # name: "Submitting Assignments"
+          # href: labs/lab1-submit.qmd
+- week: 2
+  days:
+    - date: "Mon Oct 5"
+      items:
+        - type: "Assignment"
+          name: "Homework 1"
+          # href: hw/hw1.qmd
+    # - date: "Tue Oct 6"
+    #   items:
+    #     - type: "Class"
+    #       id: "4"
+    #       name: "Introduction"
+    #       href: index.qmd
+    # - date: "Thu Oct 8"
+    #   items:
+    #     - type: "Class"
+    #       id: "5"
+    #       name: "Introduction"
+    #       href: index.qmd
+    # - date: "Fri Oct 9"
+    #   items:
+    #     - type: "Lab"
+    #       id: "2"
+    #       name: "Errors and Debugging"
+    #       href: labs/lab2-debug.qmd
+# - week: 3
+#   days:
+#     - date: "Mon Oct 12"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 2"
+#           href: hw/hw2.qmd
+#     - date: "Tue Oct 13"
+#       items:
+#         - type: "Class"
+#           id: "6"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Oct 15"
+#       items:
+#         - type: "Class"
+#           id: "7"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Oct 16"
+#       items:
+#         - type: "Lab"
+#           id: "3"
+#           name: "I/O Handling"
+#           href: labs/lab3-io.qmd
+# - week: 4
+#   days:
+#     - date: "Mon Oct 19"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 3"
+#           href: hw/hw3.qmd
+#     - date: "Tue Oct 20"
+#       items:
+#         - type: "Class"
+#           id: "8"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Oct 22"
+#       items:
+#         - type: "Class"
+#           id: "9"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Oct 23"
+#       items:
+#         - type: "Lab"
+#           id: "4"
+#           name: "Reproducibility"
+#           href: labs/lab4-reproducibility.qmd
+# - week: 5
+#   days:
+#     - date: "Mon Oct 26"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 4"
+#           href: hw/hw4.qmd
+#     - date: "Tue Oct 27"
+#       items:
+#         - type: "Class"
+#           id: "10"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Oct 29"
+#       items:
+#         - type: "Class"
+#           id: "11"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Oct 30"
+#       items:
+#         - type: "Lab"
+#           id: "5"
+#           name: "Code Review"
+#           href: labs/lab5-codereview.qmd
+# - week: 6
+#   days:
+#     - date: "Mon Nov 2"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 5"
+#           href: hw/hw5.qmd
+#     - date: "Tue Nov 3"
+#       items:
+#         - type: "Class"
+#           id: "12"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Nov 5"
+#       items:
+#         - type: "Class"
+#           id: "13"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Nov 6"
+#       items:
+#         - type: "Lab"
+#           id: "6"
+#           name: "TBD"
+#           href: labs/lab6-tbd.qmd
+# - week: 7
+#   days:
+#     - date: "Mon Nov 9"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 6"
+#           href: hw/hw6.qmd
+#     - date: "Tue Nov 10"
+#       items:
+#         - type: "Class"
+#           id: "14"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Nov 12"
+#       items:
+#         - type: "Class"
+#           id: "15"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Nov 13"
+#       items:
+#         - type: "Lab"
+#           id: "7"
+#           name: "Simulation"
+#           href: labs/lab7-simulation.qmd
+# - week: 8
+#   days:
+#     - date: "Mon Nov 7"
+#       items:
+#         - type: "Assignment"
+#           name: "Homework 7"
+#           href: hw/hw7.qmd
+#     - date: "Tue Nov 18"
+#       items:
+#         - type: "Class"
+#           id: "16"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Nov 19"
+#       items:
+#         - type: "Class"
+#           id: "17"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Nov 20"
+#       items:
+#         - type: "Lab"
+#           id: "8"
+#           name: "Collaboration using Git"
+#           href: labs/lab8-collab.qmd
+# - week: 9
+#   days:
+#     - date: "Mon Nov 8"
+#       items:
+#         - type: "Assignment"
+#           id: "1"
+#           name: "Homework 8"
+#           href: hw/hw8.qmd
+#     - date: "Tue Nov 24"
+#       items:
+#         - type: "Class"
+#           id: "18"
+# - week: 10
+#   days:
+#     - date: "Tue Dec 1"
+#       items:
+#         - type: "Class"
+#           id: "19"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Thu Dec 3"
+#       items:
+#         - type: "Class"
+#           id: "20"
+#           name: "Introduction"
+#           href: index.qmd
+#     - date: "Fri Dec 4"
+#       items:
+#         - type: "TBD"
+#           id: "0"
+#           name: "Submitting Assignments"
+#           href: labs/lab1-submit.qmd
+# - week: Finals
+#   days:
+#     - date: "Tue Dec 8"
+#       items:
+#         - type: "Assignment"
+#           name: "Final Project"
+#           href: project/project.qmd

@@ -1,0 +1,47 @@
+/*
+CREDIT: Cristopher Paciorek for the starting point
+*/
+.label {
+    border-radius: 9px;
+    padding: 5px;
+    color: white;
+}
+
+.label-Class { background-color: #003DA5}
+.label-Lab { background-color: #FFB81C}
+.label-Assignment { background-color: #919D9D}
+
+th {
+    width: 20%;
+}
+
+td:first-of-type {
+    width: 60%;
+}
+
+td:last-of-type {
+    width: 20%;
+}
+
+table {
+    border: 2px solid;
+}
+
+button > a {
+    color: white;
+    text-decoration: none;
+}
+
+button {
+    border: none;
+}
+
+.border {
+  color: #003DA5;
+  font-weight: bold;
+}
+
+.cell-output {
+  background-color: #F0F0F0;
+  border-radius: 4px;
+}

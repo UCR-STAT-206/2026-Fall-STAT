@@ -1,0 +1,104 @@
+---
+title: Use Revise.jl
+engine: markdown
+---
+
+## Additional Materials
+
+- [Revise 3.16.5 Documentation](https://timholy.github.io/Revise.jl/v3.16.5/)
+
+
+
+## Goals
+
+1. Install Revise.jl in your main Julia environment.
+2. Integrate Revise.jl into your workflow: you'll never have to to re-run code chunks again.
+
+
+
+## Motivation
+
+If you've ever worked with R Markdown, Quarto Markdown, or Jupyter notebooks, then you are likely familiar with the following workflow:
+
+1. Write some code, maybe across several code chunks/cells.
+2. Realize there is an error in a function defined in chunk 8.
+3. Edit the code in chunk 8.
+4. Go back to chunk 20 and re-run it. Nothing changed?!
+5. Oh, we forgot to run chunk 8 again. Done.
+6. Huh, does anything else in my notebook depend on that function?
+
+These systems are fantastic when writing brief chunks of code, particularly in illustrating a specific point to the reader.
+It is difficult, and in fact impossible, to write more elaborate code approaching the complexity of a library/package.
+
+Most of the work you'll be doing in this class is better handled in code source files (.jl for Julia), with Quarto Markdown reserved for documenting your thought process and communicating results.
+Yet, that does not quite solve the issue mentioned above as the workflow now becomes:
+
+1. Open a Julia REPL (perhaps connected to a Quarto document)
+2. Load source files with `include("mycode.jl")`.
+3. Experiment and discover an issue.
+4. Fix the issue, then reload source files with `include("mycode.jl")`.
+5. Wait, it was actually `include("other_source.jl")`...
+
+The Revise.jl package in Julia was designed to avoid this problem, easing the cognitive load on developers by keeping the focus on iterative development.
+
+
+
+## How do we install it?
+
+To get the most out of Revise.jl, you'll want to install it in your "global" or "main" environment.
+In a Julia REPL, you can check by typing <kbd>]</kbd> to enter Package mode:
+
+Julia mode (default):
+
+```text
+julia>
+```
+
+Package mode:
+
+```text
+(@v1.12) pkg>
+```
+
+If you **do not** see `(@v1.12)` in the prompt, type `activate` + <kbd>Enter</kbd> *while in Package mode* to activate the global environment for Julia 1.12.
+Finally, we can install the package by running the command
+
+```text
+(@v1.12) pkg> add Revise
+```
+
+After some work in the background, you'll have the package available for any of your projects in this class.
+
+## How do we use it?
+
+### Loading Revise.jl
+
+First, we need to load it like any other Julia package:
+
+```text
+using Revise
+```
+
+**Critically, we need to do this before loading any packages or source files!**
+
+### Hooking into Revise.jl
+
+1. Create a Julia source file for your work (if you do not have one already). Let's say we're working on `mysource.jl`.
+2. Load the source code using `includet("mysource.jl")`. **The `t` is not a typo!**
+
+... and that's it. Now, any changes you make to `mysource.jl` will automatically be reflected in your Julia session.
+
+## Frequently Asked Questions
+
+### What can Revise track?
+
+See the Revise documentation on [this topic](https://timholy.github.io/Revise.jl/v3.16.5/#What-Revise-can-track).
+Short answer: virtually anything you might care about in this class.
+
+### Revise isn't working! What gives?
+
+Has the Julia prompt changed from green to yellow? If so, that means Revise.jl encountered an error trying to propagate your edits to source code somewhere. Try running:
+
+1. `Revise.errors()` to check any error messages that you may have missed.
+2. `Revise.retry()` to force Revise.jl to propagate changes again.
+3. `Revise.duplicate_methods()` to see if the error is due to duplicated method definitions in your code.

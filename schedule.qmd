@@ -1,0 +1,11 @@
+---
+title: Schedule
+listing:
+  - id: schedule
+    template: assets/schedule.ejs
+    contents: schedule.yml
+---
+
+:::::::::::::::::::::::::::::::: {#schedule}
+
+::::::::::::::::::::::::::::::::

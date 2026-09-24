@@ -1,0 +1,53 @@
+---
+title: Submit Assignments
+engine: markdown
+---
+
+## Format
+
+Solutions to lab and homework assignments will consist of several files.
+
+- **Quarto Markdown**. Your main report must be prepared using Quarto Markdown (.qmd) source files. *Other formats, such as Jupyter notebooks (.ipynb) will not be accepted*. These files combine code, code outputs, and explanatory texts to answer problem prompts.
+- **Project.toml**. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia's package manager to specify each dependency (both in the standard library and from the package ecosystem).
+- **Julia Source**. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).
+- **Inputs and Outputs**. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.
+
+You will use Git to version control these files and upload your work to a remote repository on GitHub.
+
+## Workflows
+
+## GitHub
+
+### Setup
+
+### File structure
+
+- Each assignment must be organized into directories, subdirectories, and files with specific names.
+- Part of your grade will be for reproducibility of your work; that is, how well `quarto run hw/hw1/report.qmd` faithfully reproduces the outputs in your report.
+- All names are case-sensitive, so please stick to lowercase to avoid issues.
+
+```text
+repo/
+├── hw/
+│   ├── hw1/
+│   │   ├── complex_data.arrow
+│   │   ├── fancy_algorithm.jl
+│   │   ├── report.qmd
+│   │   ├── Project.toml
+│   │   └── <other code or files>
+│   ├── hw2/
+│   │
+│   ...
+│   └── hw8/
+└── labs/
+    ├── lab1/
+    │   ├── report.qmd
+    │   ├── Project.toml
+    │   └── test.jl
+    ...
+    └── lab8
+```
+
+### Pushing/Pulling
+
+## Grading and feedback

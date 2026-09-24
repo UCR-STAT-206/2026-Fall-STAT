@@ -1,0 +1,102 @@
+---
+title: Configure Git
+---
+
+## Goals
+
+After reading this guide, you should
+
+1. be able to create commits signed with your chosen username and email,
+2. verify your global configuration using `git config --global --list`, and
+3. understand how to set up Git on a computer.
+
+## Overview
+
+We will use Git for version control of our work throughout the quarter.
+You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments.
+Later in the course you will work in a small team and use Git to coordinate development.
+
+Before that can happen, we'll need to configure Git.
+
+:::::::::::::::::::::::::::::::: callout-note
+
+### Configuration Files
+
+Dr. Landeros prefers to use a `~/.config/` directory to store configuration files as much as possible.
+This practice is based on the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir/latest/), which a tool like Git respects. *That said, not every tool across Linux distributions will adhere to this standard*.
+
+::::::::::::::::::::::::::::::::
+
+## Method 1: Quick and easy
+
+The following commands will create a global configuration file at `~/.gitconfig`.
+
+```default
+git config --global user.name "CHOSE YOUR NAME"
+git config --global user.email "UCR EMAIL"
+git config --global core.editor "code --wait"
+```
+
+## Method 2: Using an editor
+
+1. Create and open a file: `~/.config/git/config`. Alternatively, you may use a file at `~/.gitconfig`. *Just choose whichever approach appeals to you.*
+2. In the file, type in the following information (mind the indentation):
+
+    ```text
+    [user]
+        name = CHOOSE YOUR NAME
+        email = UCR EMAIL
+    [core]
+        editor = code --wait
+    ```
+
+## What does the `core.editor` option do?
+
+If you run `git commit` in a Git repository, the command set for `core.editor` is run automatically for you.
+This is convenient for quickly drafting a commit message.
+
+Alternatively, you can use the VSCode interface for writing commits.
+
+## Check your work
+
+- Read the contents of `~/.config/git/config`
+- Check the output of `git config --global --list`.
+- Check the output of `git config --global --list --show-source`.
+
+## Optional: Address colorblindness
+
+By default, the command `git diff` relies on red (for deletions) and green (for additions) to highlight changes in files.
+Other Git commands use red and green to tag the state of varies files in a repository.
+Fortunately, the tool can be configured to use colorblind-friendly alternatives and increase its accessibility.
+
+### Option 1: Change the diff colors
+
+In a command line:
+
+```text
+git config --global color.diff.old "yellow"
+git config --global color.diff.new "blue"
+```
+
+Alternatively, edit your Git configuration file:
+
+```text
+[color "diff"]
+    old = yellow
+    new = blue
+```
+
+### Option 2: Disable color-coded output
+
+In a command line:
+
+```text
+git config --global color.ui false
+```
+
+Alternatively, edit your Git configuration file:
+
+```text
+[color]
+    ui = false
+```

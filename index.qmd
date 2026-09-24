@@ -1,0 +1,19 @@
+---
+title: "STAT 206: Statistical Computing"
+subtitle: "UC Riverside, Fall 2026"
+listing:
+  - id: buttons
+    template: assets/buttons.ejs
+    contents: buttons.yml
+---
+
+:::::::::::::::::::::::::::::::: {#buttons}
+::::::::::::::::::::::::::::::::
+
+## Course materials
+
+Notes, assignments, labs, and step-by-step guides are contained to this website. Any additional materials or important links can be accessed using the links above.
+
+## Taking this class
+
+The first three weeks involve learning several software tools at once. Use the [schedule](schedule.qmd) to help plan your reading of the course notes ahead of class.

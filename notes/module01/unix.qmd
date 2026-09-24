@@ -1,0 +1,223 @@
+---
+title: The Unix Shell
+---
+
+## Additional Materials
+
+- [UCR HPCC Linux Manuals](https://hpcc.ucr.edu/manuals/linux_basics/)
+- [Software Carpentry Tutorials](https://swcarpentry.github.io/shell-novice/index.html)
+    + [Videos (Youtube)](https://www.youtube.com/watch?v=8c1BL5b47kg)
+
+
+
+## Goals
+
+1. Develop a sense of how to navigate on a Linux based system using `cd`, `pwd`, and `ls`.
+2. Practice using a command-line interface.
+
+
+
+## What is Unix?
+
+UNIX is a broad term for a collection of operating systems [that no longer exist](https://en.wikipedia.org/wiki/History_of_Unix).
+These systems emerged in the late 1960s/1970s when [time-sharing](https://en.wikipedia.org/wiki/Time-sharing) was an important computing model.
+Its various projects represent tight collaboration between academic circles and industrial research groups (e.g. Bell Labs).
+
+Although extinct, UNIX spawned descendant UNIX-like, or Linux-like, systems and continues to influence computing to this day.
+Part of its lasting impact is, arguably, due to the so-called [UNIX Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy)
+
+- Write programs that do one thing and do it well.
+- Write programs to work together.
+- Write programs to handle text streams, because that is a universal interface.
+
+
+
+## What is a Shell?
+
+In the last several decades, humans have interacted with computers in a variety of ways.
+You are likely reading this on a **graphical user interface (GUI)**.
+While appealing and (usually) intuitive, GUIs do not scale well to certain tasks.
+A **command-line interace (CLI)** is often an efficient interaction mode for manipulating files on computers and automating various repetitive tasks.
+Both GUIs and CLIs are examples of **shells**: they are user interfaces that allow an entity to interact with an OS.
+
+In this class, we will use *shell* as a shorthand for CLI shell, which operate through text-based inputs and outputs.
+The class Docker image has three shells:
+
+- `zsh`: [Z shell](https://en.wikipedia.org/wiki/Z_shell), which is the default. This default is used by modern MacOS, too. It is a good option for *interactive work*.
+- `bash`: [Bourne Again Shell](https://en.wikipedia.org/wiki/Bash_(Unix_shell)). It is a good option for *scripting* because it respects portability and adheres to well-established standards.
+- `sh`: [Bourne Shell](https://en.wikipedia.org/wiki/Bourne_shell). This is the standard for system-level work and operations, and will not be relevant to us.
+
+
+
+## But... why?
+
+While CLIs have a learning curve that involve learning various commands, they also:
+
+- allow simple operations to be combined, forming new, useful programs,
+- allow commands to be recorded for documentaion, reuse, modification, and automation,
+- allow programs to be parameterized, extending their use, and
+- empower the user to be thoughtful, independent, competent, and fast.
+
+
+
+## Getting started
+
+The class Docker image creates a container that, by default, will log you in to an interactive shell `zsh`.
+You will be greeted by a prompt:
+
+```text
+student@STAT206 ~ $
+```
+
+The prompt is fully customizable, but this was chosen to present some information to students in the class:
+
+- `student`: This is the user account you are logged in as when you run a container with our image.
+- `@STAT206`: A visual cue that you are in the container, not your own operating system's environment.
+- `~`: The current directory. It is shorthand for your **home directory**, `/home/student`. The display will change as you navigate to different locations.
+- `$`: A visual cue that you may enter a command.
+
+This brings up two important concepts to keep in mind (regardless of what computer/OS you use):
+
+- Everything you do on a computer, you do as a particular user. Users have different **permissions** that limit or enable access to resources on a computer.
+- Every command you type into your shell operates within some context, namely the directory you are currently in.
+
+:::::::::::::::::::::::::::::::: callout-warning
+
+### Never use `sudo` unless it is absolutely necessary
+
+In the past, many programmers would scour StackOverflow and similar websites to figure how to do something on their favorite Linux distro. There is a long tradition of trolling inexperienced users and plenty of misinformation.
+
+Today, a Chat Bot may tell you to use `sudo` to implement a task you're struggling to figure out.
+
+Regardless of the source, it has been my experience (and the advice of countless experts) that `sudo` is almost never needed.
+Everything in this course has been set up so that you do not need to use it.
+**Avoid running `sudo` commands on your computer unless you're willing to accept the consequences**.
+
+::::::::::::::::::::::::::::::::
+
+
+
+## Navigating
+
+Upon landing in the container, you will start in `/home/student/`.
+You can always check where you are using the **print working directory** command
+
+```text
+pwd
+```
+
+:::::::::::::::::::::::::::::::: {.cell-output}
+
+/home/student/
+
+::::::::::::::::::::::::::::::::
+
+For that matter, you can also check **who you are**
+
+```text
+whoami
+```
+
+:::::::::::::::::::::::::::::::: {.cell-output}
+
+student
+
+::::::::::::::::::::::::::::::::
+
+and **list** everything around
+
+```text
+ls
+```
+
+:::::::::::::::::::::::::::::::: {.cell-output}
+
+::::::::::::::::::::::::::::::::
+
+Some paths may be hidden to you. Use an **option** to make **all** visible to you:
+
+```text
+ls -a
+```
+
+:::::::::::::::::::::::::::::::: {.cell-output}
+
+.  ..  .bashrc  .cache  .config  .julia  .juliaup  .local  .mamba  .micromamba  .profile  .zcompdump  .zshrc
+
+::::::::::::::::::::::::::::::::
+
+If you spot something interesting, take a look
+
+```text
+ls .local
+```
+
+:::::::::::::::::::::::::::::::: {.cell-output}
+bin lib share
+::::::::::::::::::::::::::::::::
+
+and **change directory** to go there
+
+```text
+cd .local/bin
+```
+
+You can always **go up a level**
+
+```text
+cd ..
+```
+
+or **return home** should you get lost.
+
+```text
+cd ~
+```
+
+
+## Getting Help
+
+If you want to learn more about what a command does or explore the options it has, use `--help`.
+For example,
+
+```text
+ls --help
+```
+
+displays everything one needs to know about how to use `ls`.
+If you find it difficult to read on your screen, **pipe** the output to `less`:
+
+```text
+ls --help | less
+```
+
+This lets you scroll interactively using `u` and `d`. Exit by typing `q`.
+
+:::::::::::::::::::::::::::::::: callout-important
+
+### There are no `manpages`
+
+If you're familiar with Unix-like systems, you might know about the `man` command to pull up manuals.
+Unfortunately, the class image does not include any manpages to reduce image size.
+
+::::::::::::::::::::::::::::::::
+
+## About Our OS
+
+You should become familiar with the OS used by the class Docker image.
+It is especially important if you use any external resources to troubleshoot or get help.
+You should not mix advice for Distro A for Distro B.
+
+We are using [Debian Bookworm 12](https://www.debian.org/releases/bookworm/) as our Linux distro. The command `cat /etc/os-release` is a reliable way to discover this information on a Linux distro. *Example Output*:
+
+```text
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+```
