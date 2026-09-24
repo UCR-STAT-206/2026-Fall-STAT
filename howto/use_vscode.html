@@ -45,7 +45,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-00250e9e7f52b57467adf65942b9b5dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -485,6 +485,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#accessing-a-terminal-within-vscode" id="toc-accessing-a-terminal-within-vscode" class="nav-link" data-scroll-target="#accessing-a-terminal-within-vscode">Accessing a terminal within VSCode</a></li>
   <li><a href="#moving-files-between-your-machine-and-the-container" id="toc-moving-files-between-your-machine-and-the-container" class="nav-link" data-scroll-target="#moving-files-between-your-machine-and-the-container">Moving files between your machine and the container</a></li>
   <li><a href="#installing-extensions" id="toc-installing-extensions" class="nav-link" data-scroll-target="#installing-extensions">Installing extensions</a></li>
+  <li><a href="#configuring-the-julia-extension" id="toc-configuring-the-julia-extension" class="nav-link" data-scroll-target="#configuring-the-julia-extension">Configuring the Julia extension</a></li>
+  <li><a href="#using-julia-julia-vscode-extension" id="toc-using-julia-julia-vscode-extension" class="nav-link" data-scroll-target="#using-julia-julia-vscode-extension">Using Julia + Julia VSCode Extension</a>
+  <ul class="collapse">
+  <li><a href="#accessing-the-repl-directly" id="toc-accessing-the-repl-directly" class="nav-link" data-scroll-target="#accessing-the-repl-directly">Accessing the REPL directly</a></li>
+  <li><a href="#accessing-the-repl-with-the-julia-command" id="toc-accessing-the-repl-with-the-julia-command" class="nav-link" data-scroll-target="#accessing-the-repl-with-the-julia-command">Accessing the REPL with the <code>julia</code> command</a></li>
+  <li><a href="#using-the-julia-extension" id="toc-using-the-julia-extension" class="nav-link" data-scroll-target="#using-the-julia-extension">Using the Julia Extension</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -601,8 +608,77 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://marketplace.visualstudio.com/items?itemName=julialang.language-julia">Julia</a></li>
 <li><a href="https://marketplace.visualstudio.com/items?itemName=quarto.quarto">Quarto</a></li>
 </ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Quarto extension’s features only work after Quarto has been installed. Follow the instructions in <a href="../labs/lab0-setup.html#download-and-install-quarto">Lab 0</a> to set it up.</p>
+</div>
+</div>
+</section>
+<section id="configuring-the-julia-extension" class="level2">
+<h2 class="anchored" data-anchor-id="configuring-the-julia-extension">Configuring the Julia extension</h2>
+<p>Writing programs is an iterative process. To this end, we will be using the Julia REPL (Read-Eval-Print-Loop) which is an interactive environment that executes Julia code and displays its results. Julia’s built-in REPL integrates nicely with VSCode through the Julia extension installed in the previous section. We’ll need to tweak its configuration to maximize these benefits.</p>
+<ol type="1">
+<li>Open VSCode settings with <kbd>Control</kbd> + <kbd>,</kbd> (<kbd>Cmd</kbd> + <kbd>,</kbd>).</li>
+<li>Click on <code>Remote [Container alanderos91/ucr-stat206...]</code> near the top.</li>
+<li>Now type <code>julia.executablePath</code> in the search bar.</li>
+<li>Under the option <code>Julia: Executable Path</code> enter <code>/home/student/.juliaup/bin/julia</code>.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/use_vscode-julia.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="using-julia-julia-vscode-extension" class="level2">
+<h2 class="anchored" data-anchor-id="using-julia-julia-vscode-extension">Using Julia + Julia VSCode Extension</h2>
+<section id="accessing-the-repl-directly" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-the-repl-directly">Accessing the REPL directly</h3>
+<p>Open the Command Palette <kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and select <code>Julia: Start REPL</code>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/use_vscode-juliaREPL1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="accessing-the-repl-with-the-julia-command" class="level3">
+<h3 class="anchored" data-anchor-id="accessing-the-repl-with-the-julia-command">Accessing the REPL with the <code>julia</code> command</h3>
+<p>You can always start Julia from the integrated terminal in VSCode by running the command <code>julia</code>. If you want that session to make use of the Julia Extension features, you’ll need to connect the Julia REPL to VSCode.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/use_vscode-juliaREPL2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+<p>Copy and paste the code from the prompt run it. It will resemble the following in the screenshot.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/use_vscode-juliaREPL3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+</section>
+<section id="using-the-julia-extension" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-julia-extension">Using the Julia Extension</h3>
+<p>The Julia button (three circles) opens up an environment resembling RStudio.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/use_vscode-juliaREPL4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+<ul>
+<li><strong>Workspace</strong>: Displays any loaded packages, functions, and variables visible within the current scope.</li>
+<li><strong>Documentation</strong>: A documentation browser for anything you look up using <code>?&lt;term&gt;</code>; e.g.&nbsp;<code>?sum</code>.</li>
+<li><strong>Plot Navigator</strong>: Allows you to select plots to view in the Plot Viewer.</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
