@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>How to Use VSCode with a Container</title>
+<title>Use Git (A Brief Tutorial)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -87,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_vscode.html">Use VSCode with a Container</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_git.html">Use Git</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -434,7 +469,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link active">
+  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use VSCode with a Container</span></a>
   </div>
 </li>
@@ -452,7 +487,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Use Git</span></a>
   </div>
 </li>
@@ -475,25 +510,23 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#basic-setup" id="toc-basic-setup" class="nav-link" data-scroll-target="#basic-setup">Basic Setup</a>
+  <li><a href="#setting-up-your-workspace" id="toc-setting-up-your-workspace" class="nav-link" data-scroll-target="#setting-up-your-workspace">Setting up your workspace</a></li>
+  <li><a href="#creating-your-first-snapshot" id="toc-creating-your-first-snapshot" class="nav-link" data-scroll-target="#creating-your-first-snapshot">Creating your first snapshot</a></li>
+  <li><a href="#going-back-in-time" id="toc-going-back-in-time" class="nav-link" data-scroll-target="#going-back-in-time">Going back in time</a>
   <ul class="collapse">
-  <li><a href="#install-the-dev-containers-extension" id="toc-install-the-dev-containers-extension" class="nav-link" data-scroll-target="#install-the-dev-containers-extension">1. Install the Dev Containers Extension</a></li>
-  <li><a href="#make-sure-a-container-based-on-the-class-image-is-running." id="toc-make-sure-a-container-based-on-the-class-image-is-running." class="nav-link" data-scroll-target="#make-sure-a-container-based-on-the-class-image-is-running.">2. Make sure a container based on the class image is running.</a></li>
-  <li><a href="#attach-a-vscode-window-to-the-container" id="toc-attach-a-vscode-window-to-the-container" class="nav-link" data-scroll-target="#attach-a-vscode-window-to-the-container">3. Attach a VSCode window to the container</a></li>
+  <li><a href="#example-quick-fix-to-a-single-file-mistake" id="toc-example-quick-fix-to-a-single-file-mistake" class="nav-link" data-scroll-target="#example-quick-fix-to-a-single-file-mistake">Example: Quick-fix to a single file mistake</a></li>
+  <li><a href="#example-moving-along-the-timeline" id="toc-example-moving-along-the-timeline" class="nav-link" data-scroll-target="#example-moving-along-the-timeline">Example: Moving along the timeline</a></li>
   </ul></li>
-  <li><a href="#manipulating-files-through-vscode" id="toc-manipulating-files-through-vscode" class="nav-link" data-scroll-target="#manipulating-files-through-vscode">Manipulating files through VSCode</a></li>
-  <li><a href="#accessing-a-terminal-within-vscode" id="toc-accessing-a-terminal-within-vscode" class="nav-link" data-scroll-target="#accessing-a-terminal-within-vscode">Accessing a terminal within VSCode</a></li>
-  <li><a href="#moving-files-between-your-machine-and-the-container" id="toc-moving-files-between-your-machine-and-the-container" class="nav-link" data-scroll-target="#moving-files-between-your-machine-and-the-container">Moving files between your machine and the container</a></li>
-  <li><a href="#installing-extensions" id="toc-installing-extensions" class="nav-link" data-scroll-target="#installing-extensions">Installing extensions</a></li>
+  <li><a href="#excluding-files" id="toc-excluding-files" class="nav-link" data-scroll-target="#excluding-files">Excluding files</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_vscode.html">Use VSCode with a Container</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_git.html">Use Git</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">How to Use VSCode with a Container</h1>
+<h1 class="title">Use Git (A Brief Tutorial)</h1>
 </div>
 
 
@@ -512,95 +545,80 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="goals" class="level2">
 <h2 class="anchored" data-anchor-id="goals">Goals</h2>
-<p>This guide assumes you have installed VSCode, Docker Desktop, and are able to start a container using the class image.</p>
-<p>By completing this guide, you will</p>
+</section>
+<section id="setting-up-your-workspace" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-your-workspace">Setting up your workspace</h2>
+<p>First, we need to create a dedicated directory (folder) in the file system and instruct Git to track its history. In your local container, run these commands:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a># Move to my home directory</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>cd ~</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a># Create a directory called GitTutorial</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>mkdir GitTutorial</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a># Move into the new directory</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>cd GitTutorial</span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a># Turn this directory into a tracked project repository</span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>git init</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="creating-your-first-snapshot" class="level2">
+<h2 class="anchored" data-anchor-id="creating-your-first-snapshot">Creating your first snapshot</h2>
+<p>In Git, saving your progress happens in two steps:</p>
 <ol type="1">
-<li>be able to connect VSCode to your local container,</li>
-<li>understand how to view, edit, and organize files and directories inside <code>/home/student</code> through VSCode,</li>
-<li>access a Linux shell within VSCode, and</li>
-<li>download and upload files to and from a container, respectively.</li>
+<li>you package your changes, and</li>
+<li>then you take a permanent snapshot called a commit.</li>
+</ol>
+<p>Let’s practice creating a commit:</p>
+<ul>
+<li><strong>Create a file</strong>: In VSCode, create a file named <code>README.md</code> within the <code>GitTutorial</code> directory. Add a quick greeting like <code># My First Julia Project</code> and save it.</li>
+<li><strong>Check the repo’s status</strong>: Type <code>git status</code> in your terminal. Git will mark an untracked file in red.</li>
+<li><strong>Stage the file</strong>: Type <code>git add README.md</code> (or <code>git add .</code> to catch everything). This puts your file in the staging area to be saved.</li>
+<li><strong>Commit the snapshot</strong>: Run <code>git commit -m "Initial commit"</code> to permanently save it to your project history.</li>
+<li><strong>Check the history</strong>: You can use <code>git log</code> to see a timeline of all your commits.</li>
+</ul>
+</section>
+<section id="going-back-in-time" class="level2">
+<h2 class="anchored" data-anchor-id="going-back-in-time">Going back in time</h2>
+<p>Let’s test Git’s time travel capabilities. Follow the steps in each example.</p>
+<section id="example-quick-fix-to-a-single-file-mistake" class="level3">
+<h3 class="anchored" data-anchor-id="example-quick-fix-to-a-single-file-mistake">Example: Quick-fix to a single file mistake</h3>
+<p>Suppose your local troublemaker (say, your neighbor’s 5 year-old) got hold of your computer and messed up your project. Open up <code>README.md</code>, delete the contents, replace it with the following line:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>Where do you put the cork when you put a cork in it?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Save the file and close VS Code. If this were a normal text editor, your original work would be gone forever.</p>
+<ol type="1">
+<li><strong>Check what changed</strong>: Type <code>git diff</code> to see a breakdown of what changed.</li>
+<li><strong>Return to a better time</strong>: If you want to instantly undo the tyranny of that toddler, run <code>git checkout README.md</code>. Now open the file in VSCode and inspect its contents.</li>
 </ol>
 </section>
-<section id="basic-setup" class="level2">
-<h2 class="anchored" data-anchor-id="basic-setup">Basic Setup</h2>
-<section id="install-the-dev-containers-extension" class="level3">
-<h3 class="anchored" data-anchor-id="install-the-dev-containers-extension">1. Install the Dev Containers Extension</h3>
-<p>In VSCode, navigate to the Extensions menu and install the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers">Dev Containers</a> extension.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-01.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="make-sure-a-container-based-on-the-class-image-is-running." class="level3">
-<h3 class="anchored" data-anchor-id="make-sure-a-container-based-on-the-class-image-is-running.">2. Make sure a container based on the class image is running.</h3>
-<ul>
-<li><strong>From a terminal</strong>, run <code>docker start STAT206-STAT</code>.</li>
-<li><strong>From Docker Desktop</strong>, open the dashboard and navigate to Containers. Click on the Run button for STAT206-STAT.</li>
-</ul>
-</section>
-<section id="attach-a-vscode-window-to-the-container" class="level3">
-<h3 class="anchored" data-anchor-id="attach-a-vscode-window-to-the-container">3. Attach a VSCode window to the container</h3>
-<p>Open the <em>Command Palette</em> and select <code>Dev Containers: Attach to Running Containers...</code> and wait for the connection.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-02.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-<ul>
-<li>Windows: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></li>
-<li>MacOS: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></li>
-</ul>
-<p>Now VSCode can interact with the file system on the container. In the future, you only need to attach VSCode to the container.</p>
-</section>
-</section>
-<section id="manipulating-files-through-vscode" class="level2">
-<h2 class="anchored" data-anchor-id="manipulating-files-through-vscode">Manipulating files through VSCode</h2>
-<p>The File Explorer allows you to explore directories and view files.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-03-explorer.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-<ul>
-<li>Windows: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd></li>
-<li>Linux/MacOS: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd></li>
-</ul>
-<p>There are <em>New File</em> and <em>New Folder</em> buttons that appears in the top right-hand corner of the File Explorer when hovering your cursor.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-03-file.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-03-folder.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-<p>Opening a file allows you to edit its contents like any other text editor. The Extensions feature in VSCode can modify the editor to provide additional support for specific file types.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_vscode-04-editor.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
-</figure>
-</div>
-</section>
-<section id="accessing-a-terminal-within-vscode" class="level2">
-<h2 class="anchored" data-anchor-id="accessing-a-terminal-within-vscode">Accessing a terminal within VSCode</h2>
-<p>Open the command palette and select <code>Terminal: Create New Terminal</code>.</p>
-</section>
-<section id="moving-files-between-your-machine-and-the-container" class="level2">
-<h2 class="anchored" data-anchor-id="moving-files-between-your-machine-and-the-container">Moving files between your machine and the container</h2>
-<p>To <strong>download</strong> a file or directory <em>from</em> the container, right-click it and choose the <em>Download…</em> option.</p>
-<p><img src="assets/use_vscode-05-download.png" class="img-fluid"></p>
-<p>To <strong>upload</strong> a file or directory <em>to</em> the container, you can drag and drop it onto the File Explorer.</p>
-</section>
-<section id="installing-extensions" class="level2">
-<h2 class="anchored" data-anchor-id="installing-extensions">Installing extensions</h2>
-<p>Any VSCode extensions you like must be installed on the container side. Recommended extensions for this class:</p>
+<section id="example-moving-along-the-timeline" class="level3">
+<h3 class="anchored" data-anchor-id="example-moving-along-the-timeline">Example: Moving along the timeline</h3>
+<p>Now let’s add more history so we move between commits in the project’s history.</p>
 <ol type="1">
-<li><a href="https://marketplace.visualstudio.com/items?itemName=julialang.language-julia">Julia</a></li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=quarto.quarto">Quarto</a></li>
+<li><p><strong>Make a new change</strong>: Open <code>README.md</code> in VS Code, add a new line underneath, <code>Author: Student</code>, and save it.</p></li>
+<li><p><strong>Save this second snapshot</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>git add README.md</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>git commit -m "Add author name"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Look at your timeline</strong>: Type <code>git log --oneline</code> into your terminal. You will see a short list of your two commits, each with a unique ID (a string of letters and numbers like <code>a1b2c3d</code>):</p></li>
+<li><p><strong>Hop back to the past</strong>: Copy the ID of your very first commit and use it with <code>git checkout</code>. For example, say the commit’s ID is <code>b7c3d90</code>. The command <code>git checkout b7c3d90</code> moves us back to that version of the project. Now open your <code>README.md</code> file in VS Code. The author line has vanished, and you are looking at the project as it existed at the very beginning.</p></li>
+<li><p><strong>Return to the present</strong>: Run the command <code>git checkout main</code>. This moves us to the latest version <em>recorded in the local repository</em>.</p></li>
 </ol>
+</section>
+</section>
+<section id="excluding-files" class="level2">
+<h2 class="anchored" data-anchor-id="excluding-files">Excluding files</h2>
+<p>There may be some files or directories that we’d like to avoid tracking:</p>
+<ul>
+<li>Intermediate LaTeX files.</li>
+<li>A <code>./Results</code> or <code>./Figures</code> sub-directory that we do not intend to include.</li>
+<li>Large image files, data files, and/or binaries.</li>
+</ul>
+<p>You can exclude such items by creating a <code>.gitignore</code> file in your project. Here is an example that you can use for many Julia projects:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>*.jl.cov      # Exclude any files ending in .jl.cov</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>*.jl.*.cov    # Note: * acts as a wildcard</span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a>*.jl.mem</span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a>/deps/deps.jl # Exclude deps.jl in the /deps/ directory</span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a>/docs/build   # Exclude the entire /docs/build directory</span>
+<span id="cb4-6"><a href="#cb4-6" aria-label="6"></a>Manifest.toml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
