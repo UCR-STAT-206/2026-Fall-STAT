@@ -89,3 +89,52 @@ Any VSCode extensions you like must be installed on the container side. Recommen
 
 1. [Julia](https://marketplace.visualstudio.com/items?itemName=julialang.language-julia)
 2. [Quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto)
+
+:::::::::::::::::::::::::::::::: callout-note
+
+The Quarto extension's features only work after Quarto has been installed. Follow the instructions in [Lab 0](../labs/lab0-setup.qmd#download-and-install-quarto) to set it up.
+
+::::::::::::::::::::::::::::::::
+
+## Configuring the Julia extension
+
+Writing programs is an iterative process.
+To this end, we will be using the Julia REPL (Read-Eval-Print-Loop) which is an interactive environment that executes Julia code and displays its results.
+Julia's built-in REPL integrates nicely with VSCode through the Julia extension installed in the previous section.
+We'll need to tweak its configuration to maximize these benefits.
+
+1. Open VSCode settings with <kbd>Control</kbd> + <kbd>,</kbd> (<kbd>Cmd</kbd> + <kbd>,</kbd>).
+2. Click on `Remote [Container alanderos91/ucr-stat206...]` near the top.
+3. Now type `julia.executablePath` in the search bar.
+4. Under the option `Julia: Executable Path` enter `/home/student/.juliaup/bin/julia`.
+
+![](assets/use_vscode-julia.png){fig-align="center" width=80%}
+
+## Using Julia + Julia VSCode Extension
+
+### Accessing the REPL directly
+
+Open the Command Palette <kbd>Control</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> and select `Julia: Start REPL`.
+
+![](assets/use_vscode-juliaREPL1.png){fig-align="center" width=80%}
+
+### Accessing the REPL with the `julia` command
+
+You can always start Julia from the integrated terminal in VSCode by running the command `julia`.
+If you want that session to make use of the Julia Extension features, you'll need to connect the Julia REPL to VSCode.
+
+![](assets/use_vscode-juliaREPL2.png){fig-align="center" width=80%}
+
+Copy and paste the code from the prompt run it. It will resemble the following in the screenshot.
+
+![](assets/use_vscode-juliaREPL3.png){fig-align="center" width=80%}
+
+### Using the Julia Extension
+
+The Julia button (three circles) opens up an environment resembling RStudio.
+
+![](assets/use_vscode-juliaREPL4.png){fig-align="center" width=60%}
+
+- **Workspace**: Displays any loaded packages, functions, and variables visible within the current scope.
+- **Documentation**: A documentation browser for anything you look up using `?<term>`; e.g. `?sum`.
+- **Plot Navigator**: Allows you to select plots to view in the Plot Viewer.
