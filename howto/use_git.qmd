@@ -1,0 +1,99 @@
+---
+title: Use Git (A Brief Tutorial)
+---
+
+## Goals
+
+## Setting up your workspace
+
+First, we need to create a dedicated directory (folder) in the file system and instruct Git to track its history.
+In your local container, run these commands:
+
+```text
+# Move to my home directory
+cd ~
+
+# Create a directory called GitTutorial
+mkdir GitTutorial
+
+# Move into the new directory
+cd GitTutorial
+
+# Turn this directory into a tracked project repository
+git init
+```
+
+
+
+## Creating your first snapshot
+
+In Git, saving your progress happens in two steps:
+
+1. you package your changes, and
+2. then you take a permanent snapshot called a commit.
+
+Let's practice creating a commit:
+
+- **Create a file**: In VSCode, create a file named `README.md` within the `GitTutorial` directory. Add a quick greeting like `# My First Julia Project` and save it.
+- **Check the repo's status**: Type `git status` in your terminal. Git will mark an untracked file in red.
+- **Stage the file**: Type `git add README.md` (or `git add .` to catch everything). This puts your file in the staging area to be saved.
+- **Commit the snapshot**: Run `git commit -m "Initial commit"` to permanently save it to your project history.
+- **Check the history**: You can use `git log` to see a timeline of all your commits.
+
+
+
+## Going back in time
+
+Let's test Git's time travel capabilities. Follow the steps in each example.
+
+### Example: Quick-fix to a single file mistake
+
+Suppose your local troublemaker (say, your neighbor's 5 year-old) got hold of your computer and messed up your project.
+Open up `README.md`, delete the contents, replace it with the following line:
+
+```text
+Where do you put the cork when you put a cork in it?
+```
+
+Save the file and close VS Code. If this were a normal text editor, your original work would be gone forever.
+
+1. **Check what changed**: Type `git diff` to see a breakdown of what changed.
+2. **Return to a better time**: If you want to instantly undo the tyranny of that toddler, run `git checkout README.md`. Now open the file in VSCode and inspect its contents.
+
+
+
+### Example: Moving along the timeline
+
+Now let's add more history so we move between commits in the project's history.
+
+1. **Make a new change**: Open `README.md` in VS Code, add a new line underneath, `Author: Student`, and save it.
+2. **Save this second snapshot**:
+    
+    ```text
+    git add README.md
+    git commit -m "Add author name"
+    ```
+
+3. **Look at your timeline**: Type `git log --oneline` into your terminal. You will see a short list of your two commits, each with a unique ID (a string of letters and numbers like `a1b2c3d`):
+4. **Hop back to the past**: Copy the ID of your very first commit and use it with `git checkout`. For example, say the commit's ID is `b7c3d90`. The command `git checkout b7c3d90` moves us back to that version of the project.
+    Now open your `README.md` file in VS Code. The author line has vanished, and you are looking at the project as it existed at the very beginning.
+5. **Return to the present**: Run the command `git checkout main`. This moves us to the latest version *recorded in the local repository*.
+
+## Excluding files
+
+There may be some files or directories that we’d like to avoid tracking:
+
+- Intermediate LaTeX files.
+- A `./Results` or `./Figures` sub-directory that we do not intend to include.
+- Large image files, data files, and/or binaries.
+
+You can exclude such items by creating a `.gitignore` file in your project. Here is an example that you can use for many Julia projects:
+
+```text
+*.jl.cov      # Exclude any files ending in .jl.cov
+*.jl.*.cov    # Note: * acts as a wildcard
+*.jl.mem
+/deps/deps.jl # Exclude deps.jl in the /deps/ directory
+/docs/build   # Exclude the entire /docs/build directory
+Manifest.toml
+```
