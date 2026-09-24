@@ -1,551 +1,5 @@
 [
   {
-    "objectID": "office_hours.html",
-    "href": "office_hours.html",
-    "title": "Office hours",
-    "section": "",
-    "text": "Instructor: Alfonso Landeros\n\nWhere: Olmsted 1343\nWhen:\n\nTuesdays TBD\nThursdays TBD\n\nBy appointment\nFeel free to drop by if my door is open; I’ll let you know if I’m available.\n\nTA: Charlotte\n\nWhere: TBD\nWhen:\n\nDay 1 TBD\nDay 2 TBD",
-    "crumbs": [
-      "Office Hours"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html",
-    "href": "notes/module01/filesystem.html",
-    "title": "The File System",
-    "section": "",
-    "text": "Software Carpentry has an excellent tutorial on navigating files and directories.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html#additional-materials",
-    "href": "notes/module01/filesystem.html#additional-materials",
-    "title": "The File System",
-    "section": "",
-    "text": "Software Carpentry has an excellent tutorial on navigating files and directories.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html#goals",
-    "href": "notes/module01/filesystem.html#goals",
-    "title": "The File System",
-    "section": "Goals",
-    "text": "Goals\n\nUnderstand the organizational structure of a file system on Linux.\nUnderstand relative and absolute paths.\nDevelop awareness of key locations on a Linux system and the class Docker image.\nUnderstand that programs, regardless of operating system, operate in a context.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html#overview",
-    "href": "notes/module01/filesystem.html#overview",
-    "title": "The File System",
-    "section": "Overview",
-    "text": "Overview\nFiles on computers are generally arranged in a hierarchical manner, specifically as a rooted tree. The following is the output of tree -L 1 / on a machine with macOS Sequoia. This command displays a file system, one level deep, starting from the root directory /:\n/\n├── Applications\n├── bin\n├── cores\n├── dev\n├── etc -&gt; private/etc\n├── home -&gt; /System/Volumes/Data/home\n├── Library\n├── opt\n├── private\n├── sbin\n├── System\n├── tmp -&gt; private/tmp\n├── Users\n├── usr\n├── var -&gt; private/var\n└── Volumes\n\n17 directories, 0 files\nEverything is a file in the Unix world, yet the output above clearly distinguishes between files and directories. Files are data on your computer. Directories are, too, but their role is to act as folders connecting one level of a tree to other parts in the system. In brief, directories are branches and files are leaves in the rooted tree structure.\n\n\n\n\n\n\nImportantSymbolic Links\n\n\n\nYou might notice a few of the labels in the tree output above have arrows; for example home -&gt; /System/Volumes/Data/home. These are examples of symbolic links, which are files that point to a location elsewhere. Symbolic links are useful for introducing indirection and decoupling an interface from an implementation.\n\nIndirection, as a concept, can be useful for creating shortcuts. For example, say you have multiple projects that need access to a particular resource nested deeply within your file system. A single symbolic link can provide access at a convenient location and allow each project to inherit access without writing out cumbersome paths.\nTo give another example, symbolic links can be used to manage versions of a resource. If two projects need access to two versions of FANCY_DATASET, each project can use its own symbolic link FANCY_DATASET which points to the appropriate version. This simplifies any scripts operating on that resource without having to introduce version information into the code.\n\n\n\nThe following is mock output of tree on a directory named repo. Your Git repository for this class will resemble this structure over time.\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\nHere repo/ is the top level, so we can say these files are rooted at repo/, but it is not the root directory. The root directory is unique because Unix/Linux file systems are generally rooted trees. By definition, there can only be one root that serves as the absolute top level.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html#absolute-vs-relative-paths",
-    "href": "notes/module01/filesystem.html#absolute-vs-relative-paths",
-    "title": "The File System",
-    "section": "Absolute vs Relative Paths",
-    "text": "Absolute vs Relative Paths\nVirtually every operating system operates on file paths. A file path is a sequence of names/labels of specific files/directories in a file system that point to a specific location. On Linux, file paths are formatted by the file separator /. Let’s revisit the repo/ example:\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n...\n\nThe file path repo/ leads from wherever repo/ exists to repo/. Equivalently, ./repo.\nThe file path repo/hw is similar, but points one directory down towards hw/. Equivalently, ./repo/hw.\nThe file path repo/hw/hw1/report.qmd is a file path that leads from wherever repo/ exists to report.qmd. Equivalently, ./reop/hw/hw1/report.qmd.\n\nAll these examples are relative paths because they depend on context. That context is ., a symbolic file path that points here which is wherever you might be. From here you can reference the parent directory using .. which is whatever the parent might be.\nIn contrast, absolute paths do not depend on context because they’re absolute! On a Linux system, /repo/hw/hw1/report.qmd is an example of an absolute path (that probably does not exist). Let’s modify the example so that repo/ resides inside a stat206/ directory somewhere on the file system:\n/\n├──Documents\n│   └──stat206\n│       └── repo\n...         ├── hw\n            │   ├── hw1/\n            │   │   ├── complex_data.arrow\n            │   │   ├── fancy_algorithm.jl\n            │   │   ├── report.qmd\n            │   │   ├── Project.toml\n            │   │   └── &lt;other code or files&gt;\n            │   ├── hw2/\n            ...\nHere /Documents/stat206/repo/ is an absolute path that references repo. On Linux, all absolute paths must begin with the root directory, /. This eliminates any ambiguity.\n\nUse in Programming and Data Analysis\nIn practice, we rarely, if ever, use absolute paths. Relative paths are preferred because two machines rarely share the same structure in their file systems. This is all the more relevant if we consider machines that have completely different operating systems. We conclude with the following advice that ought to ring true in many contexts.\n\nBe thoughtful about how you organize files for a project. Stick to conventions, where possible, and aim for simplicity whenever guidance is scarce.\nPrepend your file paths with . and .. to communicate your intent in references. It might help you or other catch mistakes.\nPlace scripts close to the top level of a project’s directory. This often simplifies relative paths.\nAvoid hard-coding file separators into your code source files. Most programming languages provide tools to handle file separators correctly across operating systems.\n\n\n\n\n\n\n\nImportantAside: What about Windows?\n\n\n\n\nThere is no “root directory” in Windows, at least not in the same sense as Unix-like file systems. Windows file systems use drive letters as the root node; for example, the C:\\ drive. Unix-like/Linux-like systems support working with multiple drives, too, but do not anchor their file systems to specific drives.\nWindows uses the backslash \\ as a file separator. It is one of the reasons (but not the only reason) we cannot hard-code file paths in scripts.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/filesystem.html#special-locations-on-linux-file-systems",
-    "href": "notes/module01/filesystem.html#special-locations-on-linux-file-systems",
-    "title": "The File System",
-    "section": "Special Locations on Linux File Systems",
-    "text": "Special Locations on Linux File Systems\nMost operating systems exploit the hierarchical nature of file systems to organize sensitive information and tools so that permission settings can readily provide a level of security. The following are useful locations for you to be aware about:\n\n/: The root directory. User accounts typically do not have file permissions here, and you should keep it that way.\n/usr: Home to user-level resources. These are common to all users on a machine.\n\n/usr/bin: Home to essential binaries, or programs, for the operating system. Commands like mv and cd exist here.\n/usr/lib: Home to libraries required by applications. Can be source code, scripts, or compiled objects.\n\n/etc: Home to system-wide configuration files.\n/home: Contains the home directories for individual users. Your home directory on our Docker image is /home/student. Your shell sessions always start here.\n\n~: Same as /home/${USERNAME}.\n\n/var: A variable directory that holds files changing continuously during operation; for example, log files for applications can be found here under /var/log.\n/tmp: A volatile workspace for temporary files. Treat it as a workspace, as systems are typically configured to periodically clean up (delete files) this workspace.\n\n\nOur Docker Image\nThere are a few directories in the home directory /home/student that you should be aware of:\n\n/home/student/.config: We will use this to store configuration files; for example, your Git identity.\n/home/student/.ssh: We will use this to store keys for SSH authentication, mainly for GitHub.\n/home/student/.local: We will use this to install software not included by default. No need for sudo!",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "The File System"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html",
-    "href": "notes/module01/git.html",
-    "title": "Version Control with Git",
-    "section": "",
-    "text": "Blischak JD, Davenport ER, Wilson G (2016) A Quick Introduction to Version Control with Git and GitHub. PLoS Comput Biol 12(1): e1004668. doi: 10.1371/journal.pcbi.1004668",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#additional-materials",
-    "href": "notes/module01/git.html#additional-materials",
-    "title": "Version Control with Git",
-    "section": "",
-    "text": "Blischak JD, Davenport ER, Wilson G (2016) A Quick Introduction to Version Control with Git and GitHub. PLoS Comput Biol 12(1): e1004668. doi: 10.1371/journal.pcbi.1004668",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#goals",
-    "href": "notes/module01/git.html#goals",
-    "title": "Version Control with Git",
-    "section": "Goals",
-    "text": "Goals\n\nDevelop an understanding and appreciation of Git and version control.\nUnderstand the difference between a local and remote repository.\nBecome familiar with basic Git commands and a basic single user workflow.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#what-is-version-control",
-    "href": "notes/module01/git.html#what-is-version-control",
-    "title": "Version Control with Git",
-    "section": "What is Version Control?",
-    "text": "What is Version Control?\n\nAn article about computational science in a scientific publication is not the scholarship itself, it is merely the advertising of the scholarship. The actual scholarship is the complete software development environment and the complete set of instructions which generated the figures.\n\n— Buckheit and Donoho (1995), summarizing Jon Claerbout’s ideas on reproducible research in computational sciences.\nResearchers (Data Scientists, and other professionals) often need to manage a number of documents:\n\nmanuscripts/technical reports\nnotes\ndata\nimages\ncode\nscripts\n\nToday, many of those documents live on a computer.\n\nTracking different versions of a document by hand is tedious and error-prone.\nTracking the history of a changing document is cumbersome.\n\nVersion control has its origins in software development and has increasingly been adopted across various disciplines, including data science.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#what-is-git",
-    "href": "notes/module01/git.html#what-is-git",
-    "title": "Version Control with Git",
-    "section": "What is Git?",
-    "text": "What is Git?\n\n\nA tool for distributed version control.\nOriginally developed by Linus Torvaldis for managing the Linux kernel.\nMultiple people own and can edit copies of a repository.\nGit operates on changes between versions of a document, effectively tracking line-by-line changes.\nEach version of the repository exists as a commit, or snapshot.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#the-model",
-    "href": "notes/module01/git.html#the-model",
-    "title": "Version Control with Git",
-    "section": "The model",
-    "text": "The model\nGit keeps track of versions for various files, along with a log that tells us about why things changed.\n\n\n\n\n\n\nworking directory: the directory on your machine that represents your repository of files under version control.\n\nThese are just the files and directories that make up a project. There is no history or version control history.\n\nstaging area: files that you tag to commit changes are said to be staged / in the staging area.\nlocal repo: your local repository; the collection of all the files in your folder + changes + history.\n\nThis consists only of your commits. Any changes/edits to files not committed are not in the local repository.\nYour commits are linked to each other. This lets us go back in time to a different state of the working directory.\n\nremote repo: a foreign version that lives elsewhere; usually a backup on GitHub, GitLab, or Bitbucket.\ncommit: a snapshot of the project. This consists of specific files that were added/removed/edited + an informative message by the commit author.\n\nThe main idea is that git helps you put your projects under version control by examining your working tree, comparing to the local repo, and informing you of changes that have occurred. It is then incumbent on YOU to manage those changes and move them onto the staging area to be organized into commits stored in the local repo.\n\n\n\n\n\n\nNoteBranches in Git\n\n\n\nGit allows you to maintain multiple versions of the same workspace with separate commits using branches. By default, Git initializes your local repository with a main or master branch.\nWe will revisit branching much later in the course when we start using Git to collaborate with others.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#basic-commands",
-    "href": "notes/module01/git.html#basic-commands",
-    "title": "Version Control with Git",
-    "section": "Basic commands",
-    "text": "Basic commands\nThe list below is by no means exhaustive.\n\ngit init\nThis initializes a working directory as a local Git repository. Specifically, it creates a .git directory to store the history and metadata about various files in the repository.\n\n\ngit add &lt;name of a file or directory&gt;\nAdds files to the staging area so that you can create a commit.\n\n\ngit commit\nOpens an editor to draft a message associated with your proposed commit. This command supports various additional options.\n\nAdd the message in-line: git commit -m \"This is my commit message\"\nEdit the previous commit: git commit --amend\nEdit the previous commit, without updating the message: git commit --amend --no-edit\n\n\n\ngit status\nCheck that state of the repository. This will highlight any files that have been edited, any that are not tracked, and any that might already be staged.\n\n\ngit log\nExplore the local repository’s history.\n\n\ngit diff\nCompare differences across commits.\n\n\ngit push\nUpload the work on your local repository to a remote repository.\n\n\ngit fetch / git pull\nDownload the work on a remote repository to your local repository.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#writing-a-commit-message",
-    "href": "notes/module01/git.html#writing-a-commit-message",
-    "title": "Version Control with Git",
-    "section": "Writing a commit message",
-    "text": "Writing a commit message\n\nThe next person to read your work in 6 months is not going to be some schmuck. It’s going to be YOU!\n\n— A certain UCR Statistics Professor\nTreat commit messages like entries in a journal. They are meant to be read by someone. There are two parts of a commit message:\n\nThe first line: A succinct summary. This is what gets displayed in most Git tools; e.g. on GitHub.\nThe rest: Add additional lines to add more context. A commit message can be as long as you want. Use it!",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "notes/module01/git.html#a-basic-single-user-workflow",
-    "href": "notes/module01/git.html#a-basic-single-user-workflow",
-    "title": "Version Control with Git",
-    "section": "A basic single user workflow",
-    "text": "A basic single user workflow\n\nUsing Git for the first time on a new computer\n\nSet up your identity in Git. See Lab 0 on how to configure Git.\nConsider setting up a global .gitignore.\nSet up SSH access to your GitHub/GitLab/Other Git Service for the new machine.\n\n\n\nSetting up a new project\n\nCreate the main project directory and cd into it.\nRun git init.\nSet up the project with some basic files so you can create an initial commit. For example, adding a README.md is a good first step especially if you plan to host the project on GitHub.\nSet up a remote repository, if applicable.\nRun git add ... and git commit ... to create the first commit in the project.\nPush the initial commit to the remote repository.\n\n\n\nWorking on a project\n\nRun git status to check for local changes. Run git fetch --all to check for remote changes.\n\nIf your remote repo has changes, consider whether you can git pull them.\n\nEdit some file(s), working towards The Next Logical Step.\n\nThis should be implementing some small part of your project. For example, writing a specific function that your project requires can be The Next Logical Step.\nAt The Next Logical Step, the project should be in a semi-working state.\nIn the early phase of a project, that might mean that you’ve worked out enough to test basic functionality.\nFor example, you might write a script or function to load a dataset and print some summary statistics.\n\nRun git add ... to organize files and changes associated with The Next Logical Step.\nWrite an informative message about what was done and any useful context.",
-    "crumbs": [
-      "Module 1 (Fundamentals)",
-      "Git"
-    ]
-  },
-  {
-    "objectID": "howto/submit_hw.html",
-    "href": "howto/submit_hw.html",
-    "title": "Submit Assignments",
-    "section": "",
-    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
-  },
-  {
-    "objectID": "howto/submit_hw.html#format",
-    "href": "howto/submit_hw.html#format",
-    "title": "Submit Assignments",
-    "section": "",
-    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
-  },
-  {
-    "objectID": "howto/submit_hw.html#workflows",
-    "href": "howto/submit_hw.html#workflows",
-    "title": "Submit Assignments",
-    "section": "Workflows",
-    "text": "Workflows",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
-  },
-  {
-    "objectID": "howto/submit_hw.html#github",
-    "href": "howto/submit_hw.html#github",
-    "title": "Submit Assignments",
-    "section": "GitHub",
-    "text": "GitHub\n\nSetup\n\n\nFile structure\n\nEach assignment must be organized into directories, subdirectories, and files with specific names.\nPart of your grade will be for reproducibility of your work; that is, how well quarto run hw/hw1/report.qmd faithfully reproduces the outputs in your report.\nAll names are case-sensitive, so please stick to lowercase to avoid issues.\n\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\n\n\nPushing/Pulling",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
-  },
-  {
-    "objectID": "howto/submit_hw.html#grading-and-feedback",
-    "href": "howto/submit_hw.html#grading-and-feedback",
-    "title": "Submit Assignments",
-    "section": "Grading and feedback",
-    "text": "Grading and feedback",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
-  },
-  {
-    "objectID": "howto/use_docker.html",
-    "href": "howto/use_docker.html",
-    "title": "How to Use Docker in this Class",
-    "section": "",
-    "text": "By completing this guide, you will\n\nhave access to Docker Desktop on your computer,\nunderstand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and\nhave access to a standardized computing environment.",
-    "crumbs": [
-      "How to...",
-      "Use Docker"
-    ]
-  },
-  {
-    "objectID": "howto/use_docker.html#goals",
-    "href": "howto/use_docker.html#goals",
-    "title": "How to Use Docker in this Class",
-    "section": "",
-    "text": "By completing this guide, you will\n\nhave access to Docker Desktop on your computer,\nunderstand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and\nhave access to a standardized computing environment.",
-    "crumbs": [
-      "How to...",
-      "Use Docker"
-    ]
-  },
-  {
-    "objectID": "howto/use_docker.html#what-is-docker",
-    "href": "howto/use_docker.html#what-is-docker",
-    "title": "How to Use Docker in this Class",
-    "section": "What is Docker?",
-    "text": "What is Docker?\nDocker is a collection of technologies that allow developers to run applications in isolated environments. For example, a company like Netflix might use multiple containers to isolate different parts of the user experience (logging in to your account, billing, selecting a series to binge). In the realm of data analysis, researchers and analysts use Docker to package fragile software stacks, such as a specific version of Julia, Python, or R combined with custom libraries and GPU drivers, so that data processing, modeling, and other pipelines can be shared and run anywhere without breaking. In either setting, careful management of the computing environments under which discrete tasks are carried out is a central concern.",
-    "crumbs": [
-      "How to...",
-      "Use Docker"
-    ]
-  },
-  {
-    "objectID": "howto/use_docker.html#why-are-we-using-docker",
-    "href": "howto/use_docker.html#why-are-we-using-docker",
-    "title": "How to Use Docker in this Class",
-    "section": "Why are we using Docker?",
-    "text": "Why are we using Docker?\nWhile there are many ways in which containers might be applied, our interest in isolated environments is motivated by the following:\n\nStandarization and Consistency. Everyone in the class will run the same OS, the same system dependencies, and identical software versions.\nMinimal Installation Friction. There is a benefit to learning how to manage systems on your own, from scratch, as you build out your workspace and tools. Unfortunately, the quarter system does not allow much time for exploration, experimentation, and failure. Most of the hard work has been handled by building the class Docker image.\nReproducbility. Containerization helps us practice reproducbility in our work. It makes for good science, good software, and excellent communication of your work.",
-    "crumbs": [
-      "How to...",
-      "Use Docker"
-    ]
-  },
-  {
-    "objectID": "howto/use_docker.html#so-how-do-i-use-it",
-    "href": "howto/use_docker.html#so-how-do-i-use-it",
-    "title": "How to Use Docker in this Class",
-    "section": "So how do I use it?",
-    "text": "So how do I use it?\nThere are few terms we need to define before we use Docker.\n\nDockerfile: This is a recipe that defines an environment. It’s just a text file with Bash commands (usually) and some additional Docker-specific syntax.\nImage: This is the product generated by running the recipe in a Dockerfile. It is a read-only environment, configured with a specific Operating System (OS), file structure, and accompanying software.\nContainer: Whereas images are static, containers are dynamic. It is the “runtime” or how we use a Docker image. A single image can be used to spin up multiple containers, each running instances of the same or related applications. The environment is the same each time you create a container, from scratch, using the same image.\nVolume: You can create and destroy data within a container, but Docker containers are deliberately disposable. A (storage) volume allows you to persist data after you shut down a container. This works by mapping data (files, folders, programs, etc) from a container to your disk.\nDocker Desktop: The main software from Docker that we will use, which handles building images, container creation, and deployment.\n\n\n1. Download and Install Docker Desktop\nPoint your preferred web browser to https://www.docker.com/products/docker-desktop/ and select the appropriate download for your OS and architecture.\n\n\n\n\n\n\nWarningWindows Users\n\n\n\n\nIf you have a Surface or Copilot+ laptop, it has a Qualcomm Snapdragon CPU. Select the ARM64 option.\nOtherwise, you have an Intel or AMD CPU. Select the AMD64 option.\n\n\n\nFollow instructions from the installer.\n\n\n2. Download our docker-compose.yml\n\nThis is a file to automatically construct a container from pre-built images.\nPlease download it from Canvas.\nBe sure to download it to a convenient location where you would like to store your course materials.\n\n\n\n\n\n\n\nWarningWindows Users\n\n\n\nAvoid placing your course materials, including docker-compose.yml, inside a folder that is backed up by cloud services like OneDrive or Google Drive. The automated nature of such tools risk corrupting your files if a backup triggers while your container is running, resulting in data loss.\nSuggested Workaround: Store your work directly under your C:\\ drive; for example C:\\STAT206.\n\n\n\n\n3. Create your local container\nFirst, open the terminal view in Docker Desktop.\n\n\n\n\n\nNext, navigate to the folder/directory containing the docker-compose.yml file. Once you’ve verified the file’s presence, enter and run the command docker compose up -d stat.\n\n\n\n\n\nThe Containers tab in Docker Desktop shows the status of your container.\n\n\n\n\n\n\nGray circle: Not running\nGreen circle: Running (in the background)\nYou can start/stop the container using the Play/Stop button under Actions.\n\nThe docker ps command can also be used to monitor your container from a CLI.\n\n\n\n\n\n\n\n4. Using the Container\nIf you want to access the container from your machine’s Terminal:\ndocker start -ai STAT206-STAT\n\ndocker start: The start action will only start an existing container.\n-ai: The option a ensures we can see messages in our terminal and propagates signals (such as force quitting). The option i is used to indicate an interactive session.\nSTAT206-STAT the name of the container we wish to run.\n\nIf you just want the container to run in the background so you can connect to it using VSCode:\ndocker start STAT206-STAT\nYou can stop a running container using:\ndocker stop STAT206-STAT",
-    "crumbs": [
-      "How to...",
-      "Use Docker"
-    ]
-  },
-  {
-    "objectID": "howto/configure_git.html",
-    "href": "howto/configure_git.html",
-    "title": "Configure Git",
-    "section": "",
-    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
-  },
-  {
-    "objectID": "howto/configure_git.html#goals",
-    "href": "howto/configure_git.html#goals",
-    "title": "Configure Git",
-    "section": "",
-    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
-  },
-  {
-    "objectID": "howto/configure_git.html#overview",
-    "href": "howto/configure_git.html#overview",
-    "title": "Configure Git",
-    "section": "Overview",
-    "text": "Overview\nWe will use Git for version control of our work throughout the quarter. You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments. Later in the course you will work in a small team and use Git to coordinate development.\nBefore that can happen, we’ll need to configure Git.\n\n\n\n\n\n\nNoteConfiguration Files\n\n\n\nDr. Landeros prefers to use a ~/.config/ directory to store configuration files as much as possible. This practice is based on the XDG Base Directory Specification, which a tool like Git respects. That said, not every tool across Linux distributions will adhere to this standard."
-  },
-  {
-    "objectID": "howto/configure_git.html#method-1-quick-and-easy",
-    "href": "howto/configure_git.html#method-1-quick-and-easy",
-    "title": "Configure Git",
-    "section": "Method 1: Quick and easy",
-    "text": "Method 1: Quick and easy\nThe following commands will create a global configuration file at ~/.gitconfig.\ngit config --global user.name \"CHOSE YOUR NAME\"\ngit config --global user.email \"UCR EMAIL\"\ngit config --global core.editor \"code --wait\""
-  },
-  {
-    "objectID": "howto/configure_git.html#method-2-using-an-editor",
-    "href": "howto/configure_git.html#method-2-using-an-editor",
-    "title": "Configure Git",
-    "section": "Method 2: Using an editor",
-    "text": "Method 2: Using an editor\n\nCreate and open a file: ~/.config/git/config. Alternatively, you may use a file at ~/.gitconfig. Just choose whichever approach appeals to you.\nIn the file, type in the following information (mind the indentation):\n[user]\n    name = CHOOSE YOUR NAME\n    email = UCR EMAIL\n[core]\n    editor = code --wait"
-  },
-  {
-    "objectID": "howto/configure_git.html#what-does-the-core.editor-option-do",
-    "href": "howto/configure_git.html#what-does-the-core.editor-option-do",
-    "title": "Configure Git",
-    "section": "What does the core.editor option do?",
-    "text": "What does the core.editor option do?\nIf you run git commit in a Git repository, the command set for core.editor is run automatically for you. This is convenient for quickly drafting a commit message.\nAlternatively, you can use the VSCode interface for writing commits."
-  },
-  {
-    "objectID": "howto/configure_git.html#check-your-work",
-    "href": "howto/configure_git.html#check-your-work",
-    "title": "Configure Git",
-    "section": "Check your work",
-    "text": "Check your work\n\nRead the contents of ~/.config/git/config\nCheck the output of git config --global --list.\nCheck the output of git config --global --list --show-source."
-  },
-  {
-    "objectID": "howto/configure_git.html#optional-address-colorblindness",
-    "href": "howto/configure_git.html#optional-address-colorblindness",
-    "title": "Configure Git",
-    "section": "Optional: Address colorblindness",
-    "text": "Optional: Address colorblindness\nBy default, the command git diff relies on red (for deletions) and green (for additions) to highlight changes in files. Other Git commands use red and green to tag the state of varies files in a repository. Fortunately, the tool can be configured to use colorblind-friendly alternatives and increase its accessibility.\n\nOption 1: Change the diff colors\nIn a command line:\ngit config --global color.diff.old \"yellow\"\ngit config --global color.diff.new \"blue\"\nAlternatively, edit your Git configuration file:\n[color \"diff\"]\n    old = yellow\n    new = blue\n\n\nOption 2: Disable color-coded output\nIn a command line:\ngit config --global color.ui false\nAlternatively, edit your Git configuration file:\n[color]\n    ui = false"
-  },
-  {
-    "objectID": "project/project.html",
-    "href": "project/project.html",
-    "title": "Final Project",
-    "section": "",
-    "text": "To be announced at a later date.",
-    "crumbs": [
-      "Final Project"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html",
-    "href": "labs/lab0-setup.html",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "",
-    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#get-the-class-docker-image-working-on-your-computer",
-    "href": "labs/lab0-setup.html#get-the-class-docker-image-working-on-your-computer",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Get the class Docker image working on your computer",
-    "text": "Get the class Docker image working on your computer\nRead the guide on how to use Docker in this class.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#practice-using-the-terminal",
-    "href": "labs/lab0-setup.html#practice-using-the-terminal",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Practice using the terminal",
-    "text": "Practice using the terminal\nRead the notes on the Unix shell and experiment inside a container.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#read-up-git-github-the-ssh-protocol",
-    "href": "labs/lab0-setup.html#read-up-git-github-the-ssh-protocol",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Read up Git, GitHub, the SSH protocol",
-    "text": "Read up Git, GitHub, the SSH protocol\n\nGit\nGitHub\nWhat is SSH?.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#configure-git",
-    "href": "labs/lab0-setup.html#configure-git",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Configure git",
-    "text": "Configure git\nWe will use Git for version control of our work throughout the quarter. You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments. Later in the course you will work in a small team and use Git to coordinate development.\nBefore that can happen, we’ll need to configure Git.\n\n\n\n\n\n\nNoteConfiguration Files\n\n\n\nDr. Landeros prefers to use a ~/.config/ directory to store configuration files as much as possible. This practice is based on the XDG Base Directory Specification, which a tool like Git respects. That said, not every tool across Linux distributions will adhere to this standard.\n\n\n\nQuick and easy\nThe following commands will create a global configuration file at ~/.gitconfig.\ngit config --global user.name \"CHOSE YOUR NAME\"\ngit config --global user.email \"UCR EMAIL\"\ngit config --global core.editor \"code --wait\"\n\n\nUsing an editor\n\nCreate and open a file: /.config/git/config. Alternatively, you may use a file at ~/.gitconfig. Just choose whichever approach appeals to you.\nIn the file, type in the following information (mind the indentation):\n[user]\n    name = CHOOSE YOUR NAME\n    email = UCR EMAIL\n[core]\n    editor = code --wait\n\n\n\nCheck your work\n\nRead the contents of ~/.config/git/config\nCheck the output of git config --global --list.\nCheck the output of git config --global --list --show-source.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#setup-your-github-account",
-    "href": "labs/lab0-setup.html#setup-your-github-account",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Setup your GitHub account",
-    "text": "Setup your GitHub account\n\nSign up for a GitHub account using your UCR email.\nChecking for existing SSH keys.\nHow to generate an SSH key.\nHow to add an SSH key.\nVerify that you can connect to GitHub’s servers.",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#download-and-install-quarto",
-    "href": "labs/lab0-setup.html#download-and-install-quarto",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Download and install Quarto",
-    "text": "Download and install Quarto\n\nInside your terminal, run uname -m to determine whether your container is setup with an arm64 or x86_64 architecture.\nBased on the result in the previous step, download Quarto using curl:\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz\nor\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz\nNext, unpack files from the tarball into /home/student/.local:\ntar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local\nFinally, check that Quarto can be run from your terminal (and therefore seen by other programs) with\nquarto check",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "labs/lab0-setup.html#practice-creating-your-first-quarto-document",
-    "href": "labs/lab0-setup.html#practice-creating-your-first-quarto-document",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "Practice creating your first Quarto document",
-    "text": "Practice creating your first Quarto document",
-    "crumbs": [
-      "Labs",
-      "Lab 0 (Getting Started)"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "STAT 206: Statistical Computing",
-    "section": "",
-    "text": "Canvas\n\n  Slack\n\nNo matching items",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#course-materials",
-    "href": "index.html#course-materials",
-    "title": "STAT 206: Statistical Computing",
-    "section": "Course materials",
-    "text": "Course materials\nNotes, assignments, labs, and step-by-step guides are contained to this website. Any additional materials or important links can be accessed using the links above.",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#taking-this-class",
-    "href": "index.html#taking-this-class",
-    "title": "STAT 206: Statistical Computing",
-    "section": "Taking this class",
-    "text": "Taking this class\nThe first three weeks involve learning several software tools at once. Use the schedule to help plan your reading of the course notes ahead of class.",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html",
-    "href": "howto/use_vscode.html",
-    "title": "How to Use VSCode with a Container",
-    "section": "",
-    "text": "This guide assumes you have installed VSCode, Docker Desktop, and are able to start a container using the class image.\nBy completing this guide, you will\n\nbe able to connect VSCode to your local container,\nunderstand how to view, edit, and organize files and directories inside /home/student through VSCode,\naccess a Linux shell within VSCode, and\ndownload and upload files to and from a container, respectively.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#goals",
-    "href": "howto/use_vscode.html#goals",
-    "title": "How to Use VSCode with a Container",
-    "section": "",
-    "text": "This guide assumes you have installed VSCode, Docker Desktop, and are able to start a container using the class image.\nBy completing this guide, you will\n\nbe able to connect VSCode to your local container,\nunderstand how to view, edit, and organize files and directories inside /home/student through VSCode,\naccess a Linux shell within VSCode, and\ndownload and upload files to and from a container, respectively.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#basic-setup",
-    "href": "howto/use_vscode.html#basic-setup",
-    "title": "How to Use VSCode with a Container",
-    "section": "Basic Setup",
-    "text": "Basic Setup\n\n1. Install the Dev Containers Extension\nIn VSCode, navigate to the Extensions menu and install the Dev Containers extension.\n\n\n\n\n\n\n\n2. Make sure a container based on the class image is running.\n\nFrom a terminal, run docker start STAT206-STAT.\nFrom Docker Desktop, open the dashboard and navigate to Containers. Click on the Run button for STAT206-STAT.\n\n\n\n3. Attach a VSCode window to the container\nOpen the Command Palette and select Dev Containers: Attach to Running Containers... and wait for the connection.\n\n\n\n\n\n\nWindows: Ctrl + Shift + P\nMacOS: Ctrl + Shift + P\n\nNow VSCode can interact with the file system on the container. In the future, you only need to attach VSCode to the container.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#manipulating-files-through-vscode",
-    "href": "howto/use_vscode.html#manipulating-files-through-vscode",
-    "title": "How to Use VSCode with a Container",
-    "section": "Manipulating files through VSCode",
-    "text": "Manipulating files through VSCode\nThe File Explorer allows you to explore directories and view files.\n\n\n\n\n\n\nWindows: Ctrl + Shift + E\nLinux/MacOS: Ctrl + Shift + E\n\nThere are New File and New Folder buttons that appears in the top right-hand corner of the File Explorer when hovering your cursor.\n\n\n\n\n\n\n\n\n\n\nOpening a file allows you to edit its contents like any other text editor. The Extensions feature in VSCode can modify the editor to provide additional support for specific file types.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#accessing-a-terminal-within-vscode",
-    "href": "howto/use_vscode.html#accessing-a-terminal-within-vscode",
-    "title": "How to Use VSCode with a Container",
-    "section": "Accessing a terminal within VSCode",
-    "text": "Accessing a terminal within VSCode\nOpen the command palette and select Terminal: Create New Terminal.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#moving-files-between-your-machine-and-the-container",
-    "href": "howto/use_vscode.html#moving-files-between-your-machine-and-the-container",
-    "title": "How to Use VSCode with a Container",
-    "section": "Moving files between your machine and the container",
-    "text": "Moving files between your machine and the container\nTo download a file or directory from the container, right-click it and choose the Download… option.\n\nTo upload a file or directory to the container, you can drag and drop it onto the File Explorer.",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
-    "objectID": "howto/use_vscode.html#installing-extensions",
-    "href": "howto/use_vscode.html#installing-extensions",
-    "title": "How to Use VSCode with a Container",
-    "section": "Installing extensions",
-    "text": "Installing extensions\nAny VSCode extensions you like must be installed on the container side. Recommended extensions for this class:\n\nJulia\nQuarto",
-    "crumbs": [
-      "How to...",
-      "Use VSCode with a Container"
-    ]
-  },
-  {
     "objectID": "howto/setup_github.html",
     "href": "howto/setup_github.html",
     "title": "Set up a GitHub Account",
@@ -655,6 +109,160 @@
     "crumbs": [
       "How to...",
       "Use Revise.jl"
+    ]
+  },
+  {
+    "objectID": "howto/submit_hw.html",
+    "href": "howto/submit_hw.html",
+    "title": "Submit Assignments",
+    "section": "",
+    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
+    "crumbs": [
+      "How to...",
+      "Submit Assignments"
+    ]
+  },
+  {
+    "objectID": "howto/submit_hw.html#format",
+    "href": "howto/submit_hw.html#format",
+    "title": "Submit Assignments",
+    "section": "",
+    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
+    "crumbs": [
+      "How to...",
+      "Submit Assignments"
+    ]
+  },
+  {
+    "objectID": "howto/submit_hw.html#workflows",
+    "href": "howto/submit_hw.html#workflows",
+    "title": "Submit Assignments",
+    "section": "Workflows",
+    "text": "Workflows",
+    "crumbs": [
+      "How to...",
+      "Submit Assignments"
+    ]
+  },
+  {
+    "objectID": "howto/submit_hw.html#github",
+    "href": "howto/submit_hw.html#github",
+    "title": "Submit Assignments",
+    "section": "GitHub",
+    "text": "GitHub\n\nSetup\n\n\nFile structure\n\nEach assignment must be organized into directories, subdirectories, and files with specific names.\nPart of your grade will be for reproducibility of your work; that is, how well quarto run hw/hw1/report.qmd faithfully reproduces the outputs in your report.\nAll names are case-sensitive, so please stick to lowercase to avoid issues.\n\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\n\n\nPushing/Pulling",
+    "crumbs": [
+      "How to...",
+      "Submit Assignments"
+    ]
+  },
+  {
+    "objectID": "howto/submit_hw.html#grading-and-feedback",
+    "href": "howto/submit_hw.html#grading-and-feedback",
+    "title": "Submit Assignments",
+    "section": "Grading and feedback",
+    "text": "Grading and feedback",
+    "crumbs": [
+      "How to...",
+      "Submit Assignments"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html",
+    "href": "notes/module01/git.html",
+    "title": "Version Control with Git",
+    "section": "",
+    "text": "Blischak JD, Davenport ER, Wilson G (2016) A Quick Introduction to Version Control with Git and GitHub. PLoS Comput Biol 12(1): e1004668. doi: 10.1371/journal.pcbi.1004668",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#additional-materials",
+    "href": "notes/module01/git.html#additional-materials",
+    "title": "Version Control with Git",
+    "section": "",
+    "text": "Blischak JD, Davenport ER, Wilson G (2016) A Quick Introduction to Version Control with Git and GitHub. PLoS Comput Biol 12(1): e1004668. doi: 10.1371/journal.pcbi.1004668",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#goals",
+    "href": "notes/module01/git.html#goals",
+    "title": "Version Control with Git",
+    "section": "Goals",
+    "text": "Goals\n\nDevelop an understanding and appreciation of Git and version control.\nUnderstand the difference between a local and remote repository.\nBecome familiar with basic Git commands and a basic single user workflow.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#what-is-version-control",
+    "href": "notes/module01/git.html#what-is-version-control",
+    "title": "Version Control with Git",
+    "section": "What is Version Control?",
+    "text": "What is Version Control?\n\nAn article about computational science in a scientific publication is not the scholarship itself, it is merely the advertising of the scholarship. The actual scholarship is the complete software development environment and the complete set of instructions which generated the figures.\n\n— Buckheit and Donoho (1995), summarizing Jon Claerbout’s ideas on reproducible research in computational sciences.\nResearchers (Data Scientists, and other professionals) often need to manage a number of documents:\n\nmanuscripts/technical reports\nnotes\ndata\nimages\ncode\nscripts\n\nToday, many of those documents live on a computer.\n\nTracking different versions of a document by hand is tedious and error-prone.\nTracking the history of a changing document is cumbersome.\n\nVersion control has its origins in software development and has increasingly been adopted across various disciplines, including data science.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#what-is-git",
+    "href": "notes/module01/git.html#what-is-git",
+    "title": "Version Control with Git",
+    "section": "What is Git?",
+    "text": "What is Git?\n\n\nA tool for distributed version control.\nOriginally developed by Linus Torvaldis for managing the Linux kernel.\nMultiple people own and can edit copies of a repository.\nGit operates on changes between versions of a document, effectively tracking line-by-line changes.\nEach version of the repository exists as a commit, or snapshot.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#the-model",
+    "href": "notes/module01/git.html#the-model",
+    "title": "Version Control with Git",
+    "section": "The model",
+    "text": "The model\nGit keeps track of versions for various files, along with a log that tells us about why things changed.\n\n\n\n\n\n\nworking directory: the directory on your machine that represents your repository of files under version control.\n\nThese are just the files and directories that make up a project. There is no history or version control history.\n\nstaging area: files that you tag to commit changes are said to be staged / in the staging area.\nlocal repo: your local repository; the collection of all the files in your folder + changes + history.\n\nThis consists only of your commits. Any changes/edits to files not committed are not in the local repository.\nYour commits are linked to each other. This lets us go back in time to a different state of the working directory.\n\nremote repo: a foreign version that lives elsewhere; usually a backup on GitHub, GitLab, or Bitbucket.\ncommit: a snapshot of the project. This consists of specific files that were added/removed/edited + an informative message by the commit author.\n\nThe main idea is that git helps you put your projects under version control by examining your working tree, comparing to the local repo, and informing you of changes that have occurred. It is then incumbent on YOU to manage those changes and move them onto the staging area to be organized into commits stored in the local repo.\n\n\n\n\n\n\nNoteBranches in Git\n\n\n\nGit allows you to maintain multiple versions of the same workspace with separate commits using branches. By default, Git initializes your local repository with a main or master branch.\nWe will revisit branching much later in the course when we start using Git to collaborate with others.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#basic-commands",
+    "href": "notes/module01/git.html#basic-commands",
+    "title": "Version Control with Git",
+    "section": "Basic commands",
+    "text": "Basic commands\nThe list below is by no means exhaustive.\n\ngit init\nThis initializes a working directory as a local Git repository. Specifically, it creates a .git directory to store the history and metadata about various files in the repository.\n\n\ngit add &lt;name of a file or directory&gt;\nAdds files to the staging area so that you can create a commit.\n\n\ngit commit\nOpens an editor to draft a message associated with your proposed commit. This command supports various additional options.\n\nAdd the message in-line: git commit -m \"This is my commit message\"\nEdit the previous commit: git commit --amend\nEdit the previous commit, without updating the message: git commit --amend --no-edit\n\n\n\ngit status\nCheck that state of the repository. This will highlight any files that have been edited, any that are not tracked, and any that might already be staged.\n\n\ngit log\nExplore the local repository’s history.\n\n\ngit diff\nCompare differences across commits.\n\n\ngit push\nUpload the work on your local repository to a remote repository.\n\n\ngit fetch / git pull\nDownload the work on a remote repository to your local repository.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#writing-a-commit-message",
+    "href": "notes/module01/git.html#writing-a-commit-message",
+    "title": "Version Control with Git",
+    "section": "Writing a commit message",
+    "text": "Writing a commit message\n\nThe next person to read your work in 6 months is not going to be some schmuck. It’s going to be YOU!\n\n— A certain UCR Statistics Professor\nTreat commit messages like entries in a journal. They are meant to be read by someone. There are two parts of a commit message:\n\nThe first line: A succinct summary. This is what gets displayed in most Git tools; e.g. on GitHub.\nThe rest: Add additional lines to add more context. A commit message can be as long as you want. Use it!",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
+    ]
+  },
+  {
+    "objectID": "notes/module01/git.html#a-basic-single-user-workflow",
+    "href": "notes/module01/git.html#a-basic-single-user-workflow",
+    "title": "Version Control with Git",
+    "section": "A basic single user workflow",
+    "text": "A basic single user workflow\n\nUsing Git for the first time on a new computer\n\nSet up your identity in Git. See Lab 0 on how to configure Git.\nConsider setting up a global .gitignore.\nSet up SSH access to your GitHub/GitLab/Other Git Service for the new machine.\n\n\n\nSetting up a new project\n\nCreate the main project directory and cd into it.\nRun git init.\nSet up the project with some basic files so you can create an initial commit. For example, adding a README.md is a good first step especially if you plan to host the project on GitHub.\nSet up a remote repository, if applicable.\nRun git add ... and git commit ... to create the first commit in the project.\nPush the initial commit to the remote repository.\n\n\n\nWorking on a project\n\nRun git status to check for local changes. Run git fetch --all to check for remote changes.\n\nIf your remote repo has changes, consider whether you can git pull them.\n\nEdit some file(s), working towards The Next Logical Step.\n\nThis should be implementing some small part of your project. For example, writing a specific function that your project requires can be The Next Logical Step.\nAt The Next Logical Step, the project should be in a semi-working state.\nIn the early phase of a project, that might mean that you’ve worked out enough to test basic functionality.\nFor example, you might write a script or function to load a dataset and print some summary statistics.\n\nRun git add ... to organize files and changes associated with The Next Logical Step.\nWrite an informative message about what was done and any useful context.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "Git"
     ]
   },
   {
@@ -768,6 +376,187 @@
     ]
   },
   {
+    "objectID": "labs/lab0-setup.html",
+    "href": "labs/lab0-setup.html",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "",
+    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
+    "crumbs": [
+      "Labs",
+      "Lab 0 (Getting Started)"
+    ]
+  },
+  {
+    "objectID": "labs/lab0-setup.html#goals",
+    "href": "labs/lab0-setup.html#goals",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "",
+    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
+    "crumbs": [
+      "Labs",
+      "Lab 0 (Getting Started)"
+    ]
+  },
+  {
+    "objectID": "labs/lab0-setup.html#the-tools",
+    "href": "labs/lab0-setup.html#the-tools",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "The Tools",
+    "text": "The Tools\nYou are responsible for installing the following on your machine:\n\nDocker Desktop\nVS Code\n\nOnce you create a container using the class image, you will have access to:\n\na Unix Shell (we will use zsh by default),\nGit,\nQuarto, and\nJulia 1.12.7.\n\nIn addition to various tools installed on the image (i.e. Unix utilities), you also have access to\n\nPython 3.14,\nR 4.5, and\nDuckDB 1.5.5.",
+    "crumbs": [
+      "Labs",
+      "Lab 0 (Getting Started)"
+    ]
+  },
+  {
+    "objectID": "labs/lab0-setup.html#on-your-own",
+    "href": "labs/lab0-setup.html#on-your-own",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "On Your Own",
+    "text": "On Your Own\n\n1. Get the class Docker image working on your computer\nRead the guide on how to use Docker in this class.\n\n\n2. Practice using the terminal\nRead the notes on the Unix shell and experiment inside a container.\n\n\n3. Read up on Git, GitHub, the SSH protocol\nTry setting up Git on your container and create your GitHub account.\n\nWhat is Git? and How to configure Git.\nHow to set up your GitHub account.\nWhat is SSH?.",
+    "crumbs": [
+      "Labs",
+      "Lab 0 (Getting Started)"
+    ]
+  },
+  {
+    "objectID": "labs/lab0-setup.html#in-person",
+    "href": "labs/lab0-setup.html#in-person",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "In Person",
+    "text": "In Person\nThe following tasks involve using the class Docker image. Instructions are to be carried out inside a running container unless otherwise specified.\n\n1. Download and install Quarto\n\nInside your terminal, run uname -m to determine whether your container is setup with an arm64 or x86_64 architecture.\nBased on the result in the previous step, download Quarto using curl:\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz\nor\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz\nNext, unpack files from the tarball into /home/student/.local:\ntar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local\nFinally, check that Quarto can be run from your terminal (and therefore seen by other programs) with\nquarto check\n\n\n\n2. Let us know your GitHub username\nFill out the Google form to record the username you wish to use for this course. It will be used to set up your private repository for this class.\n\n\n3. Fill out the class survey\nSee this Google form to answer a few questions. It will help the instructors understand everyone’s background.\n\n\n4. Practice creating your first Quarto document\nSee the notes on Quarto and explore Quarto’s features.",
+    "crumbs": [
+      "Labs",
+      "Lab 0 (Getting Started)"
+    ]
+  },
+  {
+    "objectID": "project/project.html",
+    "href": "project/project.html",
+    "title": "Final Project",
+    "section": "",
+    "text": "To be announced at a later date.",
+    "crumbs": [
+      "Final Project"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "STAT 206: Statistical Computing",
+    "section": "",
+    "text": "Canvas\n\n  Slack\n\nNo matching items",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#course-materials",
+    "href": "index.html#course-materials",
+    "title": "STAT 206: Statistical Computing",
+    "section": "Course materials",
+    "text": "Course materials\nNotes, assignments, labs, and step-by-step guides are contained to this website. Any additional materials or important links can be accessed using the links above.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#taking-this-class",
+    "href": "index.html#taking-this-class",
+    "title": "STAT 206: Statistical Computing",
+    "section": "Taking this class",
+    "text": "Taking this class\nThe first three weeks involve learning several software tools at once. Use the schedule to help plan your reading of the course notes ahead of class.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "office_hours.html",
+    "href": "office_hours.html",
+    "title": "Office hours",
+    "section": "",
+    "text": "Instructor: Alfonso Landeros\n\nWhere: Olmsted 1343\nWhen:\n\nTuesdays TBD\nThursdays TBD\n\nBy appointment\nFeel free to drop by if my door is open; I’ll let you know if I’m available.\n\nTA: Charlotte\n\nWhere: TBD\nWhen:\n\nDay 1 TBD\nDay 2 TBD",
+    "crumbs": [
+      "Office Hours"
+    ]
+  },
+  {
+    "objectID": "schedule.html",
+    "href": "schedule.html",
+    "title": "Schedule",
+    "section": "",
+    "text": "Week 0\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Thu Sept 24:\n           \n           Class 1a The Unix Shell\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1b The File System\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1c Git\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1d Quarto\n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Fri Sept 25:\n           \n           Lab 0 Getting Started\n           \n                \n           \n                \n           \n        \n   \n   \n   \n  \n\n   Week 1\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Tue Sept 29:\n           \n           Class 2 \n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Thu Oct 1:\n           \n           Class 3 \n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Fri Oct 2:\n           \n           Lab 1 \n           \n                \n           \n                \n           \n        \n   \n   \n   \n  \n\n   Week 2\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Mon Oct 5:\n           \n           Assignment Homework 1\n           \n                \n           \n                \n           \n        \n   \n   \n   \nNo matching items",
+    "crumbs": [
+      "Schedule"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html",
+    "href": "notes/module01/filesystem.html",
+    "title": "The File System",
+    "section": "",
+    "text": "Software Carpentry has an excellent tutorial on navigating files and directories.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html#additional-materials",
+    "href": "notes/module01/filesystem.html#additional-materials",
+    "title": "The File System",
+    "section": "",
+    "text": "Software Carpentry has an excellent tutorial on navigating files and directories.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html#goals",
+    "href": "notes/module01/filesystem.html#goals",
+    "title": "The File System",
+    "section": "Goals",
+    "text": "Goals\n\nUnderstand the organizational structure of a file system on Linux.\nUnderstand relative and absolute paths.\nDevelop awareness of key locations on a Linux system and the class Docker image.\nUnderstand that programs, regardless of operating system, operate in a context.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html#overview",
+    "href": "notes/module01/filesystem.html#overview",
+    "title": "The File System",
+    "section": "Overview",
+    "text": "Overview\nFiles on computers are generally arranged in a hierarchical manner, specifically as a rooted tree. The following is the output of tree -L 1 / on a machine with macOS Sequoia. This command displays a file system, one level deep, starting from the root directory /:\n/\n├── Applications\n├── bin\n├── cores\n├── dev\n├── etc -&gt; private/etc\n├── home -&gt; /System/Volumes/Data/home\n├── Library\n├── opt\n├── private\n├── sbin\n├── System\n├── tmp -&gt; private/tmp\n├── Users\n├── usr\n├── var -&gt; private/var\n└── Volumes\n\n17 directories, 0 files\nEverything is a file in the Unix world, yet the output above clearly distinguishes between files and directories. Files are data on your computer. Directories are, too, but their role is to act as folders connecting one level of a tree to other parts in the system. In brief, directories are branches and files are leaves in the rooted tree structure.\n\n\n\n\n\n\nImportantSymbolic Links\n\n\n\nYou might notice a few of the labels in the tree output above have arrows; for example home -&gt; /System/Volumes/Data/home. These are examples of symbolic links, which are files that point to a location elsewhere. Symbolic links are useful for introducing indirection and decoupling an interface from an implementation.\n\nIndirection, as a concept, can be useful for creating shortcuts. For example, say you have multiple projects that need access to a particular resource nested deeply within your file system. A single symbolic link can provide access at a convenient location and allow each project to inherit access without writing out cumbersome paths.\nTo give another example, symbolic links can be used to manage versions of a resource. If two projects need access to two versions of FANCY_DATASET, each project can use its own symbolic link FANCY_DATASET which points to the appropriate version. This simplifies any scripts operating on that resource without having to introduce version information into the code.\n\n\n\nThe following is mock output of tree on a directory named repo. Your Git repository for this class will resemble this structure over time.\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\nHere repo/ is the top level, so we can say these files are rooted at repo/, but it is not the root directory. The root directory is unique because Unix/Linux file systems are generally rooted trees. By definition, there can only be one root that serves as the absolute top level.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html#absolute-vs-relative-paths",
+    "href": "notes/module01/filesystem.html#absolute-vs-relative-paths",
+    "title": "The File System",
+    "section": "Absolute vs Relative Paths",
+    "text": "Absolute vs Relative Paths\nVirtually every operating system operates on file paths. A file path is a sequence of names/labels of specific files/directories in a file system that point to a specific location. On Linux, file paths are formatted by the file separator /. Let’s revisit the repo/ example:\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n...\n\nThe file path repo/ leads from wherever repo/ exists to repo/. Equivalently, ./repo.\nThe file path repo/hw is similar, but points one directory down towards hw/. Equivalently, ./repo/hw.\nThe file path repo/hw/hw1/report.qmd is a file path that leads from wherever repo/ exists to report.qmd. Equivalently, ./reop/hw/hw1/report.qmd.\n\nAll these examples are relative paths because they depend on context. That context is ., a symbolic file path that points here which is wherever you might be. From here you can reference the parent directory using .. which is whatever the parent might be.\nIn contrast, absolute paths do not depend on context because they’re absolute! On a Linux system, /repo/hw/hw1/report.qmd is an example of an absolute path (that probably does not exist). Let’s modify the example so that repo/ resides inside a stat206/ directory somewhere on the file system:\n/\n├──Documents\n│   └──stat206\n│       └── repo\n...         ├── hw\n            │   ├── hw1/\n            │   │   ├── complex_data.arrow\n            │   │   ├── fancy_algorithm.jl\n            │   │   ├── report.qmd\n            │   │   ├── Project.toml\n            │   │   └── &lt;other code or files&gt;\n            │   ├── hw2/\n            ...\nHere /Documents/stat206/repo/ is an absolute path that references repo. On Linux, all absolute paths must begin with the root directory, /. This eliminates any ambiguity.\n\nUse in Programming and Data Analysis\nIn practice, we rarely, if ever, use absolute paths. Relative paths are preferred because two machines rarely share the same structure in their file systems. This is all the more relevant if we consider machines that have completely different operating systems. We conclude with the following advice that ought to ring true in many contexts.\n\nBe thoughtful about how you organize files for a project. Stick to conventions, where possible, and aim for simplicity whenever guidance is scarce.\nPrepend your file paths with . and .. to communicate your intent in references. It might help you or other catch mistakes.\nPlace scripts close to the top level of a project’s directory. This often simplifies relative paths.\nAvoid hard-coding file separators into your code source files. Most programming languages provide tools to handle file separators correctly across operating systems.\n\n\n\n\n\n\n\nImportantAside: What about Windows?\n\n\n\n\nThere is no “root directory” in Windows, at least not in the same sense as Unix-like file systems. Windows file systems use drive letters as the root node; for example, the C:\\ drive. Unix-like/Linux-like systems support working with multiple drives, too, but do not anchor their file systems to specific drives.\nWindows uses the backslash \\ as a file separator. It is one of the reasons (but not the only reason) we cannot hard-code file paths in scripts.",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
+    "objectID": "notes/module01/filesystem.html#special-locations-on-linux-file-systems",
+    "href": "notes/module01/filesystem.html#special-locations-on-linux-file-systems",
+    "title": "The File System",
+    "section": "Special Locations on Linux File Systems",
+    "text": "Special Locations on Linux File Systems\nMost operating systems exploit the hierarchical nature of file systems to organize sensitive information and tools so that permission settings can readily provide a level of security. The following are useful locations for you to be aware about:\n\n/: The root directory. User accounts typically do not have file permissions here, and you should keep it that way.\n/usr: Home to user-level resources. These are common to all users on a machine.\n\n/usr/bin: Home to essential binaries, or programs, for the operating system. Commands like mv and cd exist here.\n/usr/lib: Home to libraries required by applications. Can be source code, scripts, or compiled objects.\n\n/etc: Home to system-wide configuration files.\n/home: Contains the home directories for individual users. Your home directory on our Docker image is /home/student. Your shell sessions always start here.\n\n~: Same as /home/${USERNAME}.\n\n/var: A variable directory that holds files changing continuously during operation; for example, log files for applications can be found here under /var/log.\n/tmp: A volatile workspace for temporary files. Treat it as a workspace, as systems are typically configured to periodically clean up (delete files) this workspace.\n\n\nOur Docker Image\nThere are a few directories in the home directory /home/student that you should be aware of:\n\n/home/student/.config: We will use this to store configuration files; for example, your Git identity.\n/home/student/.ssh: We will use this to store keys for SSH authentication, mainly for GitHub.\n/home/student/.local: We will use this to install software not included by default. No need for sudo!",
+    "crumbs": [
+      "Module 1 (Fundamentals)",
+      "The File System"
+    ]
+  },
+  {
     "objectID": "notes/module01/quarto.html",
     "href": "notes/module01/quarto.html",
     "title": "Quarto",
@@ -823,13 +612,191 @@
     ]
   },
   {
-    "objectID": "schedule.html",
-    "href": "schedule.html",
-    "title": "Schedule",
+    "objectID": "howto/use_vscode.html",
+    "href": "howto/use_vscode.html",
+    "title": "How to Use VSCode with a Container",
     "section": "",
-    "text": "Week 0\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Thu Sept 24:\n           \n           Class 1a The Unix Shell\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1b The File System\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1c Git\n           \n                \n           \n                \n           \n        \n\n           \n           \n           Class 1d Quarto\n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Fri Sept 25:\n           \n           Lab 0 Getting Started\n           \n                \n           \n                \n           \n        \n   \n   \n   \n  \n\n   Week 1\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Tue Sept 29:\n           \n           Class 2 \n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Thu Oct 1:\n           \n           Class 3 \n           \n                \n           \n                \n           \n        \n   \n\n        \n\n           \n           \n           Fri Oct 2:\n           \n           Lab 1 \n           \n                \n           \n                \n           \n        \n   \n   \n   \n  \n\n   Week 2\n\n   \n   \n   \n   \n   \n   \n\n        \n\n           \n           \n           Mon Oct 5:\n           \n           Assignment Homework 1\n           \n                \n           \n                \n           \n        \n   \n   \n   \nNo matching items",
+    "text": "This guide assumes you have installed VSCode, Docker Desktop, and are able to start a container using the class image.\nBy completing this guide, you will\n\nbe able to connect VSCode to your local container,\nunderstand how to view, edit, and organize files and directories inside /home/student through VSCode,\naccess a Linux shell within VSCode, and\ndownload and upload files to and from a container, respectively.",
     "crumbs": [
-      "Schedule"
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#goals",
+    "href": "howto/use_vscode.html#goals",
+    "title": "How to Use VSCode with a Container",
+    "section": "",
+    "text": "This guide assumes you have installed VSCode, Docker Desktop, and are able to start a container using the class image.\nBy completing this guide, you will\n\nbe able to connect VSCode to your local container,\nunderstand how to view, edit, and organize files and directories inside /home/student through VSCode,\naccess a Linux shell within VSCode, and\ndownload and upload files to and from a container, respectively.",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#basic-setup",
+    "href": "howto/use_vscode.html#basic-setup",
+    "title": "How to Use VSCode with a Container",
+    "section": "Basic Setup",
+    "text": "Basic Setup\n\n1. Install the Dev Containers Extension\nIn VSCode, navigate to the Extensions menu and install the Dev Containers extension.\n\n\n\n\n\n\n\n2. Make sure a container based on the class image is running.\n\nFrom a terminal, run docker start STAT206-STAT.\nFrom Docker Desktop, open the dashboard and navigate to Containers. Click on the Run button for STAT206-STAT.\n\n\n\n3. Attach a VSCode window to the container\nOpen the Command Palette and select Dev Containers: Attach to Running Containers... and wait for the connection.\n\n\n\n\n\n\nWindows: Ctrl + Shift + P\nMacOS: Ctrl + Shift + P\n\nNow VSCode can interact with the file system on the container. In the future, you only need to attach VSCode to the container.",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#manipulating-files-through-vscode",
+    "href": "howto/use_vscode.html#manipulating-files-through-vscode",
+    "title": "How to Use VSCode with a Container",
+    "section": "Manipulating files through VSCode",
+    "text": "Manipulating files through VSCode\nThe File Explorer allows you to explore directories and view files.\n\n\n\n\n\n\nWindows: Ctrl + Shift + E\nLinux/MacOS: Ctrl + Shift + E\n\nThere are New File and New Folder buttons that appears in the top right-hand corner of the File Explorer when hovering your cursor.\n\n\n\n\n\n\n\n\n\n\nOpening a file allows you to edit its contents like any other text editor. The Extensions feature in VSCode can modify the editor to provide additional support for specific file types.",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#accessing-a-terminal-within-vscode",
+    "href": "howto/use_vscode.html#accessing-a-terminal-within-vscode",
+    "title": "How to Use VSCode with a Container",
+    "section": "Accessing a terminal within VSCode",
+    "text": "Accessing a terminal within VSCode\nOpen the command palette and select Terminal: Create New Terminal.",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#moving-files-between-your-machine-and-the-container",
+    "href": "howto/use_vscode.html#moving-files-between-your-machine-and-the-container",
+    "title": "How to Use VSCode with a Container",
+    "section": "Moving files between your machine and the container",
+    "text": "Moving files between your machine and the container\nTo download a file or directory from the container, right-click it and choose the Download… option.\n\nTo upload a file or directory to the container, you can drag and drop it onto the File Explorer.",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/use_vscode.html#installing-extensions",
+    "href": "howto/use_vscode.html#installing-extensions",
+    "title": "How to Use VSCode with a Container",
+    "section": "Installing extensions",
+    "text": "Installing extensions\nAny VSCode extensions you like must be installed on the container side. Recommended extensions for this class:\n\nJulia\nQuarto",
+    "crumbs": [
+      "How to...",
+      "Use VSCode with a Container"
+    ]
+  },
+  {
+    "objectID": "howto/configure_git.html",
+    "href": "howto/configure_git.html",
+    "title": "Configure Git",
+    "section": "",
+    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
+  },
+  {
+    "objectID": "howto/configure_git.html#goals",
+    "href": "howto/configure_git.html#goals",
+    "title": "Configure Git",
+    "section": "",
+    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
+  },
+  {
+    "objectID": "howto/configure_git.html#overview",
+    "href": "howto/configure_git.html#overview",
+    "title": "Configure Git",
+    "section": "Overview",
+    "text": "Overview\nWe will use Git for version control of our work throughout the quarter. You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments. Later in the course you will work in a small team and use Git to coordinate development.\nBefore that can happen, we’ll need to configure Git.\n\n\n\n\n\n\nNoteConfiguration Files\n\n\n\nDr. Landeros prefers to use a ~/.config/ directory to store configuration files as much as possible. This practice is based on the XDG Base Directory Specification, which a tool like Git respects. That said, not every tool across Linux distributions will adhere to this standard."
+  },
+  {
+    "objectID": "howto/configure_git.html#method-1-quick-and-easy",
+    "href": "howto/configure_git.html#method-1-quick-and-easy",
+    "title": "Configure Git",
+    "section": "Method 1: Quick and easy",
+    "text": "Method 1: Quick and easy\nThe following commands will create a global configuration file at ~/.gitconfig.\ngit config --global user.name \"CHOSE YOUR NAME\"\ngit config --global user.email \"UCR EMAIL\"\ngit config --global core.editor \"code --wait\""
+  },
+  {
+    "objectID": "howto/configure_git.html#method-2-using-an-editor",
+    "href": "howto/configure_git.html#method-2-using-an-editor",
+    "title": "Configure Git",
+    "section": "Method 2: Using an editor",
+    "text": "Method 2: Using an editor\n\nCreate and open a file: ~/.config/git/config. Alternatively, you may use a file at ~/.gitconfig. Just choose whichever approach appeals to you.\nIn the file, type in the following information (mind the indentation):\n[user]\n    name = CHOOSE YOUR NAME\n    email = UCR EMAIL\n[core]\n    editor = code --wait"
+  },
+  {
+    "objectID": "howto/configure_git.html#what-does-the-core.editor-option-do",
+    "href": "howto/configure_git.html#what-does-the-core.editor-option-do",
+    "title": "Configure Git",
+    "section": "What does the core.editor option do?",
+    "text": "What does the core.editor option do?\nIf you run git commit in a Git repository, the command set for core.editor is run automatically for you. This is convenient for quickly drafting a commit message.\nAlternatively, you can use the VSCode interface for writing commits."
+  },
+  {
+    "objectID": "howto/configure_git.html#check-your-work",
+    "href": "howto/configure_git.html#check-your-work",
+    "title": "Configure Git",
+    "section": "Check your work",
+    "text": "Check your work\n\nRead the contents of ~/.config/git/config\nCheck the output of git config --global --list.\nCheck the output of git config --global --list --show-source."
+  },
+  {
+    "objectID": "howto/configure_git.html#optional-address-colorblindness",
+    "href": "howto/configure_git.html#optional-address-colorblindness",
+    "title": "Configure Git",
+    "section": "Optional: Address colorblindness",
+    "text": "Optional: Address colorblindness\nBy default, the command git diff relies on red (for deletions) and green (for additions) to highlight changes in files. Other Git commands use red and green to tag the state of varies files in a repository. Fortunately, the tool can be configured to use colorblind-friendly alternatives and increase its accessibility.\n\nOption 1: Change the diff colors\nIn a command line:\ngit config --global color.diff.old \"yellow\"\ngit config --global color.diff.new \"blue\"\nAlternatively, edit your Git configuration file:\n[color \"diff\"]\n    old = yellow\n    new = blue\n\n\nOption 2: Disable color-coded output\nIn a command line:\ngit config --global color.ui false\nAlternatively, edit your Git configuration file:\n[color]\n    ui = false"
+  },
+  {
+    "objectID": "howto/use_docker.html",
+    "href": "howto/use_docker.html",
+    "title": "How to Use Docker in this Class",
+    "section": "",
+    "text": "By completing this guide, you will\n\nhave access to Docker Desktop on your computer,\nunderstand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and\nhave access to a standardized computing environment.",
+    "crumbs": [
+      "How to...",
+      "Use Docker"
+    ]
+  },
+  {
+    "objectID": "howto/use_docker.html#goals",
+    "href": "howto/use_docker.html#goals",
+    "title": "How to Use Docker in this Class",
+    "section": "",
+    "text": "By completing this guide, you will\n\nhave access to Docker Desktop on your computer,\nunderstand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and\nhave access to a standardized computing environment.",
+    "crumbs": [
+      "How to...",
+      "Use Docker"
+    ]
+  },
+  {
+    "objectID": "howto/use_docker.html#what-is-docker",
+    "href": "howto/use_docker.html#what-is-docker",
+    "title": "How to Use Docker in this Class",
+    "section": "What is Docker?",
+    "text": "What is Docker?\nDocker is a collection of technologies that allow developers to run applications in isolated environments. For example, a company like Netflix might use multiple containers to isolate different parts of the user experience (logging in to your account, billing, selecting a series to binge). In the realm of data analysis, researchers and analysts use Docker to package fragile software stacks, such as a specific version of Julia, Python, or R combined with custom libraries and GPU drivers, so that data processing, modeling, and other pipelines can be shared and run anywhere without breaking. In either setting, careful management of the computing environments under which discrete tasks are carried out is a central concern.",
+    "crumbs": [
+      "How to...",
+      "Use Docker"
+    ]
+  },
+  {
+    "objectID": "howto/use_docker.html#why-are-we-using-docker",
+    "href": "howto/use_docker.html#why-are-we-using-docker",
+    "title": "How to Use Docker in this Class",
+    "section": "Why are we using Docker?",
+    "text": "Why are we using Docker?\nWhile there are many ways in which containers might be applied, our interest in isolated environments is motivated by the following:\n\nStandarization and Consistency. Everyone in the class will run the same OS, the same system dependencies, and identical software versions.\nMinimal Installation Friction. There is a benefit to learning how to manage systems on your own, from scratch, as you build out your workspace and tools. Unfortunately, the quarter system does not allow much time for exploration, experimentation, and failure. Most of the hard work has been handled by building the class Docker image.\nReproducbility. Containerization helps us practice reproducbility in our work. It makes for good science, good software, and excellent communication of your work.",
+    "crumbs": [
+      "How to...",
+      "Use Docker"
+    ]
+  },
+  {
+    "objectID": "howto/use_docker.html#so-how-do-i-use-it",
+    "href": "howto/use_docker.html#so-how-do-i-use-it",
+    "title": "How to Use Docker in this Class",
+    "section": "So how do I use it?",
+    "text": "So how do I use it?\nThere are few terms we need to define before we use Docker.\n\nDockerfile: This is a recipe that defines an environment. It’s just a text file with Bash commands (usually) and some additional Docker-specific syntax.\nImage: This is the product generated by running the recipe in a Dockerfile. It is a read-only environment, configured with a specific Operating System (OS), file structure, and accompanying software.\nContainer: Whereas images are static, containers are dynamic. It is the “runtime” or how we use a Docker image. A single image can be used to spin up multiple containers, each running instances of the same or related applications. The environment is the same each time you create a container, from scratch, using the same image.\nVolume: You can create and destroy data within a container, but Docker containers are deliberately disposable. A (storage) volume allows you to persist data after you shut down a container. This works by mapping data (files, folders, programs, etc) from a container to your disk.\nDocker Desktop: The main software from Docker that we will use, which handles building images, container creation, and deployment.\n\n\n1. Download and Install Docker Desktop\nPoint your preferred web browser to https://www.docker.com/products/docker-desktop/ and select the appropriate download for your OS and architecture.\n\n\n\n\n\n\nWarningWindows Users\n\n\n\n\nIf you have a Surface or Copilot+ laptop, it has a Qualcomm Snapdragon CPU. Select the ARM64 option.\nOtherwise, you have an Intel or AMD CPU. Select the AMD64 option.\n\n\n\nFollow instructions from the installer.\n\n\n2. Download our docker-compose.yml\n\nThis is a file to automatically construct a container from pre-built images.\nPlease download it from Canvas.\nBe sure to download it to a convenient location where you would like to store your course materials.\n\n\n\n\n\n\n\nWarningWindows Users\n\n\n\nAvoid placing your course materials, including docker-compose.yml, inside a folder that is backed up by cloud services like OneDrive or Google Drive. The automated nature of such tools risk corrupting your files if a backup triggers while your container is running, resulting in data loss.\nSuggested Workaround: Store your work directly under your C:\\ drive; for example C:\\STAT206.\n\n\n\n\n3. Create your local container\nFirst, open the terminal view in Docker Desktop.\n\n\n\n\n\nNext, navigate to the folder/directory containing the docker-compose.yml file. Once you’ve verified the file’s presence, enter and run the command docker compose up -d stat.\n\n\n\n\n\nThe Containers tab in Docker Desktop shows the status of your container.\n\n\n\n\n\n\nGray circle: Not running\nGreen circle: Running (in the background)\nYou can start/stop the container using the Play/Stop button under Actions.\n\nThe docker ps command can also be used to monitor your container from a CLI.\n\n\n\n\n\n\n\n4. Using the Container\nIf you want to access the container from your machine’s Terminal:\ndocker start -ai STAT206-STAT\n\ndocker start: The start action will only start an existing container.\n-ai: The option a ensures we can see messages in our terminal and propagates signals (such as force quitting). The option i is used to indicate an interactive session.\nSTAT206-STAT the name of the container we wish to run.\n\nIf you just want the container to run in the background so you can connect to it using VSCode:\ndocker start STAT206-STAT\nYou can stop a running container using:\ndocker stop STAT206-STAT",
+    "crumbs": [
+      "How to...",
+      "Use Docker"
     ]
   }
 ]
