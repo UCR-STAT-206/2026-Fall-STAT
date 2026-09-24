@@ -4,35 +4,55 @@
     "href": "howto/setup_github.html",
     "title": "Set up a GitHub Account",
     "section": "",
-    "text": "After working through this guide, you should\n\nunderstand GitHub as a Git hosting service, and\nhave access to a GitHub account associated with your UCR email."
+    "text": "After working through this guide, you should\n\nunderstand GitHub as a Git hosting service, and\nhave access to a GitHub account associated with your UCR email.",
+    "crumbs": [
+      "How to...",
+      "Set Up Your GitHub Account"
+    ]
   },
   {
     "objectID": "howto/setup_github.html#goals",
     "href": "howto/setup_github.html#goals",
     "title": "Set up a GitHub Account",
     "section": "",
-    "text": "After working through this guide, you should\n\nunderstand GitHub as a Git hosting service, and\nhave access to a GitHub account associated with your UCR email."
+    "text": "After working through this guide, you should\n\nunderstand GitHub as a Git hosting service, and\nhave access to a GitHub account associated with your UCR email.",
+    "crumbs": [
+      "How to...",
+      "Set Up Your GitHub Account"
+    ]
   },
   {
     "objectID": "howto/setup_github.html#what-is-github",
     "href": "howto/setup_github.html#what-is-github",
     "title": "Set up a GitHub Account",
     "section": "What is GitHub?",
-    "text": "What is GitHub?\nGitHub is one of several web-based platforms for version control. It specifically targets Git.\n\nProvide a central hub for a Git repository.\n\nShare your work with others, or backup your local workspaces remotely.\nServes as a hub for synchronizing changes and resolving conflicting edits.\n\nProvide tools for discussing a project; e.g. issue tracking and documentation.\nBoth private and public options.\nGitHub provides a few incentives for users with EDU email addresses.\nCan also be used to create a personal website."
+    "text": "What is GitHub?\nGitHub is one of several web-based platforms for version control. It specifically targets Git.\n\nProvide a central hub for a Git repository.\n\nShare your work with others, or backup your local workspaces remotely.\nServes as a hub for synchronizing changes and resolving conflicting edits.\n\nProvide tools for discussing a project; e.g. issue tracking and documentation.\nBoth private and public options.\nGitHub provides a few incentives for users with EDU email addresses.\nCan also be used to create a personal website.",
+    "crumbs": [
+      "How to...",
+      "Set Up Your GitHub Account"
+    ]
   },
   {
     "objectID": "howto/setup_github.html#how-to-set-up-an-account-for-this-class",
     "href": "howto/setup_github.html#how-to-set-up-an-account-for-this-class",
     "title": "Set up a GitHub Account",
     "section": "How to set up an account for this class",
-    "text": "How to set up an account for this class\n\n\n\n\n\n\nImportant\n\n\n\nYou can sign up using your favorite browser, but all the command line instructions need to be carried out within the class container!\n\n\n\nSign up for a GitHub account using your UCR email.\n\nIf you set up an account in the past, you may use that instead.\nOtherwise, please use your UCR email! It makes you eligible for the GitHub Student Developer Pack.\n\nChecking for existing SSH keys.\nHow to generate an SSH key.\nHow to add an SSH key.\nVerify that you can connect to GitHub’s servers."
+    "text": "How to set up an account for this class\n\n\n\n\n\n\nImportant\n\n\n\nYou can sign up using your favorite browser, but all the command line instructions need to be carried out within the class container!\n\n\n\nSign up for a GitHub account using your UCR email.\n\nIf you set up an account in the past, you may use that instead.\nOtherwise, please use your UCR email! It makes you eligible for the GitHub Student Developer Pack.\n\nChecking for existing SSH keys.\nHow to generate an SSH key.\nHow to add an SSH key.\nVerify that you can connect to GitHub’s servers.",
+    "crumbs": [
+      "How to...",
+      "Set Up Your GitHub Account"
+    ]
   },
   {
     "objectID": "howto/setup_github.html#let-us-know-your-github-username",
     "href": "howto/setup_github.html#let-us-know-your-github-username",
     "title": "Set up a GitHub Account",
     "section": "Let us know your GitHub username!",
-    "text": "Let us know your GitHub username!\nFill out the Google form to record the username you wish to use for this course. It will be used to set up your private repository for this class."
+    "text": "Let us know your GitHub username!\nFill out the Google form to record the username you wish to use for this course. It will be used to set up your private repository for this class.",
+    "crumbs": [
+      "How to...",
+      "Set Up Your GitHub Account"
+    ]
   },
   {
     "objectID": "howto/use_revise.html",
@@ -116,55 +136,35 @@
     "href": "howto/submit_hw.html",
     "title": "Submit Assignments",
     "section": "",
-    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
+    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub."
   },
   {
     "objectID": "howto/submit_hw.html#format",
     "href": "howto/submit_hw.html#format",
     "title": "Submit Assignments",
     "section": "",
-    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub.",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
+    "text": "Solutions to lab and homework assignments will consist of several files.\n\nQuarto Markdown. Your main report must be prepared using Quarto Markdown (.qmd) source files. Other formats, such as Jupyter notebooks (.ipynb) will not be accepted. These files combine code, code outputs, and explanatory texts to answer problem prompts.\nProject.toml. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia’s package manager to specify each dependency (both in the standard library and from the package ecosystem).\nJulia Source. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).\nInputs and Outputs. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.\n\nYou will use Git to version control these files and upload your work to a remote repository on GitHub."
   },
   {
     "objectID": "howto/submit_hw.html#workflows",
     "href": "howto/submit_hw.html#workflows",
     "title": "Submit Assignments",
     "section": "Workflows",
-    "text": "Workflows",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
+    "text": "Workflows"
   },
   {
     "objectID": "howto/submit_hw.html#github",
     "href": "howto/submit_hw.html#github",
     "title": "Submit Assignments",
     "section": "GitHub",
-    "text": "GitHub\n\nSetup\n\n\nFile structure\n\nEach assignment must be organized into directories, subdirectories, and files with specific names.\nPart of your grade will be for reproducibility of your work; that is, how well quarto run hw/hw1/report.qmd faithfully reproduces the outputs in your report.\nAll names are case-sensitive, so please stick to lowercase to avoid issues.\n\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\n\n\nPushing/Pulling",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
+    "text": "GitHub\n\nSetup\n\n\nFile structure\n\nEach assignment must be organized into directories, subdirectories, and files with specific names.\nPart of your grade will be for reproducibility of your work; that is, how well quarto run hw/hw1/report.qmd faithfully reproduces the outputs in your report.\nAll names are case-sensitive, so please stick to lowercase to avoid issues.\n\nrepo/\n├── hw/\n│   ├── hw1/\n│   │   ├── complex_data.arrow\n│   │   ├── fancy_algorithm.jl\n│   │   ├── report.qmd\n│   │   ├── Project.toml\n│   │   └── &lt;other code or files&gt;\n│   ├── hw2/\n│   │\n│   ...\n│   └── hw8/\n└── labs/\n    ├── lab1/\n    │   ├── report.qmd\n    │   ├── Project.toml\n    │   └── test.jl\n    ...\n    └── lab8\n\n\nPushing/Pulling"
   },
   {
     "objectID": "howto/submit_hw.html#grading-and-feedback",
     "href": "howto/submit_hw.html#grading-and-feedback",
     "title": "Submit Assignments",
     "section": "Grading and feedback",
-    "text": "Grading and feedback",
-    "crumbs": [
-      "How to...",
-      "Submit Assignments"
-    ]
+    "text": "Grading and feedback"
   },
   {
     "objectID": "notes/module01/git.html",
@@ -693,56 +693,88 @@
     "href": "howto/configure_git.html",
     "title": "Configure Git",
     "section": "",
-    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
+    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer.",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#goals",
     "href": "howto/configure_git.html#goals",
     "title": "Configure Git",
     "section": "",
-    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer."
+    "text": "After reading this guide, you should\n\nbe able to create commits signed with your chosen username and email,\nverify your global configuration using git config --global --list, and\nunderstand how to set up Git on a computer.",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#overview",
     "href": "howto/configure_git.html#overview",
     "title": "Configure Git",
     "section": "Overview",
-    "text": "Overview\nWe will use Git for version control of our work throughout the quarter. You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments. Later in the course you will work in a small team and use Git to coordinate development.\nBefore that can happen, we’ll need to configure Git.\n\n\n\n\n\n\nNoteConfiguration Files\n\n\n\nDr. Landeros prefers to use a ~/.config/ directory to store configuration files as much as possible. This practice is based on the XDG Base Directory Specification, which a tool like Git respects. That said, not every tool across Linux distributions will adhere to this standard."
+    "text": "Overview\nWe will use Git for version control of our work throughout the quarter. You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments. Later in the course you will work in a small team and use Git to coordinate development.\nBefore that can happen, we’ll need to configure Git.\n\n\n\n\n\n\nNoteConfiguration Files\n\n\n\nDr. Landeros prefers to use a ~/.config/ directory to store configuration files as much as possible. This practice is based on the XDG Base Directory Specification, which a tool like Git respects. That said, not every tool across Linux distributions will adhere to this standard.",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#method-1-quick-and-easy",
     "href": "howto/configure_git.html#method-1-quick-and-easy",
     "title": "Configure Git",
     "section": "Method 1: Quick and easy",
-    "text": "Method 1: Quick and easy\nThe following commands will create a global configuration file at ~/.gitconfig.\ngit config --global user.name \"CHOSE YOUR NAME\"\ngit config --global user.email \"UCR EMAIL\"\ngit config --global core.editor \"code --wait\""
+    "text": "Method 1: Quick and easy\nThe following commands will create a global configuration file at ~/.gitconfig.\ngit config --global user.name \"CHOSE YOUR NAME\"\ngit config --global user.email \"UCR EMAIL\"\ngit config --global core.editor \"code --wait\"",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#method-2-using-an-editor",
     "href": "howto/configure_git.html#method-2-using-an-editor",
     "title": "Configure Git",
     "section": "Method 2: Using an editor",
-    "text": "Method 2: Using an editor\n\nCreate and open a file: ~/.config/git/config. Alternatively, you may use a file at ~/.gitconfig. Just choose whichever approach appeals to you.\nIn the file, type in the following information (mind the indentation):\n[user]\n    name = CHOOSE YOUR NAME\n    email = UCR EMAIL\n[core]\n    editor = code --wait"
+    "text": "Method 2: Using an editor\n\nCreate and open a file: ~/.config/git/config. Alternatively, you may use a file at ~/.gitconfig. Just choose whichever approach appeals to you.\nIn the file, type in the following information (mind the indentation):\n[user]\n    name = CHOOSE YOUR NAME\n    email = UCR EMAIL\n[core]\n    editor = code --wait",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#what-does-the-core.editor-option-do",
     "href": "howto/configure_git.html#what-does-the-core.editor-option-do",
     "title": "Configure Git",
     "section": "What does the core.editor option do?",
-    "text": "What does the core.editor option do?\nIf you run git commit in a Git repository, the command set for core.editor is run automatically for you. This is convenient for quickly drafting a commit message.\nAlternatively, you can use the VSCode interface for writing commits."
+    "text": "What does the core.editor option do?\nIf you run git commit in a Git repository, the command set for core.editor is run automatically for you. This is convenient for quickly drafting a commit message.\nAlternatively, you can use the VSCode interface for writing commits.",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#check-your-work",
     "href": "howto/configure_git.html#check-your-work",
     "title": "Configure Git",
     "section": "Check your work",
-    "text": "Check your work\n\nRead the contents of ~/.config/git/config\nCheck the output of git config --global --list.\nCheck the output of git config --global --list --show-source."
+    "text": "Check your work\n\nRead the contents of ~/.config/git/config\nCheck the output of git config --global --list.\nCheck the output of git config --global --list --show-source.",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/configure_git.html#optional-address-colorblindness",
     "href": "howto/configure_git.html#optional-address-colorblindness",
     "title": "Configure Git",
     "section": "Optional: Address colorblindness",
-    "text": "Optional: Address colorblindness\nBy default, the command git diff relies on red (for deletions) and green (for additions) to highlight changes in files. Other Git commands use red and green to tag the state of varies files in a repository. Fortunately, the tool can be configured to use colorblind-friendly alternatives and increase its accessibility.\n\nOption 1: Change the diff colors\nIn a command line:\ngit config --global color.diff.old \"yellow\"\ngit config --global color.diff.new \"blue\"\nAlternatively, edit your Git configuration file:\n[color \"diff\"]\n    old = yellow\n    new = blue\n\n\nOption 2: Disable color-coded output\nIn a command line:\ngit config --global color.ui false\nAlternatively, edit your Git configuration file:\n[color]\n    ui = false"
+    "text": "Optional: Address colorblindness\nBy default, the command git diff relies on red (for deletions) and green (for additions) to highlight changes in files. Other Git commands use red and green to tag the state of varies files in a repository. Fortunately, the tool can be configured to use colorblind-friendly alternatives and increase its accessibility.\n\nOption 1: Change the diff colors\nIn a command line:\ngit config --global color.diff.old \"yellow\"\ngit config --global color.diff.new \"blue\"\nAlternatively, edit your Git configuration file:\n[color \"diff\"]\n    old = yellow\n    new = blue\n\n\nOption 2: Disable color-coded output\nIn a command line:\ngit config --global color.ui false\nAlternatively, edit your Git configuration file:\n[color]\n    ui = false",
+    "crumbs": [
+      "How to...",
+      "Configure Git"
+    ]
   },
   {
     "objectID": "howto/use_docker.html",
