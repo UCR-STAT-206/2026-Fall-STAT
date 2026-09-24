@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Optimization Intro</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fe28389acfe4858586809e3bd823463c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#optimization-problem" id="toc-optimization-problem" class="nav-link" data-scroll-target="#optimization-problem">Optimization Problem</a></li>
+  <li><a href="#optimization-vs-root-finding" id="toc-optimization-vs-root-finding" class="nav-link" data-scroll-target="#optimization-vs-root-finding">Optimization vs Root Finding</a>
+  <ul class="collapse">
+  <li><a href="#example-the-babylonian-method" id="toc-example-the-babylonian-method" class="nav-link" data-scroll-target="#example-the-babylonian-method">Example: The Babylonian Method</a></li>
+  <li><a href="#solve-as-a-root-finding-problem" id="toc-solve-as-a-root-finding-problem" class="nav-link" data-scroll-target="#solve-as-a-root-finding-problem">Solve as a Root Finding Problem</a></li>
+  <li><a href="#solve-as-a-minimization-problem" id="toc-solve-as-a-minimization-problem" class="nav-link" data-scroll-target="#solve-as-a-minimization-problem">Solve as a Minimization Problem</a></li>
+  </ul></li>
+  <li><a href="#multivariable-calculus" id="toc-multivariable-calculus" class="nav-link" data-scroll-target="#multivariable-calculus">Multivariable Calculus</a>
+  <ul class="collapse">
+  <li><a href="#definitions" id="toc-definitions" class="nav-link" data-scroll-target="#definitions">Definitions</a></li>
+  <li><a href="#differentation-with-abstract-objects" id="toc-differentation-with-abstract-objects" class="nav-link" data-scroll-target="#differentation-with-abstract-objects">Differentation with abstract objects</a></li>
+  </ul></li>
+  <li><a href="#inner-products" id="toc-inner-products" class="nav-link" data-scroll-target="#inner-products">Inner Products</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
+  <ul class="collapse">
+  <li><a href="#deriving-the-normal-equations-in-ordinary-regression" id="toc-deriving-the-normal-equations-in-ordinary-regression" class="nav-link" data-scroll-target="#deriving-the-normal-equations-in-ordinary-regression">Deriving the Normal Equations in Ordinary Regression</a></li>
+  <li><a href="#normal-equations-for-multivariate-regression" id="toc-normal-equations-for-multivariate-regression" class="nav-link" data-scroll-target="#normal-equations-for-multivariate-regression">Normal Equations for Multivariate Regression</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Optimization Intro</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<ul>
+<li>Many problems in statistics come down to optimization (but not all of them).</li>
+<li>So do lots of problems in economics, physics, CS, biology, operations research …</li>
+<li><em>Mathematical optimization</em> deals in minimums <span class="math inline">\(\min\)</span> and maximums <span class="math inline">\(\max\)</span>.</li>
+<li>Statisticians usually talk about <em>maximization</em>; the field of optimization often just study minimization. We translate one to the other with minus signs.</li>
+</ul>
+<p>Lots of estimators are formulated in terms of minimization/maximization.</p>
+<ul>
+<li>Ordinary least squares (including variants with ridge, lasso, elastic net…)</li>
+<li>Least angle regression (LARS); OLS but with <span class="math inline">\(|\cdot|\)</span></li>
+<li>Maximum likelihood estimation (MLE)</li>
+<li>Maximum a posteriori (MAP) estimation; Bayesian statistics</li>
+<li>Machine learning: loss + regularization</li>
+</ul>
+</section>
+<section id="optimization-problem" class="level1">
+<h1>Optimization Problem</h1>
+<p>An <em>unconstrained minimization problem</em> takes the form of</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{x}}~f(\boldsymbol{x}) \qquad \qquad (P)
+\]</span></p>
+<ul>
+<li>The underset symbol <span class="math inline">\(\boldsymbol{x}\)</span> indicates the variable(s) of the optimization problem.</li>
+<li>The expression <span class="math inline">\(f(\boldsymbol{x})\)</span> represents the objective function; i.e.&nbsp;what do we want to minimize.</li>
+<li>We understand <span class="math inline">\(\boldsymbol{x} \in \mathbb{R}^{d}\)</span> from context; we’ll assume real-valued solutions in this class.</li>
+</ul>
+<p>The Problem (P) may or may not have a solution. There may be multiple solutions.</p>
+<ul>
+<li><em>No solution</em>: <span class="math inline">\(\min_{x} \log(x)\)</span></li>
+<li><em>Not unique</em>: <span class="math inline">\(\min_{x} \cos(x)\)</span></li>
+</ul>
+<p>As such, we may write the following when dealing with nonunique solutions</p>
+<p><span class="math display">\[
+\boldsymbol{x} \in \underset{\boldsymbol{x}}{\mathrm{argmin}}~f(\boldsymbol{x}) = \left\{\boldsymbol{z} : f(\boldsymbol{z}) = f_{\ast}\right\},
+\]</span></p>
+<p>and say <span class="math inline">\(\boldsymbol{x}\)</span> is <em>a solution</em> or <em>a minimizer</em> to Problem (P) if <span class="math inline">\(f(\boldsymbol{x}) = f_{\ast}\)</span>, the minimum value of the function <span class="math inline">\(f\)</span>. When we have a guarantee that there is only one solution, we replace <span class="math inline">\(\in\)</span> with <span class="math inline">\(=\)</span>.</p>
+<p>Outside of easy textbook problems, most real-world applications do not admit closed-form solutions; i.e.&nbsp;in general, we cannot hope to write down an explicit formula giving solutions to Problem (P). Thus, we need algorithms to compute solutions, often in an iterative fashion.</p>
+</section>
+<section id="optimization-vs-root-finding" class="level1">
+<h1>Optimization vs Root Finding</h1>
+<p>The problems of optimization and root finding are closely related to each other. Depending on the application, one perspective may offer a better algorithm. The example below was derived without any knowledge of calculus but calculus features heavily in optimization algorithms. We will see the connection between the two mathematical problems via the Newton-Raphson method.</p>
+<section id="example-the-babylonian-method" class="level2">
+<h2 class="anchored" data-anchor-id="example-the-babylonian-method">Example: The Babylonian Method</h2>
+<p>The ancient Babylonians knew how to approximate the hypotenuse of a triangle, which involves computing the square root of a non-negative number. The Greek mathematician Heron would later define an explicit algorithm for computing the square root of an arbitrary non-negative number <span class="math inline">\(c\)</span>, which is often attributed to the Babylonians due to their geometric skills.</p>
+<p><strong>Source</strong>: <a href="https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Heron's_method">Babylonian Method (Wikipedia)</a></p>
+<p><strong>Credit</strong>: <a href="https://epubs.siam.org/doi/book/10.1137/1.9781611976175">Algorithms from THE BOOK (Chapter 1, Section 3)</a></p>
+<p>Before seeing the <em>algorithm</em>, let us first formulate the problem precisely: Given <span class="math inline">\(c &gt; 0\)</span>, we seek a number <span class="math inline">\(x\)</span> such that <span class="math inline">\(x = \sqrt{c}\)</span>. A little rearranging reveals the generic problem:</p>
+<p><span class="math display">\[
+f(x) = x^{2} - c = 0; \qquad c &gt; 0,
+\]</span></p>
+<p>that is, we need to find a <em>root</em> or <em>zero</em> of the function <span class="math inline">\(f(x) = x^{2} - c\)</span>.</p>
+<p>From elementary calculus, we know our objective <span class="math inline">\(f(x)\)</span> is differentiable and that we can approximate the objective’s value at <span class="math inline">\(x\)</span> from its properties at an anchor point <span class="math inline">\(x_{0}\)</span>. To first order, Taylor’s theorem states we can extrapolate from <span class="math inline">\(x_{0}\)</span> via</p>
+<p><span class="math display">\[
+f(x) = f(x_{0}) + f^{\prime}(x_{0})(x - x_{0}) + O(|x-x_{0}|^{2}).
+\]</span></p>
+<p>Assume this approximation is <em>good enough</em>, i.e.&nbsp;the <span class="math inline">\(O(|x-x_{0}|^{2})\)</span> terms is negligible. Focus on the linear piece only; this simply defines a line with <span class="math inline">\(y = f(x)\)</span>:</p>
+<p><span class="math display">\[
+y = f(x_{0}) + f^{\prime}(x_{0})(x - x_{0}).
+\]</span></p>
+<p>The derivative <span class="math inline">\(f^{\prime}(x_{0})\)</span> defines its slope. To determine its <span class="math inline">\(x\)</span>-intercept, we solve by finding <span class="math inline">\(x_{1}\)</span> such that <span class="math inline">\(y = 0\)</span>:</p>
+<p><span class="math display">\[
+0 = f(x_{0}) + f^{\prime}(x_{0})(x_{1} - x_{0}),
+\]</span></p>
+<p>which yields</p>
+<p><span class="math display">\[
+x_{1} = x_{0} - \frac{f(x_{0})}{f^{\prime}(x_{0})}.
+\]</span></p>
+<p>This provides a generic recipe for extrapolating <span class="math inline">\(x\)</span>-intercepts for the lines <span class="math inline">\(y = f(x_{n}) + f^{\prime}(x_{n})(x - x_{n})\)</span> where <span class="math inline">\(y = f(x)\)</span>. Thus, iterating the <em>algorithm map</em></p>
+<p><span class="math display">\[
+x_{n+1} = x_{n} - \frac{f(x_{n})}{f^{\prime}(x_{n})},
+\]</span></p>
+<p>should, under certain conditions, recover an estimate <span class="math inline">\(x\)</span> such that <span class="math inline">\(f(x) = 0\)</span>. Filling in the details for our problem, we have</p>
+<p><span class="math display">\[
+x_{n+1} = x_{n} - \frac{x_{n}^{2} - c}{2 x_{n}}.
+\]</span></p>
+<p>This is precisely the <strong>Newton-Raphson method</strong> for calculating roots of functions. It requires <span class="math inline">\(f(x)\)</span> to be differentiable with respect to <span class="math inline">\(x\)</span>. Later we will see a version of Newton-Raphson for optimization.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Newton.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:40.0%"></p>
+</figure>
+</div>
+</section>
+<section id="solve-as-a-root-finding-problem" class="level2">
+<h2 class="anchored" data-anchor-id="solve-as-a-root-finding-problem">Solve as a Root Finding Problem</h2>
+<p>The method turns out to be the so-called <strong>Babylonian method</strong> to estimate square roots. After some rearrangement, recipe is</p>
+<p><span class="math display">\[
+x_{n+1} = \frac{1}{2} \left[x_{n}+\frac{c}{x_{n}}\right].
+\]</span></p>
+<p>This is an <em>iterative algorithm</em> in which the next iterate (left-hand side), <span class="math inline">\(x_{n+1}\)</span>, is defined by some function of the previous iterates (just <span class="math inline">\(x_{n}\)</span> in this case) plus some additional problem data (such as the number, <span class="math inline">\(c\)</span>).</p>
+<p>The following code implements the algorithm using the stopping condition <span class="math inline">\(|x_{n+1}^{2} - c| &lt; \epsilon\)</span> for some tolerance parameter <span class="math inline">\(\epsilon\)</span>.</p>
+<div id="2" class="cell" data-execution_count="0">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">function</span> <span class="fu">babylonian</span>(c, x0; maxiter <span class="op">=</span> <span class="fl">10</span>, epsilon <span class="op">=</span> <span class="fl">1e-3</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  not_converged <span class="op">=</span> c <span class="op">!=</span> <span class="fl">0</span>              <span class="co"># convergence check</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  x <span class="op">=</span> <span class="fu">ifelse</span>(not_converged, x0, c)    <span class="co"># current estimate</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  n <span class="op">=</span> <span class="fl">0</span>                               <span class="co"># iteration counter</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="cf">while</span> (not_converged <span class="op">&amp;&amp;</span> n <span class="op">&lt;</span> maxiter)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    x <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> (x <span class="op">+</span> c <span class="op">/</span> x)                   <span class="co"># update</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    not_converged <span class="op">=</span> <span class="fu">abs</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> c) <span class="op">&gt;</span> epsilon  <span class="co"># check</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    n <span class="op">=</span> n <span class="op">+</span> <span class="fl">1</span>                               <span class="co"># update counter</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="cf">end</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>  status <span class="op">=</span> <span class="fu">ifelse</span>(not_converged, <span class="st">"did not"</span>, <span class="st">"did"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>  <span class="fu">println</span>(<span class="st">"The algorithm "</span>, status, <span class="st">" converge after "</span>, n, <span class="st">" iterations."</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  <span class="cf">return</span> x</span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="4" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">babylonian</span>(<span class="cn">pi</span>, <span class="fl">3.14</span>, epsilon <span class="op">=</span> <span class="fl">1e-6</span>) <span class="op">-</span> <span class="fu">sqrt</span>(<span class="cn">pi</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="solve-as-a-minimization-problem" class="level2">
+<h2 class="anchored" data-anchor-id="solve-as-a-minimization-problem">Solve as a Minimization Problem</h2>
+<p>Alternatively, we can cast the problem of calculating square roots as an optimization problem. That is, minimize the residual in</p>
+<p><span class="math display">\[
+f(x) = \frac{1}{2}(x^{2} - c)^2
+\]</span></p>
+<ul>
+<li>Why the square? Large negative values should be penalized just as much as large positive values. Absolute values are not differentiable, but squares are.</li>
+<li>Want <span class="math inline">\(x^{2}\)</span> “close” to <span class="math inline">\(c\)</span>; that is, in terms of squared Euclidean distance. Generalize to <span class="math inline">\(d\)</span> dimensions.</li>
+<li>Probably not the best idea here.</li>
+</ul>
+<p>From calculus we know that the <em>stationary condition</em> <span class="math inline">\(f^{\prime}(x) = 0\)</span> indicates a critical point. Thus, we might think to apply the root-finding Newton-Raphson method to the function <span class="math inline">\(f^{\prime}(x)\)</span>. This leads to the algorithm map</p>
+<p><span class="math display">\[
+x_{n+1} = x_{n} - \frac{f^{\prime}(x_{n})}{f^{\prime\prime}(x_{n})},
+\]</span></p>
+<p>which requires <span class="math inline">\(f(x)\)</span> to be twice-differentiable. Filling in the details, we have</p>
+<p><span class="math display">\[
+x_{n+1} = x_{n} - \frac{x_{n}(x_{n}^{2} - c)}{3 x^{2}_{n} -c}
+\]</span></p>
+<div id="6" class="cell" data-execution_count="0">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">function</span> <span class="fu">newton_sqrt</span>(c, x0; maxiter <span class="op">=</span> <span class="fl">10</span>, epsilon <span class="op">=</span> <span class="fl">1e-3</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  not_converged <span class="op">=</span> c <span class="op">!=</span> <span class="fl">0</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  x <span class="op">=</span> <span class="fu">ifelse</span>(not_converged, x0, c)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  n <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="cf">while</span> (not_converged <span class="op">&amp;&amp;</span> n <span class="op">&lt;</span> maxiter)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    x2 <span class="op">=</span> x<span class="op">*</span>x</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    x <span class="op">=</span> x <span class="op">-</span> x <span class="op">*</span> (x2 <span class="op">-</span> c) <span class="op">/</span> (<span class="fl">3</span> <span class="op">*</span> x2 <span class="op">-</span> c)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    not_converged <span class="op">=</span> <span class="fu">abs</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">-</span> c) <span class="op">&gt;</span> epsilon  <span class="co"># check</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>    n <span class="op">=</span> n <span class="op">+</span> <span class="fl">1</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="cf">end</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>  status <span class="op">=</span> <span class="fu">ifelse</span>(not_converged, <span class="st">"did not"</span>, <span class="st">"did"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a>  <span class="fu">println</span>(<span class="st">"The algorithm "</span>, status, <span class="st">" converge after "</span>, n, <span class="st">" iterations."</span>)</span>
+<span id="cb3-13"><a href="#cb3-13"></a>  <span class="cf">return</span> x</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="8" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">newton_sqrt</span>(<span class="cn">pi</span>, <span class="fl">3.14</span>, epsilon <span class="op">=</span> <span class="fl">1e-6</span>) <span class="op">-</span> <span class="fu">sqrt</span>(<span class="cn">pi</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="multivariable-calculus" class="level1">
+<h1>Multivariable Calculus</h1>
+<section id="definitions" class="level2">
+<h2 class="anchored" data-anchor-id="definitions">Definitions</h2>
+<p>Functions of several variables have many notions of derivatives.</p>
+<p>For a function <span class="math inline">\(f : \mathbb{R}^{d} \longrightarrow \mathbb{R}\)</span>, define the differential operator <span class="math inline">\(D_{j}\)</span> by its action on <span class="math inline">\(f\)</span></p>
+<p><span class="math display">\[
+D_{j} f(\boldsymbol{x})
+= \lim_{t \to 0} \frac{f(\boldsymbol{x} + t\boldsymbol{e}_{j}) - f(\boldsymbol{x})}{t} = \frac{d}{dx_{j}}f(\boldsymbol{x}),
+\]</span></p>
+<p>whenever the limit exists. This is the <strong>partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(\boldsymbol{x}_{j}\)</span></strong>.</p>
+<ul>
+<li><span class="math inline">\(D_{j}\)</span> (or <span class="math inline">\(\frac{d}{d x_{j}}\)</span>) is an operator that acts on functions,</li>
+<li><span class="math inline">\(\boldsymbol{e}_{j}\)</span> is the <span class="math inline">\(j\)</span>-th standard basis vector of <span class="math inline">\(\mathbb{R}^{d}\)</span>, and</li>
+<li><span class="math inline">\(\frac{d}{dx_{j}}f(\boldsymbol{x})\)</span> is the result, itself a function evaluated at <span class="math inline">\(\boldsymbol{x}\)</span>.</li>
+</ul>
+<p>Partial derivatives are thus special cases of <em>directional derivatives</em>. The <strong>directional derivative along direction <span class="math inline">\(\boldsymbol{v}\)</span></strong> is defined by the limit</p>
+<p><span class="math display">\[
+D_{\boldsymbol{v}} f(\boldsymbol{x})
+= \lim_{t \to 0} \frac{f(\boldsymbol{x} + t\boldsymbol{v}) - f(\boldsymbol{x})}{t} = \left\langle df(\boldsymbol{x}), \boldsymbol{v}\right\rangle,
+\]</span></p>
+<p>where we assume <span class="math inline">\(\|\boldsymbol{v}\| = 1\)</span> and the brackets <span class="math inline">\(\langle\cdot,\cdot\rangle\)</span> denote an inner product. There are a few things to note here:</p>
+<ol type="1">
+<li>Partial derivatives depend on your basis elements. <em>Thus, partial derivatives depend on your choice of coordinate system</em>.</li>
+<li>Directional derivatives are anchored to directions. <em>They are insensitive to coordinate systems</em>.</li>
+<li>Both partial and directional derivatives are <em>scalars</em> representing slopes of tangent lines.</li>
+<li>The object <span class="math inline">\(df(\boldsymbol{x})\)</span> is the first <strong>differential</strong> of <span class="math inline">\(f\)</span>.</li>
+</ol>
+<p>A <em>differential</em> generalizes the notion of slope to more abstract objects. Specifically, it is the best linear approximation to a function based on the Taylor-like expansion</p>
+<p><span class="math display">\[
+f(\boldsymbol{x} + t\boldsymbol{v}) \approx f(\boldsymbol{x}) + \langle df(\boldsymbol{x}), (t \boldsymbol{v})\rangle.
+\]</span></p>
+<p>Indeed, when <span class="math inline">\(f\)</span> is differentiable in <span class="math inline">\(\boldsymbol{x}\)</span> the differential <span class="math inline">\(df(\boldsymbol{x})\)</span> is <em>unique</em> and defines the <strong>gradient</strong> of <span class="math inline">\(f\)</span></p>
+<p><span class="math display">\[
+\nabla f(\boldsymbol{x}) = (D_{1}f(\boldsymbol{x}), D_{2}(\boldsymbol{x}), \ldots, D_{d}(\boldsymbol{x}))^{\top} = df((\boldsymbol{x}))^{\top}.
+\]</span></p>
+</section>
+<section id="differentation-with-abstract-objects" class="level2">
+<h2 class="anchored" data-anchor-id="differentation-with-abstract-objects">Differentation with abstract objects</h2>
+<p>On the surface, the language in our definitions appears entirely focused on <em>vectors</em> in the sense of 1D arrays. What we really require is some notion of <em>inner product</em></p>
+<p><span class="math display">\[
+\langle\cdot,\cdot\rangle: V \times V \longrightarrow \mathbb{R}
+\]</span></p>
+<p>This is map taking two elements of a vector space <span class="math inline">\(\boldsymbol{V}\)</span> and assigning them a scalar from the underlying field (<span class="math inline">\(\mathbb{R}\)</span> for our purposes). The outputs of inner products relate “magnitude” to “angles” between objects, and thus helps us define what it means to be “orthogonal”.</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>Euclidean vector space with the “dot” product serving as inner product; i.e.&nbsp;<span class="math inline">\(\boldsymbol{x},\boldsymbol{y} \in \mathbb{R}^{d}\)</span> and <span class="math inline">\(\langle \boldsymbol{x}, \boldsymbol{y}\rangle = \boldsymbol{x} \cdot \boldsymbol{y} = \boldsymbol{x}^{\top} = \boldsymbol{y}\)</span>.</li>
+<li>The set of <span class="math inline">\(m \times n\)</span> matrices (is a vector space) with <em>trace</em> <span class="math inline">\(\mathrm{tr}(\cdot)\)</span> serving as inner product; i.e.&nbsp;<span class="math inline">\(\boldsymbol{A}, \boldsymbol{B} \in \mathbb{R}^{m \times n}\)</span> and <span class="math inline">\(\langle\boldsymbol{A},\boldsymbol{B}\rangle = \mathrm{tr}(\boldsymbol{A}^{\top}\boldsymbol{B})\)</span>.</li>
+<li>The set of square integrable functions with common domain <span class="math inline">\(\Omega\)</span>; i.e.&nbsp;<span class="math inline">\(f,g\)</span> square integrable functions and <span class="math inline">\(\langle f, g \rangle = \int_{\Omega} f(x) g(x) dx\)</span>.</li>
+<li>The set of real-valued random variables with <span class="math inline">\(\langle X, Y \rangle = E[XY]\)</span>. See the previous example; need some measure theory to see this perspective.</li>
+</ul>
+</section>
+</section>
+<section id="inner-products" class="level1">
+<h1>Inner Products</h1>
+<p><a href="https://en.wikipedia.org/wiki/Inner_product_space#Definition"><strong>Informal definition</strong></a>: An inner product must satisfy</p>
+<ul>
+<li>(conjugate) symmetry: <span class="math inline">\(\langle x, y\rangle = \overline{\langle y, x\rangle}\)</span> (<span class="math inline">\(\bar{x}\)</span> indicates the conjugate of <span class="math inline">\(x \in \mathbb{C}\)</span>)</li>
+<li>linear in first argument: <span class="math inline">\(\langle ax + by, z\rangle = a\langle x, z\rangle + b\langle y, z\rangle\)</span></li>
+<li>positive definiteness: <span class="math inline">\(\langle x, x\rangle\)</span> whenever <span class="math inline">\(x \neq 0\)</span>.</li>
+</ul>
+<p><strong>Consequences</strong>:</p>
+<ul>
+<li><span class="math inline">\(\langle 0, x\rangle = 0\)</span></li>
+<li><span class="math inline">\(\|x\|^2 = \langle x, x\rangle \ge 0\)</span></li>
+<li>$x, x= $ if and only if <span class="math inline">\(x = 0\)</span></li>
+<li>linear in second argument</li>
+</ul>
+<p>When working over <span class="math inline">\(\mathbb{R}\)</span>, binomial expansions take on the familiar form</p>
+<p><span class="math display">\[
+\langle x+y, x+y \rangle = \langle x, x \rangle + 2 \langle x, y \rangle + \langle y, y \rangle
+\]</span></p>
+</section>
+<section id="examples" class="level1">
+<h1>Examples</h1>
+<section id="deriving-the-normal-equations-in-ordinary-regression" class="level2">
+<h2 class="anchored" data-anchor-id="deriving-the-normal-equations-in-ordinary-regression">Deriving the Normal Equations in Ordinary Regression</h2>
+<p>Compute the gradients of the following functions:</p>
+<ul>
+<li><span class="math inline">\(g(\boldsymbol{\beta}) = \boldsymbol{X} \boldsymbol{\beta}\)</span>, where <span class="math inline">\(\boldsymbol{X} \in \mathbb{R}^{n \times p}\)</span>.</li>
+<li><span class="math inline">\(h(\boldsymbol{\beta}) = \boldsymbol{\beta}^{\top} \boldsymbol{C} \boldsymbol{\beta}\)</span>, where <span class="math inline">\(\boldsymbol{C} \in \mathbb{R}^{n \times n}\)</span></li>
+<li><span class="math inline">\(f(\boldsymbol{\beta}) = \|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|^{2}\)</span>.</li>
+</ul>
+<p>Use the stationary condition <span class="math inline">\(\nabla f(\boldsymbol{\beta}) = \boldsymbol{0}\)</span> to derive the normal equations.</p>
+</section>
+<section id="normal-equations-for-multivariate-regression" class="level2">
+<h2 class="anchored" data-anchor-id="normal-equations-for-multivariate-regression">Normal Equations for Multivariate Regression</h2>
+<p>Now suppose you have a multivariate response <span class="math inline">\(\boldsymbol{Y} \in \mathbb{R}^{n \times c}\)</span>; rows are observations and columns correspond to components of the response. The objective function for constructing an estimator based on least squares is</p>
+<p><span class="math display">\[
+f(\boldsymbol{B}) = \|\boldsymbol{Y} - \boldsymbol{X}\boldsymbol{B}\|_{F}^{2},
+\]</span></p>
+<p>where the subscript <span class="math inline">\(F\)</span> indicates the Frobenius norm. What is the gradient with respect to <span class="math inline">\(\boldsymbol{B} \in \mathbb{R}^{p \times c}\)</span>? Use the stationary condition <span class="math inline">\(\nabla f(\boldsymbol{B}) = \boldsymbol{0}\)</span> to derive the normal equations.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

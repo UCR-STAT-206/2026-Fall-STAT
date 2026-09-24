@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Bootstrap</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fe28389acfe4858586809e3bd823463c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#plug-in-and-the-bootstrap" id="toc-plug-in-and-the-bootstrap" class="nav-link active" data-scroll-target="#plug-in-and-the-bootstrap">Plug-in and the bootstrap</a>
+  <ul class="collapse">
+  <li><a href="#why-the-name" id="toc-why-the-name" class="nav-link" data-scroll-target="#why-the-name">Why the name?</a></li>
+  </ul></li>
+  <li><a href="#nonparametric-bootstrap" id="toc-nonparametric-bootstrap" class="nav-link" data-scroll-target="#nonparametric-bootstrap">Nonparametric bootstrap</a>
+  <ul class="collapse">
+  <li><a href="#resampling" id="toc-resampling" class="nav-link" data-scroll-target="#resampling">Resampling</a></li>
+  <li><a href="#motivation-for-bootstrap" id="toc-motivation-for-bootstrap" class="nav-link" data-scroll-target="#motivation-for-bootstrap">Motivation for bootstrap</a></li>
+  <li><a href="#when-it-works" id="toc-when-it-works" class="nav-link" data-scroll-target="#when-it-works">When it works</a></li>
+  <li><a href="#bootstrap-percentile-intervals" id="toc-bootstrap-percentile-intervals" class="nav-link" data-scroll-target="#bootstrap-percentile-intervals">Bootstrap percentile intervals</a></li>
+  </ul></li>
+  <li><a href="#parametric-bootstrap" id="toc-parametric-bootstrap" class="nav-link" data-scroll-target="#parametric-bootstrap">Parametric Bootstrap</a></li>
+  <li><a href="#nonparametric-versus-parametric" id="toc-nonparametric-versus-parametric" class="nav-link" data-scroll-target="#nonparametric-versus-parametric">Nonparametric versus Parametric</a></li>
+  <li><a href="#example-abnormal-speed-of-light-data" id="toc-example-abnormal-speed-of-light-data" class="nav-link" data-scroll-target="#example-abnormal-speed-of-light-data">Example: Abnormal speed of light data</a>
+  <ul class="collapse">
+  <li><a href="#applying-the-bootstrap" id="toc-applying-the-bootstrap" class="nav-link" data-scroll-target="#applying-the-bootstrap">Applying the bootstrap</a></li>
+  <li><a href="#wheres-the-sampling-distribution" id="toc-wheres-the-sampling-distribution" class="nav-link" data-scroll-target="#wheres-the-sampling-distribution">Where’s the sampling distribution?</a></li>
+  <li><a href="#resampling-1" id="toc-resampling-1" class="nav-link" data-scroll-target="#resampling-1">Resampling</a></li>
+  <li><a href="#defining-the-p-value" id="toc-defining-the-p-value" class="nav-link" data-scroll-target="#defining-the-p-value">Defining the <span class="math inline">\(p\)</span>-value</a></li>
+  </ul></li>
+  <li><a href="#example-sleep-study" id="toc-example-sleep-study" class="nav-link" data-scroll-target="#example-sleep-study">Example: Sleep study</a>
+  <ul class="collapse">
+  <li><a href="#two-sample-t-test" id="toc-two-sample-t-test" class="nav-link" data-scroll-target="#two-sample-t-test">Two-sample <span class="math inline">\(t\)</span>-test</a></li>
+  </ul></li>
+  <li><a href="#bootstrapping-functions" id="toc-bootstrapping-functions" class="nav-link" data-scroll-target="#bootstrapping-functions">Bootstrapping functions</a>
+  <ul class="collapse">
+  <li><a href="#bootstrapping-a-single-statistic" id="toc-bootstrapping-a-single-statistic" class="nav-link" data-scroll-target="#bootstrapping-a-single-statistic">Bootstrapping a single statistic</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bootstrap</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="2" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">RCall</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">RDatasets</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span>, <span class="bu">Random</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">using</span> <span class="bu">Statistics</span>, <span class="bu">StatsBase</span>, <span class="bu">Distributions</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">Plots</span>, <span class="bu">StatsPlots</span>, <span class="bu">LaTeXStrings</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="plug-in-and-the-bootstrap" class="level1">
+<h1>Plug-in and the bootstrap</h1>
+<ul>
+<li>The worst mistake one can make in statistics is to confuse the sample and the population or to confuse estimators and parameters. That is, <span class="math inline">\(\hat{\theta}\)</span> is <strong>not</strong> <span class="math inline">\(\theta\)</span></li>
+<li>Plug-in principle seems to say the opposite
+<ul>
+<li>Sometimes it is okay to just plug in an estimate for an unknown parameter.</li>
+<li>In particular, okay to plug in a <strong>consistent estimator</strong> of the asymptotic variance of a parameter in forming asymptotic confidence intervals for that parameter.</li>
+</ul></li>
+<li>So it is a terrible mistake to confuse a parameter of interest and an estimator for it, but it may not be a mistake to ignore the difference between a nuisance parameter and an estimator for it.</li>
+</ul>
+<section id="why-the-name" class="level2">
+<h2 class="anchored" data-anchor-id="why-the-name">Why the name?</h2>
+<ul>
+<li>The “bootstrap” is a cute name for a vast generalization of the plug-in principle.</li>
+<li>The name comes from the cliche “pull oneself up by one’s bootstraps” which although it describes a literal impossibility actually means succeed by one’s own efforts.</li>
+<li>In statistics, the hint of impossibility is part of the flavor.</li>
+<li>Seems problematic, but it (usually) works.</li>
+</ul>
+</section>
+</section>
+<section id="nonparametric-bootstrap" class="level1">
+<h1>Nonparametric bootstrap</h1>
+<ul>
+<li>The bootstrap comes in two flavors, parametric and nonparametric.</li>
+<li>Theory of the nonparametric bootstrap is all above the level of this course, so we give a non-theoretical explanation.</li>
+<li>The nonparametric bootstrap, considered non-theoretically, is just an analogy.</li>
+</ul>
+<p>“Real world” vs “Bootstrap world”</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Real</th>
+<th>Bootstrap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>true distribution</td>
+<td><span class="math inline">\(F\)</span></td>
+<td><span class="math inline">\(\hat{F}_n\)</span></td>
+</tr>
+<tr class="even">
+<td>data</td>
+<td><span class="math inline">\(X_1, \dots, X_n\)</span> IID <span class="math inline">\(F\)</span></td>
+<td><span class="math inline">\(X_1^*, \dots, X_n^*\)</span> IID <span class="math inline">\(\hat{F}_n\)</span></td>
+</tr>
+<tr class="odd">
+<td>empirical distribution</td>
+<td><span class="math inline">\(\hat{F}_n\)</span></td>
+<td><span class="math inline">\(F_n^*\)</span></td>
+</tr>
+<tr class="even">
+<td>parameter</td>
+<td><span class="math inline">\(\theta = h(F)\)</span></td>
+<td><span class="math inline">\(\hat{\theta}_n = h(\hat{F}_n)\)</span></td>
+</tr>
+<tr class="odd">
+<td>estimator</td>
+<td><span class="math inline">\(\hat{\theta}_n = h(\hat{F}_n)\)</span></td>
+<td><span class="math inline">\(\theta_n^* = h(F_n^*)\)</span></td>
+</tr>
+<tr class="even">
+<td>error</td>
+<td><span class="math inline">\(\hat{\theta}_n - \theta\)</span></td>
+<td><span class="math inline">\(\theta_n^* - \hat{\theta}_n\)</span></td>
+</tr>
+<tr class="odd">
+<td>standardized error</td>
+<td><span class="math inline">\(\frac{\hat{\theta}_n - \theta}{s(\hat{F}_n)}\)</span></td>
+<td><span class="math inline">\(\frac{\theta_n^* - \hat{\theta}_n}{s(F_n^*)}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Notation <span class="math inline">\(\theta = h(F)\)</span> means <span class="math inline">\(\theta\)</span> is some function of the true unknown distribution.</p>
+<section id="resampling" class="level2">
+<h2 class="anchored" data-anchor-id="resampling">Resampling</h2>
+<ul>
+<li>The notation <span class="math inline">\(X_1^*, \dots, X_n^*\)</span> IID <span class="math inline">\(\hat{F}_n\)</span> means <span class="math inline">\(X_1^*, \dots, X_n^*\)</span> are independent and identically distributed from the empirical distribution of the real data.</li>
+<li>Sampling from the empirical distribution is just like sampling from a finite population, where the “population” is the real data <span class="math inline">\(X_1, \dots, X_n\)</span>.
+<ul>
+<li>To be IID sampling it must be done with replacement.</li>
+<li><span class="math inline">\(X_1^*, \dots, X_n^*\)</span> are a sample with replacement from <span class="math inline">\(X_1, \dots, X_n\)</span>.</li>
+<li>This is known as <strong>resampling</strong>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="motivation-for-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="motivation-for-bootstrap">Motivation for bootstrap</h2>
+<ul>
+<li>We want to know the sampling distribution of <span class="math inline">\(\hat{\theta}_n\)</span> or <span class="math inline">\(\hat{\theta}_n - \theta\)</span> or <span class="math inline">\(\frac{\hat{\theta}_n - \theta}{s(\hat{F}_n)}\)</span>.</li>
+<li>This sampling distribution depends on the true unknown distribution <span class="math inline">\(F\)</span> of the real data.</li>
+<li>May be very difficult or impossible to calculate theoretically.</li>
+<li>Even asymptotic approximation may be difficult if the parameter <span class="math inline">\(\theta = h(F)\)</span> is a sufficiently complicated function of the true unknown <span class="math inline">\(F\)</span>.</li>
+</ul>
+<p>Enter the “bootstrap world”:</p>
+<ul>
+<li>In the “bootstrap world” everything is known, <span class="math inline">\(\hat{F}_n\)</span> plays the role of the true unknown distribution and <span class="math inline">\(\hat{\theta}_n\)</span> plays the role of the true unknown parameter value</li>
+<li>The sampling distribution of <span class="math inline">\(\theta_n^*\)</span> or <span class="math inline">\(\theta_n^* - \hat{\theta}_n\)</span> or <span class="math inline">\(\frac{\theta_n^* - \hat{\theta}_n}{s(F_n^*)}\)</span> may still be difficult to calculate theoretically, but it can always be “calculated” by simulation.</li>
+</ul>
+</section>
+<section id="when-it-works" class="level2">
+<h2 class="anchored" data-anchor-id="when-it-works">When it works</h2>
+<ul>
+<li>Much folklore about the bootstrap is misleading.</li>
+<li>The bootstrap is large sample, approximate, asymptotic.
+<ul>
+<li>It is not an exact method.</li>
+</ul></li>
+<li>The bootstrap analogy works when the empirical distribution <span class="math inline">\(\hat{F}_n\)</span> is close to the true unknown distribution <span class="math inline">\(F\)</span>.
+<ul>
+<li>Usually the case when the sample size <span class="math inline">\(n\)</span> is large and not otherwise.</li>
+</ul></li>
+</ul>
+</section>
+<section id="bootstrap-percentile-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="bootstrap-percentile-intervals">Bootstrap percentile intervals</h2>
+<ul>
+<li>Simplest method of making confidence intervals for the unknown parameter is to take <span class="math inline">\(\alpha/2\)</span> and <span class="math inline">\(1 - \alpha/2\)</span> quantiles of the bootstrap distribution of the estimator <span class="math inline">\(\theta_n^*\)</span> as endpoints of the 100(1 − <span class="math inline">\(\alpha\)</span>)% confidence interval.</li>
+<li>Percentile method only makes sense when there is a symmetrizing transformation (some function of <span class="math inline">\(\hat{\theta}\)</span> has an approximately symmetric distribution with the center of symmetry being the true unknown parameter value <span class="math inline">\(\theta\)</span>).</li>
+<li>The symmetrizing transformation does not have to be <em>known</em>, but it does have to <em>exist</em>.</li>
+</ul>
+</section>
+</section>
+<section id="parametric-bootstrap" class="level1">
+<h1>Parametric Bootstrap</h1>
+<ul>
+<li>The parametric bootstrap is just like the nonparametric bootstrap except for one difference in the analogy.</li>
+<li>We use a parametric model <span class="math inline">\(F_{\hat{\theta}_n}\)</span> rather than the empirical distribution <span class="math inline">\(\hat{F}_n\)</span> as the analog of the true unknown distribution in the bootstrap world.</li>
+</ul>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>World</th>
+<th>Real</th>
+<th>Bootstrap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>parameter</td>
+<td><span class="math inline">\(\theta\)</span></td>
+<td><span class="math inline">\(\hat{\theta}_n\)</span></td>
+</tr>
+<tr class="even">
+<td>true distribution</td>
+<td><span class="math inline">\(F_{\theta}\)</span></td>
+<td><span class="math inline">\(F_{\hat{\theta}_n}\)</span></td>
+</tr>
+<tr class="odd">
+<td>data</td>
+<td><span class="math inline">\(X_1, \dots, X_n\)</span> IID <span class="math inline">\(F_{\theta}\)</span></td>
+<td><span class="math inline">\(X_1^*, \dots, X_n^*\)</span> IID <span class="math inline">\(F_{\hat{\theta}_n}\)</span></td>
+</tr>
+<tr class="even">
+<td>estimator</td>
+<td><span class="math inline">\(\hat{\theta}_n = h(X_1, \dots, X_n)\)</span></td>
+<td><span class="math inline">\(\theta_n^* = h(X_1^*, \dots, X_n^*)\)</span></td>
+</tr>
+<tr class="odd">
+<td>error</td>
+<td><span class="math inline">\(\hat{\theta}_n - \theta\)</span></td>
+<td><span class="math inline">\(\theta_n^* - \hat{\theta}_n\)</span></td>
+</tr>
+<tr class="even">
+<td>standardized error</td>
+<td><span class="math inline">\(\frac{\hat{\theta}_n - \theta}{s(X_1, \dots, X_n)}\)</span></td>
+<td><span class="math inline">\(\frac{\theta_n^* - \hat{\theta}_n}{s(X_1^*, \dots, X_n^*)}\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Simulation from the parametric model <span class="math inline">\(F_{\hat{\theta}_n}\)</span> not analogous to finite population sampling and <em>does not</em> resample the data like the nonparametric bootstrap does.</li>
+<li>Instead we simulate the parametric model.</li>
+<li>May be easy (when R has a function to provide such random simulations) or difficult.</li>
+</ul>
+</section>
+<section id="nonparametric-versus-parametric" class="level1">
+<h1>Nonparametric versus Parametric</h1>
+<ul>
+<li>The nonparametric bootstrap is nonparametric. That means it always does the right thing, except when it doesn’t. It doesn’t work when:
+<ul>
+<li>the sample size is too small or</li>
+<li>when the square root law doesn’t hold or</li>
+<li>when the data are not IID or</li>
+<li>when various technical issues arise that are beyond the scope of this course.</li>
+<li>That is, if the parameter is not a “nice enough” function of the true unknown distribution.</li>
+</ul></li>
+<li>The parametric bootstrap is parametric. That means it is always wrong when the model is wrong.
+<ul>
+<li>On the other hand, when the parametric bootstrap does the right thing (when the statistical model is correct), it does a much better job at smaller sample sizes than the nonparametric bootstrap.</li>
+</ul></li>
+<li>When the parameter <span class="math inline">\(\theta\)</span> is defined in terms of the parametric statistical model and can only be estimated using the parametric model (by maximum likelihood perhaps), the statistical model needs to be correct for the parameter estimate <span class="math inline">\(\hat{\theta}_n\)</span> to make sense.</li>
+<li><strong>Since we already need the statistical model to be correct</strong>, the parametric bootstrap is a reasonable choice.</li>
+</ul>
+</section>
+<section id="example-abnormal-speed-of-light-data" class="level1">
+<h1>Example: Abnormal speed of light data</h1>
+<ul>
+<li>Thanks to Rob Gould (UCLA Statistics) for the following example.</li>
+<li>In 1882 Simon Newcomb performed an experiment to measure the speed of light.</li>
+<li>Measured time it took for light to travel from Fort Myer on the west bank of the Potomac River to a fixed mirror at the foot of the Washington monument 3721 meters away.</li>
+<li>In the units of the data, the currently accepted “true” speed of light is 33.02.
+<ul>
+<li>Measured as deviations from 24.8 nanoseconds.</li>
+</ul></li>
+<li>Does the data support the current accepted speed of 33.02?</li>
+<li>To convert these units to time in the millionths of a second, multiply by <span class="math inline">\(10^{-3}\)</span> and add <span class="math inline">\(24.8\)</span>.</li>
+</ul>
+<div id="4" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1"></a>speed <span class="op">=</span> <span class="dt">Float64</span>[</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fl">28</span>, <span class="op">-</span><span class="fl">44</span>, <span class="fl">29</span>, <span class="fl">30</span>, <span class="fl">26</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fl">27</span>, <span class="fl">22</span>, <span class="fl">23</span>, <span class="fl">33</span>, <span class="fl">16</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="fl">24</span>, <span class="fl">29</span>, <span class="fl">24</span>, <span class="fl">40</span>, <span class="fl">21</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="fl">31</span>, <span class="fl">34</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">25</span>, <span class="fl">19</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>];</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="6" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">histogram</span>(speed, xlabel <span class="op">=</span> <span class="st">"Speed"</span>, ylabel <span class="op">=</span> <span class="st">"Frequency"</span>, label <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="8" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">qqnorm</span>(speed, xlabel <span class="op">=</span> <span class="st">"Normal Quantiles"</span>, ylabel <span class="op">=</span> <span class="st">"Empirical Quantiles"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>A <span class="math inline">\(t\)</span>-test assumes the population of measurements is normally distributed (with unknown mean and variance).</li>
+<li>With this small sample size and a severe departure from normality, we can’t be guaranteed a good approximation.</li>
+<li>Instead, we can consider the bootstrap.</li>
+</ul>
+<section id="applying-the-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="applying-the-bootstrap">Applying the bootstrap</h2>
+<ol type="1">
+<li><strong>State null and alternative hypotheses</strong>: <span class="math display">\[
+H_0: \mu = 33.02 \text{ versus } H_a: \mu \ne 33.02
+\]</span></li>
+<li><strong>Choose a significance level</strong>. in our case <span class="math inline">\(\alpha = 0.05\)</span>.</li>
+<li><strong>Choose a test statistic</strong>. Since we wish to estimate the <em>mean speed</em> we can use the <em>sample average</em>.</li>
+<li><strong>Find the observed value of the test statistic</strong>.</li>
+<li><strong>Calculate a <span class="math inline">\(p\)</span>-value</strong>?</li>
+</ol>
+<div id="10" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">mean</span>(speed)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="wheres-the-sampling-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="wheres-the-sampling-distribution">Where’s the sampling distribution?</h2>
+<ul>
+<li>We now need a <span class="math inline">\(p\)</span>-value, but <strong>we don’t have the sampling distribution of our test statistic when the null hypothesis is true</strong>!</li>
+<li>It is approximately normal, but that is a poor approximation here.</li>
+<li>Instead we can <strong>perform a simulation under conditions in which we know the null hypothesis is true</strong>.</li>
+<li>Use our data to represent the population, but first we shift it over so that the mean really is 33.02.</li>
+</ul>
+<div id="12" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1"></a>newspeed <span class="op">=</span> speed <span class="op">.-</span> <span class="fu">mean</span>(speed) <span class="op">.+</span> <span class="fl">33.02</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>fig <span class="op">=</span> <span class="fu">histogram</span>(speed, xlabel <span class="op">=</span> <span class="st">"Speed"</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  layout <span class="op">=</span> <span class="fu">grid</span>(<span class="fl">1</span>, <span class="fl">2</span>),</span>
+<span id="cb6-5"><a href="#cb6-5"></a>  title <span class="op">=</span> <span class="st">"Data"</span>, subplot <span class="op">=</span> <span class="fl">1</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  size <span class="op">=</span> (<span class="fl">800</span>, <span class="fl">400</span>),</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  legend <span class="op">=</span> <span class="cn">false</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="fu">histogram!</span>(newspeed, xlabel <span class="op">=</span> <span class="st">"Speed"</span>, title <span class="op">=</span> <span class="st">"Bootstrap Population"</span>, subplot <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="cn">false</span>)</span>
+<span id="cb6-10"><a href="#cb6-10"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The histogram of <code>newspeed</code> will have exactly the same shape as speed, but will be shifted. <em>In the bootstrap world</em>, this <em>is</em> the “true” distribution.</p>
+</section>
+<section id="resampling-1" class="level2">
+<h2 class="anchored" data-anchor-id="resampling-1">Resampling</h2>
+<ul>
+<li>Now we reach into our fake population and take out 20 observations at random, <strong>with replacement</strong>.</li>
+<li>We take out 20 because that’s the size of our initial sample.</li>
+<li>We calculate the average and save it, then repeat this process many, many times.</li>
+<li>Now we have a sampling distribution with mean 33.02!</li>
+<li>Can compare this to our observed sample average and obtain a <span class="math inline">\(p\)</span>-value.</li>
+</ul>
+<div id="14" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">function</span> <span class="fu">resample</span>(data)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">sample</span>(data, <span class="fu">length</span>(data), replace <span class="op">=</span> <span class="cn">true</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="16" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1903</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>n <span class="op">=</span> <span class="fl">1000</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>bstrap <span class="op">=</span> [<span class="fu">mean</span>(<span class="fu">resample</span>(newspeed)) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n]</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>fig <span class="op">=</span> <span class="fu">histogram</span>(bstrap, title<span class="op">=</span><span class="st">"Bootstrap Sampling Distribution"</span>, xlabel<span class="op">=</span><span class="st">"Bootstrap Samples"</span>, legend <span class="op">=</span> <span class="cn">false</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="fu">vline!</span>([<span class="fu">mean</span>(speed)], color <span class="op">=</span> <span class="op">:</span>red, lw <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Doesn’t look normal, which means we did the right thing.</li>
+<li>Not impossible for the sample average to be 21.75.</li>
+<li>But it’s not all that common, either.</li>
+<li><strong>What is the statistic in our bootstrap procedure?</strong></li>
+<li><strong>Why do we highlight the value 21.75?</strong></li>
+</ul>
+</section>
+<section id="defining-the-p-value" class="level2">
+<h2 class="anchored" data-anchor-id="defining-the-p-value">Defining the <span class="math inline">\(p\)</span>-value</h2>
+<ul>
+<li>The <span class="math inline">\(p\)</span>-value is the probability of obtaining a statistic “more extreme” than what we observed.</li>
+<li>Notice <span class="math inline">\(21.75\)</span> is <span class="math inline">\(33.02 - 21.75 = 11.27\)</span> units away from the null hypothesis.</li>
+<li>So the <span class="math inline">\(p\)</span>-value is the probability of being more than 11.27 units away from 33.02.</li>
+</ul>
+<div id="18" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a>μ <span class="op">=</span> <span class="fu">mean</span>(newspeed)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>Δ <span class="op">=</span> <span class="fu">abs</span>(μ <span class="op">-</span> <span class="fu">mean</span>(speed))</span>
+<span id="cb9-3"><a href="#cb9-3"></a>(μ <span class="op">-</span> Δ, μ <span class="op">+</span> Δ)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="20" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1"></a>(<span class="fu">sum</span>(bstrap <span class="op">.&lt;</span> μ <span class="op">-</span> Δ) <span class="op">+</span> <span class="fu">sum</span>(bstrap <span class="op">.&gt;</span> μ <span class="op">+</span> Δ)) <span class="op">/</span> n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Since our significance level is 5%, we have evidence against <span class="math inline">\(H_0\)</span> and conclude that Newcomb’s measurements were not consistent with the currently accepted figure.</p>
+</section>
+</section>
+<section id="example-sleep-study" class="level1">
+<h1>Example: Sleep study</h1>
+<p>Data which show the effect of two soporific drugs (increase in hours of sleep compared to control) on 10 patients. There are 20 observations on 3 variables.</p>
+<ul>
+<li><code>Extra</code>, a numeric increase in hours of sleep.</li>
+<li><code>Group</code>, a factor for the drug given.</li>
+<li><code>ID</code>, a factor for patient ID.</li>
+</ul>
+<div id="22" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a>sleep <span class="op">=</span> RDatasets.<span class="fu">dataset</span>(<span class="st">"datasets"</span>, <span class="st">"sleep"</span>) <span class="co"># see ?sleep in R</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="two-sample-t-test" class="level2">
+<h2 class="anchored" data-anchor-id="two-sample-t-test">Two-sample <span class="math inline">\(t\)</span>-test</h2>
+<ul>
+<li>The two sample <span class="math inline">\(t\)</span>-test checks for differences in means according to a <strong>known</strong> null distribution.</li>
+<li>Similar to permutation tests.</li>
+<li>Let’s resample and generate the sampling distribution <strong>under the bootstrap assumption</strong>.</li>
+</ul>
+<div id="24" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">function</span> <span class="fu">diff_in_means</span>(data)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  muA <span class="op">=</span> <span class="fu">mean</span>(data[data.Group <span class="op">.==</span> <span class="st">"1"</span>, <span class="st">"Extra"</span>])</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  muB <span class="op">=</span> <span class="fu">mean</span>(data[data.Group <span class="op">.==</span> <span class="st">"2"</span>, <span class="st">"Extra"</span>])</span>
+<span id="cb12-4"><a href="#cb12-4"></a>  <span class="cf">return</span> muA <span class="op">-</span> muB</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">end</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="kw">function</span> <span class="fu">resample</span>(data<span class="op">::</span><span class="dt">DataFrame</span>)</span>
+<span id="cb12-8"><a href="#cb12-8"></a>  idx <span class="op">=</span> <span class="fu">resample</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(data))</span>
+<span id="cb12-9"><a href="#cb12-9"></a>  <span class="cf">return</span> data[idx, <span class="op">:</span>]</span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="26" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1903</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co"># H0: difference is centered at 0. Do this by centering groups at a common value.</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>x <span class="op">=</span> sleep[sleep.Group <span class="op">.==</span> <span class="st">"1"</span>, <span class="st">"Extra"</span>]</span>
+<span id="cb13-7"><a href="#cb13-7"></a>x <span class="op">=</span> x <span class="op">.-</span> <span class="fu">mean</span>(x)</span>
+<span id="cb13-8"><a href="#cb13-8"></a>y <span class="op">=</span> sleep[sleep.Group <span class="op">.==</span> <span class="st">"2"</span>, <span class="st">"Extra"</span>]</span>
+<span id="cb13-9"><a href="#cb13-9"></a>y <span class="op">=</span> y <span class="op">.-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb13-10"><a href="#cb13-10"></a>newsleep <span class="op">=</span> <span class="fu">DataFrame</span>(Extra <span class="op">=</span> [x; y], Group <span class="op">=</span> sleep.Group, ID <span class="op">=</span> sleep.ID)</span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="fu">diff_in_means</span>(newsleep)</span>
+<span id="cb13-12"><a href="#cb13-12"></a></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co"># bootstrap</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a>n <span class="op">=</span> <span class="fl">2000</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a>resample_diffs <span class="op">=</span> [<span class="fu">diff_in_means</span>(<span class="fu">resample</span>(newsleep)) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>n]</span>
+<span id="cb13-16"><a href="#cb13-16"></a></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="fu">histogram</span>(resample_diffs, title <span class="op">=</span> <span class="st">"Bootstrap Sampling Distribution"</span>)</span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="fu">vline!</span>([<span class="fu">diff_in_means</span>(sleep)], color <span class="op">=</span> <span class="op">:</span>red, lw <span class="op">=</span> <span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>State the null and alternative hypothesis for the mean effect of the two drugs.</li>
+<li>What is the value of the true parameter under the bootstrap?</li>
+<li>State the condition needed for a valid <span class="math inline">\(p\)</span>-value under <span class="math inline">\(H_0\)</span>.</li>
+</ul>
+<div id="28" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1"></a>(<span class="fu">sum</span>(resample_diffs <span class="op">.&lt;</span> <span class="op">-</span><span class="fl">1.58</span>) <span class="op">+</span> <span class="fu">sum</span>(resample_diffs <span class="op">.&gt;</span> <span class="fl">1.58</span>)) <span class="op">/</span> n</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="bootstrapping-functions" class="level1">
+<h1>Bootstrapping functions</h1>
+<ul>
+<li>R has numerous built in bootstrapping functions, too many to mention, see <code>boot</code> library.</li>
+<li>Example of the function <code>boot</code>.</li>
+<li>Bootstrap of the <strong>ratio of means</strong> using the <code>city</code> data included in the <code>boot</code> package.</li>
+</ul>
+<div id="30" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">library</span>(boot)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="fu">data</span>(city)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>ratio <span class="op">&lt;-</span> <span class="kw">function</span>(d, w) {</span>
+<span id="cb15-4"><a href="#cb15-4"></a>  theta_hat <span class="op">&lt;-</span> <span class="fu">sum</span>(d<span class="op">$</span>x <span class="op">*</span> w)<span class="op">/</span><span class="fu">sum</span>(d<span class="op">$</span>u <span class="op">*</span> w)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>  <span class="cf">return</span>(theta_hat)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>}</span>
+<span id="cb15-7"><a href="#cb15-7"></a></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co"># Inputs:</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co"># - `city`: the data</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co"># - `ratio`: the function which computes the statistic</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="co"># - `R`: number of replicates.</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co"># - `stype`: statistic type; see ?boot.</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="co">#</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a>results <span class="op">&lt;-</span> <span class="fu">boot</span>(city, ratio, R <span class="op">=</span> <span class="fl">1000</span>, stype <span class="op">=</span> <span class="st">"w"</span>)</span>
+<span id="cb15-17"><a href="#cb15-17"></a>results <span class="op">|&gt;</span> <span class="fu">print</span>()</span>
+<span id="cb15-18"><a href="#cb15-18"></a>NULL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Results indicate a level of bias in our bootstrap data. The <a href="https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Methods_for_bootstrap_confidence_intervals">BCa method</a> (see “accelerated bootstrap”) adjusts for this bias:</p>
+<div id="32" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1"></a>boot.<span class="fu">ci</span>(results, <span class="kw">type</span> <span class="op">=</span> <span class="st">"bca"</span>) <span class="op">|&gt;</span> <span class="fu">print</span>()</span>
+<span id="cb16-2"><a href="#cb16-2"></a>NULL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="bootstrapping-a-single-statistic" class="level2">
+<h2 class="anchored" data-anchor-id="bootstrapping-a-single-statistic">Bootstrapping a single statistic</h2>
+<ul>
+<li>Can use the bootstrap to generate a 95% confidence interval for <span class="math inline">\(R^2\)</span>.</li>
+<li>Linear regression of miles per gallon (<code>mpg</code>) on car weight (<code>wt</code>) and displacement (<code>disp</code>).</li>
+<li>Data source is <code>mtcars</code>.</li>
+<li>The bootstrapped confidence interval is based on 1000 replicates.</li>
+</ul>
+<div id="34" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Function to compute statistic</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>rsq <span class="op">&lt;-</span> <span class="kw">function</span>(formula, data, indices) {</span>
+<span id="cb17-3"><a href="#cb17-3"></a>  d <span class="op">&lt;-</span> data[indices,]  </span>
+<span id="cb17-4"><a href="#cb17-4"></a>  fit <span class="op">&lt;-</span> <span class="fu">lm</span>(formula, data<span class="op">=</span>d)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="cf">return</span>(<span class="fu">summary</span>(fit)<span class="op">$</span>r.square)</span>
+<span id="cb17-6"><a href="#cb17-6"></a>} </span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># R^2 from the data</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="fu">rsq</span>(mpg <span class="op">~</span> wt <span class="op">+</span> disp, mtcars, <span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span>(mtcars))</span>
+<span id="cb17-10"><a href="#cb17-10"></a></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co"># Run the bootstrap</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a>set.<span class="fu">seed</span>(<span class="fl">206</span>)</span>
+<span id="cb17-13"><a href="#cb17-13"></a>results <span class="op">&lt;-</span> <span class="fu">boot</span>(</span>
+<span id="cb17-14"><a href="#cb17-14"></a>  data <span class="op">=</span> mtcars,</span>
+<span id="cb17-15"><a href="#cb17-15"></a>  statistic <span class="op">=</span> rsq, </span>
+<span id="cb17-16"><a href="#cb17-16"></a>  R <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span id="cb17-17"><a href="#cb17-17"></a>  formula <span class="op">=</span> mpg <span class="op">~</span> wt <span class="op">+</span> disp</span>
+<span id="cb17-18"><a href="#cb17-18"></a>)</span>
+<span id="cb17-19"><a href="#cb17-19"></a>results <span class="op">|&gt;</span> <span class="fu">print</span>()</span>
+<span id="cb17-20"><a href="#cb17-20"></a>NULL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note that <code>results</code> has class <code>boot</code>.</p>
+<div id="36" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1"></a>boot.<span class="fu">ci</span>(results, <span class="kw">type</span><span class="op">=</span><span class="st">"bca"</span>) <span class="op">|&gt;</span> <span class="fu">print</span>()</span>
+<span id="cb18-2"><a href="#cb18-2"></a>NULL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Diagnostic plots are available via <code>plot()</code>. See <code>?plot.boot</code> for details.</p>
+<div id="38" class="cell" data-fig-width="12" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">plot</span>(results)</span>
+<span id="cb19-2"><a href="#cb19-2"></a>NULL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<ul>
+<li>Bootstrapping provides a nonparametric approach to statistical inference when distributional assumptions may not be met.</li>
+<li>Enables calculation of standard errors and conﬁdence intervals in a variety of situations, e.g.&nbsp;medians, correlation coefficients, regression parameters, …</li>
+<li>Hypothesis tests are a little more challenging.</li>
+<li>The bootstrap is large sample, approximate, and asymptotic!</li>
+<li>Works when the empirical distribution <span class="math inline">\(\hat{F}_n\)</span> is close to the true unknown distribution <span class="math inline">\(F\)</span>.</li>
+<li>Usually the case when the sample size <span class="math inline">\(n\)</span> is large and not otherwise, no method can save bad data!</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
