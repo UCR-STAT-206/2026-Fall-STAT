@@ -1,15 +1,8 @@
 project:
   type: website
   output-dir: _site
-  preview:
-    port: 6925
-
-extensions:
-  iconify:
-    style: "color: #b22222;"
 
 website:
-  site-url: "http://localhost:6925"
   sidebar:
     style: docked
     title: "STAT 206"
