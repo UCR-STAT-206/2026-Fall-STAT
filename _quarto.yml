@@ -139,8 +139,14 @@ website:
             href: howto/use_docker.qmd
           - text: Use VSCode with a Container
             href: howto/use_vscode.qmd
-          - text: Submit Assignments
-            href: howto/submit_hw.qmd
+          - text: Configure Git
+            href: howto/configure_git.qmd
+          - text: Set Up Your GitHub Account
+            href: howto/setup_github.qmd
+          - text: Use Git
+            href: howto/use_git.qmd
+          # - text: Submit Assignments
+          #   href: howto/submit_hw.qmd
           # - text: Use Julia Environments
           #   href: howto/use_pkg.qmd
           - text: Use Revise.jl
