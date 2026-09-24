@@ -12,18 +12,18 @@ format:
 engine: markdown
 ---
 
-# Goals
+## Goals
 
 1. Access a virtualized computing environment as a local Docker container.
 2. Integrate your computing environment with VS Code.
 3. Configure Git for documenting your work and submitting assignments.
 4. Practice setting up software in a Unix-like environment.
 
-# The Tools
+## The Tools
 
 You are responsible for installing the following on your machine:
 
-1. [Docker Desktop]()
+1. [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 2. [VS Code](https://code.visualstudio.com/download)
 
 Once you create a container using the class image, you will have access to:
@@ -39,82 +39,31 @@ In addition to various tools installed on the image (i.e. Unix utilities), you a
 2. [R 4.5](https://en.wikipedia.org/wiki/R_(programming_language)), and
 3. [DuckDB 1.5.5](https://en.wikipedia.org/wiki/DuckDB).
 
-# On Your Own
+## On Your Own
 
-## Get the class Docker image working on your computer
+### 1. Get the class Docker image working on your computer
 
 Read the guide on [how to use Docker](/howto/use_docker.qmd) in this class.
 
-## Practice using the terminal
+### 2. Practice using the terminal
 
 Read the notes on [the Unix shell](/notes/module01/unix.qmd) and experiment inside a container.
 
-## Read up Git, GitHub, the SSH protocol
+### 3. Read up on Git, GitHub, the SSH protocol
 
-1. Git
-2. GitHub
+Try setting up Git on your container and create your GitHub account.
+
+1. [What is Git?](../notes/module01/git.qmd) and [How to configure Git](../howto/configure_git.qmd).
+2. [How to set up your GitHub account](../howto/setup_github.qmd).
 3. [What is SSH?](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh).
 
-## Configure git
 
-We will use Git for version control of our work throughout the quarter.
-You will spend most of your time working in a single-user setting, editing and managing your own repository for assignments.
-Later in the course you will work in a small team and use Git to coordinate development.
-
-Before that can happen, we'll need to configure Git.
-
-:::::::::::::::::::::::::::::::: callout-note
-
-### Configuration Files
-
-Dr. Landeros prefers to use a `~/.config/` directory to store configuration files as much as possible.
-This practice is based on the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir/latest/), which a tool like Git respects. *That said, not every tool across Linux distributions will adhere to this standard*.
-
-::::::::::::::::::::::::::::::::
-
-### Quick and easy
-
-The following commands will create a global configuration file at `~/.gitconfig`.
-
-```default
-git config --global user.name "CHOSE YOUR NAME"
-git config --global user.email "UCR EMAIL"
-git config --global core.editor "code --wait"
-```
-
-### Using an editor
-
-1. Create and open a file: `/.config/git/config`. Alternatively, you may use a file at `~/.gitconfig`. *Just choose whichever approach appeals to you.*
-2. In the file, type in the following information (mind the indentation):
-
-    ```text
-    [user]
-        name = CHOOSE YOUR NAME
-        email = UCR EMAIL
-    [core]
-        editor = code --wait
-    ```
-
-### Check your work
-
-- Read the contents of `~/.config/git/config`
-- Check the output of `git config --global --list`.
-- Check the output of `git config --global --list --show-source`.
-
-## Setup your GitHub account
-
-1. [Sign up](https://github.com/login) for a GitHub account **using your UCR email**.
-2. [Checking for existing SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/checking-for-existing-ssh-keys?platform=linux).
-3. [How to generate an SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent?platform=linux).
-4. [How to add an SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account?platform=linux).
-5. [Verify that you can connect to GitHub's servers](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection?platform=linux).
-
-# In Person
+## In Person
 
 The following tasks involve using the class Docker image.
 Instructions are to be carried out inside a running container unless otherwise specified.
 
-## Download and install Quarto
+### 1. Download and install Quarto
 
 1. Inside your terminal, run `uname -m` to determine whether your container is setup with an `arm64` or `x86_64` architecture.
 
@@ -144,5 +93,14 @@ Instructions are to be carried out inside a running container unless otherwise s
     quarto check
     ```
 
-## Practice creating your first Quarto document
+### 2. Let us know your GitHub username
 
+Fill out the [Google form](https://forms.gle/NjciYpV6sePL2ZvL9) to record the username you wish to use for this course. It will be used to set up your private repository for this class.
+
+### 3. Fill out the class survey
+
+See [this Google form](https://forms.gle/am7qCGiuBuk4CTuBA) to answer a few questions. It will help the instructors understand everyone's background.
+
+### 4. Practice creating your first Quarto document
+
+See the notes on [Quarto](../notes/module01/quarto.qmd) and explore Quarto's features.
