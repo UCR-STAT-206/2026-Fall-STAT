@@ -12,20 +12,4 @@ execute:
   freeze: auto
 ---
 
-Working in groups of X, you will implement and experiment with a method Y.
-
-- Groups are assigned randomly.
-- This project should not be a huge burden when working as a group.
-
-The main goal of this project is to apply the skills, knowledge, and tools by:
-
-- Developing well-designed, well-tested software.
-- Documenting and communicating your experience and experiments in testing the software.
-
-# Problem/Guidelines
-
-# Requirements
-
-## Formatting
-
-## Additional Information
+To be announced at a later date.
