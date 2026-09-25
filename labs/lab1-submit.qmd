@@ -1,0 +1,94 @@
+---
+title: "Lab 1: Submitting Assignments"
+date: "2026-10-02"
+eval: false
+format:
+  html:
+    theme: cosmo
+    css: ../assets/styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+engine: markdown
+---
+
+## Goals
+
+By the end of this lab, you should:
+
+1. Have your **local repository** set up on your computer within the Docker container.
+2. Be able to `git pull` and `git push` to your **remote repository**, hosted on GitHub.
+3. Understand the workflow of drafting your solutions using version control and submitting to GitHub.
+
+## 1. Log in to the container environment
+
+a. Make sure the Docker container is running.
+b. Connect VSCode to the container.
+c. Open a terminal
+
+## 2. Clone your personal repository to the container
+
+a. Make sure you are in `/home/student`; e.g. check the output of `pwd`.
+b. Run `git clone git@github:UCR-STAT-206/LASTNAME_FIRSTNAME.git Work`. Be sure to edit `LASTNAME` and `FIRSTNAME`; we used the information on Canvas.
+c. `cd` into the newly created `Work` directory and check the files with `ls`. It should match what is currently on GitHub.
+
+## 3. Organize the files
+
+a. Edit `README.md` by adding yourself as an author. For example, add a line like `Author: FIRSTNAME LASTNAME`.
+b. Create a new directory named `lab1`. Use this name exactly as printed here.
+c. Move all the files (except `README.md`) into `lab1`.
+d. Verify the file structure inside `lab1` using the `tree` command. You should see the following:
+
+    ```text
+    .
+    ├── lab1
+    │   ├── demo.jl
+    │   ├── Project.toml
+    │   └── ucr-and-bell-tower.jpg
+    └── README.md
+    ```
+
+e. **Stage** all the changes you've made and **commit** them. Use the message `Completed Step 3 of Lab 1`.
+
+:::::::::::::::::::::::::::::::: callout-note
+
+## Make it a habit to check your work
+
+Depending on how you use `git add`, Git may not detect the file movements accurately.
+Verify with `git status` **before** you commit.
+You should see
+
+```text
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	renamed:    Project.toml -> lab1/Project.toml
+	renamed:    demo.jl -> lab1/demo.jl
+	renamed:    ucr-and-bell-tower.jpg -> lab1/ucr-and-bell-tower.jpg
+```
+
+::::::::::::::::::::::::::::::::
+
+## 4. Create a Quarto document based on the script
+
+a. Call the file `demo.qmd`. Name yourself as the author.
+    - Most of the comments in `demo.jl` should become regular text in your Quarto document.
+    - You may need to run the `instantiate` command in Julia's package manager to get everything working.
+    - **Test it out as you work** using `quarto preview demo.qmd`.
+b. Create a new snapshot once you've finished working on `demo.qmd`.
+    - Be sure to **only** commit `demo.qmd`. Exclude everything else.
+    - Use the message `Completed Step 4 of Lab 1`.
+
+## 5. Review your work and submit
+
+a. Review your work.
+
+    - Does the code run in the REPL?
+    - Does the Quarto document render successfully?
+    - What does `git log` look like?
+
+b. Run the command `git tag Lab1` to tag a specific version with an easy-to-read label.
+c. Run the command `git push` to push all your work to GitHub.
+d. Run the command `git push --tags` to push the easy-to-read label.
