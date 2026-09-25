@@ -32,6 +32,12 @@ a. Make sure you are in `/home/student`; e.g. check the output of `pwd`.
 b. Run `git clone git@github:UCR-STAT-206/LASTNAME_FIRSTNAME.git Work`. Be sure to edit `LASTNAME` and `FIRSTNAME`; we used the information on Canvas.
 c. `cd` into the newly created `Work` directory and check the files with `ls`. It should match what is currently on GitHub.
 
+:::::::::::::::::::::::::::::::: callout-note
+
+You only need to clone your repo from GitHub once.
+
+::::::::::::::::::::::::::::::::
+
 ## 3. Organize the files
 
 a. Edit `README.md` by adding yourself as an author. For example, add a line like `Author: FIRSTNAME LASTNAME`.

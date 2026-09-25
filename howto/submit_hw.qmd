@@ -6,48 +6,112 @@ engine: markdown
 ## Format
 
 Solutions to lab and homework assignments will consist of several files.
-
-- **Quarto Markdown**. Your main report must be prepared using Quarto Markdown (.qmd) source files. *Other formats, such as Jupyter notebooks (.ipynb) will not be accepted*. These files combine code, code outputs, and explanatory texts to answer problem prompts.
-- **Project.toml**. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia's package manager to specify each dependency (both in the standard library and from the package ecosystem).
-- **Julia Source**. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (.jl).
-- **Inputs and Outputs**. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.
-
 You will use Git to version control these files and upload your work to a remote repository on GitHub.
 
-## Workflows
+- **Quarto Markdown**. Your main report must be prepared using Quarto Markdown (`.qmd`) source files. *Other formats, such as Jupyter notebooks (.ipynb) will not be accepted*. These files combine code, code outputs, and explanatory texts to answer problem prompts.
+- **Project.toml**. Each assignment is a mini-project with its own computing environment. You must carefully manage that environment using Julia's package manager to specify each dependency (both in the standard library and from the package ecosystem).
+- **Julia Source**. Later in the course, your solutions will involve code spanning several lines, multiple functions, custom types, and possibly custom modules. These must be defined in separate Julia source files (`.jl`).
+- **Inputs and Outputs**. Some assignments will require external data and generate outputs, such as data subsets, summary tables, benchmarking results, or graphics. These must be included as part of your submissions.
 
-## GitHub
+:::::::::::::::::::::::::::::::: callout-tip
+## Make use of `.gitignore`
 
-### Setup
+Setting this up, for any project, will prevent you from accidentally committing irrelevant files or sensitive data.
+Avoid the following (unless explicitly instructed to include):
 
-### File structure
+- Manifest.toml
+- Any large PNG, JPEG, or other image type.
+- Any HTML or PDF files.
+
+::::::::::::::::::::::::::::::::
+
+## File structure
 
 - Each assignment must be organized into directories, subdirectories, and files with specific names.
-- Part of your grade will be for reproducibility of your work; that is, how well `quarto run hw/hw1/report.qmd` faithfully reproduces the outputs in your report.
+- The expectation is that each assignment is self-contained. That means each project must handle its own dependencies, if any, and not rely on some external configuration.
+- Part of your grade will be for reproducibility of your work; that is, how well `quarto run hw1/report.qmd` faithfully reproduces the outputs in your report.
 - All names are case-sensitive, so please stick to lowercase to avoid issues.
 
 ```text
 repo/
-├── hw/
-│   ├── hw1/
-│   │   ├── complex_data.arrow
-│   │   ├── fancy_algorithm.jl
-│   │   ├── report.qmd
-│   │   ├── Project.toml
-│   │   └── <other code or files>
-│   ├── hw2/
-│   │
-│   ...
-│   └── hw8/
-└── labs/
-    ├── lab1/
-    │   ├── report.qmd
-    │   ├── Project.toml
-    │   └── test.jl
-    ...
-    └── lab8
+│
+├── hw1/
+│   ├── complex_data.arrow
+│   ├── fancy_algorithm.jl
+│   ├── report.qmd
+│   ├── Project.toml
+│   └── <other code or files>
+├── hw2/
+│
+...
+├── hw8/
+│
+├── lab1/
+│   ├── report.qmd
+│   ├── Project.toml
+│   └── test.jl
+...
+└── lab8
 ```
 
-### Pushing/Pulling
+## Other requirements
+
+### Environment Section
+
+- Place this at the very end of the main Quarto file.
+- Use `Pkg.status()` to report all the packages used in the assignment.
+- Use `versioninfo()` (from the InteractiveUtils package) to report additional environment information.
+
+### Code and report quality
+
+- Large units of code should be organized into Julia source files.
+- Document your code. The standard should be to help your future self remember what you did.
+- The Quarto report is for communicating your work. Use complete sentences and appropriate prose in describing your approach or thought process.
+
+### Tagging final submissions
+
+- Use the [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) feature to label the final version of your work that should be graded. See the end of [Lab 1](../labs/lab1-submit.qmd) for an example.
+- Tags should be lowercase and match the assignment directory; e.g. the assignment in `hw1` should be tagged as `git tag hw1` *after* you've made the final commit.
 
 ## Grading and feedback
+
+- The lab assignments are graded as complete/incomplete.
+- Homework assignments are graded on a 6-point scale (see below).
+- The instructors will create a separate branch, `grading`, in which you will receive a grade with any relevant feedback. Look for a `GRADING.md` file within an assignment.
+
+We will use the following grading scale for homework assignments
+
+- **5**
+    + All relevant code runs and Quarto report is reproducible.
+    + Complete, working solutions that demonstrate mastery of relevant concepts.
+    + No lapses in code style, communication, or procedural elements.
+- **4**
+    + All relevant code runs and Quarto report is reproducible.
+    + Working solutions with only minor performance issues.
+    + Minor lapses in code style, communication, or procedural elements.
+- **3**
+    + All relevant code runs and Quarto report is reproducible.
+    + Working solutions with only minor performance issues or errors.
+    + Minor lapses in code style, communication, or procedural elements.
+- **2**
+    + All relevant code runs and Quarto report is reproducible.
+    + Solutions or report contain a few major errors.
+    + Minor lapses in code style, communication, or procedural elements.
+- **1**
+    + All relevant code runs and Quarto report is reproducible.
+    + Solutions or report contain several significant errors.
+    + Significant lapses in code style, communication, or procedural elements
+- **0**
+    + Code does not run and/or Quarto report is not reproducible.
+    + Any work submitted after the 24-hour grace period, without permission from the instructor, will also receive this score.
+
+Clarification of terminology:
+
+- **Performance issues**: Your code uses more memory or is much slower than it should be.
+- **Code style**: Choice of variables, formatting, use of comments, and any other elements that make your code readable and easy to reason about.
+- **Communication**: The Quarto report quality. It needs to be readable, must address any relevant prompts, and adequately convey technical results.
+- **Procedural elements**: Poor commit discipline (e.g. only 1 commit for the entire assignment), missing Git tag, missing or inadequate commit messages.
+
+## The process itself
+
+Review [Lab 1](../labs/lab1-submit.qmd) for a guided tour of the process.

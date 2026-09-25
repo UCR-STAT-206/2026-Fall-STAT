@@ -145,8 +145,8 @@ website:
             href: howto/setup_github.qmd
           - text: Use Git
             href: howto/use_git.qmd
-          # - text: Submit Assignments
-          #   href: howto/submit_hw.qmd
+          - text: Submit Assignments
+            href: howto/submit_hw.qmd
           # - text: Use Julia Environments
           #   href: howto/use_pkg.qmd
           - text: Use Revise.jl
