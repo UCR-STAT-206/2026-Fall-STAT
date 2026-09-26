@@ -50,7 +50,7 @@ website:
       - section: Module 4 (Numerical Basics)
         contents:
           - text: Computer Arithmetic
-            # href: notes/module04/numbers.qmd
+            href: notes/module04/numbers.qmd
           - text: Computer Architecture
             # href: notes/module04/computers.qmd
           - text: Algorithms Introduction
