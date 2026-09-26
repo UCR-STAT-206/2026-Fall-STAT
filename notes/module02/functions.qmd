@@ -1,0 +1,478 @@
+---
+title: Functions
+error: true
+---
+
+## Goals
+
+1. Understand basic syntax of a Julia function.
+2. Understand Julia's scoping rules.
+3. Develop an awareness of how Julia functions can be used, manipulated, and leveraged.
+4. Develop a mental model for writing functions in Julia.
+
+
+
+## Overview
+
+Functions are the basic units by which we assemble solutions to complex problems. This is especially true in R and Julia, as the languages strongly favor a Functional Programming (FP) style.
+These languages greatly benefit from ideas in other FP languages (e.g. Lisp) that came before and which evolved concurrently.
+One key aspect of FP is that functions are treated like any other object in the language (first-class citizens).
+
+:::::::::::::::::::::::::::::::: callout-note
+
+For the Python users, the language favors a particular flavor of object-oriented programming that puts lets emphasis on functions/methods and more on classes.
+But functions remain important!
+
+::::::::::::::::::::::::::::::::
+
+## Syntax and Semantics
+
+```{julia}
+#| eval: false
+function func(req1, req2; key1=dflt1, key2=dflt2)
+  # do stuff
+  return out1, out2, out3
+end
+```
+
+- **Required arguments** are separated by a comma and use *positional notation*.
+- **Optional arguments** need a default value in the signature.
+- **Semicolons** are not required in a function call. It is used to separate positional arguments from **keyword arguments**.
+- A `return` statement is optional, but *highly encouraged in STAT 206*.
+- If your function needs to return multiple values, use a `Tuple`, `Dict`, or `NamedTuple`.
+
+### Anonymous Functions
+
+**Anonymous functions** are functions without a name.
+
+- These are short functions in terms of code length.
+- Used only once and have no reuse value.
+- Are commonly used in collection functions or list comprehensions.
+
+#### Example: Squaring numbers in a collection
+
+```{julia}
+y = 1:9
+```
+
+Use an anonymous function for this straightforward calculation:
+
+```{julia}
+map(x -> x^2, y)
+```
+
+Better yet, the `abs2()` function does exactly what we need:
+
+```{julia}
+map(abs2, y)
+```
+
+Suppose `abs2()` does not exist.
+Our function is `^(x, 2)`, it is just the application of the Binary operator `^` with the *second* argument fixed to the value `2`.
+The `Base.Fix2` construct can help avoid anonymous functions:
+
+```{julia}
+map(Base.Fix2(^, 2), y) # use sparingly
+```
+
+### Pass by sharing
+
+In Julia, all arguments to functions are **passed by sharing**, in contrast to R and Matlab.
+
+```{julia}
+x = rand(1:10, 4)
+```
+
+```{julia}
+sort!(x) # in-place; vs sort(x) which is out-of-place
+```
+
+```{julia}
+x
+```
+
+:::::::::::::::::::::::::::::::: callout-important
+
+Function names ending with `!` indicate that the function mutates at least one argument, typically the first.
+This is strictly a convention; adding `!` to the end of a Julia function does nothing semantically.
+
+::::::::::::::::::::::::::::::::
+
+
+## Variable scope and rules
+
+**Variable scope** and the associated rules defining scope are all about what functions can "see" and "do".
+
+- Each function has its own environment, or *local scope*.
+- Names here override names in the *global scope*.
+- Internal environment starts with the *named arguments*.
+- If your computer encounters an undefined name in a function, it looks for it in the environment of the next outer scope *where the function was defined*. This is known as **lexical scope**.
+
+Julia, R, and Python all use some variation of these rules for variable scope.
+That is, they all use *lexical scope* to resolve any "free" variables/symbols.
+
+Julia’s scope rules are [more or less straightforward](https://docs.julialang.org/en/v1/manual/variables-and-scoping/#scope-of-variables).
+Below are some Julia-specific quirks:
+
+- Everything lives in the `Main` module, but default. It is the enclosing global scope for interactive environments; e.g. if you are working in the Julia REPL.
+- Global references must be declared using `global` for *consistent* behavior. Otherwise, global references will change depending on context, due to [hard vs soft scoping](https://docs.julialang.org/en/v1/manual/variables-and-scoping/#local-scope).
+- Julia allows *mutation* of *mutable types*. This reason alone is a good reason to avoid global references at all costs.
+- Scalars are immutable, as are many other constructs. You cannot change their content.
+- An `Array` object is mutable, so changing the content of an `Array` instance persists outside a function call.
+- Remember that `x = <expr>` binds the RHS to the left; `x .= <expr>` fills the LHS with the RHS.
+
+:::::::::::::::::::::::::::::::: callout-tip
+
+### Avoid global variables!
+
+- Reduces risk of confusion and error.
+- Exception: Reserve global variables for true universal concepts like $\pi$.
+- Exception: Allocating work buffers in large and sophisticated libraries like BLAS/LAPACK.
+
+::::::::::::::::::::::::::::::::
+
+### Example: Using a global variable
+
+```{julia}
+x = 7
+y = ['A', 'C', 'G', 'T', 'U']
+
+function adder(y)
+  global x # specify a global reference
+  x = x + y
+  return x
+end
+```
+
+Let's see what happens to `x` and `y` when we call the function with a particular value.
+
+```{julia}
+adder(1)
+```
+
+```{julia}
+x # oh the humanity!
+```
+
+```{julia}
+y
+```
+
+Outside the `adder()` function:
+
+- `x` is a symbol that binds the scalar value `7`.
+- `y` is a symbol that binds the specified `Array` value.
+
+Inside the `adder()` function:
+
+- The symbol `y` is declared as a local variable; specifically it is the name of the first (and only) argument to the function.
+- The symbol `x` is declared as a global reference. We pull its value from the next outer scope.
+- Surprisingly, we manage to modify `x` but not `y`!
+
+### Example: Redefining `π`
+
+In Julia, the symbols `pi` and `π` are defined in the language as convenient references to the number $\pi$.
+While it is convenient to use, it is a global variable and therefore carries some risk.
+
+The following function uses `pi` to compute the area of a circle with radius `r`:
+
+```{julia}
+circle_area(r) = pi*r^2
+```
+
+Check that is works as expected:
+
+```{julia}
+circle_area.([1, 2, 3])
+```
+
+What happens if we modify a global constant?
+
+```{julia}
+truepi = pi
+pi = 3
+circle_area.([1, 2, 3])
+```
+
+```{julia}
+pi = truepi # restore sanity
+circle_area.([1, 2, 3])
+```
+
+## Using functions
+
+### Nesting
+
+Functions can be nested.
+In the example below, the `outerfunction()` can be invoked in the enclosing scope, whereas the `innerfunction()` is only visible within `outerfunction()`.
+
+```{julia}
+function outerfunction()
+  # do some outer stuff
+  function innerfunction()
+    # do inner stuff
+    # can access prior outer definitions
+  end
+  # do more outer stuff
+end
+```
+
+:::::::::::::::::::::::::::::::: callout-tip
+
+### What's the use case?
+
+It is sometimes advantageous to hide helper functions where they are used, especially if they are not used elsewhere.
+Inner functions are also used to create *closures*, functions that "fix" some arguments to another function.
+We will discuss these at a later date.
+
+:::::::::::::::::::::::::::::::: 
+
+### Recursion
+
+Julia supports recursive function definitions.
+
+A successful recursive implementation of a function requires two key ingredients:
+
+1. A **base case**. How do we know when to stop recursion?
+2. A **recursive step**. How do we build the next item in the recursion?
+
+Without a base case, a recursive function will create too many calls to itself and trigger a `StackOverflow` exception.
+This is a protection built into programming langauges to prevent "runaway code" that never terminates.
+
+#### Example: Factorial
+
+The following code implements the factorial function, $n! = n \times (n-1) \times \ldots \times 2 \times 1$.
+
+```{julia}
+function myfactorial(n)
+  if n > 1
+    # recursive step
+    return n * myfactorial(n-1)
+  else
+    # base case; treats x! = 1 for any x <= 0.
+    return 1
+  end
+end
+```
+
+```{julia}
+@show myfactorial(3)
+@show myfactorial(6);
+```
+
+### Vectorization
+
+Scalar functions can be vectorized using the Dot (`.`) syntax:
+
+```{julia}
+# defined for scalar
+function myfunc(x)
+    return sin(x^2)
+end
+```
+
+```{julia}
+x = randn(5, 3)
+myfunc.(x) # this is applied element-wise; always opt-in
+```
+
+Several levels of vectorization can be achieved using `@.`.
+In particular, this *macro* is a mechanism for *loop fusion*.
+
+```{julia}
+x = zeros(10)
+y = randn(10)
+display(y)
+@. x = max(0, y) # vectorize `max()` AND `=`
+```
+
+### Higher-order functions
+
+Julia allows functions as arguments to other functions. You can even write functions to generate other functions.
+
+#### `map()`
+
+This is a staple of functional languages that allows you to apply a function to each element of a collection:
+
+```{julia}
+xs = randn(5)
+map(x -> sin(x^2), xs)
+```
+
+The `map()` function and its relatives support `do` block syntax.
+
+```{julia}
+map(xs) do x
+  sin(x^2)
+end
+```
+
+#### `filter()`
+
+Keeps only the elements in a collection for which the predicate function returns `true`.
+
+```{julia}
+filter(iseven, 1:10)
+```
+
+#### `reduce()`
+
+Combines the elements of a collection from left to right using a binary function to "reduce" it down to a single value.
+
+```{julia}
+reduce(+, [1, 2, 3, 4])
+```
+
+#### `any()`
+
+Tests whether any elements in a collection satisfy the condition defined by a predicate function.
+
+```{julia}
+any(isodd, 1:10)
+```
+
+#### `all()`
+
+Tests whether all elements in a collection satisfy the condition defined by a predicate function.
+
+```{julia}
+all(isodd, 1:10)
+```
+
+#### `count()`
+
+Counts how many elements in a collection satisfy the condition defined by a predicate function.
+
+```{julia}
+count(x -> sqrt(x) < 5, 1:10)
+```
+
+#### `sort()`
+
+Sorts a collection using a custom metric or transformation defined `by` a function.
+
+```{julia}
+sort(["apple", "pie", "banana"]; by=length) # sort by string length
+```
+
+### List comprehensions
+
+```{julia}
+[sin(2i + j) for i in 1:5, j in 1:3] # similar to Python
+```
+
+## How to write (Julia) functions
+
+### Treat function signatures as interfaces
+
+**Interfaces** are the inputs or arguments; the **outputs** or **return value**.
+
+- An interface tells the caller what is required.
+- Outside perspective: Try to avoid caring about *what* is inside a function or *how* it carries out its work.
+  - Calls other functions: `ifelse()`, `abs()`, operators `^` and `>`, and could also call other functions we've written.
+  - Keep the internals orthogonal to the external; that's **encapsulation**.
+- `return` says what the output is; alternately, return the last evaluation.
+  - We often do not need to care about this; just use `return` to be explicit!
+- **Comments**: Not required but a good idea.
+  - Helps document what kinds of inputs are required.
+  - Julia and R are dynamic languages. No constructs to enforce types in signatures.
+  - Documentation/comments should signal what is/isn't allowed.
+
+### What should be a function?
+
+- Things you're going to re-run, especially if it will be re-run with changes.
+- Chunks of code you keep highlighting and hitting return on.
+- Chunks of code which are small parts of a larger analysis or process.
+- Chunks of code which are very similar to other chunks.
+
+### Named and default arguments
+
+Consider the "robust" loss function
+
+$$
+\psi(x) = \begin{cases}
+  2 |x| - 1, & x^{2} > 1 \\
+  x^{2}, & x^{2} \le 1
+\end{cases}.
+$$
+
+We define two versions of this function below:
+
+```{julia}
+# Robust loss function for outlier-resistant regression
+# Inputs: vector of numbers (x)
+# Outputs: vector with x^2 for small entries, |x| for large ones
+function psi1(x)
+  psi = ifelse(x^2 > 1, 2*abs(x) - 1, x^2
+  return psi
+end
+
+# Robust loss function for outlier-resistant regression
+# Inputs: vector of numbers (x), scale for crossover (c)
+# Outputs: vector with x^2 for small entries, 2c|x|-c^2 for large ones
+function psi2(x; c::Reall = 1.0)
+  psi = ifelse(x^2 > c^2, 2*c*abs(x) - c^2, x^2)
+  return psi
+end
+```
+
+Let's check that they are the same when $c=1$:
+
+```{julia}
+z = 1.3
+psi1(z) ≈ psi2(z; c = 1.0)
+```
+
+Notice that default values are used whenever named arguments are missing:
+
+```{julia}
+psi2(z; c = 1.0) ≈ psi2(z)
+```
+
+Julia enforces order in positional arguments due to its multiple dispatch system.
+Can't mimic what you see on the R side for shuffling arguments.
+
+
+
+### Checking arguments
+
+**Problem**: We see odd behavior when arguments are not specified as expected.
+
+```{julia}
+psi2(z; c = Float64[1, 1, 1, 10])
+```
+
+**Solution**: Put sanity checks in the code.
+Ideally, put any input validation at the top of the function body.
+
+```{julia}
+function psi3(x; c::Real = 1)
+  if !(c isa Number)
+    error("Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)")
+  elseif c < 0
+    error("Parameter `c` should be positive. Got $(c).")
+  end
+  return psi2(x; c = c) # now this is safe!
+end
+```
+
+The `error()` function will stop execution and allow you to pass an informative message to a user.
+Can also `throw()` more specific errors; e.g. `throw(DomainError(...))` or `@assert some_condition`.
+
+```{julia}
+psi3(z; c = -1.0)
+```
+
+
+### Encapsulation: Respect the interfaces!
+
+- Interfaces mark out a controlled environment for our code.
+- A function interacts with the rest of a system *only at the interface*.
+- Similarly, the "output" should only be through the return value.
+  - That means avoiding *side-effects*, which are modifications to some external state not defined inside a function.
+
+Your goal in writing a function is to achieve **encapsulation**: separate *what* your function does from *how* it implements its task.
+
+- It should do one and only one thing as well as possible.
+- If your function needs to modify some state/data, then that state/data ought to be arguments to the function.
+- Information that is unrelated to what a function does should be minimized as much as possible.

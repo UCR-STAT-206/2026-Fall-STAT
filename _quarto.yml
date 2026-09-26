@@ -36,7 +36,7 @@ website:
           - text: Control Flow
             href: notes/module02/control.qmd
           - text: Functions
-            # href: notes/module02/functions.qmd
+            href: notes/module02/functions.qmd
           - text: Multiple Dispatch
       - section: Module 3 (Best Practices)
         contents:
