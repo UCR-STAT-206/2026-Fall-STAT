@@ -34,7 +34,7 @@ website:
           - text: Types
           - text: Basic Operations
           - text: Control Flow
-            # href: notes/module02/control.qmd
+            href: notes/module02/control.qmd
           - text: Functions
             # href: notes/module02/functions.qmd
           - text: Multiple Dispatch

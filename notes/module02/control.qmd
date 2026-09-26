@@ -1,0 +1,322 @@
+---
+title: Control Flow
+execute: 
+  error: true
+---
+
+## Goals
+
+1. Understand how to use `if` blocks to write conditional statements.
+2. Understand how to use `for` and `while` for repeated evaluation.
+3. Practice using control flow to write programs.
+
+
+
+## Overview
+
+Literals, variables, and built-in/package functions are quite useful but insufficient for writing complex scripts and programs. Here we briefly review syntax for conditional statements and repeated evaluation. These two concepts vastly increase the expressiveness of any programming language. We then shift our attention to user-defined functions, highlighting scoping rules and other features in Julia.
+
+
+
+## Conditional Statements
+
+Conditional statements allow a program to change its behavior based on some state, usually captured by one or more variables.
+
+```{julia}
+#| eval: false
+if condition1
+  # do something
+elseif condition2
+  # do something
+else
+  # do something
+end
+```
+
+Here, `condition1` and `condition2` must be Julia expressions *that evaluate to* `true` or `false`. There are a few points to be aware of:
+
+- Most programming languages treat `true` and `false` as `1` and `0` (integers). This is true in Julia, but **the reverse is not allowed**.
+- Julia uses the `Missing` type to represent [missingness](https://docs.julialang.org/en/v1/manual/missing/), and `Nothing` to represent `void`. The former can appear as the result of a Boolean expression. The proper way to check for missingness or nothingness is to use `ismissing()` or `isnothing()`, respectively.
+- Conditional statements can be chained and nested.
+- Whitespace does not have special meaning in Julia. Thus, it is perfectly acceptable to write
+- **The order in which you check conditions matters!**
+
+```{julia}
+#| eval: false
+if condition something end
+```
+
+:::::::::::::::::::::::::::::::: callout-important
+
+Every conditional statement introduces a branch in your code. Excessive branching may obscure intended meaning and potentially slow down your code.
+
+::::::::::::::::::::::::::::::::
+
+
+
+### Example: Checking for an empty collection
+
+```{julia}
+mydata = Int[] # array of Ints
+if isempty(mydata)
+  push!(mydata, 100)
+else
+  mydata[1] = 100
+end
+```
+
+The cell above displays an array with 1 element.
+
+- Which branch was executed?
+- Why do we see any return value at all?
+
+
+
+### Example: A biased coin flip
+
+```{julia}
+u = rand()
+if u < 1/3
+  println("Heads")
+else
+  println("Tails")
+end
+```
+
+The code above behaves randomly because the printed message depends on the value of `u`.
+
+- What is the probability of seeing the outcome `"Tails"`?
+- Justify your answer to the question above.
+- What about the probability of seeing `"heads"`?
+
+
+
+### Shorthand: Elvis Operator
+
+Like other languages, Julia supports the "ternary" operator `?:`, sometimes referred to as the [Elvis operator](https://en.wikipedia.org/wiki/Elvis_operator).
+It is shorthand for `if-else`, but it can be chained to mimic `if-elseif-else` (don't do that!).
+
+```{julia}
+#| eval: false
+condition1 ? alternativeA : alternativeB
+```
+
+
+
+### Example: Writing a quick message
+
+```{julia}
+mymood = abs(randn()) > 1.96 ? "jubilant" : "downtrodden"
+explanation = mymood == "jubilant" ? "" : "failed to"
+println("Just so you know, so-and-so is absolutely $(mymood) because their simulation $(explanation) converged.")
+```
+
+- Explain why there is an extra space whenever so-and-so's mood is jubilant.
+
+
+
+### Functional Version: `ifelse()`
+
+The performance of code with hot loops (that is, code that is expected to execute thousands of times in a program or script) can be quite sensitive to minor tweaks.
+One example is the presence of *branches*. Modern CPUs are equipped with aggressive [branch predictors](https://en.wikipedia.org/wiki/Branch_predictor) that attempt to mitigate the cost of branching but they have limitations.
+
+In some cases, it may be cheaper to avoid branching altogether by paying the cost of executing both branches. This is precisely the purpose of `ifelse()` in the Julia language:
+
+```{julia}
+x = 0.5 * randn()
+
+# this branches (maybe)
+if x < 0
+  x^2
+else
+  sqrt(x)
+end
+```
+
+```{julia}
+# this does not branch
+# both expressions below are evaluated before checking the condition.
+ifelse(x < 0, x^2, sqrt(x))
+```
+
+```{julia}
+ifelse(true, 0, error("stop execution!"))
+```
+
+:::::::::::::::::::::::::::::::: callout-note
+
+### `ifelse()` in other languages
+
+In the Python and R languages, the `ifelse()` function is primarily used to vectorize conditional statements.
+Julia's version also supports vectorization, e.g. `ifelse.(condition, x, y)`.
+
+::::::::::::::::::::::::::::::::
+
+
+
+## Repeated Evaluation
+
+### `for` Loop
+
+```{julia}
+#| eval: false
+for i in 1:10
+  println(i)
+end
+```
+
+Just like condtional statements, loops can be nested.
+
+```{julia}
+#| eval: false
+for i in 1:10
+  for j in 1:5
+    println(i * j)
+  end
+end
+```
+
+Julia supports nesting within a single line:
+
+```{julia}
+#| eval: false
+for i in 1:10, j in 1:5
+  println(i * j)
+end
+```
+
+
+
+### `while` Loop
+
+```{julia}
+#| eval: false
+while condition1
+  # do something
+end
+```
+
+
+
+### Loop Overrides
+
+You can `break` out of **innermost** loop.
+
+```{julia}
+#| eval: false
+for i in 1:10
+  # do something
+  if condition1
+    break # skip remaining loop
+  end
+end
+```
+
+You can also `continue` to skip over a particular iteration.
+
+```{julia}
+#| eval: false
+for i in 1:10
+  # do something
+  if condition1
+    continue # skip to next iteration
+  end
+  # do something
+end
+```
+
+
+
+### Example: Displaying a Tic-Tac-Toe board
+
+A Tic-Tac-Toe board consists of 9 spaces arranged in a 3 by 3 grid.
+If we include characters to represent the grid, then we need 5 characters per row for a total of 25 characters.
+Let's display an empty board:
+
+```{julia}
+for i in 1:5
+  row_i = ""
+  if iszero(i % 2)
+    row_i *= "─┼─┼─"
+  else
+    for j in 1:5
+      row_i *= ifelse(iszero(j % 2), "│", " ")
+    end
+  end
+  println(row_i)
+end
+```
+
+
+
+### Compatibility with Iterators
+
+Loops in Julia are compatible with any iterable object. For example, the built-in collections in Julia implement the [iteration interface](https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration).
+
+```{julia}
+x = [10, 20, 30]
+
+for item in x
+  println(item)
+end
+```
+
+```{julia}
+for (i, item) in enumerate(x)
+  println("index: ", i, ", value: ", item)
+end
+```
+
+```{julia}
+for item in reverse(x)
+  println(item)
+end
+```
+
+```{julia}
+d = Dict("Alice" => 4, "Bob" => 2)
+for (key, val) in d
+  println("They key $(key) maps to value $(val)")
+end
+```
+
+:::::::::::::::::::::::::::::::: callout-tip
+
+## Laziness is a virtue
+
+The `reverse()` function above does not `sort()` the array `x`! Instead, it exploits the structure of the underlying data type to reverse the iteration.
+This avoids memory allocation and extra computation.
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::: callout-tip
+
+## Iteration Style
+
+The proper style for iterating over an `Array` is to use `eachindex()` or `axes()`.
+The reason is that, while Julia uses 1-based indexing, [it supports arbitrary indexing styles](https://github.com/giordano/StarWarsArrays.jl).
+
+::::::::::::::::::::::::::::::::
+
+
+
+## Error Handling
+
+Julia provides several built-in [exception](https://docs.julialang.org/en/v1/manual/control-flow/#Exception-Handling) types to handle errors or otherwise halt execution and display an informative message.
+
+```{julia}
+1 / 0     # division expanding to floating point
+div(1, 0) # Euclidean division (integers only)
+```
+
+```{julia}
+error("Eternity lies ahead of us, and behind. Have you drunk your fill?")
+```
+
+In many cases, it is enough to use an assertion with `@assert`.
+
+```{julia}
+x = -1
+@assert x >= 0
+sqrt(x)
+```
