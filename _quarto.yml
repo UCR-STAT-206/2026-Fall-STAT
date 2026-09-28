@@ -168,6 +168,8 @@ format:
 
 execute:
   engine: markdown
+  julia:
+    exeflags: ["+1.12", "--project=@."]
   freeze: auto
 
 bibliography: references.bib
