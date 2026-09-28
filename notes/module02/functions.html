@@ -732,30 +732,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 2
- 1
- 8
- 6</code></pre>
+ 10
+  7
+  3
+  8</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 1
- 2
- 6
- 8</code></pre>
+  3
+  7
+  8
+ 10</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 1
- 2
- 6
- 8</code></pre>
+  3
+  7
+  8
+ 10</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -989,11 +989,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
-  0.445212  0.00405992  0.83758
- -0.268826  0.185651    0.393062
-  0.870779  0.135845    0.000606597
-  0.432061  0.00117066  0.123764
-  0.144308  0.946933    0.926839</code></pre>
+  0.626593   0.915013    0.306828
+ -0.491561   0.00175265  0.876033
+  0.0196561  7.1767e-5   0.673356
+  0.187385   0.00134515  0.00360668
+  0.0706235  0.981533    0.822229</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1004,29 +1004,29 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  0.5542088964239684
-  1.8452177157891285
-  0.9265704565981566
-  0.030690222799195633
-  0.7174466170193592
- -0.006387514137345456
-  1.6382999006064576
- -0.5920345529293681
-  0.019803106950303906
-  1.061188425057498</code></pre>
+  0.09895804707407087
+ -1.4390043422198575
+  0.39857558338248283
+  0.3862843274486116
+ -1.4716107366590268
+ -0.12287841336958477
+  0.4860376845944558
+  0.5474671699055763
+ -1.092420871777527
+  0.6037977019445652</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.5542088964239684
- 1.8452177157891285
- 0.9265704565981566
- 0.030690222799195633
- 0.7174466170193592
+ 0.09895804707407087
  0.0
- 1.6382999006064576
+ 0.39857558338248283
+ 0.3862843274486116
  0.0
- 0.019803106950303906
- 1.061188425057498</code></pre>
+ 0.0
+ 0.4860376845944558
+ 0.5474671699055763
+ 0.0
+ 0.6037977019445652</code></pre>
 </div>
 </div>
 </section>
@@ -1041,11 +1041,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
-  0.9698991252317651
- -0.3315477958311239
-  0.5511681317649791
-  0.9905392068002717
-  0.0979844390878594</code></pre>
+ 0.3755016011882225
+ 0.49087816006534235
+ 0.1913402919225635
+ 0.15423858149714145
+ 0.6984140779004979</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1055,11 +1055,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
-  0.9698991252317651
- -0.3315477958311239
-  0.5511681317649791
-  0.9905392068002717
-  0.0979844390878594</code></pre>
+ 0.3755016011882225
+ 0.49087816006534235
+ 0.1913402919225635
+ 0.15423858149714145
+ 0.6984140779004979</code></pre>
 </div>
 </div>
 </section>
@@ -1195,55 +1195,34 @@ myfactorial(6) = 720</code></pre>
 <span id="cb63-2"><a href="#cb63-2" aria-label="2"></a><span class="co"># Inputs: vector of numbers (x)</span></span>
 <span id="cb63-3"><a href="#cb63-3" aria-label="3"></a><span class="co"># Outputs: vector with x^2 for small entries, |x| for large ones</span></span>
 <span id="cb63-4"><a href="#cb63-4" aria-label="4"></a><span class="kw">function</span> <span class="fu">psi1</span>(x)</span>
-<span id="cb63-5"><a href="#cb63-5" aria-label="5"></a>  psi <span class="op">=</span> <span class="fu">ifelse</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fl">2</span><span class="fu">*abs</span>(x) <span class="op">-</span> <span class="fl">1</span>, x<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-label="5"></a>  psi <span class="op">=</span> <span class="fu">ifelse</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fl">2</span><span class="fu">*abs</span>(x) <span class="op">-</span> <span class="fl">1</span>, x<span class="op">^</span><span class="fl">2</span>)</span>
 <span id="cb63-6"><a href="#cb63-6" aria-label="6"></a>  <span class="cf">return</span> psi</span>
 <span id="cb63-7"><a href="#cb63-7" aria-label="7"></a><span class="kw">end</span></span>
 <span id="cb63-8"><a href="#cb63-8" aria-label="8"></a></span>
 <span id="cb63-9"><a href="#cb63-9" aria-label="9"></a><span class="co"># Robust loss function for outlier-resistant regression</span></span>
 <span id="cb63-10"><a href="#cb63-10" aria-label="10"></a><span class="co"># Inputs: vector of numbers (x), scale for crossover (c)</span></span>
 <span id="cb63-11"><a href="#cb63-11" aria-label="11"></a><span class="co"># Outputs: vector with x^2 for small entries, 2c|x|-c^2 for large ones</span></span>
-<span id="cb63-12"><a href="#cb63-12" aria-label="12"></a><span class="kw">function</span> <span class="fu">psi2</span>(x; c<span class="op">::</span><span class="dt">Reall </span><span class="op">=</span> <span class="fl">1.0</span>)</span>
+<span id="cb63-12"><a href="#cb63-12" aria-label="12"></a><span class="kw">function</span> <span class="fu">psi2</span>(x; c<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1.0</span>)</span>
 <span id="cb63-13"><a href="#cb63-13" aria-label="13"></a>  psi <span class="op">=</span> <span class="fu">ifelse</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">&gt;</span> c<span class="op">^</span><span class="fl">2</span>, <span class="fl">2</span><span class="fu">*c*abs</span>(x) <span class="op">-</span> c<span class="op">^</span><span class="fl">2</span>, x<span class="op">^</span><span class="fl">2</span>)</span>
 <span id="cb63-14"><a href="#cb63-14" aria-label="14"></a>  <span class="cf">return</span> psi</span>
 <span id="cb63-15"><a href="#cb63-15" aria-label="15"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre>ParseError:
-<span class="ansi-bright-black-fg"># Error @ </span>]8;;file:///home/runner/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/functions.qmd#406:42\<span class="ansi-bright-black-fg">/home/runner/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/functions.qmd:406:42</span>]8;;\
-function psi1(x)
-  psi = ifelse(x^2 &gt; 1, 2*abs(x) - 1, x^2
-<span class="ansi-bright-black-fg">#                                        └ ── </span><span class="ansi-bright-red-fg">Expected `)` or `,`</span>
-Stacktrace:
- [1] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:406</span></pre>
-</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>psi2 (generic function with 1 method)</code></pre>
 </div>
 </div>
 <p>Let’s check that they are the same when <span class="math inline">\(c=1\)</span>:</p>
 <div id="66" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1" aria-label="1"></a>z <span class="op">=</span> <span class="fl">1.3</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-label="2"></a><span class="fu">psi1</span>(z) <span class="op">≈</span> <span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre>UndefVarError: `psi1` not defined in `Main.Notebook`
-Suggestion: check for spelling errors or missing imports.
-Stacktrace:
- [1] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:423</span></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1" aria-label="1"></a>z <span class="op">=</span> <span class="fl">1.3</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-label="2"></a><span class="fu">psi1</span>(z) <span class="op">≈</span> <span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
 </div>
 </div>
 <p>Notice that default values are used whenever named arguments are missing:</p>
 <div id="68" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>) <span class="op">≈</span> <span class="fu">psi2</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-error">
-<div class="ansi-escaped-output">
-<pre>UndefVarError: `psi2` not defined in `Main.Notebook`
-Suggestion: check for spelling errors or missing imports.
-Stacktrace:
- [1] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:429</span></pre>
-</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>) <span class="op">≈</span> <span class="fu">psi2</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
 </div>
 </div>
 <p>Julia enforces order in positional arguments due to its multiple dispatch system. Can’t mimic what you see on the R side for shuffling arguments.</p>
@@ -1252,46 +1231,64 @@ Stacktrace:
 <h3 class="anchored" data-anchor-id="checking-arguments">Checking arguments</h3>
 <p><strong>Problem</strong>: We see odd behavior when arguments are not specified as expected.</p>
 <div id="70" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="dt">Float64</span>[<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">10</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="dt">Float64</span>[<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">10</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
-<pre>UndefVarError: `psi2` not defined in `Main.Notebook`
-Suggestion: check for spelling errors or missing imports.
+<pre>TypeError: in keyword argument c, expected Real, got a value of type Vector{Float64}
 Stacktrace:
- [1] top-level scope
+ [1] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Vector{Float64}}</span>, ::typeof(psi2), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:413</span>
+ [2] top-level scope
  <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
 </div>
 </div>
 </div>
 <p><strong>Solution</strong>: Put sanity checks in the code. Ideally, put any input validation at the top of the function body.</p>
 <div id="72" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">psi3</span>(x; c<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1</span>)</span>
-<span id="cb67-2"><a href="#cb67-2" aria-label="2"></a>  <span class="cf">if</span> !(c isa <span class="dt">Number</span>)</span>
-<span id="cb67-3"><a href="#cb67-3" aria-label="3"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)"</span>)</span>
-<span id="cb67-4"><a href="#cb67-4" aria-label="4"></a>  <span class="cf">elseif</span> c <span class="op">&lt;</span> <span class="fl">0</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-label="5"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be positive. Got </span><span class="sc">$</span>(c)<span class="st">."</span>)</span>
-<span id="cb67-6"><a href="#cb67-6" aria-label="6"></a>  <span class="cf">end</span></span>
-<span id="cb67-7"><a href="#cb67-7" aria-label="7"></a>  <span class="cf">return</span> <span class="fu">psi2</span>(x; c <span class="op">=</span> c) <span class="co"># now this is safe!</span></span>
-<span id="cb67-8"><a href="#cb67-8" aria-label="8"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb70-1"><a href="#cb70-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">psi3</span>(x; c<span class="op">::</span><span class="dt">Union{Real,AbstractArray{&lt;:Real}} </span><span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb70-2"><a href="#cb70-2" aria-label="2"></a>  <span class="cf">if</span> !(c isa <span class="dt">Number</span>)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-label="3"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)"</span>)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-label="4"></a>  <span class="cf">elseif</span> c <span class="op">&lt;</span> <span class="fl">0</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-label="5"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be positive. Got </span><span class="sc">$</span>(c)<span class="st">."</span>)</span>
+<span id="cb70-6"><a href="#cb70-6" aria-label="6"></a>  <span class="cf">end</span></span>
+<span id="cb70-7"><a href="#cb70-7" aria-label="7"></a>  <span class="cf">return</span> <span class="fu">psi2</span>(x; c <span class="op">=</span> c) <span class="co"># now this is safe!</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-label="8"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>psi3 (generic function with 1 method)</code></pre>
 </div>
 </div>
-<p>The <code>error()</code> function will stop execution and allow you to pass an informative message to a user. Can also <code>throw()</code> more specific errors; e.g.&nbsp;<code>throw(DomainError(...))</code> or <code>@assert some_condition</code>.</p>
 <div id="74" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1" aria-label="1"></a><span class="fu">psi3</span>(z; c <span class="op">=</span> <span class="op">-</span><span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb72-1"><a href="#cb72-1" aria-label="1"></a><span class="fu">psi3</span>(z; c <span class="op">=</span> <span class="dt">Float64</span>[<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">10</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)
+Stacktrace:
+ [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+ [2] <span class="ansi-bold">psi3</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Float64; <span class="ansi-bright-black-fg">c</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span><span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:451</span>
+ [3] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Vector{Float64}}</span>, ::typeof(psi3), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:449</span>
+ [4] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:460</span></pre>
+</div>
+</div>
+</div>
+<p>The <code>error()</code> function will stop execution and allow you to pass an informative message to a user. Can also <code>throw()</code> more specific errors; e.g.&nbsp;<code>throw(DomainError(...))</code> or <code>@assert some_condition</code>.</p>
+<div id="76" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb73-1"><a href="#cb73-1" aria-label="1"></a><span class="fu">psi3</span>(z; c <span class="op">=</span> <span class="op">-</span><span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-error">
 <div class="ansi-escaped-output">
 <pre>Parameter `c` should be positive. Got -1.0.
 Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
  <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
- [2] <span class="ansi-bold">psi3</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Float64; <span class="ansi-bright-black-fg">c</span>::Float64<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span>
+ [2] <span class="ansi-bold">#psi3#17</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span><span class="ansi-bright-black-fg"> [inlined]</span>
  [3] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Float64}</span>, ::typeof(psi3), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
  <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:449</span>
  [4] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:463</span></pre>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:467</span></pre>
 </div>
 </div>
 </div>
