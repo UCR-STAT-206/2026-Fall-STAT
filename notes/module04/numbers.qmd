@@ -84,16 +84,19 @@ This is known as **overflow behavior** and it varies across programming language
 In R, overflow behavior is to emit `NA`:
 
 ```{r}
+#| eval: false
 .Machine$integer.max
 ```
 
 ```{r}
+#| eval: false
 M <- 32
 big <- 2^(M - 1) - 1
 as.integer(big)
 ```
 
 ```{r}
+#| eval: false
 as.integer(big + 1)
 ```
 
