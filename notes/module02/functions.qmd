@@ -403,14 +403,14 @@ We define two versions of this function below:
 # Inputs: vector of numbers (x)
 # Outputs: vector with x^2 for small entries, |x| for large ones
 function psi1(x)
-  psi = ifelse(x^2 > 1, 2*abs(x) - 1, x^2
+  psi = ifelse(x^2 > 1, 2*abs(x) - 1, x^2)
   return psi
 end
 
 # Robust loss function for outlier-resistant regression
 # Inputs: vector of numbers (x), scale for crossover (c)
 # Outputs: vector with x^2 for small entries, 2c|x|-c^2 for large ones
-function psi2(x; c::Reall = 1.0)
+function psi2(x; c::Real = 1.0)
   psi = ifelse(x^2 > c^2, 2*c*abs(x) - c^2, x^2)
   return psi
 end
@@ -446,7 +446,7 @@ psi2(z; c = Float64[1, 1, 1, 10])
 Ideally, put any input validation at the top of the function body.
 
 ```{julia}
-function psi3(x; c::Real = 1)
+function psi3(x; c::Union{Real,AbstractArray{<:Real}} = 1)
   if !(c isa Number)
     error("Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)")
   elseif c < 0
@@ -454,6 +454,10 @@ function psi3(x; c::Real = 1)
   end
   return psi2(x; c = c) # now this is safe!
 end
+```
+
+```{julia}
+psi3(z; c = Float64[1, 1, 1, 10])
 ```
 
 The `error()` function will stop execution and allow you to pass an informative message to a user.
