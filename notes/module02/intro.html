@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-09-25">
 
-<title>Lab 0: Setting Up Your Workspace</title>
+<title>Introduction to Julia</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -62,26 +61,45 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5a76141f77d867fb867d14d57f46a0f6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -111,7 +129,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../../assets/styles.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -123,7 +141,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Lab 0 (Getting Started)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Intro to Julia</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -137,12 +155,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">STAT 206</a> 
+      <a href="../../">STAT 206</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -154,19 +172,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../office_hours.html" class="sidebar-item-text sidebar-link">
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Office Hours</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../schedule.html" class="sidebar-item-text sidebar-link">
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Schedule</span></a>
   </div>
 </li>
@@ -182,25 +200,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The Unix Shell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The File System</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quarto</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Git</span></a>
   </div>
 </li>
@@ -208,16 +226,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Module 2 (Programming)</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Intro to Julia</span></a>
   </div>
 </li>
@@ -229,13 +247,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Control Flow</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Functions</span></a>
   </div>
 </li>
@@ -284,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Computer Arithmetic</span></a>
   </div>
 </li>
@@ -432,22 +450,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
  <span class="menu-text">Labs</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 0 (Getting Started)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
   </div>
 </li>
@@ -469,7 +487,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../project/project.html" class="sidebar-item-text sidebar-link">
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Final Project</span></a>
   </div>
 </li>
@@ -485,43 +503,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Docker</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use VSCode with a Container</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Configure Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Set Up Your GitHub Account</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Submit Assignments</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Revise.jl</span></a>
   </div>
 </li>
@@ -538,19 +556,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#the-tools" id="toc-the-tools" class="nav-link" data-scroll-target="#the-tools">The Tools</a></li>
-  <li><a href="#on-your-own" id="toc-on-your-own" class="nav-link" data-scroll-target="#on-your-own">On Your Own</a>
+  <li><a href="#what-is-a-programming-language" id="toc-what-is-a-programming-language" class="nav-link" data-scroll-target="#what-is-a-programming-language">What is a programming language?</a></li>
+  <li><a href="#what-is-julia" id="toc-what-is-julia" class="nav-link" data-scroll-target="#what-is-julia">What is Julia?</a></li>
+  <li><a href="#syntax-and-semantics" id="toc-syntax-and-semantics" class="nav-link" data-scroll-target="#syntax-and-semantics">Syntax and Semantics</a></li>
+  <li><a href="#types-of-programming-languages" id="toc-types-of-programming-languages" class="nav-link" data-scroll-target="#types-of-programming-languages">Types of Programming Languages</a></li>
+  <li><a href="#how-do-high-level-languages-work" id="toc-how-do-high-level-languages-work" class="nav-link" data-scroll-target="#how-do-high-level-languages-work">How do high-level languages work?</a></li>
+  <li><a href="#what-does-julia-do-different" id="toc-what-does-julia-do-different" class="nav-link" data-scroll-target="#what-does-julia-do-different">What does Julia do different?</a></li>
+  <li><a href="#basic-julia-syntax" id="toc-basic-julia-syntax" class="nav-link" data-scroll-target="#basic-julia-syntax">Basic Julia Syntax</a>
   <ul class="collapse">
-  <li><a href="#get-the-class-docker-image-working-on-your-computer" id="toc-get-the-class-docker-image-working-on-your-computer" class="nav-link" data-scroll-target="#get-the-class-docker-image-working-on-your-computer">1. Get the class Docker image working on your computer</a></li>
-  <li><a href="#practice-using-the-terminal" id="toc-practice-using-the-terminal" class="nav-link" data-scroll-target="#practice-using-the-terminal">2. Practice using the terminal</a></li>
-  <li><a href="#read-up-on-git-github-the-ssh-protocol" id="toc-read-up-on-git-github-the-ssh-protocol" class="nav-link" data-scroll-target="#read-up-on-git-github-the-ssh-protocol">3. Read up on Git, GitHub, the SSH protocol</a></li>
+  <li><a href="#literals" id="toc-literals" class="nav-link" data-scroll-target="#literals">Literals</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables">Variables</a></li>
+  <li><a href="#assignment" id="toc-assignment" class="nav-link" data-scroll-target="#assignment">Assignment</a></li>
+  <li><a href="#functions-and-operators" id="toc-functions-and-operators" class="nav-link" data-scroll-target="#functions-and-operators">Functions and Operators</a></li>
+  <li><a href="#special-constructors" id="toc-special-constructors" class="nav-link" data-scroll-target="#special-constructors">Special Constructors</a></li>
   </ul></li>
-  <li><a href="#in-person" id="toc-in-person" class="nav-link" data-scroll-target="#in-person">In Person</a>
+  <li><a href="#mental-models" id="toc-mental-models" class="nav-link" data-scroll-target="#mental-models">Mental Models</a>
   <ul class="collapse">
-  <li><a href="#download-and-install-quarto" id="toc-download-and-install-quarto" class="nav-link" data-scroll-target="#download-and-install-quarto">1. Download and install Quarto</a></li>
-  <li><a href="#let-us-know-your-github-username" id="toc-let-us-know-your-github-username" class="nav-link" data-scroll-target="#let-us-know-your-github-username">2. Let us know your GitHub username</a></li>
-  <li><a href="#fill-out-the-class-survey" id="toc-fill-out-the-class-survey" class="nav-link" data-scroll-target="#fill-out-the-class-survey">3. Fill out the class survey</a></li>
-  <li><a href="#practice-creating-your-first-quarto-document" id="toc-practice-creating-your-first-quarto-document" class="nav-link" data-scroll-target="#practice-creating-your-first-quarto-document">4. Practice creating your first Quarto document</a></li>
+  <li><a href="#pythonrmatlab-talking-to-a-politician" id="toc-pythonrmatlab-talking-to-a-politician" class="nav-link" data-scroll-target="#pythonrmatlab-talking-to-a-politician">Python/R/MATLAB: Talking to a Politician</a></li>
+  <li><a href="#cfortran-talking-to-a-philosopher" id="toc-cfortran-talking-to-a-philosopher" class="nav-link" data-scroll-target="#cfortran-talking-to-a-philosopher">C/Fortran: Talking to a Philosopher</a></li>
+  <li><a href="#julia-talking-to-a-scientist" id="toc-julia-talking-to-a-scientist" class="nav-link" data-scroll-target="#julia-talking-to-a-scientist">Julia: Talking to a Scientist</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -558,9 +582,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Lab 0 (Getting Started)</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Intro to Julia</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Lab 0: Setting Up Your Workspace</h1>
+<h1 class="title">Introduction to Julia</h1>
 </div>
 
 
@@ -568,12 +592,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 25, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -586,89 +604,334 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="goals" class="level2">
 <h2 class="anchored" data-anchor-id="goals">Goals</h2>
 <ol type="1">
-<li>Access a virtualized computing environment as a local Docker container.</li>
-<li>Integrate your computing environment with VS Code.</li>
-<li>Configure Git for documenting your work and submitting assignments.</li>
-<li>Practice setting up software in a Unix-like environment.</li>
+<li>Understand that programs are run in some context: file system, operating system, hardware, and so on.</li>
+<li>Develop a mental model for programming.</li>
+<li>Introduce basic syntax and its semantics: variables, literals, functions, and assignment.</li>
 </ol>
 </section>
-<section id="the-tools" class="level2">
-<h2 class="anchored" data-anchor-id="the-tools">The Tools</h2>
-<p>You are responsible for installing the following on your machine:</p>
+<section id="what-is-a-programming-language" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-programming-language">What is a programming language?</h2>
+<ul>
+<li>A system of notation by which a programmer communicates a program to a computer.</li>
+<li>A program is a sequence of instructions that computes something; there are inputs and outputs.</li>
+<li>In contrast, a machine language is a formal system by which a computer understands and executes a program.</li>
+<li>The term <em>computer language</em> is a broader term that includes programming, machine, markup, and other languages used in computing.</li>
+</ul>
+</section>
+<section id="what-is-julia" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-julia">What is Julia?</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/julia-logo.png" class="img-fluid quarto-figure quarto-figure-center figure-img" alt="Julia logo, which consists of the word 'julia' decorated with circles. Specifically, a green, red, and purple circle arranged in a triangle sit above the lower case letter `i`. A blue circle decorates the lower case letter `j`."></p>
+</figure>
+</div>
+<blockquote class="blockquote">
+<p>Julia is a high-level, high-performance dynamic programming language for technical computing, with syntax that is familiar to users of other technical computing environments.</p>
+<p>— <span class="citation" data-cites="bezanson2017">Bezanson et al. (<a href="#ref-bezanson2017" role="doc-biblioref">2017</a>)</span></p>
+</blockquote>
+<ul>
+<li>The Julia programming language has been in development for over a decade (early work in 2009).</li>
+<li>Creators: <a href="https://en.wikipedia.org/wiki/Jeff_Bezanson">Jeff Bezanson</a>, <a href="https://en.wikipedia.org/wiki/Alan_Edelman">Alan Edelman</a>, <a href="https://en.wikipedia.org/wiki/Stefan_Karpinski">Stefan Karpinski</a>, <a href="https://en.wikipedia.org/wiki/Viral_B._Shah">Viral Shah</a>.
+<ul>
+<li>Two University of California alumni: Stefan and Viral.</li>
+</ul></li>
+<li>The 1.0 release took place in 2018.</li>
+<li>Current release: v1.11.7 (September 16, 2025); Array object is now implemented in Julia rather than C.</li>
+</ul>
+<p><strong>Purpose</strong>: Solve the so-called two language problem</p>
+<ul>
+<li>Prototype a solution to a problem in high-level language (R/Python/Mathlab).</li>
+<li>Fast, efficient production code goes into low-level language (Fortran/C/C++/Rust).</li>
+<li>Julia provides a high-level programming interface that can be used to generate fast, low-level machine code.</li>
+<li>Not just a “Fast R” or “Fast Matlab”!
+<ul>
+<li>Designed for technical computing from the start.</li>
+<li>Design considerations all the way from the lowest level of abstraction up to the language syntax.</li>
+<li>Part of the work in designing the language is <a href="https://dspace.mit.edu/handle/1721.1/99811">Jeff Bezanson’s PhD thesis</a>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="syntax-and-semantics" class="level2">
+<h2 class="anchored" data-anchor-id="syntax-and-semantics">Syntax and Semantics</h2>
+<p>The Julia runtime can only understand your instructions through the rules of the language. The language is composed of:</p>
+<ul>
+<li><strong>Syntax</strong>: What you can say and how you represent ideas.
+<ul>
+<li>The syntax in a language defines rules. Break them and Julia will complain.</li>
+<li>Might feel arbitrary… because it is!</li>
+<li>These are deliberate design decisions that make trade-offs between competing requirements.</li>
+<li>Tools built into integrated development environments (IDE) such as VSCode can often help catch these mistakes.</li>
+</ul></li>
+<li><strong>Semantics</strong>: The intended meaning of symbols and rules.
+<ul>
+<li>Requires lots of exposure and practice to master.</li>
+<li>Julia’s syntax is quite clean at the surface level, but implications at the semantics level run deep.</li>
+<li>IDE tools are less likely to catch semantic errors, which often surface as unexpected behavior or incorrect results when your code runs.</li>
+</ul></li>
+</ul>
+<p>We will focus heavily on syntax in the beginning to learn how we can represent data and concepts within the language.</p>
+</section>
+<section id="types-of-programming-languages" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-programming-languages">Types of Programming Languages</h2>
+<ul>
+<li><strong>Compiled languages</strong> (low-level languages): C/C++, Fortran, …
+<ul>
+<li>Directly compiled to machine code that is executed by CPU</li>
+<li>Pros: fast, memory efficient</li>
+<li>Cons: longer development time, hard to debug</li>
+</ul></li>
+<li><strong>Interpreted language</strong> (high-level languages): R, Matlab, Python, SAS IML, JavaScript, …
+<ul>
+<li>Interpreted by interpreter</li>
+<li>Pros: fast prototyping</li>
+<li>Cons: excruciatingly slow for loops</li>
+</ul></li>
+<li>Mixed (dynamic) languages: Matlab (JIT), R (<code>compiler</code> package), Julia, Cython, Java, …
+<ul>
+<li>Pros and cons: between the compiled and interpreted languages</li>
+</ul></li>
+<li>Script languages: Linux shell scripts, Perl, …
+<ul>
+<li>Extremely useful for some data preprocessing and manipulation</li>
+</ul></li>
+<li>Database languages: SQL, Hive (Hadoop).
+<ul>
+<li>Data analysis <em>never</em> happens if we do not know how to retrieve data from databases</li>
+</ul></li>
+</ul>
+</section>
+<section id="how-do-high-level-languages-work" class="level2">
+<h2 class="anchored" data-anchor-id="how-do-high-level-languages-work">How do high-level languages work?</h2>
+<p>Typical execution of a high-level language such as R, Python, and Matlab.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/r-bytecode.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
 <ol type="1">
-<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a></li>
-<li><a href="https://code.visualstudio.com/download">VS Code</a></li>
+<li>Source code is compiled into <em>bytecode</em>, an intermediate representation of your program that is nearly 100% platform agnostic.</li>
+<li>An interpreter executes your program directly. <em>No “native” machine code is required.</em></li>
 </ol>
-<p>Once you create a container using the class image, you will have access to:</p>
-<ol type="1">
-<li>a <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix Shell</a> (we will use <code>zsh</code> by default),</li>
-<li><a href="https://en.wikipedia.org/wiki/Git">Git</a>,</li>
-<li><a href="https://en.wikipedia.org/wiki/Quarto_(software)">Quarto</a>, and</li>
-<li><a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Julia 1.12.7</a>.</li>
-</ol>
-<p>In addition to various tools installed on the image (i.e.&nbsp;Unix utilities), you also have access to</p>
-<ol type="1">
-<li><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python 3.14</a>,</li>
-<li><a href="https://en.wikipedia.org/wiki/R_(programming_language)">R 4.5</a>, and</li>
-<li><a href="https://en.wikipedia.org/wiki/DuckDB">DuckDB 1.5.5</a>.</li>
-</ol>
+<p>To improve efficiency of interpreted languages such as R or Matlab, the conventional wisdom is to avoid loops as much as possible. That is, <strong>vectorize your code</strong> as much as possible. The only loop you are allowed to have is that for an iterative algorithm. When looping is unavoidable, one resorts to C, C++, or Fortran. This creates the notorious <strong>two language problem</strong>.</p>
+<ul>
+<li><strong>Success Stories</strong>: The popular <code>glmnet</code> package in R is coded in Fortran; <code>tidyverse</code> and <code>data.table</code> packages use a lot of RCpp/C++.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/package-language.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+<p>Developers of high-level languages have made many efforts to bring their languages closer to the performance of low-level languages such as C, C++, or Fortran.</p>
+<ul>
+<li>Matlab has employed JIT (just-in-time compilation) technology since 2002.</li>
+<li>Since R 3.4.0 (Apr 2017), the JIT bytecode compiler is enabled by default at its level 3.</li>
+<li>Cython is a compiler system based on Python.</li>
+</ul>
 </section>
-<section id="on-your-own" class="level2">
-<h2 class="anchored" data-anchor-id="on-your-own">On Your Own</h2>
-<section id="get-the-class-docker-image-working-on-your-computer" class="level3">
-<h3 class="anchored" data-anchor-id="get-the-class-docker-image-working-on-your-computer">1. Get the class Docker image working on your computer</h3>
-<p>Read the guide on <a href="../howto/use_docker.html">how to use Docker</a> in this class.</p>
+<section id="what-does-julia-do-different" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-julia-do-different">What does Julia do different?</h2>
+<p>Modern languages such as Julia try to solve the two language problem: achieving efficiency without vectorizing code.</p>
+<div class="layout-ncol=&quot;2&quot;">
+<p>Credit: Arch D. Robison</p>
+<p><img src="assets/jlstack1.png" class="img-fluid quarto-figure quarto-figure-left" style="width:40.0%"> <img src="assets/jlstack2.png" class="img-fluid quarto-figure quarto-figure-right" style="width:59.0%"></p>
+</div>
+<ul>
+<li>You, as a programmer, can only control the Julia source code.</li>
+<li>In writing good, efficient code your hope is to leverage the rules of the language to make the machine Do The Right Thing.</li>
+<li>Most interactive languages have <em>profiling</em> tools that allow you to inspect how much memory is used or how long different chunks of code take to run.</li>
+<li>Julia is a bit unusual in that it allows you to peek at how your source code is transformed at various levels all the way down to the machine level.</li>
+</ul>
 </section>
-<section id="practice-using-the-terminal" class="level3">
-<h3 class="anchored" data-anchor-id="practice-using-the-terminal">2. Practice using the terminal</h3>
-<p>Read the notes on <a href="../notes/module01/unix.html">the Unix shell</a> and experiment inside a container.</p>
+<section id="basic-julia-syntax" class="level2">
+<h2 class="anchored" data-anchor-id="basic-julia-syntax">Basic Julia Syntax</h2>
+<section id="literals" class="level3">
+<h3 class="anchored" data-anchor-id="literals">Literals</h3>
+<p><strong>Literals</strong> are the most basic symbols in a language to represent <em>different kinds</em> of data.</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fl">1</span> <span class="co"># Integer (abstract), specifically Int64 (concrete)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1</code></pre>
+</div>
+</div>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="fl">1</span>. <span class="co"># or 1.0; Float64</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1.0</code></pre>
+</div>
+</div>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fl">1</span>.f0 <span class="co"># Float32</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1.0f0</code></pre>
+</div>
+</div>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="cn">π</span> <span class="co"># Irrational</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>π = 3.1415926535897...</code></pre>
+</div>
+</div>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fl">1</span> <span class="op">//</span> <span class="fl">2</span> <span class="co"># Rational</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1//2</code></pre>
+</div>
+</div>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="ch">'c'</span> <span class="co"># Char</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)</code></pre>
+</div>
+</div>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="st">"Julia"</span> <span class="co"># String</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"Julia"</code></pre>
+</div>
+</div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="cn">true</span> <span class="co"># Bool</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
 </section>
-<section id="read-up-on-git-github-the-ssh-protocol" class="level3">
-<h3 class="anchored" data-anchor-id="read-up-on-git-github-the-ssh-protocol">3. Read up on Git, GitHub, the SSH protocol</h3>
-<p>Try setting up Git on your container and create your GitHub account.</p>
-<ol type="1">
-<li><a href="../notes/module01/git.html">What is Git?</a> and <a href="../howto/configure_git.html">How to configure Git</a>.</li>
-<li><a href="../howto/setup_github.html">How to set up your GitHub account</a>.</li>
-<li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh">What is SSH?</a>.</li>
-</ol>
+<section id="variables" class="level3">
+<h3 class="anchored" data-anchor-id="variables">Variables</h3>
+<p>Literals by themselves are not too useful unless we’re willing to write long expressions by hand. <strong>Variables</strong> are symbols, not otherwise reserved by the language, that we can use to store meaning/value.</p>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a>x <span class="op">=</span> <span class="fl">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1</code></pre>
+</div>
+</div>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="co"># \pi + Tab</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a>mypi <span class="op">=</span> <span class="cn">π</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>π = 3.1415926535897...</code></pre>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="co"># \:smirk_cat: + Tab</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>😼 <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1.7320508075688772</code></pre>
+</div>
+</div>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>x <span class="op">+</span> mypi <span class="op">+</span> 😼</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5.87364346115867</code></pre>
+</div>
+</div>
+<p>The full list of special characters can be viewed at <a href="https://docs.julialang.org/en/v1/manual/unicode-input/">https://docs.julialang.org/en/v1/manual/unicode-input/</a>.</p>
+</section>
+<section id="assignment" class="level3">
+<h3 class="anchored" data-anchor-id="assignment">Assignment</h3>
+<p>Creating variables requires <strong>assignment</strong> with <code>=</code>. In Julia, you can bind a variable to</p>
+<ul>
+<li>a literal,</li>
+<li>another variable,</li>
+<li>a function, and</li>
+<li>anything else in the language.</li>
+</ul>
+<p>You should think of <strong>assignment</strong> as <em>binding a specific value to a symbol</em>.</p>
+</section>
+<section id="functions-and-operators" class="level3">
+<h3 class="anchored" data-anchor-id="functions-and-operators">Functions and Operators</h3>
+<p>If variables and literals are nouns in a programming language, then <strong>functions</strong> are the verbs. There are many basic functions built-in to the language. Many <a href="https://docs.julialang.org/en/v1.12/manual/mathematical-operations/">fundamental mathematical operations</a> are part of the base language (arithmetic, <code>sum()</code>,<code>prod()</code>, <code>exp()</code>, <code>log()</code>, …).</p>
+<p>In Julia, <strong>operators</strong> are just functions that support special notation. For example, we can add numbers using <em>infix notation</em> and <em>prefix notation</em>.</p>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">+</span>(<span class="fl">1</span>, <span class="fl">3</span>) <span class="co"># prefix notation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4</code></pre>
+</div>
+</div>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="fl">1</span> <span class="op">+</span> <span class="fl">3</span> <span class="co"># infix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4</code></pre>
+</div>
+</div>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="fu">+</span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>) <span class="co"># advantage of having functions define the operators</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>6</code></pre>
+</div>
+</div>
+</section>
+<section id="special-constructors" class="level3">
+<h3 class="anchored" data-anchor-id="special-constructors">Special Constructors</h3>
+<p>Virtually every type has a <strong>constructor</strong> to create an object from given inputs. As a matter of convention:</p>
+<ul>
+<li>these functions always start with an uppercase letter, and</li>
+<li>have names aligned to the type they construct.</li>
+</ul>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1" aria-label="1"></a><span class="fu">Rational</span>(<span class="fl">1</span>, <span class="fl">2</span>) <span class="co"># 1//2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1//2</code></pre>
+</div>
+</div>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb33-1"><a href="#cb33-1" aria-label="1"></a><span class="fu">UInt8</span>(<span class="fl">3</span>) <span class="co"># 8-bit integer</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0x03</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb35-1"><a href="#cb35-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">String</span>(<span class="st">"1"</span>) <span class="co"># constructors</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">String</span>(<span class="dt">UInt8</span>[<span class="bn">0x68</span>, <span class="bn">0x65</span>, <span class="bn">0x6c</span>, <span class="bn">0x6c</span>, <span class="bn">0x6f</span>, <span class="bn">0x2c</span>, <span class="bn">0x20</span>, <span class="bn">0x77</span>, <span class="bn">0x6f</span>, <span class="bn">0x72</span>, <span class="bn">0x6c</span>, <span class="bn">0x64</span>, <span class="bn">0x21</span>])</span>
+<span id="cb35-3"><a href="#cb35-3" aria-label="3"></a><span class="pp">@show</span> <span class="fu">string</span>(<span class="fl">1</span>); <span class="co"># similar, but treated differently conceptually</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>String("1") = "1"
+String(UInt8[0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x21]) = "hello, world!"
+string(1) = "1"</code></pre>
+</div>
+</div>
 </section>
 </section>
-<section id="in-person" class="level2">
-<h2 class="anchored" data-anchor-id="in-person">In Person</h2>
-<p>The following tasks involve using the class Docker image. Instructions are to be carried out inside a running container unless otherwise specified.</p>
-<section id="download-and-install-quarto" class="level3">
-<h3 class="anchored" data-anchor-id="download-and-install-quarto">1. Download and install Quarto</h3>
-<ol type="1">
-<li><p>Inside your terminal, run <code>uname -m</code> to determine whether your container is setup with an <code>arm64</code> or <code>x86_64</code> architecture.</p></li>
-<li><p>Based on the result in the previous step, download Quarto using <code>curl</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>curl -fL -o quarto.tar.gz \</span>
-<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>https://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>or</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>curl -fL -o quarto.tar.gz \</span>
-<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>https://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Next, unpack files from the tarball into <code>/home/student/.local</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>tar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Finally, check that Quarto can be run from your terminal (and therefore seen by other programs) with</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>quarto check</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-</ol>
+<section id="mental-models" class="level2">
+<h2 class="anchored" data-anchor-id="mental-models">Mental Models</h2>
+<p><strong>Credit</strong>: Chris Rackauckas (A Deep Introduction to Julia for Data Science and Scientific Computing)</p>
+<section id="pythonrmatlab-talking-to-a-politician" class="level3">
+<h3 class="anchored" data-anchor-id="pythonrmatlab-talking-to-a-politician">Python/R/MATLAB: Talking to a Politician</h3>
+<ul>
+<li>These languages were developed to “be easy”.</li>
+<li>You tell them something, and they try to give you what you want.</li>
+<li>There may be some things hidden behind the scenes to make everything “work better”.</li>
+<li>They may not give you the fastest reply.</li>
+</ul>
 </section>
-<section id="let-us-know-your-github-username" class="level3">
-<h3 class="anchored" data-anchor-id="let-us-know-your-github-username">2. Let us know your GitHub username</h3>
-<p>Fill out the <a href="https://forms.gle/NjciYpV6sePL2ZvL9">Google form</a> to record the username you wish to use for this course. It will be used to set up your private repository for this class.</p>
+<section id="cfortran-talking-to-a-philosopher" class="level3">
+<h3 class="anchored" data-anchor-id="cfortran-talking-to-a-philosopher">C/Fortran: Talking to a Philosopher</h3>
+<ul>
+<li>You say something, and they want something more specific.</li>
+<li>You spend hours digging deep into the specifics of something.</li>
+<li>After finally getting it right, you know how to quickly get a specific answer from them.</li>
+<li>Every time you want to talk about something new, you have to start all the way at the basics again.</li>
+</ul>
 </section>
-<section id="fill-out-the-class-survey" class="level3">
-<h3 class="anchored" data-anchor-id="fill-out-the-class-survey">3. Fill out the class survey</h3>
-<p>See <a href="https://forms.gle/am7qCGiuBuk4CTuBA">this Google form</a> to answer a few questions. It will help the instructors understand everyone’s background.</p>
-</section>
-<section id="practice-creating-your-first-quarto-document" class="level3">
-<h3 class="anchored" data-anchor-id="practice-creating-your-first-quarto-document">4. Practice creating your first Quarto document</h3>
-<p>See the notes on <a href="../notes/module01/quarto.html">Quarto</a> and explore Quarto’s features.</p>
+<section id="julia-talking-to-a-scientist" class="level3">
+<h3 class="anchored" data-anchor-id="julia-talking-to-a-scientist">Julia: Talking to a Scientist</h3>
+<ul>
+<li>When you’re talking, everything looks general. However, you really mean very specific details determined by context.</li>
+<li>You can quickly dig deep into a subject, assuming many rules, theories, and terminology.</li>
+<li>Nothing is hidden: if you ever want to hear about every little detail, you can ask.</li>
+<li>They will get mad (and throw errors at you) if you begin to be loose with the specific details.</li>
+</ul>
 
 
+
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bezanson2017" class="csl-entry" role="listitem">
+Bezanson, Jeff, Alan Edelman, Stefan Karpinski, and Viral B. Shah. 2017. <span>“Julia: A Fresh Approach to Numerical Computing.”</span> <em>SIAM Review</em> 59 (1): 65–98. <a href="https://doi.org/10.1137/141000671">https://doi.org/10.1137/141000671</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Functions</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/functions.html">Functions</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 1 (Fundamentals)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 (Programming)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Types</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Basic Operations</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Multiple Dispatch</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 3 (Best Practices)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Package Management</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Defensive Programming</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Refactoring</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 4 (Numerical Basics)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Computer Architecture</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Algorithms Introduction</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Linear Algebra Introduction</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">BLAS/LAPACK</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 5 (Linear Systems)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Easy Systems</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Condition Numbers</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">QR</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cholesky</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">SVD</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Iterative Methods</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 6 (Simulation)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">RNG and PRNGs</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Inverse Method</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Rejection Sampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Monte Carlo Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Distributions.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 7 (Resampling)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 8 (Optimization)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">First-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Second-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Automatic Differentiation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 9 (Data Technologies)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Homework 1</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">How to…</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#syntax-and-semantics" id="toc-syntax-and-semantics" class="nav-link" data-scroll-target="#syntax-and-semantics">Syntax and Semantics</a>
+  <ul class="collapse">
+  <li><a href="#anonymous-functions" id="toc-anonymous-functions" class="nav-link" data-scroll-target="#anonymous-functions">Anonymous Functions</a></li>
+  <li><a href="#pass-by-sharing" id="toc-pass-by-sharing" class="nav-link" data-scroll-target="#pass-by-sharing">Pass by sharing</a></li>
+  </ul></li>
+  <li><a href="#variable-scope-and-rules" id="toc-variable-scope-and-rules" class="nav-link" data-scroll-target="#variable-scope-and-rules">Variable scope and rules</a>
+  <ul class="collapse">
+  <li><a href="#example-using-a-global-variable" id="toc-example-using-a-global-variable" class="nav-link" data-scroll-target="#example-using-a-global-variable">Example: Using a global variable</a></li>
+  <li><a href="#example-redefining-π" id="toc-example-redefining-π" class="nav-link" data-scroll-target="#example-redefining-π">Example: Redefining <code>π</code></a></li>
+  </ul></li>
+  <li><a href="#using-functions" id="toc-using-functions" class="nav-link" data-scroll-target="#using-functions">Using functions</a>
+  <ul class="collapse">
+  <li><a href="#nesting" id="toc-nesting" class="nav-link" data-scroll-target="#nesting">Nesting</a></li>
+  <li><a href="#recursion" id="toc-recursion" class="nav-link" data-scroll-target="#recursion">Recursion</a></li>
+  <li><a href="#vectorization" id="toc-vectorization" class="nav-link" data-scroll-target="#vectorization">Vectorization</a></li>
+  <li><a href="#higher-order-functions" id="toc-higher-order-functions" class="nav-link" data-scroll-target="#higher-order-functions">Higher-order functions</a></li>
+  <li><a href="#list-comprehensions" id="toc-list-comprehensions" class="nav-link" data-scroll-target="#list-comprehensions">List comprehensions</a></li>
+  </ul></li>
+  <li><a href="#how-to-write-julia-functions" id="toc-how-to-write-julia-functions" class="nav-link" data-scroll-target="#how-to-write-julia-functions">How to write (Julia) functions</a>
+  <ul class="collapse">
+  <li><a href="#treat-function-signatures-as-interfaces" id="toc-treat-function-signatures-as-interfaces" class="nav-link" data-scroll-target="#treat-function-signatures-as-interfaces">Treat function signatures as interfaces</a></li>
+  <li><a href="#what-should-be-a-function" id="toc-what-should-be-a-function" class="nav-link" data-scroll-target="#what-should-be-a-function">What should be a function?</a></li>
+  <li><a href="#named-and-default-arguments" id="toc-named-and-default-arguments" class="nav-link" data-scroll-target="#named-and-default-arguments">Named and default arguments</a></li>
+  <li><a href="#checking-arguments" id="toc-checking-arguments" class="nav-link" data-scroll-target="#checking-arguments">Checking arguments</a></li>
+  <li><a href="#encapsulation-respect-the-interfaces" id="toc-encapsulation-respect-the-interfaces" class="nav-link" data-scroll-target="#encapsulation-respect-the-interfaces">Encapsulation: Respect the interfaces!</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/functions.html">Functions</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Functions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Understand basic syntax of a Julia function.</li>
+<li>Understand Julia’s scoping rules.</li>
+<li>Develop an awareness of how Julia functions can be used, manipulated, and leveraged.</li>
+<li>Develop a mental model for writing functions in Julia.</li>
+</ol>
+</section>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Functions are the basic units by which we assemble solutions to complex problems. This is especially true in R and Julia, as the languages strongly favor a Functional Programming (FP) style. These languages greatly benefit from ideas in other FP languages (e.g.&nbsp;Lisp) that came before and which evolved concurrently. One key aspect of FP is that functions are treated like any other object in the language (first-class citizens).</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the Python users, the language favors a particular flavor of object-oriented programming that puts lets emphasis on functions/methods and more on classes. But functions remain important!</p>
+</div>
+</div>
+</section>
+<section id="syntax-and-semantics" class="level2">
+<h2 class="anchored" data-anchor-id="syntax-and-semantics">Syntax and Semantics</h2>
+<div id="2" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">func</span>(req1, req2; key1<span class="op">=</span>dflt1, key2<span class="op">=</span>dflt2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>  <span class="co"># do stuff</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>  <span class="cf">return</span> out1, out2, out3</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><strong>Required arguments</strong> are separated by a comma and use <em>positional notation</em>.</li>
+<li><strong>Optional arguments</strong> need a default value in the signature.</li>
+<li><strong>Semicolons</strong> are not required in a function call. It is used to separate positional arguments from <strong>keyword arguments</strong>.</li>
+<li>A <code>return</code> statement is optional, but <em>highly encouraged in STAT 206</em>.</li>
+<li>If your function needs to return multiple values, use a <code>Tuple</code>, <code>Dict</code>, or <code>NamedTuple</code>.</li>
+</ul>
+<section id="anonymous-functions" class="level3">
+<h3 class="anchored" data-anchor-id="anonymous-functions">Anonymous Functions</h3>
+<p><strong>Anonymous functions</strong> are functions without a name.</p>
+<ul>
+<li>These are short functions in terms of code length.</li>
+<li>Used only once and have no reuse value.</li>
+<li>Are commonly used in collection functions or list comprehensions.</li>
+</ul>
+<section id="example-squaring-numbers-in-a-collection" class="level4">
+<h4 class="anchored" data-anchor-id="example-squaring-numbers-in-a-collection">Example: Squaring numbers in a collection</h4>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>y <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1:9</code></pre>
+</div>
+</div>
+<p>Use an anonymous function for this straightforward calculation:</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> x<span class="op">^</span><span class="fl">2</span>, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>9-element Vector{Int64}:
+  1
+  4
+  9
+ 16
+ 25
+ 36
+ 49
+ 64
+ 81</code></pre>
+</div>
+</div>
+<p>Better yet, the <code>abs2()</code> function does exactly what we need:</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="fu">map</span>(abs2, y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>9-element Vector{Int64}:
+  1
+  4
+  9
+ 16
+ 25
+ 36
+ 49
+ 64
+ 81</code></pre>
+</div>
+</div>
+<p>Suppose <code>abs2()</code> does not exist. Our function is <code>^(x, 2)</code>, it is just the application of the Binary operator <code>^</code> with the <em>second</em> argument fixed to the value <code>2</code>. The <code>Base.Fix2</code> construct can help avoid anonymous functions:</p>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">map</span>(<span class="bu">Base</span>.<span class="fu">Fix2</span>(<span class="op">^</span>, <span class="fl">2</span>), y) <span class="co"># use sparingly</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>9-element Vector{Int64}:
+  1
+  4
+  9
+ 16
+ 25
+ 36
+ 49
+ 64
+ 81</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="pass-by-sharing" class="level3">
+<h3 class="anchored" data-anchor-id="pass-by-sharing">Pass by sharing</h3>
+<p>In Julia, all arguments to functions are <strong>passed by sharing</strong>, in contrast to R and Matlab.</p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4-element Vector{Int64}:
+ 2
+ 1
+ 8
+ 6</code></pre>
+</div>
+</div>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4-element Vector{Int64}:
+ 1
+ 2
+ 6
+ 8</code></pre>
+</div>
+</div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4-element Vector{Int64}:
+ 1
+ 2
+ 6
+ 8</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Function names ending with <code>!</code> indicate that the function mutates at least one argument, typically the first. This is strictly a convention; adding <code>!</code> to the end of a Julia function does nothing semantically.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="variable-scope-and-rules" class="level2">
+<h2 class="anchored" data-anchor-id="variable-scope-and-rules">Variable scope and rules</h2>
+<p><strong>Variable scope</strong> and the associated rules defining scope are all about what functions can “see” and “do”.</p>
+<ul>
+<li>Each function has its own environment, or <em>local scope</em>.</li>
+<li>Names here override names in the <em>global scope</em>.</li>
+<li>Internal environment starts with the <em>named arguments</em>.</li>
+<li>If your computer encounters an undefined name in a function, it looks for it in the environment of the next outer scope <em>where the function was defined</em>. This is known as <strong>lexical scope</strong>.</li>
+</ul>
+<p>Julia, R, and Python all use some variation of these rules for variable scope. That is, they all use <em>lexical scope</em> to resolve any “free” variables/symbols.</p>
+<p>Julia’s scope rules are <a href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#scope-of-variables">more or less straightforward</a>. Below are some Julia-specific quirks:</p>
+<ul>
+<li>Everything lives in the <code>Main</code> module, but default. It is the enclosing global scope for interactive environments; e.g.&nbsp;if you are working in the Julia REPL.</li>
+<li>Global references must be declared using <code>global</code> for <em>consistent</em> behavior. Otherwise, global references will change depending on context, due to <a href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#local-scope">hard vs soft scoping</a>.</li>
+<li>Julia allows <em>mutation</em> of <em>mutable types</em>. This reason alone is a good reason to avoid global references at all costs.</li>
+<li>Scalars are immutable, as are many other constructs. You cannot change their content.</li>
+<li>An <code>Array</code> object is mutable, so changing the content of an <code>Array</code> instance persists outside a function call.</li>
+<li>Remember that <code>x = &lt;expr&gt;</code> binds the RHS to the left; <code>x .= &lt;expr&gt;</code> fills the LHS with the RHS.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Avoid global variables!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Reduces risk of confusion and error.</li>
+<li>Exception: Reserve global variables for true universal concepts like <span class="math inline">\(\pi\)</span>.</li>
+<li>Exception: Allocating work buffers in large and sophisticated libraries like BLAS/LAPACK.</li>
+</ul>
+</div>
+</div>
+<section id="example-using-a-global-variable" class="level3">
+<h3 class="anchored" data-anchor-id="example-using-a-global-variable">Example: Using a global variable</h3>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>x <span class="op">=</span> <span class="fl">7</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>y <span class="op">=</span> [<span class="ch">'A'</span>, <span class="ch">'C'</span>, <span class="ch">'G'</span>, <span class="ch">'T'</span>, <span class="ch">'U'</span>]</span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a><span class="kw">function</span> <span class="fu">adder</span>(y)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a>  <span class="kw">global</span> x <span class="co"># specify a global reference</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-label="6"></a>  x <span class="op">=</span> x <span class="op">+</span> y</span>
+<span id="cb16-7"><a href="#cb16-7" aria-label="7"></a>  <span class="cf">return</span> x</span>
+<span id="cb16-8"><a href="#cb16-8" aria-label="8"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>adder (generic function with 1 method)</code></pre>
+</div>
+</div>
+<p>Let’s see what happens to <code>x</code> and <code>y</code> when we call the function with a particular value.</p>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="fu">adder</span>(<span class="fl">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>8</code></pre>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>x <span class="co"># oh the humanity!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>8</code></pre>
+</div>
+</div>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5-element Vector{Char}:
+ 'A': ASCII/Unicode U+0041 (category Lu: Letter, uppercase)
+ 'C': ASCII/Unicode U+0043 (category Lu: Letter, uppercase)
+ 'G': ASCII/Unicode U+0047 (category Lu: Letter, uppercase)
+ 'T': ASCII/Unicode U+0054 (category Lu: Letter, uppercase)
+ 'U': ASCII/Unicode U+0055 (category Lu: Letter, uppercase)</code></pre>
+</div>
+</div>
+<p>Outside the <code>adder()</code> function:</p>
+<ul>
+<li><code>x</code> is a symbol that binds the scalar value <code>7</code>.</li>
+<li><code>y</code> is a symbol that binds the specified <code>Array</code> value.</li>
+</ul>
+<p>Inside the <code>adder()</code> function:</p>
+<ul>
+<li>The symbol <code>y</code> is declared as a local variable; specifically it is the name of the first (and only) argument to the function.</li>
+<li>The symbol <code>x</code> is declared as a global reference. We pull its value from the next outer scope.</li>
+<li>Surprisingly, we manage to modify <code>x</code> but not <code>y</code>!</li>
+</ul>
+</section>
+<section id="example-redefining-π" class="level3">
+<h3 class="anchored" data-anchor-id="example-redefining-π">Example: Redefining <code>π</code></h3>
+<p>In Julia, the symbols <code>pi</code> and <code>π</code> are defined in the language as convenient references to the number <span class="math inline">\(\pi\)</span>. While it is convenient to use, it is a global variable and therefore carries some risk.</p>
+<p>The following function uses <code>pi</code> to compute the area of a circle with radius <code>r</code>:</p>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">circle_area</span>(r) <span class="op">=</span> <span class="cn">pi</span><span class="op">*</span>r<span class="op">^</span><span class="fl">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>circle_area (generic function with 1 method)</code></pre>
+</div>
+</div>
+<p>Check that is works as expected:</p>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="fu">circle_area</span>.([<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+  3.141592653589793
+ 12.566370614359172
+ 28.274333882308138</code></pre>
+</div>
+</div>
+<p>What happens if we modify a global constant?</p>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a>truepi <span class="op">=</span> <span class="cn">pi</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-label="2"></a><span class="cn">pi</span> <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-label="3"></a><span class="fu">circle_area</span>.([<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Int64}:
+  3
+ 12
+ 27</code></pre>
+</div>
+</div>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a><span class="cn">pi</span> <span class="op">=</span> truepi <span class="co"># restore sanity</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a><span class="fu">circle_area</span>.([<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+  3.141592653589793
+ 12.566370614359172
+ 28.274333882308138</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="using-functions" class="level2">
+<h2 class="anchored" data-anchor-id="using-functions">Using functions</h2>
+<section id="nesting" class="level3">
+<h3 class="anchored" data-anchor-id="nesting">Nesting</h3>
+<p>Functions can be nested. In the example below, the <code>outerfunction()</code> can be invoked in the enclosing scope, whereas the <code>innerfunction()</code> is only visible within <code>outerfunction()</code>.</p>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">outerfunction</span>()</span>
+<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a>  <span class="co"># do some outer stuff</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a>  <span class="kw">function</span> <span class="fu">innerfunction</span>()</span>
+<span id="cb32-4"><a href="#cb32-4" aria-label="4"></a>    <span class="co"># do inner stuff</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-label="5"></a>    <span class="co"># can access prior outer definitions</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-label="6"></a>  <span class="kw">end</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-label="7"></a>  <span class="co"># do more outer stuff</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-label="8"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>outerfunction (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What’s the use case?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is sometimes advantageous to hide helper functions where they are used, especially if they are not used elsewhere. Inner functions are also used to create <em>closures</em>, functions that “fix” some arguments to another function. We will discuss these at a later date.</p>
+</div>
+</div>
+</section>
+<section id="recursion" class="level3">
+<h3 class="anchored" data-anchor-id="recursion">Recursion</h3>
+<p>Julia supports recursive function definitions.</p>
+<p>A successful recursive implementation of a function requires two key ingredients:</p>
+<ol type="1">
+<li>A <strong>base case</strong>. How do we know when to stop recursion?</li>
+<li>A <strong>recursive step</strong>. How do we build the next item in the recursion?</li>
+</ol>
+<p>Without a base case, a recursive function will create too many calls to itself and trigger a <code>StackOverflow</code> exception. This is a protection built into programming langauges to prevent “runaway code” that never terminates.</p>
+<section id="example-factorial" class="level4">
+<h4 class="anchored" data-anchor-id="example-factorial">Example: Factorial</h4>
+<p>The following code implements the factorial function, <span class="math inline">\(n! = n \times (n-1) \times \ldots \times 2 \times 1\)</span>.</p>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">myfactorial</span>(n)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-label="2"></a>  <span class="cf">if</span> n <span class="op">&gt;</span> <span class="fl">1</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-label="3"></a>    <span class="co"># recursive step</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-label="4"></a>    <span class="cf">return</span> n <span class="op">*</span> <span class="fu">myfactorial</span>(n<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-label="5"></a>  <span class="cf">else</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-label="6"></a>    <span class="co"># base case; treats x! = 1 for any x &lt;= 0.</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-label="7"></a>    <span class="cf">return</span> <span class="fl">1</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-label="8"></a>  <span class="cf">end</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-label="9"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>myfactorial (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">myfactorial</span>(<span class="fl">3</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">myfactorial</span>(<span class="fl">6</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>myfactorial(3) = 6
+myfactorial(6) = 720</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="vectorization" class="level3">
+<h3 class="anchored" data-anchor-id="vectorization">Vectorization</h3>
+<p>Scalar functions can be vectorized using the Dot (<code>.</code>) syntax:</p>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-label="1"></a><span class="co"># defined for scalar</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-label="2"></a><span class="kw">function</span> <span class="fu">myfunc</span>(x)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-label="3"></a>    <span class="cf">return</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-label="4"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>myfunc (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">5</span>, <span class="fl">3</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5×3 Matrix{Float64}:
+  0.445212  0.00405992  0.83758
+ -0.268826  0.185651    0.393062
+  0.870779  0.135845    0.000606597
+  0.432061  0.00117066  0.123764
+  0.144308  0.946933    0.926839</code></pre>
+</div>
+</div>
+<p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">zeros</span>(<span class="fl">10</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-label="2"></a>y <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">10</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-label="3"></a><span class="fu">display</span>(y)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>10-element Vector{Float64}:
+  0.5542088964239684
+  1.8452177157891285
+  0.9265704565981566
+  0.030690222799195633
+  0.7174466170193592
+ -0.006387514137345456
+  1.6382999006064576
+ -0.5920345529293681
+  0.019803106950303906
+  1.061188425057498</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Float64}:
+ 0.5542088964239684
+ 1.8452177157891285
+ 0.9265704565981566
+ 0.030690222799195633
+ 0.7174466170193592
+ 0.0
+ 1.6382999006064576
+ 0.0
+ 0.019803106950303906
+ 1.061188425057498</code></pre>
+</div>
+</div>
+</section>
+<section id="higher-order-functions" class="level3">
+<h3 class="anchored" data-anchor-id="higher-order-functions">Higher-order functions</h3>
+<p>Julia allows functions as arguments to other functions. You can even write functions to generate other functions.</p>
+<section id="map" class="level4">
+<h4 class="anchored" data-anchor-id="map"><code>map()</code></h4>
+<p>This is a staple of functional languages that allows you to apply a function to each element of a collection:</p>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1" aria-label="1"></a>xs <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">5</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5-element Vector{Float64}:
+  0.9698991252317651
+ -0.3315477958311239
+  0.5511681317649791
+  0.9905392068002717
+  0.0979844390878594</code></pre>
+</div>
+</div>
+<p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-label="1"></a><span class="fu">map</span>(xs) <span class="cf">do</span> x</span>
+<span id="cb47-2"><a href="#cb47-2" aria-label="2"></a>  <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5-element Vector{Float64}:
+  0.9698991252317651
+ -0.3315477958311239
+  0.5511681317649791
+  0.9905392068002717
+  0.0979844390878594</code></pre>
+</div>
+</div>
+</section>
+<section id="filter" class="level4">
+<h4 class="anchored" data-anchor-id="filter"><code>filter()</code></h4>
+<p>Keeps only the elements in a collection for which the predicate function returns <code>true</code>.</p>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1" aria-label="1"></a><span class="fu">filter</span>(iseven, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5-element Vector{Int64}:
+  2
+  4
+  6
+  8
+ 10</code></pre>
+</div>
+</div>
+</section>
+<section id="reduce" class="level4">
+<h4 class="anchored" data-anchor-id="reduce"><code>reduce()</code></h4>
+<p>Combines the elements of a collection from left to right using a binary function to “reduce” it down to a single value.</p>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1" aria-label="1"></a><span class="fu">reduce</span>(<span class="op">+</span>, [<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10</code></pre>
+</div>
+</div>
+</section>
+<section id="any" class="level4">
+<h4 class="anchored" data-anchor-id="any"><code>any()</code></h4>
+<p>Tests whether any elements in a collection satisfy the condition defined by a predicate function.</p>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb53-1"><a href="#cb53-1" aria-label="1"></a><span class="fu">any</span>(isodd, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+</section>
+<section id="all" class="level4">
+<h4 class="anchored" data-anchor-id="all"><code>all()</code></h4>
+<p>Tests whether all elements in a collection satisfy the condition defined by a predicate function.</p>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb55-1"><a href="#cb55-1" aria-label="1"></a><span class="fu">all</span>(isodd, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>false</code></pre>
+</div>
+</div>
+</section>
+<section id="count" class="level4">
+<h4 class="anchored" data-anchor-id="count"><code>count()</code></h4>
+<p>Counts how many elements in a collection satisfy the condition defined by a predicate function.</p>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb57-1"><a href="#cb57-1" aria-label="1"></a><span class="fu">count</span>(x <span class="op">-&gt;</span> <span class="fu">sqrt</span>(x) <span class="op">&lt;</span> <span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10</code></pre>
+</div>
+</div>
+</section>
+<section id="sort" class="level4">
+<h4 class="anchored" data-anchor-id="sort"><code>sort()</code></h4>
+<p>Sorts a collection using a custom metric or transformation defined <code>by</code> a function.</p>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb59-1"><a href="#cb59-1" aria-label="1"></a><span class="fu">sort</span>([<span class="st">"apple"</span>, <span class="st">"pie"</span>, <span class="st">"banana"</span>]; by<span class="op">=</span>length) <span class="co"># sort by string length</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{String}:
+ "pie"
+ "apple"
+ "banana"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="list-comprehensions" class="level3">
+<h3 class="anchored" data-anchor-id="list-comprehensions">List comprehensions</h3>
+<div id="62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb61-1"><a href="#cb61-1" aria-label="1"></a>[<span class="fu">sin</span>(<span class="fl">2</span>i <span class="op">+</span> j) for i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>] <span class="co"># similar to Python</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5×3 Matrix{Float64}:
+  0.14112   -0.756802  -0.958924
+ -0.958924  -0.279415   0.656987
+  0.656987   0.989358   0.412118
+  0.412118  -0.544021  -0.99999
+ -0.99999   -0.536573   0.420167</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="how-to-write-julia-functions" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-write-julia-functions">How to write (Julia) functions</h2>
+<section id="treat-function-signatures-as-interfaces" class="level3">
+<h3 class="anchored" data-anchor-id="treat-function-signatures-as-interfaces">Treat function signatures as interfaces</h3>
+<p><strong>Interfaces</strong> are the inputs or arguments; the <strong>outputs</strong> or <strong>return value</strong>.</p>
+<ul>
+<li>An interface tells the caller what is required.</li>
+<li>Outside perspective: Try to avoid caring about <em>what</em> is inside a function or <em>how</em> it carries out its work.
+<ul>
+<li>Calls other functions: <code>ifelse()</code>, <code>abs()</code>, operators <code>^</code> and <code>&gt;</code>, and could also call other functions we’ve written.</li>
+<li>Keep the internals orthogonal to the external; that’s <strong>encapsulation</strong>.</li>
+</ul></li>
+<li><code>return</code> says what the output is; alternately, return the last evaluation.
+<ul>
+<li>We often do not need to care about this; just use <code>return</code> to be explicit!</li>
+</ul></li>
+<li><strong>Comments</strong>: Not required but a good idea.
+<ul>
+<li>Helps document what kinds of inputs are required.</li>
+<li>Julia and R are dynamic languages. No constructs to enforce types in signatures.</li>
+<li>Documentation/comments should signal what is/isn’t allowed.</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-should-be-a-function" class="level3">
+<h3 class="anchored" data-anchor-id="what-should-be-a-function">What should be a function?</h3>
+<ul>
+<li>Things you’re going to re-run, especially if it will be re-run with changes.</li>
+<li>Chunks of code you keep highlighting and hitting return on.</li>
+<li>Chunks of code which are small parts of a larger analysis or process.</li>
+<li>Chunks of code which are very similar to other chunks.</li>
+</ul>
+</section>
+<section id="named-and-default-arguments" class="level3">
+<h3 class="anchored" data-anchor-id="named-and-default-arguments">Named and default arguments</h3>
+<p>Consider the “robust” loss function</p>
+<p><span class="math display">\[
+\psi(x) = \begin{cases}
+  2 |x| - 1, &amp; x^{2} &gt; 1 \\
+  x^{2}, &amp; x^{2} \le 1
+\end{cases}.
+\]</span></p>
+<p>We define two versions of this function below:</p>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb63-1"><a href="#cb63-1" aria-label="1"></a><span class="co"># Robust loss function for outlier-resistant regression</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-label="2"></a><span class="co"># Inputs: vector of numbers (x)</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-label="3"></a><span class="co"># Outputs: vector with x^2 for small entries, |x| for large ones</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-label="4"></a><span class="kw">function</span> <span class="fu">psi1</span>(x)</span>
+<span id="cb63-5"><a href="#cb63-5" aria-label="5"></a>  psi <span class="op">=</span> <span class="fu">ifelse</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">&gt;</span> <span class="fl">1</span>, <span class="fl">2</span><span class="fu">*abs</span>(x) <span class="op">-</span> <span class="fl">1</span>, x<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-label="6"></a>  <span class="cf">return</span> psi</span>
+<span id="cb63-7"><a href="#cb63-7" aria-label="7"></a><span class="kw">end</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-label="8"></a></span>
+<span id="cb63-9"><a href="#cb63-9" aria-label="9"></a><span class="co"># Robust loss function for outlier-resistant regression</span></span>
+<span id="cb63-10"><a href="#cb63-10" aria-label="10"></a><span class="co"># Inputs: vector of numbers (x), scale for crossover (c)</span></span>
+<span id="cb63-11"><a href="#cb63-11" aria-label="11"></a><span class="co"># Outputs: vector with x^2 for small entries, 2c|x|-c^2 for large ones</span></span>
+<span id="cb63-12"><a href="#cb63-12" aria-label="12"></a><span class="kw">function</span> <span class="fu">psi2</span>(x; c<span class="op">::</span><span class="dt">Reall </span><span class="op">=</span> <span class="fl">1.0</span>)</span>
+<span id="cb63-13"><a href="#cb63-13" aria-label="13"></a>  psi <span class="op">=</span> <span class="fu">ifelse</span>(x<span class="op">^</span><span class="fl">2</span> <span class="op">&gt;</span> c<span class="op">^</span><span class="fl">2</span>, <span class="fl">2</span><span class="fu">*c*abs</span>(x) <span class="op">-</span> c<span class="op">^</span><span class="fl">2</span>, x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb63-14"><a href="#cb63-14" aria-label="14"></a>  <span class="cf">return</span> psi</span>
+<span id="cb63-15"><a href="#cb63-15" aria-label="15"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>ParseError:
+<span class="ansi-bright-black-fg"># Error @ </span>]8;;file:///home/runner/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/functions.qmd#406:42\<span class="ansi-bright-black-fg">/home/runner/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/functions.qmd:406:42</span>]8;;\
+function psi1(x)
+  psi = ifelse(x^2 &gt; 1, 2*abs(x) - 1, x^2
+<span class="ansi-bright-black-fg">#                                        └ ── </span><span class="ansi-bright-red-fg">Expected `)` or `,`</span>
+Stacktrace:
+ [1] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:406</span></pre>
+</div>
+</div>
+</div>
+<p>Let’s check that they are the same when <span class="math inline">\(c=1\)</span>:</p>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb64-1"><a href="#cb64-1" aria-label="1"></a>z <span class="op">=</span> <span class="fl">1.3</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-label="2"></a><span class="fu">psi1</span>(z) <span class="op">≈</span> <span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>UndefVarError: `psi1` not defined in `Main.Notebook`
+Suggestion: check for spelling errors or missing imports.
+Stacktrace:
+ [1] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:423</span></pre>
+</div>
+</div>
+</div>
+<p>Notice that default values are used whenever named arguments are missing:</p>
+<div id="68" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb65-1"><a href="#cb65-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="fl">1.0</span>) <span class="op">≈</span> <span class="fu">psi2</span>(z)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>UndefVarError: `psi2` not defined in `Main.Notebook`
+Suggestion: check for spelling errors or missing imports.
+Stacktrace:
+ [1] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:429</span></pre>
+</div>
+</div>
+</div>
+<p>Julia enforces order in positional arguments due to its multiple dispatch system. Can’t mimic what you see on the R side for shuffling arguments.</p>
+</section>
+<section id="checking-arguments" class="level3">
+<h3 class="anchored" data-anchor-id="checking-arguments">Checking arguments</h3>
+<p><strong>Problem</strong>: We see odd behavior when arguments are not specified as expected.</p>
+<div id="70" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb66-1"><a href="#cb66-1" aria-label="1"></a><span class="fu">psi2</span>(z; c <span class="op">=</span> <span class="dt">Float64</span>[<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">10</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>UndefVarError: `psi2` not defined in `Main.Notebook`
+Suggestion: check for spelling errors or missing imports.
+Stacktrace:
+ [1] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
+</div>
+</div>
+</div>
+<p><strong>Solution</strong>: Put sanity checks in the code. Ideally, put any input validation at the top of the function body.</p>
+<div id="72" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb67-1"><a href="#cb67-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">psi3</span>(x; c<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-label="2"></a>  <span class="cf">if</span> !(c isa <span class="dt">Number</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-label="3"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)"</span>)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-label="4"></a>  <span class="cf">elseif</span> c <span class="op">&lt;</span> <span class="fl">0</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-label="5"></a>    <span class="fu">error</span>(<span class="st">"Parameter `c` should be positive. Got </span><span class="sc">$</span>(c)<span class="st">."</span>)</span>
+<span id="cb67-6"><a href="#cb67-6" aria-label="6"></a>  <span class="cf">end</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-label="7"></a>  <span class="cf">return</span> <span class="fu">psi2</span>(x; c <span class="op">=</span> c) <span class="co"># now this is safe!</span></span>
+<span id="cb67-8"><a href="#cb67-8" aria-label="8"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>psi3 (generic function with 1 method)</code></pre>
+</div>
+</div>
+<p>The <code>error()</code> function will stop execution and allow you to pass an informative message to a user. Can also <code>throw()</code> more specific errors; e.g.&nbsp;<code>throw(DomainError(...))</code> or <code>@assert some_condition</code>.</p>
+<div id="74" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb69-1"><a href="#cb69-1" aria-label="1"></a><span class="fu">psi3</span>(z; c <span class="op">=</span> <span class="op">-</span><span class="fl">1.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>Parameter `c` should be positive. Got -1.0.
+Stacktrace:
+ [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+ [2] <span class="ansi-bold">psi3</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Float64; <span class="ansi-bright-black-fg">c</span>::Float64<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span>
+ [3] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Float64}</span>, ::typeof(psi3), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:449</span>
+ [4] top-level scope
+ <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:463</span></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="encapsulation-respect-the-interfaces" class="level3">
+<h3 class="anchored" data-anchor-id="encapsulation-respect-the-interfaces">Encapsulation: Respect the interfaces!</h3>
+<ul>
+<li>Interfaces mark out a controlled environment for our code.</li>
+<li>A function interacts with the rest of a system <em>only at the interface</em>.</li>
+<li>Similarly, the “output” should only be through the return value.
+<ul>
+<li>That means avoiding <em>side-effects</em>, which are modifications to some external state not defined inside a function.</li>
+</ul></li>
+</ul>
+<p>Your goal in writing a function is to achieve <strong>encapsulation</strong>: separate <em>what</em> your function does from <em>how</em> it implements its task.</p>
+<ul>
+<li>It should do one and only one thing as well as possible.</li>
+<li>If your function needs to modify some state/data, then that state/data ought to be arguments to the function.</li>
+<li>Information that is unrelated to what a function does should be minimized as much as possible.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/UCR-STAT-206\.github\.io\/2026-Fall-STAT\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

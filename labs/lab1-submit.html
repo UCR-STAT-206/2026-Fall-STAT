@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-09-25">
+<meta name="dcterms.date" content="2026-10-02">
 
-<title>Lab 0: Setting Up Your Workspace</title>
+<title>Lab 1: Submitting Assignments</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -123,7 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Lab 0 (Getting Started)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab1-submit.html">Lab 1 (Submitting Assignments)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -441,13 +441,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link active">
+  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 0 (Getting Started)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
   </div>
 </li>
@@ -538,29 +538,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#the-tools" id="toc-the-tools" class="nav-link" data-scroll-target="#the-tools">The Tools</a></li>
-  <li><a href="#on-your-own" id="toc-on-your-own" class="nav-link" data-scroll-target="#on-your-own">On Your Own</a>
-  <ul class="collapse">
-  <li><a href="#get-the-class-docker-image-working-on-your-computer" id="toc-get-the-class-docker-image-working-on-your-computer" class="nav-link" data-scroll-target="#get-the-class-docker-image-working-on-your-computer">1. Get the class Docker image working on your computer</a></li>
-  <li><a href="#practice-using-the-terminal" id="toc-practice-using-the-terminal" class="nav-link" data-scroll-target="#practice-using-the-terminal">2. Practice using the terminal</a></li>
-  <li><a href="#read-up-on-git-github-the-ssh-protocol" id="toc-read-up-on-git-github-the-ssh-protocol" class="nav-link" data-scroll-target="#read-up-on-git-github-the-ssh-protocol">3. Read up on Git, GitHub, the SSH protocol</a></li>
-  </ul></li>
-  <li><a href="#in-person" id="toc-in-person" class="nav-link" data-scroll-target="#in-person">In Person</a>
-  <ul class="collapse">
-  <li><a href="#download-and-install-quarto" id="toc-download-and-install-quarto" class="nav-link" data-scroll-target="#download-and-install-quarto">1. Download and install Quarto</a></li>
-  <li><a href="#let-us-know-your-github-username" id="toc-let-us-know-your-github-username" class="nav-link" data-scroll-target="#let-us-know-your-github-username">2. Let us know your GitHub username</a></li>
-  <li><a href="#fill-out-the-class-survey" id="toc-fill-out-the-class-survey" class="nav-link" data-scroll-target="#fill-out-the-class-survey">3. Fill out the class survey</a></li>
-  <li><a href="#practice-creating-your-first-quarto-document" id="toc-practice-creating-your-first-quarto-document" class="nav-link" data-scroll-target="#practice-creating-your-first-quarto-document">4. Practice creating your first Quarto document</a></li>
-  </ul></li>
+  <li><a href="#log-in-to-the-container-environment" id="toc-log-in-to-the-container-environment" class="nav-link" data-scroll-target="#log-in-to-the-container-environment">1. Log in to the container environment</a></li>
+  <li><a href="#clone-your-personal-repository-to-the-container" id="toc-clone-your-personal-repository-to-the-container" class="nav-link" data-scroll-target="#clone-your-personal-repository-to-the-container">2. Clone your personal repository to the container</a></li>
+  <li><a href="#organize-the-files" id="toc-organize-the-files" class="nav-link" data-scroll-target="#organize-the-files">3. Organize the files</a></li>
+  <li><a href="#create-a-quarto-document-based-on-the-script" id="toc-create-a-quarto-document-based-on-the-script" class="nav-link" data-scroll-target="#create-a-quarto-document-based-on-the-script">4. Create a Quarto document based on the script</a></li>
+  <li><a href="#review-your-work-and-submit" id="toc-review-your-work-and-submit" class="nav-link" data-scroll-target="#review-your-work-and-submit">5. Review your work and submit</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Lab 0 (Getting Started)</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab1-submit.html">Lab 1 (Submitting Assignments)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Lab 0: Setting Up Your Workspace</h1>
+<h1 class="title">Lab 1: Submitting Assignments</h1>
 </div>
 
 
@@ -571,7 +562,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 25, 2026</p>
+      <p class="date">October 2, 2026</p>
     </div>
   </div>
   
@@ -585,87 +576,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="goals" class="level2">
 <h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<p>By the end of this lab, you should:</p>
 <ol type="1">
-<li>Access a virtualized computing environment as a local Docker container.</li>
-<li>Integrate your computing environment with VS Code.</li>
-<li>Configure Git for documenting your work and submitting assignments.</li>
-<li>Practice setting up software in a Unix-like environment.</li>
+<li>Have your <strong>local repository</strong> set up on your computer within the Docker container.</li>
+<li>Be able to <code>git pull</code> and <code>git push</code> to your <strong>remote repository</strong>, hosted on GitHub.</li>
+<li>Understand the workflow of drafting your solutions using version control and submitting to GitHub.</li>
 </ol>
 </section>
-<section id="the-tools" class="level2">
-<h2 class="anchored" data-anchor-id="the-tools">The Tools</h2>
-<p>You are responsible for installing the following on your machine:</p>
-<ol type="1">
-<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a></li>
-<li><a href="https://code.visualstudio.com/download">VS Code</a></li>
-</ol>
-<p>Once you create a container using the class image, you will have access to:</p>
-<ol type="1">
-<li>a <a href="https://en.wikipedia.org/wiki/Unix_shell">Unix Shell</a> (we will use <code>zsh</code> by default),</li>
-<li><a href="https://en.wikipedia.org/wiki/Git">Git</a>,</li>
-<li><a href="https://en.wikipedia.org/wiki/Quarto_(software)">Quarto</a>, and</li>
-<li><a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Julia 1.12.7</a>.</li>
-</ol>
-<p>In addition to various tools installed on the image (i.e.&nbsp;Unix utilities), you also have access to</p>
-<ol type="1">
-<li><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python 3.14</a>,</li>
-<li><a href="https://en.wikipedia.org/wiki/R_(programming_language)">R 4.5</a>, and</li>
-<li><a href="https://en.wikipedia.org/wiki/DuckDB">DuckDB 1.5.5</a>.</li>
+<section id="log-in-to-the-container-environment" class="level2">
+<h2 class="anchored" data-anchor-id="log-in-to-the-container-environment">1. Log in to the container environment</h2>
+<ol type="a">
+<li>Make sure the Docker container is running.</li>
+<li>Connect VSCode to the container.</li>
+<li>Open a terminal</li>
 </ol>
 </section>
-<section id="on-your-own" class="level2">
-<h2 class="anchored" data-anchor-id="on-your-own">On Your Own</h2>
-<section id="get-the-class-docker-image-working-on-your-computer" class="level3">
-<h3 class="anchored" data-anchor-id="get-the-class-docker-image-working-on-your-computer">1. Get the class Docker image working on your computer</h3>
-<p>Read the guide on <a href="../howto/use_docker.html">how to use Docker</a> in this class.</p>
+<section id="clone-your-personal-repository-to-the-container" class="level2">
+<h2 class="anchored" data-anchor-id="clone-your-personal-repository-to-the-container">2. Clone your personal repository to the container</h2>
+<ol type="a">
+<li>Make sure you are in <code>/home/student</code>; e.g.&nbsp;check the output of <code>pwd</code>.</li>
+<li>Run <code>git clone git@github:UCR-STAT-206/LASTNAME_FIRSTNAME.git Work</code>. Be sure to edit <code>LASTNAME</code> and <code>FIRSTNAME</code>; we used the information on Canvas.</li>
+<li><code>cd</code> into the newly created <code>Work</code> directory and check the files with <code>ls</code>. It should match what is currently on GitHub.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You only need to clone your repo from GitHub once.</p>
+</div>
+</div>
 </section>
-<section id="practice-using-the-terminal" class="level3">
-<h3 class="anchored" data-anchor-id="practice-using-the-terminal">2. Practice using the terminal</h3>
-<p>Read the notes on <a href="../notes/module01/unix.html">the Unix shell</a> and experiment inside a container.</p>
+<section id="organize-the-files" class="level2">
+<h2 class="anchored" data-anchor-id="organize-the-files">3. Organize the files</h2>
+<ol type="a">
+<li><p>Edit <code>README.md</code> by adding yourself as an author. For example, add a line like <code>Author: FIRSTNAME LASTNAME</code>.</p></li>
+<li><p>Create a new directory named <code>lab1</code>. Use this name exactly as printed here.</p></li>
+<li><p>Move all the files (except <code>README.md</code>) into <code>lab1</code>.</p></li>
+<li><p>Verify the file structure inside <code>lab1</code> using the <code>tree</code> command. You should see the following:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>.</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>├── lab1</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>│&nbsp;&nbsp; ├── demo.jl</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>│&nbsp;&nbsp; ├── Project.toml</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>│&nbsp;&nbsp; └── ucr-and-bell-tower.jpg</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>└── README.md</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Stage</strong> all the changes you’ve made and <strong>commit</strong> them. Use the message <code>Completed Step 3 of Lab 1</code>.</p></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Make it a habit to check your work
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending on how you use <code>git add</code>, Git may not detect the file movements accurately. Verify with <code>git status</code> <strong>before</strong> you commit. You should see</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>On branch main</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>Your branch is up to date with 'origin/main'.</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>Changes to be committed:</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a>  (use "git restore --staged &lt;file&gt;..." to unstage)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a>    renamed:    Project.toml -&gt; lab1/Project.toml</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a>    renamed:    demo.jl -&gt; lab1/demo.jl</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a>    renamed:    ucr-and-bell-tower.jpg -&gt; lab1/ucr-and-bell-tower.jpg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
 </section>
-<section id="read-up-on-git-github-the-ssh-protocol" class="level3">
-<h3 class="anchored" data-anchor-id="read-up-on-git-github-the-ssh-protocol">3. Read up on Git, GitHub, the SSH protocol</h3>
-<p>Try setting up Git on your container and create your GitHub account.</p>
-<ol type="1">
-<li><a href="../notes/module01/git.html">What is Git?</a> and <a href="../howto/configure_git.html">How to configure Git</a>.</li>
-<li><a href="../howto/setup_github.html">How to set up your GitHub account</a>.</li>
-<li><a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/about-ssh">What is SSH?</a>.</li>
+<section id="create-a-quarto-document-based-on-the-script" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-quarto-document-based-on-the-script">4. Create a Quarto document based on the script</h2>
+<ol type="a">
+<li>Call the file <code>demo.qmd</code>. Name yourself as the author.
+<ul>
+<li>Most of the comments in <code>demo.jl</code> should become regular text in your Quarto document.</li>
+<li>You may need to run the <code>instantiate</code> command in Julia’s package manager to get everything working.</li>
+<li><strong>Test it out as you work</strong> using <code>quarto preview demo.qmd</code>.</li>
+</ul></li>
+<li>Create a new snapshot once you’ve finished working on <code>demo.qmd</code>.
+<ul>
+<li>Be sure to <strong>only</strong> commit <code>demo.qmd</code>. Exclude everything else.</li>
+<li>Use the message <code>Completed Step 4 of Lab 1</code>.</li>
+</ul></li>
 </ol>
 </section>
-</section>
-<section id="in-person" class="level2">
-<h2 class="anchored" data-anchor-id="in-person">In Person</h2>
-<p>The following tasks involve using the class Docker image. Instructions are to be carried out inside a running container unless otherwise specified.</p>
-<section id="download-and-install-quarto" class="level3">
-<h3 class="anchored" data-anchor-id="download-and-install-quarto">1. Download and install Quarto</h3>
-<ol type="1">
-<li><p>Inside your terminal, run <code>uname -m</code> to determine whether your container is setup with an <code>arm64</code> or <code>x86_64</code> architecture.</p></li>
-<li><p>Based on the result in the previous step, download Quarto using <code>curl</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>curl -fL -o quarto.tar.gz \</span>
-<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>https://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>or</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>curl -fL -o quarto.tar.gz \</span>
-<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>https://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Next, unpack files from the tarball into <code>/home/student/.local</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>tar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Finally, check that Quarto can be run from your terminal (and therefore seen by other programs) with</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource default number-lines code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>quarto check</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<section id="review-your-work-and-submit" class="level2">
+<h2 class="anchored" data-anchor-id="review-your-work-and-submit">5. Review your work and submit</h2>
+<ol type="a">
+<li><p>Review your work.</p>
+<ul>
+<li>Does the code run in the REPL?</li>
+<li>Does the Quarto document render successfully?</li>
+<li>What does <code>git log</code> look like?</li>
+</ul></li>
+<li><p>Run the command <code>git tag Lab1</code> to tag a specific version with an easy-to-read label.</p></li>
+<li><p>Run the command <code>git push</code> to push all your work to GitHub.</p></li>
+<li><p>Run the command <code>git push --tags</code> to push the easy-to-read label.</p></li>
 </ol>
-</section>
-<section id="let-us-know-your-github-username" class="level3">
-<h3 class="anchored" data-anchor-id="let-us-know-your-github-username">2. Let us know your GitHub username</h3>
-<p>Fill out the <a href="https://forms.gle/NjciYpV6sePL2ZvL9">Google form</a> to record the username you wish to use for this course. It will be used to set up your private repository for this class.</p>
-</section>
-<section id="fill-out-the-class-survey" class="level3">
-<h3 class="anchored" data-anchor-id="fill-out-the-class-survey">3. Fill out the class survey</h3>
-<p>See <a href="https://forms.gle/am7qCGiuBuk4CTuBA">this Google form</a> to answer a few questions. It will help the instructors understand everyone’s background.</p>
-</section>
-<section id="practice-creating-your-first-quarto-document" class="level3">
-<h3 class="anchored" data-anchor-id="practice-creating-your-first-quarto-document">4. Practice creating your first Quarto document</h3>
-<p>See the notes on <a href="../notes/module01/quarto.html">Quarto</a> and explore Quarto’s features.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
