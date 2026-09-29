@@ -1,0 +1,206 @@
+---
+title: Basic Operations
+---
+
+## Goals
+
+1. Be familiar with arithmetic and mathematical functions in Julia.
+2. Be familiar with Julia's implementation of Boolean algebra.
+3. Be familiar with Julia's implementation of comparison operations on numbers and strings.
+
+
+
+## Arithmetic and other math
+
+### Arithmetic
+
+The following arithmetic operators are supported by the base language.
+
+| Expression | Name | Description |
+| :------ | :--------- | :--- |
+| `+x`    | unary plus | the identity operation |
+| `-x`    | unary minus | maps values to their additive inverses |
+| `x + y` | binary plus | performs addition |
+| `x - y` | binary minus | performs subtraction |
+| `x * y` | times | performs multiplication |
+| `x / y` | divide         | performs division |
+| `x ÷ y` | integer divide | $x / y$, truncated to an integer |
+| `x \ y` | inverse divide | equivalent to $y / x$ |
+| `x ^ y` | power          | raises $x$ to the $y^{\text{th}}$ power |
+| `x % y` | remainder      | equivalent to $\text{rem}(x, y)$ |
+
+### Mathematical functions
+
+The following mathematical functions are supported by the base language.
+In addition, there are computational tricks used to evaluate functions near singular points or certain limits.
+This list is not exhaustive.
+
+| Expressions | Description |
+| :------ | :--------- |
+| `sin(x)`, `cos(x)`, `tan(x)` | trigonometric functions |
+| `asin(x)`, `acos(x)`, `atan(x)` | inverse trigonometric functions |
+| `sinh(x)`, `cosh(x)`, `tanh(x)` | hyperbolic functions |
+| `exp(x)` | exponential function $e^{x}$ |
+| `log(x)`, `log10(x)`, `log(x, b)` | $\log(x)$ ($\ln(x)$), $\log_{10}(x)$, and $\log_{b}(x)$ |
+| `log1p(x)` | Accurate natural logarithm of $1 + x$, $\log(1 + x)$.
+
+### Special mathematical functions
+
+Certain functions are challenging to evaluate on computers and often require specialized implementations.
+These implementations are packaged into a [SpecialFunctions.jl](https://specialfunctions.juliamath.org/stable/functions_overview/) package that is *not* part of the standard library.
+
+| Example | Description |
+| :------ | :---------- |
+| `gamma(x)` | Evaluate the Gamma function, $\Gamma(x) = \int_{0}^{\infty} t^{x-1} e^{-t}~\mathrm{d}t, x \in \mathbb{R}_{+}$. |
+| `beta(x,y)` | Evaluates the Beta function $B(x,y)$.
+| `erf(x)` | Evaluates the error function, $\frac{2}{sqrt{\pi}} \int_{0}^{x} \exp(-t^{2})~\mathrm{d}t$. |
+
+:::::::::::::::::::::::::::::::: callout-note
+
+## Installing external packages
+
+In the REPL, switching to `pkg` mode allows you to install with `add SpecialFunctions`.
+This works for any registered package.
+We will discuss packages later in the course.
+
+::::::::::::::::::::::::::::::::
+
+### Statistical functions
+
+Aside from `minimum()`, `maximum()`, and `sum()`, most statistical functions are implemented in the [Statistics](https://docs.julialang.org/en/v1.12/stdlib/Statistics/) package in the standard library.
+
+| Example        | Description |
+| :------------- | :---------- |
+| `mean(x)` | Arithmetic mean of `x`. Has multidimensional support. |
+| `std(x)`  | Sample standard deviation of data in `x`. Can specify whether estimate is corrected and/or specify the (sample) mean. |
+| `median(x)` | Compute the sample median. |
+| `quantile(x, p)` | Compute the sample $p$-quantile; e.g. `quantile(x, 0.5)` computes the median. |
+
+
+:::::::::::::::::::::::::::::::: callout-note
+
+## Using the standard library
+
+You do not need to install packages from the standard library, just write `using Statistics` to load it.
+
+::::::::::::::::::::::::::::::::
+
+## Logic and Boolean algebra
+
+The set operations for intersection, union, and complement can be mapped to logical operations.
+This is the basis of **Bolean algebra** which classically operates on a two-value logic system.
+
+- $A \cap B$ models $A~\text{AND}~B$
+- $A \cup B$ models $A~\text{OR}~B$
+- $A^{c}$ models $!A$
+
+Julia's logical operations support a three-valued logic: `true`, `false`, and `missing`.
+The `missing` value is specifically an instance of the type `Missing`.
+
+The following subsections contain a few truth tables that describe how logical operations map inputs to outputs based on their definition.
+It is a good exercise to work these out by hand for yourself.
+Each truth table can be worked out by applying the definitions.
+
+### Logical `NOT`
+
+This operation negates its input.
+
+| `!x`  | `true`  | `false` | `missing` |
+|:-----:|:-------:|:-------:|:---------:|
+|       | `false` | `true`  | `missing` |
+
+### Logical `OR`
+
+`true` if at least one of its arguments is `true`.
+
+|  `or`     | `true` | `false` | `missing` |
+|:---------:|:------:|:-------:|:---------:|
+| `true`    | `true` |         |           |
+| `false`   |        |         |           |
+| `missing` |        |         |           |
+
+### Logical `AND`
+
+`false` if at least one of its arguments is `false`.
+
+|  `and`    | `true` | `false` | `missing` |
+|:---------:|:------:|:-------:|:---------:|
+| `true`    |        |         |           |
+| `false`   |        | `false` |           |
+| `missing` |        |         |           |
+
+
+### Logical `XOR`
+
+`True` if one and only one of its arguments is `true`.
+
+|   `^`     | `true` | `false` | `missing` |
+|:---------:|:------:|:-------:|:---------:|
+| `true`    |        |         |           |
+| `false`   | `true` |         |           |
+| `missing` |        |         |           |
+
+
+
+## Comparisons
+
+Comparison operators round out the basic operations in a programming language.
+Julia allows comparison of various types of objects.
+Specifically, we can create expressions involving comparison operators which must evaluate to `true`, `false`, and/or `missing`.
+
+For now, we focus on numeric comparisons and comparisons involving strings.
+
+| Operator  | Name       |
+|:--------- |:---------- |
+| `==`      | equality   |
+| `!=`, `≠` | inequality |
+| `<`       | less than  |
+| `<=`, `≤` | less than or equal to |
+| `===`     | identical, strict equality  |
+
+:::::::::::::::::::::::::::::::: callout-important
+
+## Different notions of equality
+
+The `==` operator checks for *equality in value* whereas `===` checks if two objects can be distinguished by a computer.
+
+- First check equality *in type*.
+- If the object is mutable, check for equality *by memory address*.
+- If the object is immutable, check for equality *by bit-level contents*.
+
+::::::::::::::::::::::::::::::::
+
+### Comparing numbers
+
+Comparisons on numbers follow their usual mathematical definitions.
+
+```{julia}
+x = 1
+y = 2
+x > y
+```
+
+```{julia}
+x ≠ y # type \neq + Tab for !=
+```
+
+These expressions are easily chained with other comparisons and logic operations.
+They follow [specific precedence rules](https://docs.julialang.org/en/v1/manual/mathematical-operations/#Operator-Precedence-and-Associativity).
+Rather than commit all these rules to memory at once, it is recommended that you use parentheses to clarify your meaning and gradually incorporate the precedence rules in your code.
+
+:::::::::::::::::::::::::::::::: callout-note
+
+## Precedence for comparisons
+
+The Julia documentation specifically states that comparisons are not associative.
+That means `x < y < z` is not the same expression as `(x < y) < z` or `x < (y < z)`, matching standard mathematical notation.
+You should convince yourself that it is a sensible rule.
+
+**Hint**: Suppose `x`, `y`, and `z` are all numbers, say `Int`. What type *must* `(x < y)` evaluate to?
+
+::::::::::::::::::::::::::::::::
+
+### Comparing strings
+
+Strings support comparisons using [lexicographic order](https://docs.julialang.org/en/v1.12/manual/strings/#Common-Operations) when **both** arguments are `String` objects.
+Attempting to compare objects of unrelated types is likely to result in an error message.

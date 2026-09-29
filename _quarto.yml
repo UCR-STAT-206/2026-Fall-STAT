@@ -33,6 +33,7 @@ website:
             href: notes/module02/intro.qmd
           - text: Types
           - text: Basic Operations
+            href: notes/module02/basics.qmd
           - text: Control Flow
             href: notes/module02/control.qmd
           - text: Functions
