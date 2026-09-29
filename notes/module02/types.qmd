@@ -1,0 +1,286 @@
+---
+title: Julia's Type System
+---
+
+## Goals
+
+1. Understand that every object in Julia has a type and that this information can be extracted programmatically.
+2. Be able to distinguish between mutable vs immutable types as well as concrete vs abstract types.
+3. Develop an awareness of Julia's type system: basic types, composite types, and parametric types.
+
+## Every object in Julia has a type
+
+```{julia}
+import AbstractTrees
+import AbstractTrees: children
+
+AbstractTrees.children(d::DataType) = subtypes(d) # a new method for DataType
+```
+
+```{julia}
+AbstractTrees.print_tree(Number)
+```
+
+This includes functions.
+For example, the `print()` function is type `typeof(print)`.
+
+Keep in mind the following facts:
+
+- Types themselves belong to the `DataType` type.
+- The "top" type that everything belongs to is the `Any` type.
+- The "bottom" type that no type can belong to is the `Union{}` type.
+- Missing-ness is represented with `missing` which has type `Missing`. This is like `NA` in R.
+- Nothing-ness is represented with `nothing` which has type `Nothing`. This is like `NULL` in R or `void` in C++.
+
+
+
+### Concreteness
+
+The `Number` type is an **abstract type**.
+It is impossible for you to create an instance of it because the type serves only as a node in an abstract tree linking related types to each other.
+However, it is possible to define *methods* on types, which are functions that specialize their behavior based on the types of inputs.
+For now, it is enough for you to understand that Julia's `inv()` function may behave differently depending on whether you pass a `Float64` or `Matrix{Float64}` as an argument.
+
+In contrast to `Number`, the types you've seen so far like `Int64`, `Float64`, or `Bool` are all **concrete types**.
+You are allowed to create instances of them; that is, `1.0` is in fact a `Float64` object even though it is related to the abstract notion of `Number`.
+While abstract types can be used to group related concepts, concrete types are terminal or leaf nodes; you cannot derive children types from a concrete type.
+
+:::::::::::::::::::::::::::::::: callout-important
+
+## Warning for experts in object-oriented programming
+
+Julia's types may resemble object classes at the surface level; e.g. Python objects.
+However, the last statement above regarding deriving new types is a critical feature that distinguishes Julia types from typical OOP systems.
+This is a deliberate design decision that avoids the [multiple inheritance problem (diamond problem)](https://en.wikipedia.org/wiki/Multiple_inheritance) which comes with its own set of advantages and disadvantages.
+
+::::::::::::::::::::::::::::::::
+
+You can ask if a `DataType` is concrete or not.
+
+```{julia}
+isconcretetype(Float64)
+```
+
+```{julia}
+isconcretetype(Number)
+```
+
+
+
+### Checking the `typeof()` object
+
+Julia allows you to ask about an object's type, as well as properties about a type.
+
+```{julia}
+typeof(1)
+```
+
+```{julia}
+x = 1.0
+```
+
+```{julia}
+typeof(x) # Float64
+```
+
+```{julia}
+supertype(Bool)
+```
+
+```{julia}
+supertype(Float64)
+```
+
+
+
+### Type conversion
+
+In some instances, it is convenient (or performance-critical) that the objects you are working with share a common type.
+Julia allows us to **convert** objects of one type into other types.
+
+Often, it is enough to just use type constructors directly.
+
+```{julia}
+Float64(1)
+```
+
+If you ever need fine-grain control, you can use the `convert()` function directly.
+Think of this as an analog of R's `as.double()` or `as.logical()` functions all collapsed into one, easy-to-remember function.
+
+```{julia}
+convert(Float64, 1)
+```
+
+```{julia}
+x = [1, 2, 3]
+convert(Vector{Float64}, x) # better way: x = Float64[1, 2, 3]
+```
+
+
+
+### Type comparisons
+
+You can ask if an object belongs to a certain type using `isa()`.
+This function asks if the left argument (an object) has type equal to the right argument (a `DataType`).
+
+```{julia}
+isa(1, Number)
+```
+
+```{julia}
+1 isa Bool # supports infix notation
+```
+
+
+
+## Mutable vs immutable types
+
+Every object in Julia is either
+
+- **mutable**, meaning you can change its data, or
+- **immutable**, meaning its data is fixed once the object has been created.
+
+You can ask if an object is mutable.
+
+```{julia}
+ # can't change the bits that make an `Int` equal to 1
+ismutable(1)
+```
+
+```{julia}
+# can change the numbers stored in an `Array`
+ismutable([1, 2, 3])
+```
+
+
+
+## The type system
+
+It is possible to use Julia without writing your own types.
+In fact, you can use other languages with R or Python for many tasks without delving into their object systems.
+Nevertheless, you can become a more proficient programmer by understanding a bit about how these systems work.
+Specifically, understanding a type system can help you avoid slow code, write clear function implementations, and avoid errors in programming.
+
+Here we focus on Julia's type system.
+
+### Primitive types
+
+Primitive types in Julia are concrete types determined by entirely their bits.
+The following are Julia's predefined primitive types, defined within the language itself.
+Aside from implementing basic data types we need in any language, the primitive types help us build up other kinds of objects.
+
+```{julia}
+#| eval: false
+primitive type Float16 <: AbstractFloat 16 end
+primitive type Float32 <: AbstractFloat 32 end
+primitive type Float64 <: AbstractFloat 64 end
+
+primitive type Bool <: Integer 8 end
+primitive type Char <: AbstractChar 32 end
+
+primitive type Int8    <: Signed   8 end
+primitive type UInt8   <: Unsigned 8 end
+primitive type Int16   <: Signed   16 end
+primitive type UInt16  <: Unsigned 16 end
+primitive type Int32   <: Signed   32 end
+primitive type UInt32  <: Unsigned 32 end
+primitive type Int64   <: Signed   64 end
+primitive type UInt64  <: Unsigned 64 end
+primitive type Int128  <: Signed   128 end
+primitive type UInt128 <: Unsigned 128 end
+```
+
+
+
+### Abstract types
+
+These are declared using the `abstract type ... end` syntax.
+For most of this course, it is enough for you to distinguish between an abstract type and a concrete type.
+
+
+
+### Composite types
+
+As the name suggests, composite types are built up by other types.
+For example, consider the following type definition:
+
+```{julia}
+struct MyPoint2D
+  x::Float64
+  y::Float64
+end
+```
+
+- Definitions begin with the `struct` keyword and terminate with the `end` keyword.
+- Inside, we declare two **fields**, `x` and `y`. Many types we will work with have their own fields.
+- The `fieldname::Type` syntax is known as **type annotation**. Here they enforce `x` being a `Float64`.
+
+```{julia}
+p = MyPoint2D(0.0, 1.0)
+```
+
+```{julia}
+q = MyPoint2D(-1, 3) # notice everything is converted to Float64
+```
+
+One reason for working with types is to implement higher-order functionality without having to constantly dive into details.
+Let's define addition on `MyPoint2D` objects.
+
+```{julia}
+import Base: +
+(+)(p::MyPoint2D, q::MyPoint2D) = MyPoint2D(p.x + q.x, p.y + q.y)
+```
+
+```{julia}
+p + q
+```
+
+### Parametric types
+
+Parametric types define *families of types* which are *parameterized* in some way.
+For example, in our `MyPoint2D` example, we're forced to use `Float64` as the underlying data type for the `x` and `y` fields.
+A parametric type lets us define a generic structure that supports multiple data types.
+
+```{julia}
+struct Point2D{T <: Number}
+  x::T
+  y::T
+end
+```
+
+- Add a parameter declaration with curly braces, `{}`.
+- The symbols in the braces specify a parameter, `T`, which we say must be a subtype of `Number`.
+- Now we say `x` and `y` must be of a common type `T`.
+
+Notice that in each example below the parameter `T` changes to match the inputs.
+
+```{julia}
+Point2D(1.0, 0.0)
+```
+
+```{julia}
+Point2D(1, 0)
+```
+
+```{julia}
+Point2D(1//2, 0//1)
+```
+
+One advantage of parametric types is being able to reuse definitions across type parameters.
+Let's define point addition again:
+
+```{julia}
+(+)(p::Point2D{T}, q::Point2D{T}) where T = Point2D(p.x + q.x, p.y + q.y)
+```
+
+Everything "just works" so long as the underlying parameter family `T` supports addition, `+`.
+
+```{julia}
+Point2D(1, 0) + Point2D(0, 10)
+```
+
+```{julia}
+Point2D(true, false) + Point2D(true, true) # why Int and not Bool?
+```
+
+The `Vector{T}` and `Matrix{T}` types we'll work with rely on the `Array{T,N}` parametric type: elements of type `T` in `N` dimensions.

@@ -32,6 +32,7 @@ website:
           - text: Intro to Julia
             href: notes/module02/intro.qmd
           - text: Types
+            href: notes/module02/types.qmd
           - text: Basic Operations
             href: notes/module02/basics.qmd
           - text: Control Flow
