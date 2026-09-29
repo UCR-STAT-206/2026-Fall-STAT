@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>How to Use Docker in this Class</title>
+<title>Basic Operations</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -64,23 +64,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -109,8 +109,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="../assets/styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -122,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_docker.html">Use Docker</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/basics.html">Basic Operations</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -136,12 +165,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="../">STAT 206</a> 
+      <a href="../../">STAT 206</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -153,19 +182,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../office_hours.html" class="sidebar-item-text sidebar-link">
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Office Hours</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../schedule.html" class="sidebar-item-text sidebar-link">
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Schedule</span></a>
   </div>
 </li>
@@ -181,25 +210,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The Unix Shell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The File System</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quarto</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Git</span></a>
   </div>
 </li>
@@ -207,40 +236,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Module 2 (Programming)</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Intro to Julia</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Types</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Basic Operations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Control Flow</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Functions</span></a>
   </div>
 </li>
@@ -289,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Computer Arithmetic</span></a>
   </div>
 </li>
@@ -446,13 +475,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 0 (Getting Started)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
   </div>
 </li>
@@ -474,59 +503,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../project/project.html" class="sidebar-item-text sidebar-link">
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Final Project</span></a>
   </div>
 </li>
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
  <span class="menu-text">How to…</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Docker</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use VSCode with a Container</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Configure Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Set Up Your GitHub Account</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Submit Assignments</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Revise.jl</span></a>
   </div>
 </li>
@@ -543,14 +572,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#what-is-docker" id="toc-what-is-docker" class="nav-link" data-scroll-target="#what-is-docker">What is Docker?</a></li>
-  <li><a href="#why-are-we-using-docker" id="toc-why-are-we-using-docker" class="nav-link" data-scroll-target="#why-are-we-using-docker">Why are we using Docker?</a></li>
-  <li><a href="#so-how-do-i-use-it" id="toc-so-how-do-i-use-it" class="nav-link" data-scroll-target="#so-how-do-i-use-it">So how do I use it?</a>
+  <li><a href="#arithmetic-and-other-math" id="toc-arithmetic-and-other-math" class="nav-link" data-scroll-target="#arithmetic-and-other-math">Arithmetic and other math</a>
   <ul class="collapse">
-  <li><a href="#download-and-install-docker-desktop" id="toc-download-and-install-docker-desktop" class="nav-link" data-scroll-target="#download-and-install-docker-desktop">1. Download and Install Docker Desktop</a></li>
-  <li><a href="#download-our-docker-compose.yml" id="toc-download-our-docker-compose.yml" class="nav-link" data-scroll-target="#download-our-docker-compose.yml">2. Download our <code>docker-compose.yml</code></a></li>
-  <li><a href="#create-your-local-container" id="toc-create-your-local-container" class="nav-link" data-scroll-target="#create-your-local-container">3. Create your local container</a></li>
-  <li><a href="#using-the-container" id="toc-using-the-container" class="nav-link" data-scroll-target="#using-the-container">4. Using the Container</a></li>
+  <li><a href="#arithmetic" id="toc-arithmetic" class="nav-link" data-scroll-target="#arithmetic">Arithmetic</a></li>
+  <li><a href="#mathematical-functions" id="toc-mathematical-functions" class="nav-link" data-scroll-target="#mathematical-functions">Mathematical functions</a></li>
+  <li><a href="#special-mathematical-functions" id="toc-special-mathematical-functions" class="nav-link" data-scroll-target="#special-mathematical-functions">Special mathematical functions</a></li>
+  <li><a href="#statistical-functions" id="toc-statistical-functions" class="nav-link" data-scroll-target="#statistical-functions">Statistical functions</a></li>
+  </ul></li>
+  <li><a href="#logic-and-boolean-algebra" id="toc-logic-and-boolean-algebra" class="nav-link" data-scroll-target="#logic-and-boolean-algebra">Logic and Boolean algebra</a>
+  <ul class="collapse">
+  <li><a href="#logical-not" id="toc-logical-not" class="nav-link" data-scroll-target="#logical-not">Logical <code>NOT</code></a></li>
+  <li><a href="#logical-or" id="toc-logical-or" class="nav-link" data-scroll-target="#logical-or">Logical <code>OR</code></a></li>
+  <li><a href="#logical-and" id="toc-logical-and" class="nav-link" data-scroll-target="#logical-and">Logical <code>AND</code></a></li>
+  <li><a href="#logical-xor" id="toc-logical-xor" class="nav-link" data-scroll-target="#logical-xor">Logical <code>XOR</code></a></li>
+  </ul></li>
+  <li><a href="#comparisons" id="toc-comparisons" class="nav-link" data-scroll-target="#comparisons">Comparisons</a>
+  <ul class="collapse">
+  <li><a href="#comparing-numbers" id="toc-comparing-numbers" class="nav-link" data-scroll-target="#comparing-numbers">Comparing numbers</a></li>
+  <li><a href="#comparing-strings" id="toc-comparing-strings" class="nav-link" data-scroll-target="#comparing-strings">Comparing strings</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -558,9 +597,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_docker.html">Use Docker</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/basics.html">Basic Operations</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">How to Use Docker in this Class</h1>
+<h1 class="title">Basic Operations</h1>
 </div>
 
 
@@ -579,124 +618,435 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="goals" class="level2">
 <h2 class="anchored" data-anchor-id="goals">Goals</h2>
-<p>By completing this guide, you will</p>
 <ol type="1">
-<li>have access to Docker Desktop on your computer,</li>
-<li>understand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and</li>
-<li>have access to a standardized computing environment.</li>
+<li>Be familiar with arithmetic and mathematical functions in Julia.</li>
+<li>Be familiar with Julia’s implementation of Boolean algebra.</li>
+<li>Be familiar with Julia’s implementation of comparison operations on numbers and strings.</li>
 </ol>
 </section>
-<section id="what-is-docker" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-docker">What is Docker?</h2>
-<p>Docker is a collection of technologies that allow developers to run applications in isolated environments. For example, a company like Netflix might use multiple containers to isolate different parts of the user experience (logging in to your account, billing, selecting a series to binge). In the realm of data analysis, researchers and analysts use Docker to package fragile software stacks, such as a specific version of Julia, Python, or R combined with custom libraries and GPU drivers, so that data processing, modeling, and other pipelines can be shared and run anywhere without breaking. In either setting, careful management of the <strong>computing environments</strong> under which discrete tasks are carried out is a central concern.</p>
+<section id="arithmetic-and-other-math" class="level2">
+<h2 class="anchored" data-anchor-id="arithmetic-and-other-math">Arithmetic and other math</h2>
+<section id="arithmetic" class="level3">
+<h3 class="anchored" data-anchor-id="arithmetic">Arithmetic</h3>
+<p>The following arithmetic operators are supported by the base language.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>+x</code></td>
+<td style="text-align: left;">unary plus</td>
+<td style="text-align: left;">the identity operation</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>-x</code></td>
+<td style="text-align: left;">unary minus</td>
+<td style="text-align: left;">maps values to their additive inverses</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>x + y</code></td>
+<td style="text-align: left;">binary plus</td>
+<td style="text-align: left;">performs addition</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>x - y</code></td>
+<td style="text-align: left;">binary minus</td>
+<td style="text-align: left;">performs subtraction</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>x * y</code></td>
+<td style="text-align: left;">times</td>
+<td style="text-align: left;">performs multiplication</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>x / y</code></td>
+<td style="text-align: left;">divide</td>
+<td style="text-align: left;">performs division</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>x ÷ y</code></td>
+<td style="text-align: left;">integer divide</td>
+<td style="text-align: left;"><span class="math inline">\(x / y\)</span>, truncated to an integer</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>x \ y</code></td>
+<td style="text-align: left;">inverse divide</td>
+<td style="text-align: left;">equivalent to <span class="math inline">\(y / x\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>x ^ y</code></td>
+<td style="text-align: left;">power</td>
+<td style="text-align: left;">raises <span class="math inline">\(x\)</span> to the <span class="math inline">\(y^{\text{th}}\)</span> power</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>x % y</code></td>
+<td style="text-align: left;">remainder</td>
+<td style="text-align: left;">equivalent to <span class="math inline">\(\text{rem}(x, y)\)</span></td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="why-are-we-using-docker" class="level2">
-<h2 class="anchored" data-anchor-id="why-are-we-using-docker">Why are we using Docker?</h2>
-<p>While there are many ways in which containers might be applied, our interest in isolated environments is motivated by the following:</p>
-<ol type="1">
-<li><p><strong>Standarization and Consistency</strong>. Everyone in the class will run the same OS, the same system dependencies, and identical software versions.</p></li>
-<li><p><strong>Minimal Installation Friction</strong>. There <em>is</em> a benefit to learning how to manage systems on your own, from scratch, as you build out your workspace and tools. Unfortunately, the quarter system does not allow much time for exploration, experimentation, and failure. <em>Most of the hard work has been handled by building the class Docker image</em>.</p></li>
-<li><p><strong>Reproducbility</strong>. Containerization helps us practice reproducbility in our work. It makes for good science, good software, and excellent communication of your work.</p></li>
-</ol>
+<section id="mathematical-functions" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-functions">Mathematical functions</h3>
+<p>The following mathematical functions are supported by the base language. In addition, there are computational tricks used to evaluate functions near singular points or certain limits. This list is not exhaustive.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 58%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Expressions</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>sin(x)</code>, <code>cos(x)</code>, <code>tan(x)</code></td>
+<td style="text-align: left;">trigonometric functions</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>asin(x)</code>, <code>acos(x)</code>, <code>atan(x)</code></td>
+<td style="text-align: left;">inverse trigonometric functions</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sinh(x)</code>, <code>cosh(x)</code>, <code>tanh(x)</code></td>
+<td style="text-align: left;">hyperbolic functions</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>exp(x)</code></td>
+<td style="text-align: left;">exponential function <span class="math inline">\(e^{x}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>log(x)</code>, <code>log10(x)</code>, <code>log(x, b)</code></td>
+<td style="text-align: left;"><span class="math inline">\(\log(x)\)</span> (<span class="math inline">\(\ln(x)\)</span>), <span class="math inline">\(\log_{10}(x)\)</span>, and <span class="math inline">\(\log_{b}(x)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>log1p(x)</code></td>
+<td style="text-align: left;">Accurate natural logarithm of <span class="math inline">\(1 + x\)</span>, <span class="math inline">\(\log(1 + x)\)</span>.</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="so-how-do-i-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="so-how-do-i-use-it">So how do I use it?</h2>
-<p>There are few terms we need to define before we use Docker.</p>
-<ul>
-<li><strong>Dockerfile</strong>: This is a recipe that defines an environment. It’s just a text file with Bash commands (usually) and some additional Docker-specific syntax.</li>
-<li><strong>Image</strong>: This is the product generated by running the recipe in a Dockerfile. It is a <strong>read-only environment</strong>, configured with a specific Operating System (OS), file structure, and accompanying software.</li>
-<li><strong>Container</strong>: Whereas images are static, containers are dynamic. It is the “runtime” or how we use a Docker image. A single image can be used to spin up multiple containers, each running instances of the same or related applications. The environment is the same each time you create a container, from scratch, using the same image.</li>
-<li><strong>Volume</strong>: You can create and destroy data within a container, but Docker containers are deliberately disposable. A (storage) volume allows you to persist data after you shut down a container. This works by mapping data (files, folders, programs, etc) from a container to your <em>disk</em>.</li>
-<li><strong>Docker Desktop</strong>: The main software from Docker that we will use, which handles building images, container creation, and deployment.</li>
-</ul>
-<section id="download-and-install-docker-desktop" class="level3">
-<h3 class="anchored" data-anchor-id="download-and-install-docker-desktop">1. Download and Install Docker Desktop</h3>
-<p>Point your preferred web browser to <a href="https://www.docker.com/products/docker-desktop/">https://www.docker.com/products/docker-desktop/</a> and select the appropriate download for your OS and architecture.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
+<section id="special-mathematical-functions" class="level3">
+<h3 class="anchored" data-anchor-id="special-mathematical-functions">Special mathematical functions</h3>
+<p>Certain functions are challenging to evaluate on computers and often require specialized implementations. These implementations are packaged into a <a href="https://specialfunctions.juliamath.org/stable/functions_overview/">SpecialFunctions.jl</a> package that is <em>not</em> part of the standard library.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 38%">
+<col style="width: 61%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>gamma(x)</code></td>
+<td style="text-align: left;">Evaluate the Gamma function, <span class="math inline">\(\Gamma(x) = \int_{0}^{\infty} t^{x-1} e^{-t}~\mathrm{d}t, x \in \mathbb{R}_{+}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>beta(x,y)</code></td>
+<td style="text-align: left;">Evaluates the Beta function <span class="math inline">\(B(x,y)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>erf(x)</code></td>
+<td style="text-align: left;">Evaluates the error function, <span class="math inline">\(\frac{2}{sqrt{\pi}} \int_{0}^{x} \exp(-t^{2})~\mathrm{d}t\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Windows Users
+<span class="screen-reader-only">Note</span>Installing external packages
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<ul>
-<li>If you have a Surface or Copilot+ laptop, it has a Qualcomm Snapdragon CPU. <strong>Select the ARM64 option.</strong></li>
-<li>Otherwise, you have an Intel or AMD CPU. <strong>Select the AMD64 option</strong>.</li>
-</ul>
+<p>In the REPL, switching to <code>pkg</code> mode allows you to install with <code>add SpecialFunctions</code>. This works for any registered package. We will discuss packages later in the course.</p>
 </div>
 </div>
-<p>Follow instructions from the installer.</p>
 </section>
-<section id="download-our-docker-compose.yml" class="level3">
-<h3 class="anchored" data-anchor-id="download-our-docker-compose.yml">2. Download our <code>docker-compose.yml</code></h3>
-<ul>
-<li>This is a file to automatically construct a container from pre-built images.</li>
-<li>Please download it from Canvas.</li>
-<li>Be sure to download it to a convenient location where you would like to store your course materials.</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
+<section id="statistical-functions" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-functions">Statistical functions</h3>
+<p>Aside from <code>minimum()</code>, <code>maximum()</code>, and <code>sum()</code>, most statistical functions are implemented in the <a href="https://docs.julialang.org/en/v1.12/stdlib/Statistics/">Statistics</a> package in the standard library.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 56%">
+<col style="width: 44%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Example</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>mean(x)</code></td>
+<td style="text-align: left;">Arithmetic mean of <code>x</code>. Has multidimensional support.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>std(x)</code></td>
+<td style="text-align: left;">Sample standard deviation of data in <code>x</code>. Can specify whether estimate is corrected and/or specify the (sample) mean.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>median(x)</code></td>
+<td style="text-align: left;">Compute the sample median.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>quantile(x, p)</code></td>
+<td style="text-align: left;">Compute the sample <span class="math inline">\(p\)</span>-quantile; e.g.&nbsp;<code>quantile(x, 0.5)</code> computes the median.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Windows Users
+<span class="screen-reader-only">Note</span>Using the standard library
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Avoid placing your course materials, including <code>docker-compose.yml</code>, inside a folder that is backed up by cloud services like OneDrive or Google Drive. The automated nature of such tools risk corrupting your files if a backup triggers while your container is running, resulting in data loss.</p>
-<p><strong>Suggested Workaround</strong>: Store your work directly under your <code>C:\</code> drive; for example <code>C:\STAT206</code>.</p>
+<p>You do not need to install packages from the standard library, just write <code>using Statistics</code> to load it.</p>
 </div>
 </div>
 </section>
-<section id="create-your-local-container" class="level3">
-<h3 class="anchored" data-anchor-id="create-your-local-container">3. Create your local container</h3>
-<p>First, open the terminal view in Docker Desktop.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-01.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop illustrating how to open a terminal."></p>
-</figure>
-</div>
-<p>Next, navigate to the folder/directory containing the <code>docker-compose.yml</code> file. Once you’ve verified the file’s presence, enter and run the command <code>docker compose up -d stat</code>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-02-stat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop terminal creating a container with Docker Compose."></p>
-</figure>
-</div>
-<p>The <em>Containers</em> tab in Docker Desktop shows the status of your container.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-03a.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop showing container status after creating a container."></p>
-</figure>
-</div>
+</section>
+<section id="logic-and-boolean-algebra" class="level2">
+<h2 class="anchored" data-anchor-id="logic-and-boolean-algebra">Logic and Boolean algebra</h2>
+<p>The set operations for intersection, union, and complement can be mapped to logical operations. This is the basis of <strong>Bolean algebra</strong> which classically operates on a two-value logic system.</p>
 <ul>
-<li>Gray circle: Not running</li>
-<li>Green circle: Running (in the background)</li>
-<li>You can start/stop the container using the Play/Stop button under <em>Actions</em>.</li>
+<li><span class="math inline">\(A \cap B\)</span> models <span class="math inline">\(A~\text{AND}~B\)</span></li>
+<li><span class="math inline">\(A \cup B\)</span> models <span class="math inline">\(A~\text{OR}~B\)</span></li>
+<li><span class="math inline">\(A^{c}\)</span> models <span class="math inline">\(!A\)</span></li>
 </ul>
-<p>The <code>docker ps</code> command can also be used to monitor your container from a CLI.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-03b-stat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of a generic terminal illustrating the docker start and docker ps commands."></p>
-</figure>
+<p>Julia’s logical operations support a three-valued logic: <code>true</code>, <code>false</code>, and <code>missing</code>. The <code>missing</code> value is specifically an instance of the type <code>Missing</code>.</p>
+<p>The following subsections contain a few truth tables that describe how logical operations map inputs to outputs based on their definition. It is a good exercise to work these out by hand for yourself. Each truth table can be worked out by applying the definitions.</p>
+<section id="logical-not" class="level3">
+<h3 class="anchored" data-anchor-id="logical-not">Logical <code>NOT</code></h3>
+<p>This operation negates its input.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>!x</code></th>
+<th style="text-align: center;"><code>true</code></th>
+<th style="text-align: center;"><code>false</code></th>
+<th style="text-align: center;"><code>missing</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><code>false</code></td>
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"><code>missing</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="logical-or" class="level3">
+<h3 class="anchored" data-anchor-id="logical-or">Logical <code>OR</code></h3>
+<p><code>true</code> if at least one of its arguments is <code>true</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>or</code></th>
+<th style="text-align: center;"><code>true</code></th>
+<th style="text-align: center;"><code>false</code></th>
+<th style="text-align: center;"><code>missing</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>false</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>missing</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="logical-and" class="level3">
+<h3 class="anchored" data-anchor-id="logical-and">Logical <code>AND</code></h3>
+<p><code>false</code> if at least one of its arguments is <code>false</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>and</code></th>
+<th style="text-align: center;"><code>true</code></th>
+<th style="text-align: center;"><code>false</code></th>
+<th style="text-align: center;"><code>missing</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>false</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><code>false</code></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>missing</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="logical-xor" class="level3">
+<h3 class="anchored" data-anchor-id="logical-xor">Logical <code>XOR</code></h3>
+<p><code>True</code> if one and only one of its arguments is <code>true</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;"><code>^</code></th>
+<th style="text-align: center;"><code>true</code></th>
+<th style="text-align: center;"><code>false</code></th>
+<th style="text-align: center;"><code>missing</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><code>false</code></td>
+<td style="text-align: center;"><code>true</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><code>missing</code></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="comparisons" class="level2">
+<h2 class="anchored" data-anchor-id="comparisons">Comparisons</h2>
+<p>Comparison operators round out the basic operations in a programming language. Julia allows comparison of various types of objects. Specifically, we can create expressions involving comparison operators which must evaluate to <code>true</code>, <code>false</code>, and/or <code>missing</code>.</p>
+<p>For now, we focus on numeric comparisons and comparisons involving strings.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Operator</th>
+<th style="text-align: left;">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>==</code></td>
+<td style="text-align: left;">equality</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>!=</code>, <code>≠</code></td>
+<td style="text-align: left;">inequality</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>&lt;</code></td>
+<td style="text-align: left;">less than</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&lt;=</code>, <code>≤</code></td>
+<td style="text-align: left;">less than or equal to</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>===</code></td>
+<td style="text-align: left;">identical, strict equality</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Different notions of equality
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>==</code> operator checks for <em>equality in value</em> whereas <code>===</code> checks if two objects can be distinguished by a computer.</p>
+<ul>
+<li>First check equality <em>in type</em>.</li>
+<li>If the object is mutable, check for equality <em>by memory address</em>.</li>
+<li>If the object is immutable, check for equality <em>by bit-level contents</em>.</li>
+</ul>
+</div>
+</div>
+<section id="comparing-numbers" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-numbers">Comparing numbers</h3>
+<p>Comparisons on numbers follow their usual mathematical definitions.</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>x <span class="op">=</span> <span class="fl">1</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>y <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>x <span class="op">&gt;</span> y</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>false</code></pre>
+</div>
+</div>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>x <span class="op">≠</span> y <span class="co"># type \neq + Tab for !=</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<p>These expressions are easily chained with other comparisons and logic operations. They follow <a href="https://docs.julialang.org/en/v1/manual/mathematical-operations/#Operator-Precedence-and-Associativity">specific precedence rules</a>. Rather than commit all these rules to memory at once, it is recommended that you use parentheses to clarify your meaning and gradually incorporate the precedence rules in your code.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Precedence for comparisons
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Julia documentation specifically states that comparisons are not associative. That means <code>x &lt; y &lt; z</code> is not the same expression as <code>(x &lt; y) &lt; z</code> or <code>x &lt; (y &lt; z)</code>, matching standard mathematical notation. You should convince yourself that it is a sensible rule.</p>
+<p><strong>Hint</strong>: Suppose <code>x</code>, <code>y</code>, and <code>z</code> are all numbers, say <code>Int</code>. What type <em>must</em> <code>(x &lt; y)</code> evaluate to?</p>
+</div>
 </div>
 </section>
-<section id="using-the-container" class="level3">
-<h3 class="anchored" data-anchor-id="using-the-container">4. Using the Container</h3>
-<p>If you want to access the container from your machine’s Terminal:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>docker start -ai STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ul>
-<li><code>docker start</code>: The <code>start</code> action will only start an existing container.</li>
-<li><code>-ai</code>: The option <code>a</code> ensures we can see messages in our terminal and propagates signals (such as force quitting). The option <code>i</code> is used to indicate an interactive session.</li>
-<li><code>STAT206-STAT</code> the name of the container we wish to run.</li>
-</ul>
-<p>If you just want the container to run in the background so you can connect to it using VSCode:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>docker start STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You can stop a running container using:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>docker stop STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="comparing-strings" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-strings">Comparing strings</h3>
+<p>Strings support comparisons using <a href="https://docs.julialang.org/en/v1.12/manual/strings/#Common-Operations">lexicographic order</a> when <strong>both</strong> arguments are <code>String</code> objects. Attempting to compare objects of unrelated types is likely to result in an error message.</p>
 
 
 </section>

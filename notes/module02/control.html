@@ -221,11 +221,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Types</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">Basic Operations</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link active">
@@ -658,7 +664,7 @@ Important
 <span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>  <span class="fu">println</span>(<span class="st">"Tails"</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-label="6"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Heads</code></pre>
+<pre><code>Tails</code></pre>
 </div>
 </div>
 <p>The code above behaves randomly because the printed message depends on the value of <code>u</code>.</p>
@@ -703,7 +709,7 @@ Important
 <span id="cb10-7"><a href="#cb10-7" aria-label="7"></a>  <span class="fu">sqrt</span>(x)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-label="8"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.7585739143880013</code></pre>
+<pre><code>0.2616787777636724</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
@@ -711,7 +717,7 @@ Important
 <span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="co"># both expressions below are evaluated before checking the condition.</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-label="3"></a><span class="fu">ifelse</span>(x <span class="op">&lt;</span> <span class="fl">0</span>, x<span class="op">^</span><span class="fl">2</span>, <span class="fu">sqrt</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.7585739143880013</code></pre>
+<pre><code>0.2616787777636724</code></pre>
 </div>
 </div>
 <div id="18" class="cell" data-execution_count="1">
@@ -721,9 +727,9 @@ Important
 <pre>stop execution!
 Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:143</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:143</span></pre>
 </div>
 </div>
 </div>
@@ -904,9 +910,9 @@ They key Bob maps to value 2</code></pre>
 <pre>DivideError: integer division error
 Stacktrace:
  [1] <span class="ansi-bold">div</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Int64, <span class="ansi-bright-black-fg">y</span>::Int64<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">int.jl:341</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">int.jl:301</span>
  [2] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:309</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:309</span></pre>
 </div>
 </div>
 </div>
@@ -917,9 +923,9 @@ Stacktrace:
 <pre>Eternity lies ahead of us, and behind. Have you drunk your fill?
 Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:313</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:313</span></pre>
 </div>
 </div>
 </div>
@@ -933,7 +939,7 @@ Stacktrace:
 <pre>AssertionError: x &gt;= 0
 Stacktrace:
  [1] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:320</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">control.qmd:320</span></pre>
 </div>
 </div>
 </div>

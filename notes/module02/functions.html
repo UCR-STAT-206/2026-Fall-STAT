@@ -250,11 +250,17 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Types</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">Basic Operations</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
@@ -732,30 +738,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 10
-  7
-  3
-  8</code></pre>
+ 2
+ 1
+ 8
+ 2</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  3
-  7
-  8
- 10</code></pre>
+ 1
+ 2
+ 2
+ 8</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  3
-  7
-  8
- 10</code></pre>
+ 1
+ 2
+ 2
+ 8</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -989,11 +995,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
-  0.626593   0.915013    0.306828
- -0.491561   0.00175265  0.876033
-  0.0196561  7.1767e-5   0.673356
-  0.187385   0.00134515  0.00360668
-  0.0706235  0.981533    0.822229</code></pre>
+ 0.16076      0.504201     0.0706984
+ 0.961199     0.147425     0.641893
+ 0.0377778    0.102352     0.255568
+ 0.000888696  0.000269837  4.11794e-6
+ 0.00160958   0.996557     0.31824</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1004,29 +1010,29 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  0.09895804707407087
- -1.4390043422198575
-  0.39857558338248283
-  0.3862843274486116
- -1.4716107366590268
- -0.12287841336958477
-  0.4860376845944558
-  0.5474671699055763
- -1.092420871777527
-  0.6037977019445652</code></pre>
+  0.016066556843964897
+ -1.044826310429008
+ -0.7917833756159517
+  0.5889366554238326
+ -0.4370300886339807
+ -0.7596135545443399
+ -0.054219946989958086
+  0.4477816032920327
+  0.9857017508781626
+ -1.2077614598759263</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.09895804707407087
- 0.0
- 0.39857558338248283
- 0.3862843274486116
+ 0.016066556843964897
  0.0
  0.0
- 0.4860376845944558
- 0.5474671699055763
+ 0.5889366554238326
  0.0
- 0.6037977019445652</code></pre>
+ 0.0
+ 0.0
+ 0.4477816032920327
+ 0.9857017508781626
+ 0.0</code></pre>
 </div>
 </div>
 </section>
@@ -1041,11 +1047,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.3755016011882225
- 0.49087816006534235
- 0.1913402919225635
- 0.15423858149714145
- 0.6984140779004979</code></pre>
+ -0.15534056620397102
+  0.32933655880694607
+  0.8521432790014032
+  0.983220205788904
+  0.9989632071791671</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1055,11 +1061,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.3755016011882225
- 0.49087816006534235
- 0.1913402919225635
- 0.15423858149714145
- 0.6984140779004979</code></pre>
+ -0.15534056620397102
+  0.32933655880694607
+  0.8521432790014032
+  0.983220205788904
+  0.9989632071791671</code></pre>
 </div>
 </div>
 </section>
@@ -1236,10 +1242,8 @@ myfactorial(6) = 720</code></pre>
 <div class="ansi-escaped-output">
 <pre>TypeError: in keyword argument c, expected Real, got a value of type Vector{Float64}
 Stacktrace:
- [1] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Vector{Float64}}</span>, ::typeof(psi2), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:413</span>
- [2] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
+ [1] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
 </div>
 </div>
 </div>
@@ -1264,13 +1268,11 @@ Stacktrace:
 <pre>Parameter `c` should be given as a number. Did you mean `psi3.(x; c = c)`?)
 Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] <span class="ansi-bold">psi3</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Float64; <span class="ansi-bright-black-fg">c</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span><span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:451</span>
- [3] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Vector{Float64}}</span>, ::typeof(psi3), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:449</span>
- [4] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:460</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:451</span>
+ [3] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:460</span></pre>
 </div>
 </div>
 </div>
@@ -1282,13 +1284,11 @@ Stacktrace:
 <pre>Parameter `c` should be positive. Got -1.0.
 Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] <span class="ansi-bold">#psi3#17</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span><span class="ansi-bright-black-fg"> [inlined]</span>
- [3] <span class="ansi-bold">kwcall</span><span class="ansi-bold">(</span>::@NamedTuple<span class="ansi-bright-black-fg">{c::Float64}</span>, ::typeof(psi3), <span class="ansi-bright-black-fg">x</span>::Float64<span class="ansi-bold">)</span>
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:449</span>
- [4] top-level scope
- <span class="ansi-bright-black-fg">  @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:467</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span><span class="ansi-bright-black-fg"> [inlined]</span>
+ [3] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:467</span></pre>
 </div>
 </div>
 </div>
