@@ -119,7 +119,7 @@ website:
       - section: "Homework"
         contents:
           - text: Homework 1
-            # href: hw/hw1.qmd
+            href: hw/hw1.qmd
           # - text: Homework 2
           #   href: hw/hw2.qmd
           # - text: Homework 3

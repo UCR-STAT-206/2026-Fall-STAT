@@ -1,0 +1,115 @@
+---
+title: "Homework 1"
+subtitle: "Due 10am on October 5, 2026"
+---
+
+## Instructions
+
+### Formatting Requirements
+
+1. Your work should be in the form of a Quarto file named `hw1.qmd`. Julia code should appear in code chunks.
+2. You are responsible for ensuring your work is reproducible on someone else's computer. That means:
+    - Verifying that `hw1.qmd` renders properly as an HTML report.
+    - Carefully managing the computing environment. This should be recorded using a `Project.toml` file. The Julia REPL lets you create this file easily.
+3. Feel free to strip away instructions or hints in your `hw1.qmd` file. Leave the problem descriptions and prompts intact.
+4. Your homework solutions must be more than code. Most prompts in this assignment, if not all, should have text describing how you approached a problem. Other students in the class should be able to understand your reasoning by reading the text and code comments.
+
+
+
+## Problem 1
+
+Before we do any computational work, let's set the front matter. A Quarto document will not render properly without a header.
+
+- Quarto's headers are especially sensitive to formatting. This is the place to be nitpicky about spacing and indentation.
+- Make sure your `.qmd` file has your name in the header.
+- Be sure to list any collaborators.
+- Double-check that `engine: julia` is set!
+
+
+
+## Problem 2
+
+Let's check whether floating point numbers obey certain algebraic rules.
+
+- If you believe a rule **does not** hold, provide one counterexample violating the rule.
+- If you believe a rule **does** hold, give a brief explanation of why it must always be true.
+
+### Associative Addition
+
+The associative rule for addition states that
+$(x + y) + z = x + (y + z)$. Check this associative property using
+`x = 0.1`, `y = 0.1`, and `z = 1.0` in Julia. Explain what you find.
+
+### Associative Multiplication
+
+Do floating point numbers obey the associative rule for multiplication:
+$(x \times y) \times c = x \times (y \times z)$?
+
+### Distributive Rule
+
+Do floating point numbers obey the distibutive rule:
+$a \times (x + y) = a \times x + a \times y$?
+
+### Integral Domain
+
+Is $0 \times x = 0$ true for all floating point numbers $x$?
+
+### Existence of Multiplicative Inverse
+
+Is $x / a = x \times (1 / a)$ always true?
+
+### Commutativity
+
+Addition and multiplication of real numbers obey the commutative laws
+$x + y = y + x$ and $x \times y = y \times x$, respectively. Do these
+laws hold for floating point numbers?
+
+
+
+## Problem 3
+
+In this exercise you're going to write some code to help you cook a brilliant lasagna from your favorite cooking book.
+You have four tasks, all related to the time spent cooking the lasagna.
+
+### 1. Store the expected bake time in a constant
+
+Define the `expected_bake_time` constant that returns how many minutes the lasagna should bake in the oven.
+According to the cooking book, lasagna needs to be in the oven for a total of 60 minutes.
+
+### 2. Calculate the preparation time in minutes
+
+Define the `preparation_time` function that takes the number of layers you added to the lasagna as an argument and returns how many minutes you spent preparing the lasagna, assuming each layer takes you 2 minutes to prepare.
+
+### 3. Calculate the remaining oven time in minutes
+
+Define the `remaining_time` function that takes the actual minutes the lasagna has been in the oven as a parameter and returns how many minutes the lasagna still has to remain in the oven.
+
+### 4. Calculate the total working time in minutes
+
+Define the `total_working_time` function that takes two arguments: the first argument is the number of layers you added to the lasagna, and the second argument is the number of minutes the lasagna has been in the oven.
+The function should return how many minutes in total you've worked on cooking the lasagna, which is the sum of the preparation time in minutes, and the time in minutes the lasagna has spent in the oven at the moment.
+
+
+
+## Problem 4
+
+### Reporting the computing environment
+
+Every assignment in this class must have a section that records the computing environment used to create a report.
+
+- Insert a heading named `Environment` just after [Problem 4](#problem-4).
+- First code cell: Load `Pkg` and report `Pkg.status()`.
+- Second code cell: Load `InteractiveUtils` and report `versioninfo()`.
+
+### Checking your work
+
+- Render/preview your report from scratch.
+- Verify that each piece of code executes free of errors.
+    + Do the results match what you saw while working interactively?
+- Verify that the report itself is readable.
+    + Figures (if any) render properly.
+    + Any math set in $\LaTeX$ displays correctly.
+- Polish the report.
+    + Use inline code to report results rather than hard-coding them into the file; e.g. \`{julia} x\` to reference the value of `x` inline.
+    + Reorganize your code to ensure your thought process is transparent to a reader.
+
