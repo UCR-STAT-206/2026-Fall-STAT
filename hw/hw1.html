@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>How to Use Docker in this Class</title>
+<title>Homework 1</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,41 +25,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -109,6 +74,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -122,7 +116,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_docker.html">Use Docker</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework 1</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -460,16 +454,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
  <span class="menu-text">Homework</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../hw/hw1.html" class="sidebar-item-text sidebar-link">
+  <a href="../hw/hw1.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Homework 1</span></a>
   </div>
 </li>
@@ -484,16 +478,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
  <span class="menu-text">How to…</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link active">
+  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Docker</span></a>
   </div>
 </li>
@@ -545,15 +539,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#what-is-docker" id="toc-what-is-docker" class="nav-link" data-scroll-target="#what-is-docker">What is Docker?</a></li>
-  <li><a href="#why-are-we-using-docker" id="toc-why-are-we-using-docker" class="nav-link" data-scroll-target="#why-are-we-using-docker">Why are we using Docker?</a></li>
-  <li><a href="#so-how-do-i-use-it" id="toc-so-how-do-i-use-it" class="nav-link" data-scroll-target="#so-how-do-i-use-it">So how do I use it?</a>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a>
   <ul class="collapse">
-  <li><a href="#download-and-install-docker-desktop" id="toc-download-and-install-docker-desktop" class="nav-link" data-scroll-target="#download-and-install-docker-desktop">1. Download and Install Docker Desktop</a></li>
-  <li><a href="#download-our-docker-compose.yml" id="toc-download-our-docker-compose.yml" class="nav-link" data-scroll-target="#download-our-docker-compose.yml">2. Download our <code>docker-compose.yml</code></a></li>
-  <li><a href="#create-your-local-container" id="toc-create-your-local-container" class="nav-link" data-scroll-target="#create-your-local-container">3. Create your local container</a></li>
-  <li><a href="#using-the-container" id="toc-using-the-container" class="nav-link" data-scroll-target="#using-the-container">4. Using the Container</a></li>
+  <li><a href="#formatting-requirements" id="toc-formatting-requirements" class="nav-link" data-scroll-target="#formatting-requirements">Formatting Requirements</a></li>
+  </ul></li>
+  <li><a href="#problem-1" id="toc-problem-1" class="nav-link" data-scroll-target="#problem-1">Problem 1</a></li>
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a>
+  <ul class="collapse">
+  <li><a href="#associative-addition" id="toc-associative-addition" class="nav-link" data-scroll-target="#associative-addition">Associative Addition</a></li>
+  <li><a href="#associative-multiplication" id="toc-associative-multiplication" class="nav-link" data-scroll-target="#associative-multiplication">Associative Multiplication</a></li>
+  <li><a href="#distributive-rule" id="toc-distributive-rule" class="nav-link" data-scroll-target="#distributive-rule">Distributive Rule</a></li>
+  <li><a href="#integral-domain" id="toc-integral-domain" class="nav-link" data-scroll-target="#integral-domain">Integral Domain</a></li>
+  <li><a href="#existence-of-multiplicative-inverse" id="toc-existence-of-multiplicative-inverse" class="nav-link" data-scroll-target="#existence-of-multiplicative-inverse">Existence of Multiplicative Inverse</a></li>
+  <li><a href="#commutativity" id="toc-commutativity" class="nav-link" data-scroll-target="#commutativity">Commutativity</a></li>
+  </ul></li>
+  <li><a href="#problem-3" id="toc-problem-3" class="nav-link" data-scroll-target="#problem-3">Problem 3</a>
+  <ul class="collapse">
+  <li><a href="#store-the-expected-bake-time-in-a-constant" id="toc-store-the-expected-bake-time-in-a-constant" class="nav-link" data-scroll-target="#store-the-expected-bake-time-in-a-constant">1. Store the expected bake time in a constant</a></li>
+  <li><a href="#calculate-the-preparation-time-in-minutes" id="toc-calculate-the-preparation-time-in-minutes" class="nav-link" data-scroll-target="#calculate-the-preparation-time-in-minutes">2. Calculate the preparation time in minutes</a></li>
+  <li><a href="#calculate-the-remaining-oven-time-in-minutes" id="toc-calculate-the-remaining-oven-time-in-minutes" class="nav-link" data-scroll-target="#calculate-the-remaining-oven-time-in-minutes">3. Calculate the remaining oven time in minutes</a></li>
+  <li><a href="#calculate-the-total-working-time-in-minutes" id="toc-calculate-the-total-working-time-in-minutes" class="nav-link" data-scroll-target="#calculate-the-total-working-time-in-minutes">4. Calculate the total working time in minutes</a></li>
+  </ul></li>
+  <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a>
+  <ul class="collapse">
+  <li><a href="#reporting-the-computing-environment" id="toc-reporting-the-computing-environment" class="nav-link" data-scroll-target="#reporting-the-computing-environment">Reporting the computing environment</a></li>
+  <li><a href="#checking-your-work" id="toc-checking-your-work" class="nav-link" data-scroll-target="#checking-your-work">Checking your work</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -561,9 +571,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howto/use_docker.html">How to…</a></li><li class="breadcrumb-item"><a href="../howto/use_docker.html">Use Docker</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework 1</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">How to Use Docker in this Class</h1>
+<h1 class="title">Homework 1</h1>
+<p class="subtitle lead">Due 10am on October 5, 2026</p>
 </div>
 
 
@@ -580,126 +591,114 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="goals" class="level2">
-<h2 class="anchored" data-anchor-id="goals">Goals</h2>
-<p>By completing this guide, you will</p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<section id="formatting-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="formatting-requirements">Formatting Requirements</h3>
 <ol type="1">
-<li>have access to Docker Desktop on your computer,</li>
-<li>understand how to use the class Docker image (or Dockerfile) to create a container with persistent storage, and</li>
-<li>have access to a standardized computing environment.</li>
+<li>Your work should be in the form of a Quarto file named <code>hw1.qmd</code>. Julia code should appear in code chunks.</li>
+<li>You are responsible for ensuring your work is reproducible on someone else’s computer. That means:
+<ul>
+<li>Verifying that <code>hw1.qmd</code> renders properly as an HTML report.</li>
+<li>Carefully managing the computing environment. This should be recorded using a <code>Project.toml</code> file. The Julia REPL lets you create this file easily.</li>
+</ul></li>
+<li>Feel free to strip away instructions or hints in your <code>hw1.qmd</code> file. Leave the problem descriptions and prompts intact.</li>
+<li>Your homework solutions must be more than code. Most prompts in this assignment, if not all, should have text describing how you approached a problem. Other students in the class should be able to understand your reasoning by reading the text and code comments.</li>
 </ol>
 </section>
-<section id="what-is-docker" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-docker">What is Docker?</h2>
-<p>Docker is a collection of technologies that allow developers to run applications in isolated environments. For example, a company like Netflix might use multiple containers to isolate different parts of the user experience (logging in to your account, billing, selecting a series to binge). In the realm of data analysis, researchers and analysts use Docker to package fragile software stacks, such as a specific version of Julia, Python, or R combined with custom libraries and GPU drivers, so that data processing, modeling, and other pipelines can be shared and run anywhere without breaking. In either setting, careful management of the <strong>computing environments</strong> under which discrete tasks are carried out is a central concern.</p>
 </section>
-<section id="why-are-we-using-docker" class="level2">
-<h2 class="anchored" data-anchor-id="why-are-we-using-docker">Why are we using Docker?</h2>
-<p>While there are many ways in which containers might be applied, our interest in isolated environments is motivated by the following:</p>
-<ol type="1">
-<li><p><strong>Standarization and Consistency</strong>. Everyone in the class will run the same OS, the same system dependencies, and identical software versions.</p></li>
-<li><p><strong>Minimal Installation Friction</strong>. There <em>is</em> a benefit to learning how to manage systems on your own, from scratch, as you build out your workspace and tools. Unfortunately, the quarter system does not allow much time for exploration, experimentation, and failure. <em>Most of the hard work has been handled by building the class Docker image</em>.</p></li>
-<li><p><strong>Reproducbility</strong>. Containerization helps us practice reproducbility in our work. It makes for good science, good software, and excellent communication of your work.</p></li>
-</ol>
+<section id="problem-1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1">Problem 1</h2>
+<p>Before we do any computational work, let’s set the front matter. A Quarto document will not render properly without a header.</p>
+<ul>
+<li>Quarto’s headers are especially sensitive to formatting. This is the place to be nitpicky about spacing and indentation.</li>
+<li>Make sure your <code>.qmd</code> file has your name in the header.</li>
+<li>Be sure to list any collaborators.</li>
+<li>Double-check that <code>engine: julia</code> is set!</li>
+</ul>
 </section>
-<section id="so-how-do-i-use-it" class="level2">
-<h2 class="anchored" data-anchor-id="so-how-do-i-use-it">So how do I use it?</h2>
-<p>There are few terms we need to define before we use Docker.</p>
+<section id="problem-2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2">Problem 2</h2>
+<p>Let’s check whether floating point numbers obey certain algebraic rules.</p>
 <ul>
-<li><strong>Dockerfile</strong>: This is a recipe that defines an environment. It’s just a text file with Bash commands (usually) and some additional Docker-specific syntax.</li>
-<li><strong>Image</strong>: This is the product generated by running the recipe in a Dockerfile. It is a <strong>read-only environment</strong>, configured with a specific Operating System (OS), file structure, and accompanying software.</li>
-<li><strong>Container</strong>: Whereas images are static, containers are dynamic. It is the “runtime” or how we use a Docker image. A single image can be used to spin up multiple containers, each running instances of the same or related applications. The environment is the same each time you create a container, from scratch, using the same image.</li>
-<li><strong>Volume</strong>: You can create and destroy data within a container, but Docker containers are deliberately disposable. A (storage) volume allows you to persist data after you shut down a container. This works by mapping data (files, folders, programs, etc) from a container to your <em>disk</em>.</li>
-<li><strong>Docker Desktop</strong>: The main software from Docker that we will use, which handles building images, container creation, and deployment.</li>
+<li>If you believe a rule <strong>does not</strong> hold, provide one counterexample violating the rule.</li>
+<li>If you believe a rule <strong>does</strong> hold, give a brief explanation of why it must always be true.</li>
 </ul>
-<section id="download-and-install-docker-desktop" class="level3">
-<h3 class="anchored" data-anchor-id="download-and-install-docker-desktop">1. Download and Install Docker Desktop</h3>
-<p>Point your preferred web browser to <a href="https://www.docker.com/products/docker-desktop/">https://www.docker.com/products/docker-desktop/</a> and select the appropriate download for your OS and architecture.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Windows Users
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>If you have a Surface or Copilot+ laptop, it has a Qualcomm Snapdragon CPU. <strong>Select the ARM64 option.</strong></li>
-<li>Otherwise, you have an Intel or AMD CPU. <strong>Select the AMD64 option</strong>.</li>
-</ul>
-</div>
-</div>
-<p>Follow instructions from the installer.</p>
+<section id="associative-addition" class="level3">
+<h3 class="anchored" data-anchor-id="associative-addition">Associative Addition</h3>
+<p>The associative rule for addition states that <span class="math inline">\((x + y) + z = x + (y + z)\)</span>. Check this associative property using <code>x = 0.1</code>, <code>y = 0.1</code>, and <code>z = 1.0</code> in Julia. Explain what you find.</p>
 </section>
-<section id="download-our-docker-compose.yml" class="level3">
-<h3 class="anchored" data-anchor-id="download-our-docker-compose.yml">2. Download our <code>docker-compose.yml</code></h3>
-<ul>
-<li>This is a file to automatically construct a container from pre-built images.</li>
-<li>Please download it from Canvas.</li>
-<li>Be sure to download it to a convenient location where you would like to store your course materials.</li>
-</ul>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Windows Users
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Avoid placing your course materials, including <code>docker-compose.yml</code>, inside a folder that is backed up by cloud services like OneDrive or Google Drive. The automated nature of such tools risk corrupting your files if a backup triggers while your container is running, resulting in data loss.</p>
-<p><strong>Suggested Workaround</strong>: Store your work directly under your <code>C:\</code> drive; for example <code>C:\STAT206</code>.</p>
-</div>
-</div>
+<section id="associative-multiplication" class="level3">
+<h3 class="anchored" data-anchor-id="associative-multiplication">Associative Multiplication</h3>
+<p>Do floating point numbers obey the associative rule for multiplication: <span class="math inline">\((x \times y) \times c = x \times (y \times z)\)</span>?</p>
 </section>
-<section id="create-your-local-container" class="level3">
-<h3 class="anchored" data-anchor-id="create-your-local-container">3. Create your local container</h3>
-<p>First, open the terminal view in Docker Desktop.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-01.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop illustrating how to open a terminal."></p>
-</figure>
-</div>
-<p>Next, navigate to the folder/directory containing the <code>docker-compose.yml</code> file. Once you’ve verified the file’s presence, enter and run the command <code>docker compose up -d stat</code>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-02-stat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop terminal creating a container with Docker Compose."></p>
-</figure>
-</div>
-<p>The <em>Containers</em> tab in Docker Desktop shows the status of your container.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-03a.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of Docker Desktop showing container status after creating a container."></p>
-</figure>
-</div>
-<ul>
-<li>Gray circle: Not running</li>
-<li>Green circle: Running (in the background)</li>
-<li>You can start/stop the container using the Play/Stop button under <em>Actions</em>.</li>
-</ul>
-<p>The <code>docker ps</code> command can also be used to monitor your container from a CLI.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="assets/use_docker-03b-stat.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%" alt="Screenshot of a generic terminal illustrating the docker start and docker ps commands."></p>
-</figure>
-</div>
+<section id="distributive-rule" class="level3">
+<h3 class="anchored" data-anchor-id="distributive-rule">Distributive Rule</h3>
+<p>Do floating point numbers obey the distibutive rule: <span class="math inline">\(a \times (x + y) = a \times x + a \times y\)</span>?</p>
 </section>
-<section id="using-the-container" class="level3">
-<h3 class="anchored" data-anchor-id="using-the-container">4. Using the Container</h3>
-<p>If you want to access the container from your machine’s Terminal:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>docker start -ai STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="integral-domain" class="level3">
+<h3 class="anchored" data-anchor-id="integral-domain">Integral Domain</h3>
+<p>Is <span class="math inline">\(0 \times x = 0\)</span> true for all floating point numbers <span class="math inline">\(x\)</span>?</p>
+</section>
+<section id="existence-of-multiplicative-inverse" class="level3">
+<h3 class="anchored" data-anchor-id="existence-of-multiplicative-inverse">Existence of Multiplicative Inverse</h3>
+<p>Is <span class="math inline">\(x / a = x \times (1 / a)\)</span> always true?</p>
+</section>
+<section id="commutativity" class="level3">
+<h3 class="anchored" data-anchor-id="commutativity">Commutativity</h3>
+<p>Addition and multiplication of real numbers obey the commutative laws <span class="math inline">\(x + y = y + x\)</span> and <span class="math inline">\(x \times y = y \times x\)</span>, respectively. Do these laws hold for floating point numbers?</p>
+</section>
+</section>
+<section id="problem-3" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3">Problem 3</h2>
+<p>In this exercise you’re going to write some code to help you cook a brilliant lasagna from your favorite cooking book. You have four tasks, all related to the time spent cooking the lasagna.</p>
+<section id="store-the-expected-bake-time-in-a-constant" class="level3">
+<h3 class="anchored" data-anchor-id="store-the-expected-bake-time-in-a-constant">1. Store the expected bake time in a constant</h3>
+<p>Define the <code>expected_bake_time</code> constant that returns how many minutes the lasagna should bake in the oven. According to the cooking book, lasagna needs to be in the oven for a total of 60 minutes.</p>
+</section>
+<section id="calculate-the-preparation-time-in-minutes" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-the-preparation-time-in-minutes">2. Calculate the preparation time in minutes</h3>
+<p>Define the <code>preparation_time</code> function that takes the number of layers you added to the lasagna as an argument and returns how many minutes you spent preparing the lasagna, assuming each layer takes you 2 minutes to prepare.</p>
+</section>
+<section id="calculate-the-remaining-oven-time-in-minutes" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-the-remaining-oven-time-in-minutes">3. Calculate the remaining oven time in minutes</h3>
+<p>Define the <code>remaining_time</code> function that takes the actual minutes the lasagna has been in the oven as a parameter and returns how many minutes the lasagna still has to remain in the oven.</p>
+</section>
+<section id="calculate-the-total-working-time-in-minutes" class="level3">
+<h3 class="anchored" data-anchor-id="calculate-the-total-working-time-in-minutes">4. Calculate the total working time in minutes</h3>
+<p>Define the <code>total_working_time</code> function that takes two arguments: the first argument is the number of layers you added to the lasagna, and the second argument is the number of minutes the lasagna has been in the oven. The function should return how many minutes in total you’ve worked on cooking the lasagna, which is the sum of the preparation time in minutes, and the time in minutes the lasagna has spent in the oven at the moment.</p>
+</section>
+</section>
+<section id="problem-4" class="level2">
+<h2 class="anchored" data-anchor-id="problem-4">Problem 4</h2>
+<section id="reporting-the-computing-environment" class="level3">
+<h3 class="anchored" data-anchor-id="reporting-the-computing-environment">Reporting the computing environment</h3>
+<p>Every assignment in this class must have a section that records the computing environment used to create a report.</p>
 <ul>
-<li><code>docker start</code>: The <code>start</code> action will only start an existing container.</li>
-<li><code>-ai</code>: The option <code>a</code> ensures we can see messages in our terminal and propagates signals (such as force quitting). The option <code>i</code> is used to indicate an interactive session.</li>
-<li><code>STAT206-STAT</code> the name of the container we wish to run.</li>
+<li>Insert a heading named <code>Environment</code> just after <a href="#problem-4">Problem 4</a>.</li>
+<li>First code cell: Load <code>Pkg</code> and report <code>Pkg.status()</code>.</li>
+<li>Second code cell: Load <code>InteractiveUtils</code> and report <code>versioninfo()</code>.</li>
 </ul>
-<p>If you just want the container to run in the background so you can connect to it using VSCode:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>docker start STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You can stop a running container using:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>docker stop STAT206-STAT</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="checking-your-work" class="level3">
+<h3 class="anchored" data-anchor-id="checking-your-work">Checking your work</h3>
+<ul>
+<li>Render/preview your report from scratch.</li>
+<li>Verify that each piece of code executes free of errors.
+<ul>
+<li>Do the results match what you saw while working interactively?</li>
+</ul></li>
+<li>Verify that the report itself is readable.
+<ul>
+<li>Figures (if any) render properly.</li>
+<li>Any math set in <span class="math inline">\(\LaTeX\)</span> displays correctly.</li>
+</ul></li>
+<li>Polish the report.
+<ul>
+<li>Use inline code to report results rather than hard-coding them into the file; e.g.&nbsp;`{julia} x` to reference the value of <code>x</code> inline.</li>
+<li>Reorganize your code to ensure your thought process is transparent to a reader.</li>
+</ul></li>
+</ul>
 
 
 </section>

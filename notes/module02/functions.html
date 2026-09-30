@@ -497,8 +497,11 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
- <span class="menu-text">Homework 1</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -738,30 +741,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 10
-  2
-  2
- 10</code></pre>
+ 7
+ 5
+ 6
+ 2</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  2
-  2
- 10
- 10</code></pre>
+ 2
+ 5
+ 6
+ 7</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  2
-  2
- 10
- 10</code></pre>
+ 2
+ 5
+ 6
+ 7</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -995,11 +998,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
- 0.0208048  0.977302  0.449774
- 0.999754   0.438425  0.0188927
- 0.040079   0.445565  0.800999
- 0.533105   0.955514  0.0853464
- 0.129192   0.616768  0.163552</code></pre>
+  0.536843    0.14172     0.155558
+  2.06262e-6  0.382505    0.988826
+  0.00101354  0.096034   -0.91165
+ -0.708228    0.0155155  -0.794489
+  0.982203    0.0808819   0.000302949</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1010,28 +1013,28 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  1.3119377619751
- -0.4898240524694846
-  0.7928788960240953
- -1.4287918500271521
- -0.38667441927982243
-  0.3053896775671695
-  0.6414176636629313
-  0.15720550603385064
- -1.09529210949926
- -0.0514005836598908</code></pre>
+  0.396983807494207
+  2.121891809839844
+ -0.03943576477197922
+  1.1437405995596703
+  0.2820356375323033
+ -0.40431270334574015
+  0.15349518609278348
+  0.566095691401574
+  1.098982100880213
+ -0.33817233655519924</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 1.3119377619751
+ 0.396983807494207
+ 2.121891809839844
  0.0
- 0.7928788960240953
+ 1.1437405995596703
+ 0.2820356375323033
  0.0
- 0.0
- 0.3053896775671695
- 0.6414176636629313
- 0.15720550603385064
- 0.0
+ 0.15349518609278348
+ 0.566095691401574
+ 1.098982100880213
  0.0</code></pre>
 </div>
 </div>
@@ -1047,11 +1050,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
-  0.9836836182975401
- -0.18299159893138103
- -0.8445456279973961
-  0.7439450560053527
-  0.6490370774134508</code></pre>
+ 0.141613543311578
+ 0.7508684516505824
+ 0.22418769948900022
+ 0.26306382037300713
+ 0.8933222318762589</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1061,11 +1064,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
-  0.9836836182975401
- -0.18299159893138103
- -0.8445456279973961
-  0.7439450560053527
-  0.6490370774134508</code></pre>
+ 0.141613543311578
+ 0.7508684516505824
+ 0.22418769948900022
+ 0.26306382037300713
+ 0.8933222318762589</code></pre>
 </div>
 </div>
 </section>
