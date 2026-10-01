@@ -305,11 +305,13 @@ The `BigFloat` type provides arbitrary precision in Julia. It is *significantly*
 ```
 
 
-## Catastrophic Cancellation
+## What goes wrong?
 
-### Scenario 1
+### Scenario 1: Roundoff Error
 
-Addition or subtraction of two numbers of widely different magnitudes: $a+b$ or $a-b$ where $a \gg b$ or $a \ll b$. We lose the precision in the number of smaller magnitude. Consider 
+Addition or subtraction of two numbers of widely different magnitudes: $a+b$ or $a-b$ where $a \gg b$ or $a \ll b$. We lose the precision in the number of smaller magnitude.
+
+Consider 
 
 $$
 \begin{eqnarray*}
@@ -326,7 +328,110 @@ What happens when computer calculates $a+b$? We get $a+b=a$!
 @show a + b == a;
 ```
 
-### Scenario 2
+This happens due to cancellation at the exponent level.
+We'll use some Julia helper functions to help us interrogate what is happening.
+
+```{julia}
+# first bit is the sign
+jl_sign_bit(x::Float64) = bitstring(x)[1]
+
+# 2nd through 12th bits are the exponent
+jl_exponent_bits(x::Float64) = bitstring(x)[2:12]
+
+# remaining bits are the fraction/mantissa/significand
+jl_significand_bits(x::Float64) = bitstring(x)[13:end]
+
+# we'll need a way to read binary... the number 1023 is an implicit bias in exponent term
+binary2decimal(x::String) = parse(Int, x, base = 2)
+jl_exponent(x::Float64) = binary2decimal(jl_exponent_bits(x)) - 1023
+jl_sign(x::Float64) = ifelse(jl_sign_bit(x) == "0", +1, -1)
+```
+
+Both numbers have the same sign:
+
+```{julia}
+@show jl_sign(a)
+@show jl_sign(b);
+```
+
+The significand is the same because `a` and `b` are powers of 2:
+
+```{julia}
+@show jl_significand_bits(a)
+@show jl_significand_bits(a);
+```
+
+The difference is in the exponent:
+
+```{julia}
+@show jl_exponent(a)
+@show jl_exponent(b);
+```
+
+```{julia}
+@show jl_exponent_bits(a)
+@show jl_exponent_bits(b);
+```
+
+In adding two `Float64` numbers, the exponents are aligned as follows: given the difference $\Delta$ in exponents, the binary point of the smaller number is shifted $\Delta$ places to the left.
+The result of $a + b$ will carry the larger exponent.
+Remember that the significand/fraction has an implicit $1$ in *binary representation*.
+
+In our example, the difference is `{julia} abs(jl_exponent(a) - jl_exponent(b))` so:
+
+```{julia}
+"1." * jl_significand_bits(b) # mind the implicit 1 in the significand
+```
+
+becomes
+
+```{julia}
+a_bit_shifted = "0." * repeat('0', abs(jl_exponent(a) - jl_exponent(b)) - 1) * "1"
+```
+
+The significand of `b` is simply `{julia} "1." * repeat('0', 52)`, where there are 52 trailing 0s.
+Thus, of adding the fractional parts of `a` and `b` is:
+
+```{julia}
+result = "1." * repeat('0', abs(jl_exponent(a) - jl_exponent(b)) - 1) * "1"
+```
+
+However, only 52 of these bits can be assigned for the significand:
+
+```{julia}
+significand_bits = result[3:(52+2)]
+@show length(significand_bits)
+@show significand_bits;
+```
+
+There is information left over in the smaller bits of the base 2 number.
+
+```{julia}
+result[(52+2+1):end]
+```
+
+In this case we are closer to the smaller of the next representable numbers (leading bit is 0) and therefore round down.
+The exponent is untouched.
+
+The resulting bit string is therefore:
+
+```{julia}
+exponent_bits = bitstring(max(jl_exponent(a), jl_exponent(b)) + 1023)[(end-10):end]
+apb_bits = "0" * exponent_bits * significand_bits
+
+@show exponent_bits
+@show length(exponent_bits)
+@show apb_bits;
+```
+
+This is precisely the result of `a+b`:
+
+```{julia}
+bitstring(a + b) == apb_bits
+```
+
+
+### Scenario 2: Catastrophic Cancellation
 
 Subtraction of two nearly equal numbers eliminates significant digits. $a-b$ where $a \approx b$. Consider 
 
@@ -337,7 +442,7 @@ $$
 \end{eqnarray*}
 $$
 
-The result is $1.vvvvu...u$ where $u$ are unassigned digits.
+The result is $1.vvvvu...u$ where $u$ are unassigned digits. *Rember that this is a binary representation, not a decimal number!*
 
 ```{julia}
 a = 1.2345678f0 # rounding
