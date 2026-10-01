@@ -593,10 +593,10 @@ window.Quarto = {
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul></li>
   <li><a href="#arbitrary-precision" id="toc-arbitrary-precision" class="nav-link" data-scroll-target="#arbitrary-precision">Arbitrary Precision</a></li>
-  <li><a href="#catastrophic-cancellation" id="toc-catastrophic-cancellation" class="nav-link" data-scroll-target="#catastrophic-cancellation">Catastrophic Cancellation</a>
+  <li><a href="#what-goes-wrong" id="toc-what-goes-wrong" class="nav-link" data-scroll-target="#what-goes-wrong">What goes wrong?</a>
   <ul class="collapse">
-  <li><a href="#scenario-1" id="toc-scenario-1" class="nav-link" data-scroll-target="#scenario-1">Scenario 1</a></li>
-  <li><a href="#scenario-2" id="toc-scenario-2" class="nav-link" data-scroll-target="#scenario-2">Scenario 2</a></li>
+  <li><a href="#scenario-1-roundoff-error" id="toc-scenario-1-roundoff-error" class="nav-link" data-scroll-target="#scenario-1-roundoff-error">Scenario 1: Roundoff Error</a></li>
+  <li><a href="#scenario-2-catastrophic-cancellation" id="toc-scenario-2-catastrophic-cancellation" class="nav-link" data-scroll-target="#scenario-2-catastrophic-cancellation">Scenario 2: Catastrophic Cancellation</a></li>
   </ul></li>
   <li><a href="#implications-for-computing" id="toc-implications-for-computing" class="nav-link" data-scroll-target="#implications-for-computing">Implications for Computing</a></li>
   </ul>
@@ -1017,11 +1017,12 @@ floatmax(BigFloat) = 5.875653789111587590936911998878442589938516392745498308333
 </div>
 </div>
 </section>
-<section id="catastrophic-cancellation" class="level2">
-<h2 class="anchored" data-anchor-id="catastrophic-cancellation">Catastrophic Cancellation</h2>
-<section id="scenario-1" class="level3">
-<h3 class="anchored" data-anchor-id="scenario-1">Scenario 1</h3>
-<p>Addition or subtraction of two numbers of widely different magnitudes: <span class="math inline">\(a+b\)</span> or <span class="math inline">\(a-b\)</span> where <span class="math inline">\(a \gg b\)</span> or <span class="math inline">\(a \ll b\)</span>. We lose the precision in the number of smaller magnitude. Consider</p>
+<section id="what-goes-wrong" class="level2">
+<h2 class="anchored" data-anchor-id="what-goes-wrong">What goes wrong?</h2>
+<section id="scenario-1-roundoff-error" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-1-roundoff-error">Scenario 1: Roundoff Error</h3>
+<p>Addition or subtraction of two numbers of widely different magnitudes: <span class="math inline">\(a+b\)</span> or <span class="math inline">\(a-b\)</span> where <span class="math inline">\(a \gg b\)</span> or <span class="math inline">\(a \ll b\)</span>. We lose the precision in the number of smaller magnitude.</p>
+<p>Consider</p>
 <p><span class="math display">\[
 \begin{eqnarray*}
     a &amp;=&amp; x.xxx ... \times 2^{30} \\  
@@ -1039,9 +1040,124 @@ b = 2.0 ^ -30 = 9.313225746154785e-10
 a + b == a = true</code></pre>
 </div>
 </div>
+<p>This happens due to cancellation at the exponent level. We’ll use some Julia helper functions to help us interrogate what is happening.</p>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-label="1"></a><span class="co"># first bit is the sign</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-label="2"></a><span class="fu">jl_sign_bit</span>(x<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">bitstring</span>(x)[<span class="fl">1</span>]</span>
+<span id="cb38-3"><a href="#cb38-3" aria-label="3"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-label="4"></a><span class="co"># 2nd through 12th bits are the exponent</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-label="5"></a><span class="fu">jl_exponent_bits</span>(x<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">bitstring</span>(x)[<span class="fl">2</span><span class="op">:</span><span class="fl">12</span>]</span>
+<span id="cb38-6"><a href="#cb38-6" aria-label="6"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-label="7"></a><span class="co"># remaining bits are the fraction/mantissa/significand</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-label="8"></a><span class="fu">jl_significand_bits</span>(x<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">bitstring</span>(x)[<span class="fl">13</span><span class="op">:</span><span class="kw">end</span>]</span>
+<span id="cb38-9"><a href="#cb38-9" aria-label="9"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-label="10"></a><span class="co"># we'll need a way to read binary... the number 1023 is an implicit bias in exponent term</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-label="11"></a><span class="fu">binary2decimal</span>(x<span class="op">::</span><span class="dt">String</span>) <span class="op">=</span> <span class="fu">parse</span>(<span class="dt">Int</span>, x, base <span class="op">=</span> <span class="fl">2</span>)</span>
+<span id="cb38-12"><a href="#cb38-12" aria-label="12"></a><span class="fu">jl_exponent</span>(x<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">binary2decimal</span>(<span class="fu">jl_exponent_bits</span>(x)) <span class="op">-</span> <span class="fl">1023</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-label="13"></a><span class="fu">jl_sign</span>(x<span class="op">::</span><span class="dt">Float64</span>) <span class="op">=</span> <span class="fu">ifelse</span>(<span class="fu">jl_sign_bit</span>(x) <span class="op">==</span> <span class="st">"0"</span>, <span class="op">+</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>jl_sign (generic function with 1 method)</code></pre>
+</div>
+</div>
+<p>Both numbers have the same sign:</p>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">jl_sign</span>(a)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">jl_sign</span>(b);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>jl_sign(a) = -1
+jl_sign(b) = -1</code></pre>
+</div>
+</div>
+<p>The significand is the same because <code>a</code> and <code>b</code> are powers of 2:</p>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">jl_significand_bits</span>(a)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">jl_significand_bits</span>(a);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>jl_significand_bits(a) = "0000000000000000000000000000000000000000000000000000"
+jl_significand_bits(a) = "0000000000000000000000000000000000000000000000000000"</code></pre>
+</div>
+</div>
+<p>The difference is in the exponent:</p>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">jl_exponent</span>(a)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">jl_exponent</span>(b);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>jl_exponent(a) = 30
+jl_exponent(b) = -30</code></pre>
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-label="1"></a><span class="pp">@show</span> <span class="fu">jl_exponent_bits</span>(a)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">jl_exponent_bits</span>(b);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>jl_exponent_bits(a) = "10000011101"
+jl_exponent_bits(b) = "01111100001"</code></pre>
+</div>
+</div>
+<p>In adding two <code>Float64</code> numbers, the exponents are aligned as follows: given the difference <span class="math inline">\(\Delta\)</span> in exponents, the binary point of the smaller number is shifted <span class="math inline">\(\Delta\)</span> places to the left. The result of <span class="math inline">\(a + b\)</span> will carry the larger exponent. Remember that the significand/fraction has an implicit <span class="math inline">\(1\)</span> in <em>binary representation</em>.</p>
+<p>In our example, the difference is 60 so:</p>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb48-1"><a href="#cb48-1" aria-label="1"></a><span class="st">"1."</span> <span class="op">*</span> <span class="fu">jl_significand_bits</span>(b) <span class="co"># mind the implicit 1 in the significand</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"1.0000000000000000000000000000000000000000000000000000"</code></pre>
+</div>
+</div>
+<p>becomes</p>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb50-1"><a href="#cb50-1" aria-label="1"></a>a_bit_shifted <span class="op">=</span> <span class="st">"0."</span> <span class="op">*</span> <span class="fu">repeat</span>(<span class="ch">'0'</span>, <span class="fu">abs</span>(<span class="fu">jl_exponent</span>(a) <span class="op">-</span> <span class="fu">jl_exponent</span>(b)) <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> <span class="st">"1"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"0.000000000000000000000000000000000000000000000000000000000001"</code></pre>
+</div>
+</div>
+<p>The significand of <code>b</code> is simply 1.0000000000000000000000000000000000000000000000000000, where there are 52 trailing 0s. Thus, of adding the fractional parts of <code>a</code> and <code>b</code> is:</p>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb52-1"><a href="#cb52-1" aria-label="1"></a>result <span class="op">=</span> <span class="st">"1."</span> <span class="op">*</span> <span class="fu">repeat</span>(<span class="ch">'0'</span>, <span class="fu">abs</span>(<span class="fu">jl_exponent</span>(a) <span class="op">-</span> <span class="fu">jl_exponent</span>(b)) <span class="op">-</span> <span class="fl">1</span>) <span class="op">*</span> <span class="st">"1"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"1.000000000000000000000000000000000000000000000000000000000001"</code></pre>
+</div>
+</div>
+<p>However, only 52 of these bits can be assigned for the significand:</p>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb54-1"><a href="#cb54-1" aria-label="1"></a>significand_bits <span class="op">=</span> result[<span class="fl">3</span><span class="op">:</span>(<span class="fl">52</span><span class="op">+</span><span class="fl">2</span>)]</span>
+<span id="cb54-2"><a href="#cb54-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">length</span>(significand_bits)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-label="3"></a><span class="pp">@show</span> significand_bits;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>length(significand_bits) = 52
+significand_bits = "0000000000000000000000000000000000000000000000000000"</code></pre>
+</div>
+</div>
+<p>There is information left over in the smaller bits of the base 2 number.</p>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb56-1"><a href="#cb56-1" aria-label="1"></a>result[(<span class="fl">52</span><span class="op">+</span><span class="fl">2</span><span class="op">+</span><span class="fl">1</span>)<span class="op">:</span><span class="kw">end</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"00000001"</code></pre>
+</div>
+</div>
+<p>In this case we are closer to the smaller of the next representable numbers (leading bit is 0) and therefore round down. The exponent is untouched.</p>
+<p>The resulting bit string is therefore:</p>
+<div id="62" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb58-1"><a href="#cb58-1" aria-label="1"></a>exponent_bits <span class="op">=</span> <span class="fu">bitstring</span>(<span class="fu">max</span>(<span class="fu">jl_exponent</span>(a), <span class="fu">jl_exponent</span>(b)) <span class="op">+</span> <span class="fl">1023</span>)[(<span class="kw">end</span><span class="op">-</span><span class="fl">10</span>)<span class="op">:</span><span class="kw">end</span>]</span>
+<span id="cb58-2"><a href="#cb58-2" aria-label="2"></a>apb_bits <span class="op">=</span> <span class="st">"0"</span> <span class="op">*</span> exponent_bits <span class="op">*</span> significand_bits</span>
+<span id="cb58-3"><a href="#cb58-3" aria-label="3"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-label="4"></a><span class="pp">@show</span> exponent_bits</span>
+<span id="cb58-5"><a href="#cb58-5" aria-label="5"></a><span class="pp">@show</span> <span class="fu">length</span>(exponent_bits)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-label="6"></a><span class="pp">@show</span> apb_bits;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>exponent_bits = "10000011101"
+length(exponent_bits) = 11
+apb_bits = "0100000111010000000000000000000000000000000000000000000000000000"</code></pre>
+</div>
+</div>
+<p>This is precisely the result of <code>a+b</code>:</p>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb60-1"><a href="#cb60-1" aria-label="1"></a><span class="fu">bitstring</span>(a <span class="op">+</span> b) <span class="op">==</span> apb_bits</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
 </section>
-<section id="scenario-2" class="level3">
-<h3 class="anchored" data-anchor-id="scenario-2">Scenario 2</h3>
+<section id="scenario-2-catastrophic-cancellation" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-2-catastrophic-cancellation">Scenario 2: Catastrophic Cancellation</h3>
 <p>Subtraction of two nearly equal numbers eliminates significant digits. <span class="math inline">\(a-b\)</span> where <span class="math inline">\(a \approx b\)</span>. Consider</p>
 <p><span class="math display">\[
 \begin{eqnarray*}
@@ -1049,15 +1165,15 @@ a + b == a = true</code></pre>
     b &amp;=&amp; x.xxxxxxxxxx0tttt
 \end{eqnarray*}
 \]</span></p>
-<p>The result is <span class="math inline">\(1.vvvvu...u\)</span> where <span class="math inline">\(u\)</span> are unassigned digits.</p>
-<div id="42" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-label="1"></a>a <span class="op">=</span> <span class="fl">1.2345678f0</span> <span class="co"># rounding</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">bitstring</span>(a) <span class="co"># rounding</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-label="3"></a>b <span class="op">=</span> <span class="fl">1.2345677f0</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-label="4"></a><span class="pp">@show</span> <span class="fu">bitstring</span>(b)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-label="5"></a><span class="co"># correct result should be 1e-7</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-label="6"></a><span class="co"># we see a large error due to catastrophic cancellation</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-label="7"></a><span class="pp">@show</span> a <span class="op">-</span> b;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The result is <span class="math inline">\(1.vvvvu...u\)</span> where <span class="math inline">\(u\)</span> are unassigned digits. <em>Rember that this is a binary representation, not a decimal number!</em></p>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb62-1"><a href="#cb62-1" aria-label="1"></a>a <span class="op">=</span> <span class="fl">1.2345678f0</span> <span class="co"># rounding</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-label="2"></a><span class="pp">@show</span> <span class="fu">bitstring</span>(a) <span class="co"># rounding</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-label="3"></a>b <span class="op">=</span> <span class="fl">1.2345677f0</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-label="4"></a><span class="pp">@show</span> <span class="fu">bitstring</span>(b)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-label="5"></a><span class="co"># correct result should be 1e-7</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-label="6"></a><span class="co"># we see a large error due to catastrophic cancellation</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-label="7"></a><span class="pp">@show</span> a <span class="op">-</span> b;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>bitstring(a) = "00111111100111100000011001010001"
 bitstring(b) = "00111111100111100000011001010000"
