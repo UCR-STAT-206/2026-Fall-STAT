@@ -102,8 +102,8 @@ website:
             href: labs/lab0-setup.qmd
           - text: Lab 1 (Submitting Assignments)
             href: labs/lab1-submit.qmd
-          # - text: Lab 2 (Errors and Debugging)
-          #   href: labs/lab2-debug.qmd
+          - text: Lab 2 (Errors and Debugging)
+            href: labs/lab2-debug.qmd
           # - text: Lab 3 (I/O Handling)
           #   href: labs/lab3-io.qmd
           # - text: Lab 4 (Reproducibility)

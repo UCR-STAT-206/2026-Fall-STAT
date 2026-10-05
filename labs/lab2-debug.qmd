@@ -1,0 +1,66 @@
+---
+title: "Lab 2: Errors and Debugging"
+date: "2026-10-09"
+eval: false
+format:
+  html:
+    theme: cosmo
+    css: ../assets/styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+engine: markdown
+---
+
+## Goals
+
+By the end of this lab, you should be able to
+
+1. Understand how to read line numbers and read syntax error messages.
+2. Follow a stack trace to identify where runtime errors originate.
+3. Trace the flow of a program to step through changes in variables and catch potential errors.
+4. Formulate a strategy to identify silent logical errors related to implementation.
+
+## Instructions
+
+1. There is no required programming for this assignment.
+2. Working on your own or as a class, you will identify and fix 4 bugs lurking in Python code.
+3. You will submit your work in a file named `bugs.qmd` under a `lab2` directory. This file must contain the following information for each bug:
+
+    + What is the bug/error? Briefly describe it.
+    + What line number does the error/bug occur on?
+    + Does Python produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?
+    + How can it be fixed? Briefly describe a solution.
+
+4. In addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.
+5. If you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.
+6. **Participate in the discussion**, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.
+
+
+
+## The Code
+
+```{julia}
+#| eval: false
+function process_order(items, tax_rate)
+  subtotal = 0.0
+
+  # Process each item in the order
+  for item in items
+    price = item["price"]
+    quantity = item["quantity"]
+
+    # Calculate item cost and add to subtotal
+    subtotal = price * quantity
+
+  # Calculate shipping
+  if subtotal > 50.0
+    shipping = 0.0
+  else
+    shipping = 5.00
+  end
+
+  total = subtotal * (1.0 + tax_rate) + shipping
+  return total
+end
+```
