@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-10-09">
 
-<title>Office hours</title>
+<title>Lab 2: Errors and Debugging</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,26 +27,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5a76141f77d867fb867d14d57f46a0f6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -75,7 +111,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="../assets/styles.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -87,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./office_hours.html">Office Hours</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab2-debug.html">Lab 2 (Errors and Debugging)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -101,12 +137,12 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="./assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">STAT 206</a> 
+      <a href="../">STAT 206</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -118,19 +154,19 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./office_hours.html" class="sidebar-item-text sidebar-link active">
+  <a href="../office_hours.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Office Hours</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./schedule.html" class="sidebar-item-text sidebar-link">
+  <a href="../schedule.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Schedule</span></a>
   </div>
 </li>
@@ -146,25 +182,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The Unix Shell</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">The File System</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Quarto</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module01/git.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module01/git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Git</span></a>
   </div>
 </li>
@@ -181,31 +217,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Intro to Julia</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module02/types.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module02/types.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Types</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Basic Operations</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module02/control.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module02/control.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Control Flow</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Functions</span></a>
   </div>
 </li>
@@ -254,7 +290,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+  <a href="../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Computer Arithmetic</span></a>
   </div>
 </li>
@@ -402,28 +438,28 @@ ul.task-list li input[type="checkbox"] {
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
  <span class="menu-text">Labs</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 0 (Getting Started)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+  <a href="../labs/lab2-debug.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
   </div>
 </li>
@@ -440,7 +476,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./hw/hw1.html" class="sidebar-item-text sidebar-link">
+  <a href="../hw/hw1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Homework 1</span></a>
   </div>
 </li>
@@ -448,7 +484,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./project/project.html" class="sidebar-item-text sidebar-link">
+  <a href="../project/project.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Final Project</span></a>
   </div>
 </li>
@@ -464,43 +500,43 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/use_docker.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Docker</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use VSCode with a Container</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/configure_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/configure_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Configure Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/setup_github.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/setup_github.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Set Up Your GitHub Account</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/use_git.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Git</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Submit Assignments</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./howto/use_revise.html" class="sidebar-item-text sidebar-link">
+  <a href="../howto/use_revise.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Use Revise.jl</span></a>
   </div>
 </li>
@@ -511,15 +547,23 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a></li>
+  <li><a href="#the-code" id="toc-the-code" class="nav-link" data-scroll-target="#the-code">The Code</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab2-debug.html">Lab 2 (Errors and Debugging)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Office hours</h1>
+<h1 class="title">Lab 2: Errors and Debugging</h1>
 </div>
 
 
@@ -527,6 +571,12 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 9, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -536,30 +586,60 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<p>By the end of this lab, you should be able to</p>
+<ol type="1">
+<li>Understand how to read line numbers and read syntax error messages.</li>
+<li>Follow a stack trace to identify where runtime errors originate.</li>
+<li>Trace the flow of a program to step through changes in variables and catch potential errors.</li>
+<li>Formulate a strategy to identify silent logical errors related to implementation.</li>
+</ol>
+</section>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<ol type="1">
+<li><p>There is no required programming for this assignment.</p></li>
+<li><p>Working on your own or as a class, you will identify and fix 4 bugs lurking in Python code.</p></li>
+<li><p>You will submit your work in a file named <code>bugs.qmd</code> under a <code>lab2</code> directory. This file must contain the following information for each bug:</p>
 <ul>
-<li><strong>Instructor</strong>: Alfonso Landeros
-<ul>
-<li><strong>Where</strong>: Olmsted 1343</li>
-<li><strong>When</strong>:
-<ul>
-<li>Tuesdays TBD</li>
-<li>Thursdays TBD</li>
+<li>What is the bug/error? Briefly describe it.</li>
+<li>What line number does the error/bug occur on?</li>
+<li>Does Python produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?</li>
+<li>How can it be fixed? Briefly describe a solution.</li>
 </ul></li>
-<li>By appointment</li>
-<li>Feel free to drop by if my door is open; I’ll let you know if I’m available.</li>
-</ul></li>
-<li><strong>TA</strong>: Charlotte
-<ul>
-<li><strong>Where</strong>: TBD</li>
-<li><strong>When</strong>:
-<ul>
-<li>Day 1 TBD</li>
-<li>Day 2 TBD</li>
-</ul></li>
-</ul></li>
-</ul>
+<li><p>In addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.</p></li>
+<li><p>If you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.</p></li>
+<li><p><strong>Participate in the discussion</strong>, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.</p></li>
+</ol>
+</section>
+<section id="the-code" class="level2">
+<h2 class="anchored" data-anchor-id="the-code">The Code</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>#| eval: false</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>function process_order(items, tax_rate)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>  subtotal = 0.0</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>  # Process each item in the order</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>  for item in items</span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>    price = item["price"]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>    quantity = item["quantity"]</span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a>    # Calculate item cost and add to subtotal</span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>    subtotal = price * quantity</span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>  # Calculate shipping</span>
+<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a>  if subtotal &gt; 50.0</span>
+<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>    shipping = 0.0</span>
+<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a>  else</span>
+<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>    shipping = 5.00</span>
+<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a>  end</span>
+<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-label="20"></a>  total = subtotal * (1.0 + tax_rate) + shipping</span>
+<span id="cb1-21"><a href="#cb1-21" aria-label="21"></a>  return total</span>
+<span id="cb1-22"><a href="#cb1-22" aria-label="22"></a>end</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
