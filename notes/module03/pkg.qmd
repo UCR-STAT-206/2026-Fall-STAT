@@ -1,0 +1,87 @@
+---
+title: Package Management
+---
+
+## Goals
+
+1. Gain a basic understanding of package management systems.
+2. Understand how to use Pkg to install dependencies from a project.
+3. Understand how to use Pkg to specify dependencies on a project.
+
+
+
+## Motivation
+
+Software changes over time.
+Often changes are positive: new features, faster execution, better performance.
+Internally, a package's code base gradually accumulates *technical debt* as functions that were once composable become incompatible, data structures change or are replaced altogether, and interfaces evolve to meet development and user needs.
+
+At a macro level, people write code that depends on different software packages.
+We rarely ever use just the base Julia/Python/R language for data analytic jobs.
+In practice, we search for an existing tool that matches the task at hand and patch in solutions in any gaps missed by the packages we use.
+Thus, change within individual projects inevitably results in friction between projects used together.
+
+### Example 1: R 4.0 release
+
+From the [R-announce mailing list](https://stat.ethz.ch/pipermail/r-announce/2020/000653.html):
+
+> R now uses a `stringsAsFactors = FALSE` default, and hence by
+> default no longer converts strings to factors in calls to
+> `data.frame()` and `read.table()`.
+
+- Original behavior implicitly assumed any text data is basically a factor, which is not always the case and does not address categorical versus ordinal data.
+- Users would work around this manually.
+- New behavior broke any scripts or packages that assumed the widely used functions named above handled data in a specific manner.
+
+
+### Example 2: Julia transition to 1.0
+
+From [Julia HISTORY.md](https://github.com/JuliaLang/julia/blob/master/HISTORY.md#julia-v070-release-notes) and [JuliaLang repo](https://github.com/JuliaLang/julia/issues/11310):
+
+> The syntax for parametric methods, `function f{T}(x::T)`, has been changed to function `f(x::T) where {T}`
+
+- This was a breaking change introduced in v0.7 as Julia developers prepared for the official upcoming v1.0 release.
+- Major change to language syntax. The old syntax led Julia users to write ambiguous function definitions and contributed to misunderstanding of an important language feature.
+- Any package pre-v0.7 may contain this old syntax and may be incompatible with any modern Julia version.
+
+
+
+## Package Management
+
+In terms of reproducible research, we want a package manager that does the following:
+
+- Keeps track of each package our project depends on; i.e. track **dependencies**.
+- Keeps track of the **version** of each dependencies.
+- Handles both *packages within the ecosystem* and *binaries* that we have zero control over.
+- Can be used to quickly and reliably reconstruct part of the computing environment required for a project, be it a new library, an analysis pipeline, or a 
+
+
+What do different languages use?
+
+- R world: `renv` is among the most popular. `rv` is emerging as a contender. Can also use `conda` and its variants.
+- Python world: `venv`, `conda`, `uv`, `poetry`... unfortunately there are lots of tools and there seems to be no consensus. You use whatever your team wants you to use.
+- Julia world: `Pkg`. That's it. Julia developers had the benefit of learning from tools that came before.
+
+
+
+## Pkg.jl
+
+See the [Pkg documentation](https://pkgdocs.julialang.org/v1/) for full details.
+You can use `Pkg` for complete programmatic control; for example, `Pkg.add("Package Name")`.
+
+### Project.toml
+
+- Always include in a project!
+- Can partially edit by hand e.g. to specify working versions.
+
+### Manifest.toml
+
+- Usually excluded unless you need exact reproducibility on the same hardware.
+- NEVER edit by hand.
+
+### Using the Julia REPL to handle dependencies
+
+- `] add NAME`: add a package; can specify version number of commit hash.
+- `] rm NAME:`: remove a package.
+- `] instantiate`: reproduce from a Project.toml file.
+- `] update`:
