@@ -41,7 +41,6 @@ By the end of this lab, you should be able to
 ## The Code
 
 ```{julia}
-#| eval: false
 function process_order(items, tax_rate)
   subtotal = 0.0
 
