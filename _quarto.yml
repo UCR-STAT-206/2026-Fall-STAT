@@ -120,8 +120,8 @@ website:
         contents:
           - text: Homework 1
             href: hw/hw1.qmd
-          # - text: Homework 2
-          #   href: hw/hw2.qmd
+          - text: Homework 2
+            href: hw/hw2.qmd
           # - text: Homework 3
           #   href: hw/hw3.qmd
           # - text: Homework 4

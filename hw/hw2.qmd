@@ -1,0 +1,173 @@
+---
+title: "Homework 2"
+subtitle: "Due 10am on October 12, 2026"
+---
+
+## Instructions
+
+1. Your work should be in the form of a Quarto file named `hw2.qmd`. If your Julia code is long, consider writing it in separate `.jl` file(s) that you `include()` in `hw2.qmd`. Use your judgment.
+2. You are responsible for ensuring your work is reproducible on someone else’s computer. That means:
+
+    + Verifying that `hw2.qmd` renders properly as an HTML report.
+    + Carefully managing the computing environment. This should be recorded using a `Project.toml` file. The Julia REPL lets you create this file easily.
+
+3. Your homework solutions must be more than code. Most prompts in this assignment, if not all, should have text describing how you approached a problem. **Your future self** and other students in the class should be able to understand your reasoning by reading the text and code comments.
+
+
+
+## Problem 1
+
+The roots of $ax^2 + bx + c = 0$ are given by the standard quadratic formula:
+
+$$
+r = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+$$
+
+When $b^2 \gg 4ac$ and $b > 0$, computing $-b + \sqrt{b^2 - 4ac}$ leads to catastrophic cancellation because two nearly equal numbers are subtracted.
+A numerically stable alternative computes the first root $r_1$ using the sign of $b$ to avoid cancellation, and the second root $r_2$ using the property $r_1 \cdot r_2 = c/a$:
+
+$$
+r_1 = \frac{-b - \operatorname{sgn}(b)\sqrt{b^2 - 4ac}}{2a}, \quad r_2 = \frac{c}{a \cdot r_1}
+$$
+
+
+
+### Part A: Naive algorithm
+
+Translate the quadratic formula to a function `naive_quadratic_roots(a, b, c)` that simply "follows the formula" without worrying about numerical issues.
+
+- Make sure to handle the case $b^{2} < 4ac$. That is, your program should check for the possibility and do *something*.
+- Return the `Tuple` `(r1, r2)`.
+
+
+
+### Part B: Better algorithm
+
+Write a Julia function `quadratic_roots(a, b, c)` that implements the stable formula given above.
+Your function should:
+
+- Handle the case $b^{2} < 4ac$. That is, your program should check for the possibility and do *something*. 
+- Return the `Tuple` `(r1, r2)`.
+
+### Part C: Testing
+
+Test `naive_quadratic_roots()` and `quadratic_roots()` against the following cases.
+Briefly justify your testing approach and explain how you know (roughly) how much error is reflected in your estimates.
+
+a. $a = 1.0$, $b = 10^8$, and $c = 1.0$.
+b. $a = 1.0$, $b = 10.5$, and $c = 5.0$.
+c. $a = 1.0$, $b = 11$, and $c = 5.0$.
+d. $a = 1.0$, $b = 400.0$, and $c = 1.0$.
+e. $a = 25.0$, $b = 100.0$, and $c = 99.99999$.
+
+
+
+## Problem 2
+
+The [Lucas numbers](https://en.wikipedia.org/wiki/Lucas_number) are closely related to the Fibonacci numbers and satisfies the same recurrence relation $L_{k+1} = L_{k} + L_{k-1}$.
+However, Lucas numbers are defined by distinct initial conditions $L_{1} = 2$ and $L_{2} = 1$.
+
+- Write a function `lucas_sequence(n)` that returns a `Vector{Int}` containing the first `n` Lucas numbers.
+- Ensure your function handles the cases $n = 1$ and $n = 2$ gracefully.
+- Test and display your implementation using $n = 1$, $n = 2$, and $n = 7$.
+
+
+
+## Problem 3
+
+In statistics and machine learning, the **softmax function** is used to convert a vector of unnormalized log-odds (logits) $\boldsymbol{x} = (x_{1}, x_{2}, \ldots, x_{n})^{\top}$ into a valid probability distribution $\boldsymbol{p} = (p_{1}, p_{2}, \ldots, p_{n})$:
+
+$$
+p_{j} = e^{x_{j} - m} \Bigr{/} \sum_{k=1}^{n} e^{x_{k} - m}.
+$$
+
+Here we subtract $m = \operatorname{maximum}{\boldsymbol{x}}$ from each $x_{j}$ before exponentiation to mitigate potential floating-point overflow.
+
+- Write a **mutating** function `softmax!(x)` that transforms `x` into probabilities *in-place* by modifying `x` directly and returning it without allocating a new `Vector`.
+- Write a **non-mutating** function `softmax(x)` that allocates a copy of `x`, uses `softmax!()` to compute probabilities in-place, and returns the modified copy.
+- Write a test case to verify that your functions work as intended.
+- Benchmark both functions with `@benchmark`. Confirm that `softmax!()` does not allocate any memory and compare it to `softmax()`.
+
+
+
+## Problem 4
+
+In this problem we are given $n$ numbers, $x_{1}, x_{2}, \ldots, x_{n}$.
+The goal is to compare different algorithms for calculating the
+(unbiased) sample variance.
+
+:::::::::::::::::::::::::::::::: callout-important
+
+- You may use the `mean()` function from the `Statistics` package.
+- You **may not** use the `var()` function from the `Statistics` package or any other similar function from another package. The only exception to this rule is in benchmarking your implementations against it later in the problem.
+- Take care not to modify the data `x` in your implementations.
+
+::::::::::::::::::::::::::::::::
+
+### Part A: Two-pass algorithm
+
+1. Implement a **two-pass algorithm** for the sample variance,
+    $$
+    s^{2} = \frac{1}{n-1} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{2},
+    $$
+    by "following the formula". That is, first compute the sample mean
+    $\bar{x}$ and then evaluate the normalized sum of squared deviations
+    from $\bar{x}$. Hence, this is a two-pass algorithm because it requires
+    passing through the data twice to compute the quantity of interest.
+
+2. How many floating point operations are needed to compute the sample variance
+    using this two-pass algorithm?
+
+:::::::::::::::: callout-important
+### What counts as a flop?
+
+- Any basic arithmetic operation `+`, `-`, `*`, `/`.
+- Only count operations on *floating-point* numbers.
+- Checking length; e.g. via `length()` does not count as a flop.
+
+::::::::::::::::
+
+### Part B: One-pass algorithm
+
+1. Implement the **one-pass algorithm** for sample variance,
+    $$
+    s^{2} = \frac{1}{n-1} \left(
+      \sum_{i=1}^{n} x_{i}^{2} - n \bar{x}_{n}^{2}
+    \right).
+    $$
+
+2. How many floating-point operations are needed to compute the sample
+    variance using this one-pass algorithm?
+
+:::::::::::::::::::::::::::::::: callout-important
+
+Do not waste your pass obtaining $\bar{x}_{n}$! Instead, think in terms of recursion.
+Rewrite $\bar{x}_{n} = \frac{1}{n} \sum_{i=1}^{n} x_{i}$ in terms of $\bar{x}_{n-1}$.
+
+::::::::::::::::
+
+### Part C: Benchmarking
+
+Generate data using the code below:
+
+:::::::::::::::: {.cell execution_count="0"}
+``` {.julia .cell-code}
+using Random
+RNG = Xoshiro(206)
+x = rand(RNG, 1_000_000) .+ 1e8;
+```
+::::::::::::::::
+
+Benchmark the two-pass and one-pass algorithms using the [BenchmarkTools](https://juliaci.github.io/BenchmarkTools.jl/stable/) package.
+Memory allocations should be **zero**.
+
+### Part D: Correctness
+
+1. Display the results of the two-pass and one-pass algorithms.
+2. Are you surprised by the results? Explain what you found.
+
+### Part E: Compare to prior work
+
+1. Investigate the algorithm implemented in the Julia function `var`.
+2. Is the `var` function a two-pass algorithm or one-pass algorithm?
+3. Display the result on the test data and benchmark it. Explain what you found.
