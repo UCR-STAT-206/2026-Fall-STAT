@@ -43,6 +43,7 @@ website:
       - section: Module 3 (Best Practices)
         contents:
           - text: Package Management
+            href: notes/module03/pkg.qmd
           - text: Error Handling
           - text: Debugging
           - text: Defensive Programming
