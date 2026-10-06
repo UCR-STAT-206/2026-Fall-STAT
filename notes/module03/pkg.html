@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>dispatch</title>
+<title>Package Management</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -85,17 +85,131 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a>
+  <ul class="collapse">
+  <li><a href="#example-1-r-4.0-release" id="toc-example-1-r-4.0-release" class="nav-link" data-scroll-target="#example-1-r-4.0-release">Example 1: R 4.0 release</a></li>
+  <li><a href="#example-2-julia-transition-to-1.0" id="toc-example-2-julia-transition-to-1.0" class="nav-link" data-scroll-target="#example-2-julia-transition-to-1.0">Example 2: Julia transition to 1.0</a></li>
+  </ul></li>
+  <li><a href="#package-management" id="toc-package-management" class="nav-link" data-scroll-target="#package-management">Package Management</a></li>
+  <li><a href="#pkg.jl" id="toc-pkg.jl" class="nav-link" data-scroll-target="#pkg.jl">Pkg.jl</a>
+  <ul class="collapse">
+  <li><a href="#project.toml" id="toc-project.toml" class="nav-link" data-scroll-target="#project.toml">Project.toml</a></li>
+  <li><a href="#manifest.toml" id="toc-manifest.toml" class="nav-link" data-scroll-target="#manifest.toml">Manifest.toml</a></li>
+  <li><a href="#using-the-julia-repl-to-handle-dependencies" id="toc-using-the-julia-repl-to-handle-dependencies" class="nav-link" data-scroll-target="#using-the-julia-repl-to-handle-dependencies">Using the Julia REPL to handle dependencies</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Package Management</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
+</header>
 
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Gain a basic understanding of package management systems.</li>
+<li>Understand how to use Pkg to install dependencies from a project.</li>
+<li>Understand how to use Pkg to specify dependencies on a project.</li>
+</ol>
+</section>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>Software changes over time. Often changes are positive: new features, faster execution, better performance. Internally, a package’s code base gradually accumulates <em>technical debt</em> as functions that were once composable become incompatible, data structures change or are replaced altogether, and interfaces evolve to meet development and user needs.</p>
+<p>At a macro level, people write code that depends on different software packages. We rarely ever use just the base Julia/Python/R language for data analytic jobs. In practice, we search for an existing tool that matches the task at hand and patch in solutions in any gaps missed by the packages we use. Thus, change within individual projects inevitably results in friction between projects used together.</p>
+<section id="example-1-r-4.0-release" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-r-4.0-release">Example 1: R 4.0 release</h3>
+<p>From the <a href="https://stat.ethz.ch/pipermail/r-announce/2020/000653.html">R-announce mailing list</a>:</p>
+<blockquote class="blockquote">
+<p>R now uses a <code>stringsAsFactors = FALSE</code> default, and hence by default no longer converts strings to factors in calls to <code>data.frame()</code> and <code>read.table()</code>.</p>
+</blockquote>
+<ul>
+<li>Original behavior implicitly assumed any text data is basically a factor, which is not always the case and does not address categorical versus ordinal data.</li>
+<li>Users would work around this manually.</li>
+<li>New behavior broke any scripts or packages that assumed the widely used functions named above handled data in a specific manner.</li>
+</ul>
+</section>
+<section id="example-2-julia-transition-to-1.0" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-julia-transition-to-1.0">Example 2: Julia transition to 1.0</h3>
+<p>From <a href="https://github.com/JuliaLang/julia/blob/master/HISTORY.md#julia-v070-release-notes">Julia HISTORY.md</a> and <a href="https://github.com/JuliaLang/julia/issues/11310">JuliaLang repo</a>:</p>
+<blockquote class="blockquote">
+<p>The syntax for parametric methods, <code>function f{T}(x::T)</code>, has been changed to function <code>f(x::T) where {T}</code></p>
+</blockquote>
+<ul>
+<li>This was a breaking change introduced in v0.7 as Julia developers prepared for the official upcoming v1.0 release.</li>
+<li>Major change to language syntax. The old syntax led Julia users to write ambiguous function definitions and contributed to misunderstanding of an important language feature.</li>
+<li>Any package pre-v0.7 may contain this old syntax and may be incompatible with any modern Julia version.</li>
+</ul>
+</section>
+</section>
+<section id="package-management" class="level2">
+<h2 class="anchored" data-anchor-id="package-management">Package Management</h2>
+<p>In terms of reproducible research, we want a package manager that does the following:</p>
+<ul>
+<li>Keeps track of each package our project depends on; i.e.&nbsp;track <strong>dependencies</strong>.</li>
+<li>Keeps track of the <strong>version</strong> of each dependencies.</li>
+<li>Handles both <em>packages within the ecosystem</em> and <em>binaries</em> that we have zero control over.</li>
+<li>Can be used to quickly and reliably reconstruct part of the computing environment required for a project, be it a new library, an analysis pipeline, or a</li>
+</ul>
+<p>What do different languages use?</p>
+<ul>
+<li>R world: <code>renv</code> is among the most popular. <code>rv</code> is emerging as a contender. Can also use <code>conda</code> and its variants.</li>
+<li>Python world: <code>venv</code>, <code>conda</code>, <code>uv</code>, <code>poetry</code>… unfortunately there are lots of tools and there seems to be no consensus. You use whatever your team wants you to use.</li>
+<li>Julia world: <code>Pkg</code>. That’s it. Julia developers had the benefit of learning from tools that came before.</li>
+</ul>
+</section>
+<section id="pkg.jl" class="level2">
+<h2 class="anchored" data-anchor-id="pkg.jl">Pkg.jl</h2>
+<p>See the <a href="https://pkgdocs.julialang.org/v1/">Pkg documentation</a> for full details. You can use <code>Pkg</code> for complete programmatic control; for example, <code>Pkg.add("Package Name")</code>.</p>
+<section id="project.toml" class="level3">
+<h3 class="anchored" data-anchor-id="project.toml">Project.toml</h3>
+<ul>
+<li>Always include in a project!</li>
+<li>Can partially edit by hand e.g.&nbsp;to specify working versions.</li>
+</ul>
+</section>
+<section id="manifest.toml" class="level3">
+<h3 class="anchored" data-anchor-id="manifest.toml">Manifest.toml</h3>
+<ul>
+<li>Usually excluded unless you need exact reproducibility on the same hardware.</li>
+<li>NEVER edit by hand.</li>
+</ul>
+</section>
+<section id="using-the-julia-repl-to-handle-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-julia-repl-to-handle-dependencies">Using the Julia REPL to handle dependencies</h3>
+<ul>
+<li><code>] add NAME</code>: add a package; can specify version number of commit hash.</li>
+<li><code>] rm NAME:</code>: remove a package.</li>
+<li><code>] instantiate</code>: reproduce from a Project.toml file.</li>
+<li><code>] update</code>:</li>
+</ul>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
