@@ -288,8 +288,11 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
- <span class="menu-text">Package Management</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
  <span class="menu-text">Error Handling</span>
   </li>
@@ -753,30 +756,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 7
- 7
- 1
- 2</code></pre>
+  2
+  3
+  6
+ 10</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 1
- 2
- 7
- 7</code></pre>
+  2
+  3
+  6
+ 10</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 1
- 2
- 7
- 7</code></pre>
+  2
+  3
+  6
+ 10</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -1010,11 +1013,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
- 0.00974864  0.53302    0.621926
- 0.0745969   0.779612   0.0236743
- 0.00579514  0.231071  -0.998807
- 0.112659    0.136096   0.00444774
- 0.157453    0.435853   0.0274345</code></pre>
+ 0.608812   9.1061e-5   0.0359194
+ 0.144905   0.490315   -0.347449
+ 0.0182542  0.0080386   0.774941
+ 0.546432   0.585444    0.0419533
+ 0.445863   0.0659114   0.0353209</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1025,29 +1028,29 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  1.060665852367023
-  2.5261022590503353
- -0.0627336574183322
- -0.4463148952090812
- -0.7793153342466068
- -0.6754555636216852
- -0.9857852868148845
- -0.44572422059199823
- -0.902747467609219
-  0.3373769617123951</code></pre>
+ -0.8582069368899268
+  1.2484803483987887
+ -0.25277171059930637
+  1.40452093123006
+  0.20486757179768048
+  0.06108832021149042
+  0.6070121907577409
+  0.8768290833054097
+  0.9574850594332739
+ -1.221302914635514</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 1.060665852367023
- 2.5261022590503353
  0.0
+ 1.2484803483987887
  0.0
- 0.0
- 0.0
- 0.0
- 0.0
- 0.0
- 0.3373769617123951</code></pre>
+ 1.40452093123006
+ 0.20486757179768048
+ 0.06108832021149042
+ 0.6070121907577409
+ 0.8768290833054097
+ 0.9574850594332739
+ 0.0</code></pre>
 </div>
 </div>
 </section>
@@ -1062,11 +1065,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9538674340779026
- 0.4989892549247647
- 0.7110003119401506
- 0.87464474590993
- 0.34250537928778</code></pre>
+ 0.5189642981475644
+ 0.7974687195656769
+ 0.1431205801564542
+ 0.5185940925790581
+ 0.3685397258972525</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1076,11 +1079,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9538674340779026
- 0.4989892549247647
- 0.7110003119401506
- 0.87464474590993
- 0.34250537928778</code></pre>
+ 0.5189642981475644
+ 0.7974687195656769
+ 0.1431205801564542
+ 0.5185940925790581
+ 0.3685397258972525</code></pre>
 </div>
 </div>
 </section>
