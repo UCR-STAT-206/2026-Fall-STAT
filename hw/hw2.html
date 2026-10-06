@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-10-09">
 
-<title>Lab 2: Errors and Debugging</title>
+<title>Homework 2</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -81,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5a76141f77d867fb867d14d57f46a0f6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -110,6 +109,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -123,7 +151,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab2-debug.html">Lab 2 (Errors and Debugging)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../hw/hw2.html">Homework 2</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -438,13 +466,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="px-0"><hr class="sidebar-divider hi "></li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
  <span class="menu-text">Labs</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
@@ -459,7 +487,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../labs/lab2-debug.html" class="sidebar-item-text sidebar-link active">
+  <a href="../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
   </div>
 </li>
@@ -467,13 +495,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true">
  <span class="menu-text">Homework</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../hw/hw1.html" class="sidebar-item-text sidebar-link">
@@ -482,7 +510,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../hw/hw2.html" class="sidebar-item-text sidebar-link">
+  <a href="../hw/hw2.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Homework 2</span></a>
   </div>
 </li>
@@ -558,18 +586,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
-  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a></li>
-  <li><a href="#the-code" id="toc-the-code" class="nav-link" data-scroll-target="#the-code">The Code</a></li>
+  <li><a href="#instructions" id="toc-instructions" class="nav-link active" data-scroll-target="#instructions">Instructions</a></li>
+  <li><a href="#problem-1" id="toc-problem-1" class="nav-link" data-scroll-target="#problem-1">Problem 1</a>
+  <ul class="collapse">
+  <li><a href="#part-a-naive-algorithm" id="toc-part-a-naive-algorithm" class="nav-link" data-scroll-target="#part-a-naive-algorithm">Part A: Naive algorithm</a></li>
+  <li><a href="#part-b-better-algorithm" id="toc-part-b-better-algorithm" class="nav-link" data-scroll-target="#part-b-better-algorithm">Part B: Better algorithm</a></li>
+  <li><a href="#part-c-testing" id="toc-part-c-testing" class="nav-link" data-scroll-target="#part-c-testing">Part C: Testing</a></li>
+  </ul></li>
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a></li>
+  <li><a href="#problem-3" id="toc-problem-3" class="nav-link" data-scroll-target="#problem-3">Problem 3</a></li>
+  <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a>
+  <ul class="collapse">
+  <li><a href="#part-a-two-pass-algorithm" id="toc-part-a-two-pass-algorithm" class="nav-link" data-scroll-target="#part-a-two-pass-algorithm">Part A: Two-pass algorithm</a></li>
+  <li><a href="#part-b-one-pass-algorithm" id="toc-part-b-one-pass-algorithm" class="nav-link" data-scroll-target="#part-b-one-pass-algorithm">Part B: One-pass algorithm</a></li>
+  <li><a href="#part-c-benchmarking" id="toc-part-c-benchmarking" class="nav-link" data-scroll-target="#part-c-benchmarking">Part C: Benchmarking</a></li>
+  <li><a href="#part-d-correctness" id="toc-part-d-correctness" class="nav-link" data-scroll-target="#part-d-correctness">Part D: Correctness</a></li>
+  <li><a href="#part-e-compare-to-prior-work" id="toc-part-e-compare-to-prior-work" class="nav-link" data-scroll-target="#part-e-compare-to-prior-work">Part E: Compare to prior work</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab2-debug.html">Lab 2 (Errors and Debugging)</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../hw/hw1.html">Homework</a></li><li class="breadcrumb-item"><a href="../hw/hw2.html">Homework 2</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Lab 2: Errors and Debugging</h1>
+<h1 class="title">Homework 2</h1>
+<p class="subtitle lead">Due 10am on October 12, 2026</p>
 </div>
 
 
@@ -577,12 +620,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">October 9, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -592,58 +629,176 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="goals" class="level2">
-<h2 class="anchored" data-anchor-id="goals">Goals</h2>
-<p>By the end of this lab, you should be able to</p>
-<ol type="1">
-<li>Understand how to read line numbers and read syntax error messages.</li>
-<li>Follow a stack trace to identify where runtime errors originate.</li>
-<li>Trace the flow of a program to step through changes in variables and catch potential errors.</li>
-<li>Formulate a strategy to identify silent logical errors related to implementation.</li>
-</ol>
-</section>
 <section id="instructions" class="level2">
 <h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
 <ol type="1">
-<li><p>There is no required programming for this assignment.</p></li>
-<li><p>Working on your own or as a class, you will identify and fix 4 bugs lurking in Python code.</p></li>
-<li><p>You will submit your work in a file named <code>bugs.qmd</code> under a <code>lab2</code> directory. This file must contain the following information for each bug:</p>
+<li><p>Your work should be in the form of a Quarto file named <code>hw2.qmd</code>. If your Julia code is long, consider writing it in separate <code>.jl</code> file(s) that you <code>include()</code> in <code>hw2.qmd</code>. Use your judgment.</p></li>
+<li><p>You are responsible for ensuring your work is reproducible on someone else’s computer. That means:</p>
 <ul>
-<li>What is the bug/error? Briefly describe it.</li>
-<li>What line number does the error/bug occur on?</li>
-<li>Does Python produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?</li>
-<li>How can it be fixed? Briefly describe a solution.</li>
+<li>Verifying that <code>hw2.qmd</code> renders properly as an HTML report.</li>
+<li>Carefully managing the computing environment. This should be recorded using a <code>Project.toml</code> file. The Julia REPL lets you create this file easily.</li>
 </ul></li>
-<li><p>In addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.</p></li>
-<li><p>If you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.</p></li>
-<li><p><strong>Participate in the discussion</strong>, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.</p></li>
+<li><p>Your homework solutions must be more than code. Most prompts in this assignment, if not all, should have text describing how you approached a problem. <strong>Your future self</strong> and other students in the class should be able to understand your reasoning by reading the text and code comments.</p></li>
 </ol>
 </section>
-<section id="the-code" class="level2">
-<h2 class="anchored" data-anchor-id="the-code">The Code</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {julia} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>function process_order(items, tax_rate)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>  subtotal = 0.0</span>
-<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>  # Process each item in the order</span>
-<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>  for item in items</span>
-<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>    price = item["price"]</span>
-<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>    quantity = item["quantity"]</span>
-<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a>    # Calculate item cost and add to subtotal</span>
-<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a>    subtotal = price * quantity</span>
-<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>  # Calculate shipping</span>
-<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>  if subtotal &gt; 50.0</span>
-<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a>    shipping = 0.0</span>
-<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>  else</span>
-<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a>    shipping = 5.00</span>
-<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>  end</span>
-<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a>  total = subtotal * (1.0 + tax_rate) + shipping</span>
-<span id="cb1-20"><a href="#cb1-20" aria-label="20"></a>  return total</span>
-<span id="cb1-21"><a href="#cb1-21" aria-label="21"></a>end</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="problem-1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1">Problem 1</h2>
+<p>The roots of <span class="math inline">\(ax^2 + bx + c = 0\)</span> are given by the standard quadratic formula:</p>
+<p><span class="math display">\[
+r = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+\]</span></p>
+<p>When <span class="math inline">\(b^2 \gg 4ac\)</span> and <span class="math inline">\(b &gt; 0\)</span>, computing <span class="math inline">\(-b + \sqrt{b^2 - 4ac}\)</span> leads to catastrophic cancellation because two nearly equal numbers are subtracted. A numerically stable alternative computes the first root <span class="math inline">\(r_1\)</span> using the sign of <span class="math inline">\(b\)</span> to avoid cancellation, and the second root <span class="math inline">\(r_2\)</span> using the property <span class="math inline">\(r_1 \cdot r_2 = c/a\)</span>:</p>
+<p><span class="math display">\[
+r_1 = \frac{-b - \operatorname{sgn}(b)\sqrt{b^2 - 4ac}}{2a}, \quad r_2 = \frac{c}{a \cdot r_1}
+\]</span></p>
+<section id="part-a-naive-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="part-a-naive-algorithm">Part A: Naive algorithm</h3>
+<p>Translate the quadratic formula to a function <code>naive_quadratic_roots(a, b, c)</code> that simply “follows the formula” without worrying about numerical issues.</p>
+<ul>
+<li>Make sure to handle the case <span class="math inline">\(b^{2} &lt; 4ac\)</span>. That is, your program should check for the possibility and do <em>something</em>.</li>
+<li>Return the <code>Tuple</code> <code>(r1, r2)</code>.</li>
+</ul>
+</section>
+<section id="part-b-better-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="part-b-better-algorithm">Part B: Better algorithm</h3>
+<p>Write a Julia function <code>quadratic_roots(a, b, c)</code> that implements the stable formula given above. Your function should:</p>
+<ul>
+<li>Handle the case <span class="math inline">\(b^{2} &lt; 4ac\)</span>. That is, your program should check for the possibility and do <em>something</em>.</li>
+<li>Return the <code>Tuple</code> <code>(r1, r2)</code>.</li>
+</ul>
+</section>
+<section id="part-c-testing" class="level3">
+<h3 class="anchored" data-anchor-id="part-c-testing">Part C: Testing</h3>
+<p>Test <code>naive_quadratic_roots()</code> and <code>quadratic_roots()</code> against the following cases. Briefly justify your testing approach and explain how you know (roughly) how much error is reflected in your estimates.</p>
+<ol type="a">
+<li><span class="math inline">\(a = 1.0\)</span>, <span class="math inline">\(b = 10^8\)</span>, and <span class="math inline">\(c = 1.0\)</span>.</li>
+<li><span class="math inline">\(a = 1.0\)</span>, <span class="math inline">\(b = 10.5\)</span>, and <span class="math inline">\(c = 5.0\)</span>.</li>
+<li><span class="math inline">\(a = 1.0\)</span>, <span class="math inline">\(b = 11\)</span>, and <span class="math inline">\(c = 5.0\)</span>.</li>
+<li><span class="math inline">\(a = 1.0\)</span>, <span class="math inline">\(b = 400.0\)</span>, and <span class="math inline">\(c = 1.0\)</span>.</li>
+<li><span class="math inline">\(a = 25.0\)</span>, <span class="math inline">\(b = 100.0\)</span>, and <span class="math inline">\(c = 99.99999\)</span>.</li>
+</ol>
+</section>
+</section>
+<section id="problem-2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2">Problem 2</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Lucas_number">Lucas numbers</a> are closely related to the Fibonacci numbers and satisfies the same recurrence relation <span class="math inline">\(L_{k+1} = L_{k} + L_{k-1}\)</span>. However, Lucas numbers are defined by distinct initial conditions <span class="math inline">\(L_{1} = 2\)</span> and <span class="math inline">\(L_{2} = 1\)</span>.</p>
+<ul>
+<li>Write a function <code>lucas_sequence(n)</code> that returns a <code>Vector{Int}</code> containing the first <code>n</code> Lucas numbers.</li>
+<li>Ensure your function handles the cases <span class="math inline">\(n = 1\)</span> and <span class="math inline">\(n = 2\)</span> gracefully.</li>
+<li>Test and display your implementation using <span class="math inline">\(n = 1\)</span>, <span class="math inline">\(n = 2\)</span>, and <span class="math inline">\(n = 7\)</span>.</li>
+</ul>
+</section>
+<section id="problem-3" class="level2">
+<h2 class="anchored" data-anchor-id="problem-3">Problem 3</h2>
+<p>In statistics and machine learning, the <strong>softmax function</strong> is used to convert a vector of unnormalized log-odds (logits) <span class="math inline">\(\boldsymbol{x} = (x_{1}, x_{2}, \ldots, x_{n})^{\top}\)</span> into a valid probability distribution <span class="math inline">\(\boldsymbol{p} = (p_{1}, p_{2}, \ldots, p_{n})\)</span>:</p>
+<p><span class="math display">\[
+p_{j} = e^{x_{j} - m} \Bigr{/} \sum_{k=1}^{n} e^{x_{k} - m}.
+\]</span></p>
+<p>Here we subtract <span class="math inline">\(m = \operatorname{maximum}{\boldsymbol{x}}\)</span> from each <span class="math inline">\(x_{j}\)</span> before exponentiation to mitigate potential floating-point overflow.</p>
+<ul>
+<li>Write a <strong>mutating</strong> function <code>softmax!(x)</code> that transforms <code>x</code> into probabilities <em>in-place</em> by modifying <code>x</code> directly and returning it without allocating a new <code>Vector</code>.</li>
+<li>Write a <strong>non-mutating</strong> function <code>softmax(x)</code> that allocates a copy of <code>x</code>, uses <code>softmax!()</code> to compute probabilities in-place, and returns the modified copy.</li>
+<li>Write a test case to verify that your functions work as intended.</li>
+<li>Benchmark both functions with <code>@benchmark</code>. Confirm that <code>softmax!()</code> does not allocate any memory and compare it to <code>softmax()</code>.</li>
+</ul>
+</section>
+<section id="problem-4" class="level2">
+<h2 class="anchored" data-anchor-id="problem-4">Problem 4</h2>
+<p>In this problem we are given <span class="math inline">\(n\)</span> numbers, <span class="math inline">\(x_{1}, x_{2}, \ldots, x_{n}\)</span>. The goal is to compare different algorithms for calculating the (unbiased) sample variance.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>You may use the <code>mean()</code> function from the <code>Statistics</code> package.</li>
+<li>You <strong>may not</strong> use the <code>var()</code> function from the <code>Statistics</code> package or any other similar function from another package. The only exception to this rule is in benchmarking your implementations against it later in the problem.</li>
+<li>Take care not to modify the data <code>x</code> in your implementations.</li>
+</ul>
+</div>
+</div>
+<section id="part-a-two-pass-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="part-a-two-pass-algorithm">Part A: Two-pass algorithm</h3>
+<ol type="1">
+<li><p>Implement a <strong>two-pass algorithm</strong> for the sample variance, <span class="math display">\[
+s^{2} = \frac{1}{n-1} \sum_{i=1}^{n} (x_{i} - \bar{x}_{n})^{2},
+\]</span> by “following the formula”. That is, first compute the sample mean <span class="math inline">\(\bar{x}\)</span> and then evaluate the normalized sum of squared deviations from <span class="math inline">\(\bar{x}\)</span>. Hence, this is a two-pass algorithm because it requires passing through the data twice to compute the quantity of interest.</p></li>
+<li><p>How many floating point operations are needed to compute the sample variance using this two-pass algorithm?</p></li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>What counts as a flop?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Any basic arithmetic operation <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.</li>
+<li>Only count operations on <em>floating-point</em> numbers.</li>
+<li>Checking length; e.g.&nbsp;via <code>length()</code> does not count as a flop.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="part-b-one-pass-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="part-b-one-pass-algorithm">Part B: One-pass algorithm</h3>
+<ol type="1">
+<li><p>Implement the <strong>one-pass algorithm</strong> for sample variance, <span class="math display">\[
+s^{2} = \frac{1}{n-1} \left(
+   \sum_{i=1}^{n} x_{i}^{2} - n \bar{x}_{n}^{2}
+\right).
+\]</span></p></li>
+<li><p>How many floating-point operations are needed to compute the sample variance using this one-pass algorithm?</p></li>
+</ol>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do not waste your pass obtaining <span class="math inline">\(\bar{x}_{n}\)</span>! Instead, think in terms of recursion. Rewrite <span class="math inline">\(\bar{x}_{n} = \frac{1}{n} \sum_{i=1}^{n} x_{i}\)</span> in terms of <span class="math inline">\(\bar{x}_{n-1}\)</span>.</p>
+</div>
+</div>
+</section>
+<section id="part-c-benchmarking" class="level3">
+<h3 class="anchored" data-anchor-id="part-c-benchmarking">Part C: Benchmarking</h3>
+<p>Generate data using the code below:</p>
+<div class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">using</span> <span class="bu">Random</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>RNG <span class="op">=</span> <span class="fu">Xoshiro</span>(<span class="fl">206</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>x <span class="op">=</span> <span class="fu">rand</span>(RNG, <span class="fl">1_000_000</span>) <span class="op">.+</span> <span class="fl">1e8</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Benchmark the two-pass and one-pass algorithms using the <a href="https://juliaci.github.io/BenchmarkTools.jl/stable/">BenchmarkTools</a> package. Memory allocations should be <strong>zero</strong>.</p>
+</section>
+<section id="part-d-correctness" class="level3">
+<h3 class="anchored" data-anchor-id="part-d-correctness">Part D: Correctness</h3>
+<ol type="1">
+<li>Display the results of the two-pass and one-pass algorithms.</li>
+<li>Are you surprised by the results? Explain what you found.</li>
+</ol>
+</section>
+<section id="part-e-compare-to-prior-work" class="level3">
+<h3 class="anchored" data-anchor-id="part-e-compare-to-prior-work">Part E: Compare to prior work</h3>
+<ol type="1">
+<li>Investigate the algorithm implemented in the Julia function <code>var</code>.</li>
+<li>Is the <code>var</code> function a two-pass algorithm or one-pass algorithm?</li>
+<li>Display the result on the test data and benchmark it. Explain what you found.</li>
+</ol>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
