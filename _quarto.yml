@@ -46,10 +46,9 @@ website:
             href: notes/module03/pkg.qmd
           - text: Error Handling
           - text: Debugging
-          - text: Defensive Programming
           - text: Testing
           - text: Refactoring
-            # href: notes/module03/refactoring.qmd
+            href: notes/module03/refactoring.qmd
       - section: Module 4 (Numerical Basics)
         contents:
           - text: Computer Arithmetic

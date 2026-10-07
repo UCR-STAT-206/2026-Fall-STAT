@@ -1,0 +1,327 @@
+---
+title: Refactoring Code
+julia: 
+  exeflags: ["--project=."]
+---
+
+## Goals
+
+1. Present a few strategies for writing complex programs.
+2. Practice refactoring Julia code into units that are *fast*, *easy-to-test*, *readable*, and *maintainable*.
+3. Develop an appreciation for organizing projects around functions.
+
+## What is refactoring?
+
+Code refactoring is the process of rewriting and restructuring existing code.
+One usually has one or more of the following goals in mind when refactoring:
+
+- *Improving readability*: This might involve renaming variables, custom types, or functions. In some cases, you might add helper functions to make complex procedures easier to reason about.
+- *Organization*: Projects involving software often involve several files and several lines of code. Even for small projects, breaking up 1 large file into 10 small ones can make it easier to discover parts of a code base and improve readability.
+- *Improving performance*: You might discover part of your code relies on a particularly slow algorithm that prevents it from scaling up to larger problems. You might replace that part of the code or find a new approach altogether.
+
+
+
+## Running example
+
+**Fact**: bigger cities tend to produce more economically per capita.
+
+[Geoffrey Brian West](https://en.wikipedia.org/wiki/Geoffrey_West) and his colleagues proposed power law relationships as a means to study emergent phenomena in urban centers. For example, consider the model
+
+$$
+Y = y_{0} N^{a} + \text{noise},
+$$
+
+where $Y$ is the per-capita "gross metropolitan product" of a city, $N$ is its population size, and $y_{0}$ and $a$ are parameters to be determined.
+
+:::::::::::::::::::::::::::::::: callout-note
+
+## Some papers on allometric scaling laws
+
+Bettencourt LM, Lobo J, Helbing D, Kühnert C, West GB (2007). "Growth, innovation, scaling, and the pace of life in cities". Proc Natl Acad Sci. 24;104(17): 7301-6. doi: 10.1073/pnas.0610172104.
+
+West, GB, Brown, JH, Enquist, BJ (1997). "A general model for the origin of allometric scaling laws in biology". Science. 276(5309): 122-126.
+
+Desai-Chowdhry, P, Brummer, AB, Savage, VM (2022). "How axon and dendrite branching are guided by time, energy, and spatial constraints". Scientific Reports, 12(1), 20810.
+
+::::::::::::::::::::::::::::::::
+
+Let's load the tools we'll need to load data and visualize it.
+
+```{julia}
+using CSV, DataFrames
+using Plots, StatsPlots
+using Statistics
+
+default(
+  format=:png,
+  dpi=100,
+  size=(600, 400),
+)
+```
+
+Here is some code that loads GMP data and plots it with a trend line based on the model above:
+
+```{julia}
+#| echo: false
+cd("assets");
+```
+
+
+```{julia}
+gmp = CSV.read("gmp.dat", DataFrame;
+  header = ["Index", "MSA", "gmp", "pcgmp"],
+  skipto = 2,
+  delim = ' ',
+  ignorerepeated = true,
+  types = [String, String, Float64, Int]
+)
+
+@. gmp.pop = gmp.gmp / gmp.pcgmp # add population size
+some_model(x) = 6611 * x ^ (1/8)
+
+@df gmp scatter(:pop, :pcgmp;
+  title = "US Metropolitan Areas, 2006",
+  xlabel = "Population",
+  ylabel = "Per-Capita Economic Output (\$/person-year)",
+  label = "Data",
+  xscale = :log10,
+  xlims = (5e4, 2e7),
+  minorgrid = true,
+)
+@df gmp plot!(sort(:pop), some_model, label = "Model", linewidth = 3)
+```
+
+## How do we fit the model?
+
+- Take $y_{0} = 6611$ for now and estimate $a$ by minimizing the mean squared error (MSE).
+- *Gradient descent* approximates the derivative of the MSE with respect to $a$ and move against it:
+
+$$
+\mathrm{MSE}(a) = \frac{1}{n} \sum_{i=1}^{n} (Y_{i} - y_{0}N_{i}^{a})^2
+$$
+
+$$
+\mathrm{MSE}^{\prime}(a) \approx \frac{\mathrm{MSE}(a + h) - \mathrm{MSE}(a)}{h}
+$$
+
+$$
+a_{t+1} = a_{t} \propto -\mathrm{MSE}^{\prime}(a)
+$$
+
+
+
+## Sample code
+
+An actual first attempt at code:
+
+```{julia}
+maximum_iterations = 100
+deriv_step = 1 / 1000
+step_scale = 1e-12
+stopping_deriv = 1 / 100
+iteration = 0
+deriv = Inf
+a = 0.15
+while iteration < maximum_iterations && deriv > stopping_deriv
+  iteration = iteration + 1
+  mse1 = mean(abs2,gmp.pcgmp-6611*gmp.pop .^ a)
+  mse2 = mean(abs2,gmp.pcgmp-6611*gmp.pop .^ (a+deriv_step))
+  deriv = (mse2 - mse1) / deriv_step
+  a = a - step_scale*deriv
+end
+myfit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+```
+
+
+
+### What's wrong with this code?
+
+- **Not encapsulated**: Re-run by cutting and pasting code, but how much of it? Also, the code is difficult to re-use and make part of something larger.
+- **Inflexible**: To change initial guess at $a$, we have to edit, cut, paste, and re-run.
+- **Error-prone**: To change the data set, we have to edit, cut, paste, re-run, and hope that all the edits are consistent.
+- **Hard to fix**: should stop when the absolute value of derivative is small, but this stops when it is large and negative. Imagine having five copies of this and needing to fix same bug on each!
+
+
+
+## First pass
+
+Start by putting the *script* into a function and fix the programming error:
+
+```{julia}
+function estimate_scaling_exponent1(a)
+  maximum_iterations = 100
+  deriv_step = 1/1000
+  step_scale = 1e-12
+  stopping_deriv = 1/100
+  iteration = 0
+  deriv = Inf
+  while iteration < maximum_iterations && abs(deriv) > stopping_deriv
+    iteration = iteration + 1
+    mse1 = mean(abs2,gmp.pcgmp-6611*gmp.pop .^ a)
+    mse2 = mean(abs2,gmp.pcgmp-6611*gmp.pop .^ (a+deriv_step))
+    deriv = (mse2 - mse1) / deriv_step
+    a = a - step_scale*deriv
+  end
+  fit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+  return fit
+end
+```
+
+- It accepts an initial guess `a` now that our program is implemented as a function.
+- Replace `deriv` with `abs(deriv)` to fix the error in the implementation.
+
+
+
+## Second pass
+
+Look at all those **magic numbers**! There is no way to modify them; e.g. to increase the number of iterations.
+Let's fix it by making them arguments to the function with default values.
+
+```{julia}
+function estimate_scaling_exponent2(a;
+  y0 = 6611,
+  maximum_iterations = 100,
+  deriv_step = 1 / 1000,
+  step_scale = 1e-12,
+  stopping_deriv = 1 / 100
+)
+  #
+  iteration = 0
+  deriv = Inf
+  while iteration < maximum_iterations && abs(deriv) > stopping_deriv
+    iteration = iteration + 1
+    mse1 = mean(abs2,gmp.pcgmp-y0*gmp.pop .^ a)
+    mse2 = mean(abs2,gmp.pcgmp-y0*gmp.pop .^ (a+deriv_step))
+    deriv = (mse2 - mse1) / deriv_step
+    a = a - step_scale*deriv
+  end
+  fit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+  return fit
+end
+```
+
+- Giving a magic number a name does not eliminate the magic.
+- With default arguments, we empower to user to programmatically change the settings of our algorithm.
+
+
+
+## Third pass
+
+Why type out the same calculation of the MSE twice? It should be *encapsulated* by a reusable function.
+
+```{julia}
+function estimate_scaling_exponent3(a;
+  y0 = 6611,
+  maximum_iterations = 100,
+  deriv_step = 1 / 1000,
+  step_scale = 1e-12,
+  stopping_deriv = 1 / 100
+)
+  # Let's define a helper MSE function here, anchored to our data.
+  mse(a) = mean(abs2, gmp.pcgmp - y0*gmp.pop .^ a)
+
+  iteration = 0
+  deriv = Inf
+  while iteration < maximum_iterations && abs(deriv) > stopping_deriv
+    @show a
+    iteration = iteration + 1
+    mse1 = mse(a)
+    mse2 = mse(a + deriv_step)
+    deriv = (mse2 - mse1) / deriv_step
+    a = a - step_scale*deriv
+  end
+  fit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+  return fit
+end
+```
+
+- We define `mse()` inside our function as an internal helper function that depends only on the parameter `a`.
+- The required data are bound to the `mse()` definition.
+- Could also define `mse(x, y) = mean(abs2, x .- y)` but this version is convenient because we are working with a specific model.
+
+
+
+## Fourth pass
+
+Our algorithm for fitting a power law is locked in to using specific columns of a `DataFrame` object named `gmp`.
+We should not have to rewrite the whole function just to compare two data sets.
+
+Let's fix it by adding more arguments with default values and sanity checks.
+
+```{julia}
+function estimate_scaling_exponent4(a;
+  response = Float64[],
+  predictor = Float64[],
+  y0 = 6611,
+  maximum_iterations = 100,
+  deriv_step = 1 / 1000,
+  step_scale = 1e-12,
+  stopping_deriv = 1 / 100
+)
+  # sanity checks
+  @assert length(response) > 0
+  @assert length(predictor) == length(response)
+  mse(a) = mean(abs2, response - y0*predictor .^ a)
+  iteration = 0
+  deriv = Inf
+  while iteration < maximum_iterations && abs(deriv) > stopping_deriv
+    iteration = iteration + 1
+    mse1 = mse(a)
+    mse2 = mse(a + deriv_step)
+    deriv = (mse2 - mse1) / deriv_step
+    a = a - step_scale*deriv
+  end
+  fit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+  return fit
+end
+```
+
+- We take control of the default values for `response` and `predictor` (empty vectors)...
+- ... so that we can also control the *failure modes* of our function.
+
+
+
+## Alternative version
+
+```{julia}
+function estimate_scaling_exponent5(a;
+  response = gmp.pcgmp,
+  predictor = gmp.pop,
+  y0 = 6611,
+  maximum_iterations = 100,
+  deriv_step = 1 / 1000,
+  step_scale = 1e-12,
+  stopping_deriv = 1 / 100
+)
+  # sanity checks
+  @assert length(response) > 0
+  @assert length(predictor) == length(response)
+  mse(a) = mean(abs2, response - y0*predictor .^ a)
+  iteration = 0
+  deriv = Inf
+  while iteration < maximum_iterations && abs(deriv) > stopping_deriv
+    iteration = iteration + 1
+    mse1 = mse(a)
+    mse2 = mean(a + deriv_step)
+    deriv = (mse2 - mse1) / deriv_step
+    a = a - step_scale*deriv
+  end
+  fit = (;a=a,iterations=iteration,converged=(iteration<maximum_iterations))
+  return fit
+end
+```
+
+- Here gmp is a global variable! Will throw an inscrutable error if gmp does not exist in our environment.
+- However, we could turn the `while` loop into a `for` loop, and nothing outside the function would care.
+
+
+
+## Environment
+
+```{julia}
+import Pkg; Pkg.status()
+```
+
+```{julia}
+import InteractiveUtils; InteractiveUtils.versioninfo()
+```
