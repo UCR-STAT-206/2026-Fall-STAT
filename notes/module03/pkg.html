@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -236,14 +271,14 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Debugging</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Defensive Programming</span>
-  </li>
-          <li class="sidebar-item">
  <span class="menu-text">Testing</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Refactoring</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -534,10 +569,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#package-management" id="toc-package-management" class="nav-link" data-scroll-target="#package-management">Package Management</a></li>
   <li><a href="#pkg.jl" id="toc-pkg.jl" class="nav-link" data-scroll-target="#pkg.jl">Pkg.jl</a>
   <ul class="collapse">
-  <li><a href="#project.toml" id="toc-project.toml" class="nav-link" data-scroll-target="#project.toml">Project.toml</a></li>
-  <li><a href="#manifest.toml" id="toc-manifest.toml" class="nav-link" data-scroll-target="#manifest.toml">Manifest.toml</a></li>
+  <li><a href="#project.toml" id="toc-project.toml" class="nav-link" data-scroll-target="#project.toml"><code>Project.toml</code></a></li>
+  <li><a href="#manifest.toml" id="toc-manifest.toml" class="nav-link" data-scroll-target="#manifest.toml"><code>Manifest.</code>toml</a></li>
   <li><a href="#using-the-julia-repl-to-handle-dependencies" id="toc-using-the-julia-repl-to-handle-dependencies" class="nav-link" data-scroll-target="#using-the-julia-repl-to-handle-dependencies">Using the Julia REPL to handle dependencies</a></li>
   </ul></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
   </ul>
 </nav>
     </div>
@@ -607,6 +643,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Keeps track of each package our project depends on; i.e.&nbsp;track <strong>dependencies</strong>.</li>
 <li>Keeps track of the <strong>version</strong> of each dependencies.</li>
 <li>Handles both <em>packages within the ecosystem</em> and <em>binaries</em> that we have zero control over.</li>
+<li>Detects incompatible versions.</li>
 <li>Can be used to quickly and reliably reconstruct part of the computing environment required for a project, be it a new library, an analysis pipeline, or a</li>
 </ul>
 <p>What do different languages use?</p>
@@ -619,31 +656,109 @@ ul.task-list li input[type="checkbox"] {
 <section id="pkg.jl" class="level2">
 <h2 class="anchored" data-anchor-id="pkg.jl">Pkg.jl</h2>
 <p>See the <a href="https://pkgdocs.julialang.org/v1/">Pkg documentation</a> for full details. You can use <code>Pkg</code> for complete programmatic control; for example, <code>Pkg.add("Package Name")</code>.</p>
+<p>The main ideas to understand as you get started with <code>Pkg</code> are:</p>
+<ol type="1">
+<li>It treats a directory as an environment. Just <code>] activate ...</code> an environment to start using specific packages and versions tied to it.</li>
+<li>It uses a <code>Project.toml</code> file that enumerates <em>which</em> packages are required, and optionally restricts version numbers. Use the <code>] add ...</code> and <code>] rm ...</code> commands to edit this through the REPL.</li>
+<li>A separate <code>Manifest.toml</code> handles all the specific version numbers and additional required packages. You don’t need to touch this.</li>
+<li>Any time you need to share your work, you include the <code>Project.toml</code> file. You collaborator just runs <code>] instantiate</code> to download everything that is required.</li>
+</ol>
 <section id="project.toml" class="level3">
-<h3 class="anchored" data-anchor-id="project.toml">Project.toml</h3>
+<h3 class="anchored" data-anchor-id="project.toml"><code>Project.toml</code></h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {text} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a>[deps]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li>Always include in a project!</li>
+<li>Always put under version control in a project!</li>
 <li>Can partially edit by hand e.g.&nbsp;to specify working versions.</li>
 </ul>
 </section>
 <section id="manifest.toml" class="level3">
-<h3 class="anchored" data-anchor-id="manifest.toml">Manifest.toml</h3>
+<h3 class="anchored" data-anchor-id="manifest.toml"><code>Manifest.</code>toml</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource {text} number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a># This file is machine-generated - editing it directly is not advised</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>julia_version = "1.12.7"</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>manifest_format = "2.0"</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a>project_hash = "e98c3398a988320f50061e3624326fe2cdb04207"</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a>[[deps.AbstractFFTs]]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a>deps = ["LinearAlgebra"]</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a>git-tree-sha1 = "d92ad398961a3ed262d8bf04a1a2b8340f915fef"</span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a>uuid = "621f4979-c628-5d54-868e-fcf4e3e8185c"</span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a>version = "1.5.0"</span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a>weakdeps = ["ChainRulesCore", "Test"]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a>    [deps.AbstractFFTs.extensions]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a>    AbstractFFTsChainRulesCoreExt = "ChainRulesCore"</span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a>    AbstractFFTsTestExt = "Test"</span>
+<span id="cb2-17"><a href="#cb2-17" aria-label="17"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-label="18"></a>[[deps.AbstractTrees]]</span>
+<span id="cb2-19"><a href="#cb2-19" aria-label="19"></a>git-tree-sha1 = "2d9c9a55f9c93e8887ad391fbae72f8ef55e1177"</span>
+<span id="cb2-20"><a href="#cb2-20" aria-label="20"></a>uuid = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"</span>
+<span id="cb2-21"><a href="#cb2-21" aria-label="21"></a>version = "0.4.5"</span>
+<span id="cb2-22"><a href="#cb2-22" aria-label="22"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-label="23"></a># ----- truncated because these are REALLY long -----</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
-<li>Usually excluded unless you need exact reproducibility on the same hardware.</li>
+<li>Usually excluded from version control unless you need exact reproducibility on the same hardware.</li>
 <li>NEVER edit by hand.</li>
 </ul>
 </section>
 <section id="using-the-julia-repl-to-handle-dependencies" class="level3">
 <h3 class="anchored" data-anchor-id="using-the-julia-repl-to-handle-dependencies">Using the Julia REPL to handle dependencies</h3>
+<p>In a Julia REPL, type <kbd>]</kbd> to enter package mode. Exit with <kbd>Backspace</kbd> or <kbd>Delete</kbd>.</p>
 <ul>
+<li><code>] help</code>: Ask about the available commands. Can also clarify a command; e.g.&nbsp;<code>] add help</code>.</li>
 <li><code>] add NAME</code>: add a package; can specify version number of commit hash.</li>
 <li><code>] rm NAME:</code>: remove a package.</li>
 <li><code>] instantiate</code>: reproduce from a Project.toml file.</li>
-<li><code>] update</code>:</li>
+<li><code>] update</code>: update all or a specific package</li>
 </ul>
-
-
 </section>
+</section>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">Demo</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/pkg1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:80.0%"></p>
+</figure>
+</div>
+<ul>
+<li>Enter package mode. Default is the global <code>@v1.12</code> environment (depending on your Julia version).</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/pkg2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+</figure>
+</div>
+<ul>
+<li>Check where we are, then <code>] activate .</code> <em>this</em> directory as a Julia environment.</li>
+<li>The package mode prompt changes to reflect the active environment.</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/pkg3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+<ol type="1">
+<li>Check the file structure from <em>here</em>.</li>
+<li>Start a Julia REPL, and check where <em>here</em> is just to make sure.</li>
+<li>Activate the environment as <code>~/work/hw2</code>.</li>
+<li>Add a required package for that assignment.</li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/pkg4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:73.0%"></p>
+</figure>
+</div>
+<ol type="1">
+<li>Verify the installed packages for the currently active environment.</li>
+<li>Go back to the global environment with <code>] activate</code> (no extra arguments).</li>
+<li>Verify that we’re working off <code>@v1.12</code> as promised.</li>
+</ol>
+
+
 </section>
 
 </main> <!-- /main -->
