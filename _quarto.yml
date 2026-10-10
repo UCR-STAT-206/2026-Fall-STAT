@@ -126,8 +126,8 @@ website:
             href: hw/hw3.qmd
           - text: Homework 4
             href: hw/hw4.qmd
-          # - text: Homework 5
-          #   href: hw/hw5.qmd
+          - text: Homework 5
+            href: hw/hw5.qmd
           # - text: Homework 6
           #   href: hw/hw6.qmd
           # - text: Homework 7
