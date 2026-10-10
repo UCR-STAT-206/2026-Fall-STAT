@@ -151,8 +151,6 @@ website:
             href: howto/use_git.qmd
           - text: Submit Assignments
             href: howto/submit_hw.qmd
-          # - text: Use Julia Environments
-          #   href: howto/use_pkg.qmd
           - text: Use Revise.jl
             href: howto/use_revise.qmd
           # - text: Plot in Julia
