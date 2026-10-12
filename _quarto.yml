@@ -54,13 +54,13 @@ website:
           - text: Computer Arithmetic
             href: notes/module04/numbers.qmd
           - text: Computer Architecture
-            # href: notes/module04/computers.qmd
+            href: notes/module04/computers.qmd
           - text: Algorithms Introduction
-            # href: notes/module04/algorithms.qmd
+            href: notes/module04/algorithms.qmd
           - text: Linear Algebra Introduction
             # href: notes/module04/linalg.qmd
           - text: BLAS/LAPACK
-            # href: notes/module04/blas.qmd
+            href: notes/module04/blas.qmd
       - section: Module 5 (Linear Systems)
         contents:
           - text: Easy Systems

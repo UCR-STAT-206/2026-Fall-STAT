@@ -1,0 +1,305 @@
+---
+title: Introduction to Algorithms
+---
+
+
+## Motivation
+
+Let’s consider a few computational tasks which can be implemented with different **algorithms**.
+
+- Dictionary definition: A set of instructions for doing something; input to output.
+- [Donald Knuth's](https://en.wikipedia.org/wiki/Donald_Knuth) definition in [The Art of Computer Programming](https://en.wikipedia.org/wiki/The_Art_of_Computer_Programming), Chapter 1: (1) Finiteness, (2) Definiteness, (3) Input, (4) Output, and (5) Effectiveness.
+
+The examples here happen to be positive examples of recursion, though their implementation on a computer may not use recursion.
+
+
+
+### Online algorithms for the sample mean and variance
+
+Given data $x_{1}, x_{2}, \ldots, x_{n}$ as $n$ real numbers, the sample mean
+and variance are
+
+\begin{align*}
+\mu_{n}
+&= \frac{1}{n} \sum_{i=1}^{n} x_{i} \\
+s_{n}^{2}
+&= \frac{1}{n-1} \sum_{i=1}^{n} (x_{i} - \mu_{n})^{2}.
+\end{align*}
+
+We seek a method to *update* the sample estimates after receiving a new observation,
+$x_{n+1}$. This presents a few issues:
+
+- If $n$ is large (say $\ge 10^{9}$), then recomputing the estimates from scratch is wasteful.
+
+- Alternatively, we may be operating in a *streaming* setting in which we anticipate receiving many more additional observations in the future at unknown times.
+
+With a bit of algebra, one can easily rewrite these formulas in a *recursive* form. For the sample mean we have
+
+\begin{align*}
+\mu_{n+1}
+&=
+\frac{1}{n+1} \sum_{i=1}^{n+1} x_{i} \\
+&=
+\frac{1}{n+1} \times \frac{n}{n} \sum_{i=1}^{n} x_{i} + \frac{1}{n+1} x_{n+1} \\
+&=
+\frac{n}{n+1} \mu_{n} + \frac{1}{n+1} x_{n+1}.
+\end{align*}
+
+Given the current estimate $\mu_{n}$, we can update the sample mean with the new observation $x_{n+1}$.
+The key feature of this algorithm is that it is a *one-pass* procedure in which we use each data point once and only once.
+There are similar formulae for the sample variance; see Homework 1.
+
+:::::::::::::::::::::::::::::::: callout-note
+
+The recursive form reveals the new mean to be a *convex
+combination* of the old mean and the new observation. That is, it follows the
+form $\alpha x + (1-\alpha) y$ for some coefficient $\alpha \in [0,1]$.
+
+::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::: callout-warning
+
+### Numerical stability
+
+Formulas for the sample variance must balance the difference between the
+sum of squares and squared sum. Mathematically, we can derive equivalent expressions
+that require a single pass through the data. Computationally, we must pay close attention to
+*numerical instability* [see @welford1962].
+
+::::::::::::::::::::::::::::::::
+
+
+
+### Robust Summation
+
+Large sums feature in various algorithms. Unfortunately, the order of summation can affect results even in relatively simple calculations. Indeed, there are various algorithms for computing
+
+$$
+\sum_{i=1}{n} x_{i} = x_{1} + x_{2} + \ldots + x_{n},
+$$
+
+because such calculations used to vary quite wildly due to the algorithm used, the programming language used, the underlying operating system, and, crucially, a machine’s hardware (think 1980s microcomputer era and beyond).
+
+Mathematically, the sum of numbers is invariant to order of summation. *Kahan-Babuška summation* is a compensated algorithm which controls numerical errors due to loss of precision [see @kahan1965; comments from [Wikipedia](https://en.wikipedia.org/wiki/Kahan_summation_algorithm#The_algorithm)].
+
+```{julia}
+function sum_kb(x)
+  T = eltype(x)
+  result = zero(T) # Prepare the accumulator.
+  c = zero(T)      # A running compensation for lost low-order bits.
+  for i in eachindex(x)
+    # c is zero the first time around
+    y = x[i] - c
+    # Alas, result is big, y small, so low-order digits of y are lost.
+    t = result + y
+    # (t - result) cancels the high-order part of y;
+    # subtracting y recovers negative (low part of y).
+    c = (t - result) - y
+    # Algebraically, c should always be zero. Beware
+    # overly-aggressive optimizing compilers!
+    result = t
+    # Next time around, the lost low part will be added to y
+    # in a fresh attempt.
+  end
+  return result
+end
+```
+
+```{julia}
+function sum_direct(x)
+  result = zero(eltype(x))
+  for i in eachindex(x)
+    result = result + x[i]
+  end
+  return result
+end
+```
+
+Let's see what happens with well-behaved inputs.
+
+```{julia}
+using Random
+Random.seed!(206)
+
+x = randn(10^3)
+ref = sum(x) # reference solution
+```
+
+```{julia}
+ref - sum_direct(x)
+```
+
+```{julia}
+ref - sum_kb(x)
+```
+
+Now test against poorly-behaved inputs.
+
+```{julia}
+Random.seed!(206)
+x = randn(10^6) .+ 1e9
+ref = sum(x) # reference solution
+```
+
+```{julia}
+ref - sum_direct(x)
+```
+
+```{julia}
+ref - sum_kb(x)
+```
+
+*Pairwise summation* also takes a simple approach often described as **divide and conquer**.
+
+```{julia}
+function sum_pairwise(x)
+  n = length(x)
+  # base cases
+  if n == 1
+    return first(x)
+  elseif n == 0
+    return 0
+  end
+  m = div(n, 2) # Euclidean division
+  s1 = @views sum_pairwise(x[1:m])     # delegate
+  s2 = @views sum_pairwise(x[(m+1):n]) # delegate
+  return s1 + s2
+end
+```
+
+```{julia}
+ref - sum_pairwise(x)
+```
+
+## Measures of Efficiency
+
+Historically, a *floating point operation*, or **flop**, was used as a basic unit for measuring the computational complexity of an algorithm. Includes:
+
+-   Arithmetic operations (`+`, `-`, `*`, `/`)
+-   Comparisons (`>`, `<`, `>=`, `<=`, `!=`, `==`)
+-   Cost associated with data retrieval and storage.
+-   Not a *precise* measure of efficiency because different operations have [different costs](http://ithare.com/wp-content/uploads/part101_infographics_v08.png).
+-   Still a useful concept today but there are various layers of abstraction on modern computers which obfuscate a simplistic flop analysis.
+
+::: { .callout-note }
+Some hardware supports combining multiplication and addition as [a single fused instruction](https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation). Some textbooks may count FMAs, leading to flop counts that differ by a factor of 2.
+:::
+
+For our purposes, we will ignore the cost of *fetching* and *storing* data. *But it does matter!*
+
+### Big O Notation
+
+Given a problem dimension $n$, we approximate the complexity of an algorithm by identifying the *leading order behavior* of how that complexity grows as a function of $n$. For example, the complexity of computing the inner/dot product between two vector $\boldsymbol{x},\boldsymbol{y} \in \mathbb{R}^{n}$:
+
+$$
+\langle\boldsymbol{x},\boldsymbol{y}\rangle
+= \boldsymbol{x}^{\top} \boldsymbol{y}
+= \sum_{i=1}^{n} x_{i} y_{i}
+= x_{1} y_{1} + x_{2} y_{2} + \ldots + x_{n} y_{n}
+$$
+
+can be calculated exactly by counting
+
+-   $n$ multiplication operations (1 for each pair of components),
+-   $n-1$ addition operations.
+
+Hence, the number of *flops* is $n + (n-1) = 2n-1$. Since $n \ge 1$ in general, the leading order term can be said to be proportional to $n$. This can be summarized with the Big O notation, $\mathcal{O}(n)$. *Note that Big O notation has a precise definition depending on whether it is used to describe the leading order behavior of a function, or the complexity of an algorithm; the latter uses a more restrictive definition.*
+
+**Definition** We say an algorithm is **order $\mathcal{O}(f(n))$** if the leading order of flops is $c \times f(n)$.
+
+- *Matrix-Vector Multiplication*: Given $\boldsymbol{A}$ $m \times n$ and $\boldsymbol{b}$ $n \times 1$, the product $\boldsymbol{A} \cdot \boldsymbol{b}$ requires $2mn - m$ flops, or $\mathcal{O}(mn)$ flops.
+- *Matrix-Matrix Multiplication*: Given the same $\boldsymbol{A}$ and matrix $\boldsymbol{B}$ $n \times p$, $\boldsymbol{A} \cdot \boldsymbol{B}$ requires $2mnp - mp$ flops, or $\mathcal{O}(mnp)$ flops.
+
+
+
+### Hierarchy of Complexity
+
+Let's say a problem is size $n$. Then:
+
+- Exponential order: $\mathcal{O}(b^{n})$ (NP-hard; horrible!)
+- Polynomial order: $\mathcal{O}(n^{q})$ (doable!)
+- "Superlinear" order: $\mathcal{O}(n \log n)$ (fast)
+- Linear order: $\mathcal{O}(n)$ (fast)
+- Log order: $\mathcal{O}(\log n)$ (super fast)
+
+[Peter Huber](https://en.wikipedia.org/wiki/Peter_J._Huber) gave the following [classification of data sets](https://link.springer.com/chapter/10.1007/978-3-642-52463-9_1)
+
+| Data Size | Bytes     | Storage Mode               |
+|-----------|-----------|----------------------------|
+| Tiny      | $10^2$    | Piece of paper             |
+| Small     | $10^4$    | A few pieces of paper      |
+| Medium    | $10^6$ (megatbytes)    | A floppy disk |
+| Large     | $10^8$    | Hard disk                  |
+| Huge      | $10^9$ (gigabytes)   | Hard disk(s)    |
+| Massive   | $10^{12}$ (terabytes) | RAID storage   |
+
+To appreciate the difference between $\mathcal{O}(n^2)$ and $\mathcal{O}(n\log n)$ on massive data, let's suppose we have a teraflop supercomputer capable of doing $10^{12}$ flops per second.
+
+- For a problem of size $n=10^{12}$, an order $\mathcal{O}(n \log n)$ algorithm takes about $10^{12} \log (10^{12}) / 10^{12} \approx 27 \text{ seconds}.$
+- An order $\mathcal{O}(n^2)$ algorithm takes about $10^{12}$ seconds, which is approximately 31710 years!
+
+**Our goal is to understand enough computational complexity that we, as statisticians/data scientists, can identify and select appropriate algorithms for different problems.**
+
+> Data Scientist (n.): Person who is better at statistics than any software engineer and better at software engineering than any statistician.
+>
+> --- Josh Willis on Twitter
+
+
+
+### Computational complexity of vector operations
+
+The **flop count** or **operation count** is the total number of flops in an algorithm.
+
+A (very) crude predictor of run time of the algorithm is 
+$$
+\text{run time} \approx \frac{\text{flop count}}{\text{computer speed (flops/second)}}.
+$$
+
+**Leading order term**: the highest-order term in the flop count.
+$$
+\frac 13 n^3 + 100 n^2 + 10n + 5 \approx \frac 13 n^3.
+$$
+
+**Order of growth**: the asymptotic growth rate, which ignores lower order terms and prefactors.
+
+$$
+\frac 13 n^3 + 100 n^2 + 10n + 5 = \text{order } n^3 = \mathcal{O}(n^3).
+$$
+
+:::::::::::::::::::::::::::::::: callout-caution
+## Beware bad asymptotics
+
+Asymptotics deal in *growth rates* and *qualitatively* describe how an algorithm or bound behaves as an input parameter diverges.
+This point is all the more salient when characterizing scaling behavior with interacting terms; for example, what does $\mathcal{O}(np)$ look like if both parameters diverge to $\infty$?
+
+In this class you will see that Big-$\mathcal{O}$ notation can only summarize some aspects of an algorithm.
+You will encounter several procedures for solving linear systems all of which are $\mathcal{O}(n^{3})$ algorithms, yet have starkly different performance characteristics in practice.
+
+::::::::::::::::::::::::::::::::
+
+
+
+## Exercises
+
+Assume vectors are all length $n$. Give the flop counts of the following operations.
+
+1. Sum the elements of a vector: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.
+
+2. Vector addition and substraction: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.
+
+3. Scalar multiplication: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.
+
+4. Elementwise multiplication: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.
+
+5. Inner product: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.  
+
+6. Norm of a vector: $\rule[-0.1cm]{1cm}{0.15mm}$ flops.
+    
+:::::::::::::::::::::::::::::::: callout-tip
+
+## Hint
+
+These vector operations are all order $\mathcal{O}(n)$ algorithms.
+
+::::::::::::::::::::::::::::::::
