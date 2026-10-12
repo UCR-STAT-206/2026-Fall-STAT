@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-10-16">
+
+<title>Lab 3: I/O Handling</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5a76141f77d867fb867d14d57f46a0f6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab3-io.html">Lab 3 (File I/O)</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 1 (Fundamentals)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 2 (Programming)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Multiple Dispatch</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 3 (Best Practices)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 4 (Numerical Basics)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Linear Algebra Introduction</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 5 (Linear Systems)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Easy Systems</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Condition Numbers</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">QR</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cholesky</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">SVD</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Iterative Methods</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 6 (Simulation)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">RNG and PRNGs</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Inverse Method</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Rejection Sampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Monte Carlo Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Distributions.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 7 (Resampling)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 8 (Optimization)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">First-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Second-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Automatic Differentiation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 9 (Data Technologies)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab3-io.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">How to…</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#data-storage-formats" id="toc-data-storage-formats" class="nav-link" data-scroll-target="#data-storage-formats">Data storage formats</a></li>
+  <li><a href="#text-file-types" id="toc-text-file-types" class="nav-link" data-scroll-target="#text-file-types">Text file types</a>
+  <ul class="collapse">
+  <li><a href="#flat-text-files" id="toc-flat-text-files" class="nav-link" data-scroll-target="#flat-text-files">Flat text files</a></li>
+  <li><a href="#hierarchical-text-files" id="toc-hierarchical-text-files" class="nav-link" data-scroll-target="#hierarchical-text-files">Hierarchical text files</a></li>
+  </ul></li>
+  <li><a href="#how-to-read-and-write" id="toc-how-to-read-and-write" class="nav-link" data-scroll-target="#how-to-read-and-write">How to read and write</a>
+  <ul class="collapse">
+  <li><a href="#streams" id="toc-streams" class="nav-link" data-scroll-target="#streams">Streams</a></li>
+  <li><a href="#how-to-read-a-file" id="toc-how-to-read-a-file" class="nav-link" data-scroll-target="#how-to-read-a-file">How to read a file</a></li>
+  <li><a href="#how-to-write-a-file" id="toc-how-to-write-a-file" class="nav-link" data-scroll-target="#how-to-write-a-file">How to write a file</a></li>
+  </ul></li>
+  <li><a href="#handling-file-paths" id="toc-handling-file-paths" class="nav-link" data-scroll-target="#handling-file-paths">Handling file paths</a></li>
+  <li><a href="#questions-and-exercises" id="toc-questions-and-exercises" class="nav-link" data-scroll-target="#questions-and-exercises">Questions and Exercises</a>
+  <ul class="collapse">
+  <li><a href="#question-1" id="toc-question-1" class="nav-link" data-scroll-target="#question-1">Question 1</a></li>
+  <li><a href="#question-2" id="toc-question-2" class="nav-link" data-scroll-target="#question-2">Question 2</a></li>
+  <li><a href="#question-3-optional" id="toc-question-3-optional" class="nav-link" data-scroll-target="#question-3-optional">Question 3 (Optional)</a></li>
+  <li><a href="#question-4-optional" id="toc-question-4-optional" class="nav-link" data-scroll-target="#question-4-optional">Question 4 (Optional)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/lab0-setup.html">Labs</a></li><li class="breadcrumb-item"><a href="../labs/lab3-io.html">Lab 3 (File I/O)</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Lab 3: I/O Handling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 16, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<p>By the end of this lab, you should</p>
+<ol type="1">
+<li>have an understanding of text versus binary files,</li>
+<li>be able to distinguish between flat versus hierarchical file types, and</li>
+<li>be able to load numeric data using <a href="https://docs.julialang.org/en/v1.12/stdlib/DelimitedFiles/">DelimitedFiles.jl</a> or <a href="https://csv.juliadata.org/stable/">CSV.jl</a>.</li>
+</ol>
+</section>
+<section id="data-storage-formats" class="level2">
+<h2 class="anchored" data-anchor-id="data-storage-formats">Data storage formats</h2>
+<ul>
+<li>Files on a computer can be categorized as <em>text files</em> or <em>binary files</em>. Both file types are encoded as bit patterns.</li>
+<li><strong>Text files</strong> encode individual characters, allowing <em>text editor programs</em> to easily display the contents of a file to a user.
+<ul>
+<li><em>Examples</em>: CSV (<code>.csv</code>), TSV (<code>.tsv</code>), HTML (<code>.html</code>), XML (<code>.xml</code>), JSON (<code>.json</code>)</li>
+<li>Often has a specific standard defining how these files are formatted; for example valid CSV files should adhere to <a href="https://www.rfc-editor.org/info/rfc4180/">RFC 41800</a>.</li>
+<li>Internal markup language/syntax is fairly simple.</li>
+<li>Usually, but not always, related to storing a dataset in the sense that is familiar to statisticians/data scientists.</li>
+</ul></li>
+<li><strong>Binary files</strong> have their contents encoded in a (sometimes proprietary) specialized format. These types of files are typically <em>not meant</em> to be manipulated by text editors, and instead use their specialized representation to minimize file size or enhance performance in certain workflows.
+<ul>
+<li><em>Examples</em>: <a href="https://www.r-bloggers.com/2021/12/how-to-read-rda-file-in-r-with-example/">R data</a> (<code>.Rda</code> and similar file types), <a href="https://en.wikipedia.org/wiki/Apache_Arrow">Arrow</a> (<code>.arrow</code>), <a href="https://en.wikipedia.org/wiki/Apache_Parquet">Parquet</a> (<code>.parquet</code>), <a href="https://docs.python.org/3/library/pickle.html">Python’s Pickle format</a> (<code>.pkl</code> or <code>.pickle</code>), <a href="https://en.wikipedia.org/wiki/Hierarchical_Data_Format">HDF5</a> (<code>.hdf5</code>), <a href="https://juliaio.github.io/JLD2.jl/stable/">JLD2</a> (<code>.jld2</code>).</li>
+<li>Who knows how the contents are stored… it does not matter for the intended use.</li>
+<li>Often, but not always, related to the idea of <em>serializing objects</em> in a programming language so they can be reused across sessions.</li>
+</ul></li>
+</ul>
+</section>
+<section id="text-file-types" class="level2">
+<h2 class="anchored" data-anchor-id="text-file-types">Text file types</h2>
+<section id="flat-text-files" class="level3">
+<h3 class="anchored" data-anchor-id="flat-text-files">Flat text files</h3>
+<p><strong>Flat text files</strong> are straightforward. Other than relying on a few special characters to separate distinct items, the textual representation you see exactly defines the data.</p>
+<ul>
+<li>Common format for tabular data: 1 row = 1 observation and 1 column = 1 variable, field, or parameter.</li>
+<li>Might rely on <strong>fixed width format</strong> in which each value must be encoded as text of a certain length.</li>
+<li>Might rely on a <strong>delimiter</strong> to separate distinct values.</li>
+</ul>
+<p>One annoying quirk: Windows and Linux-like systems use different line endings!</p>
+<ul>
+<li>Line endings typically handled by invisible <a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a> characters.</li>
+<li>If you create a file on Windows: newline <code>\n</code> and carriage return <code>\r</code>.</li>
+<li>If you create a file on MacOS/UNIX/Linux: only newline <code>\n</code>.</li>
+</ul>
+</section>
+<section id="hierarchical-text-files" class="level3">
+<h3 class="anchored" data-anchor-id="hierarchical-text-files">Hierarchical text files</h3>
+<p>Some text files rely on a <strong>hierarchical structure</strong> defined by an elaborate markup language. A classic example is HTML:</p>
+<ul>
+<li>Usually starts with <code>&lt;!DOCTYPE html&gt;</code> as a document type declaration (if adhering to W3C standards).</li>
+<li>Followed by an opening <code>&lt;html&gt;</code> tag…</li>
+<li>Followed by a nested <code>&lt;head&gt;&lt;/head&gt;</code> section…</li>
+<li>Followed by a nested <code>&lt;body&gt;&lt;/body&gt;</code>…</li>
+<li>And finally closed out by an <code>&lt;/html&gt;</code> tag.</li>
+</ul>
+<p>We can edit these by hand, but its best to use a specialized editor to parse and edit, whenever possible.</p>
+</section>
+</section>
+<section id="how-to-read-and-write" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-read-and-write">How to read and write</h2>
+<section id="streams" class="level3">
+<h3 class="anchored" data-anchor-id="streams">Streams</h3>
+<p>Julia’s support for powerful abstraction makes it so you can get by only knowing about the <code>open()</code> command <span class="math inline">\(\pm\)</span> 1 or 2 additional tools. Specifically, the patterns you should commit to memory are:</p>
+<div id="2" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="co"># to read a file</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="fu">open</span>(<span class="st">"path/to/file"</span>, <span class="st">"r"</span>) <span class="cf">do</span> io</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>  <span class="co"># do something with the IO stream</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="4" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="co"># to (over)write to a file</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="fu">open</span>(<span class="st">"path/to/file"</span>, <span class="st">"w"</span>) <span class="cf">do</span> io</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>  <span class="co"># do something with the IO stream</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In both instances, you are manipulating an <code>IOStream</code> object that handles the logic of reading and writing the contents of a file. The patterns above ensure you always close out the underlying stream. There are many convenience functions like <code>read()</code>, <code>readlines()</code>, and <code>write()</code> that you might also find helpful.</p>
+<p>You’ve already been working with <strong>streams</strong>:</p>
+<ul>
+<li><code>stdout</code>, the standard output stream. This is used to handle the logic of displaying information to you when you run commands in the Julia REPL.</li>
+<li><code>stdin</code>, the standard input stream. This is used to handle the logic of reading and parsing commands you enter in the Julia REPL.</li>
+</ul>
+<p>The following focuses on the DelimitedFiles.jl and CSV.jl packages.</p>
+</section>
+<section id="how-to-read-a-file" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-read-a-file">How to read a file</h3>
+<p>Using DelimitedFiles (part of the standard library):</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="im">using</span> <span class="bu">DelimitedFiles</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>mydata <span class="op">=</span> <span class="fu">readdlm</span>(<span class="st">"../hw/assets/nnmf-2429-by-361-face.txt"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>mydata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2429×361 Matrix{Float64}:
+ 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0
+ 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0
+ 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0
+ 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0
+ 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0
+ 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156
+ 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135
+ 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566
+ 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828
+ 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778
+ ⋮                                          ⋱                      ⋮
+ 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0
+ 0.0        0.0       0.0        0.0           0.0       0.0       0.0
+ 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529
+ 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001
+ 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0
+ 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023
+ 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951
+ 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0
+ 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908</code></pre>
+</div>
+</div>
+<p>This “just works”, but we blindly relied on the <code>readdlm()</code> function to detect structure in the file. Here’s what the first 2 lines look like (output from <code>head -n 2 nnmf-2429-by-361-face.txt</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource {text} number-lines code-with-copy"><code class="sourceCode"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a>0.14815 0.018294 0.027569 0 0.083222 0.10177 0.38004 0.51917 0.43569 0.38004 0.29656 0.25946 0.31511 0.2038 0.083222 0.018294 0.064671 0.018294 0 0.31511 0.1296 0.018294 0 0 0.055395 0.15743 0.25946 0.55627 0.42641 0.45424 0.37076 0.38931 0.34293 0.28728 0.21308 0.04612 0 0 0.50062 0.25946 0 0 0 0 0.2409 0.41714 0.45424 0.53772 0.43569 0.40786 0.38004 0.35221 0.38931 0.35221 0.30583 0.22235 0.018294 0.6583 0.29656 0.1296 0.51917 0.11105 0.073946 0.34293 0.53772 0.63975 0.6583 0.52844 0.45424 0.50989 0.47279 0.36149 0.22235 0.30583 0.36149 0.055395 0.68613 0.14815 0 0 0.18525 0.18525 0.31511 0.63975 0.64902 0.71395 0.59337 0.50989 0.63975 0.42641 0.11105 0.092497 0.027569 0.15743 0.19453 0.64902 0.073946 0 0.15743 0.2038 0.15743 0.37076 0.6212 0.63047 0.84381 0.87164 0.63975 0.57482 0.2038 0.04612 0 0 0.18525 0.40786 0.7325 0.29656 0 0.1296 0.018294 0.073946 0.28728 0.31511 0.41714 0.59337 0.67685 0.64902 0.46352 0.036844 0.17598 0 0 0.22235 0.32438 0.82526 0.36149 0.28728 0.12032 0.064671 0.21308 0.38931 0.32438 0.2409 0.13887 0.04612 0.055395 0.1667 0.073946 0.33366 0 0 0.18525 0.25018 0.89946 0.50989 0.21308 0.1667 0.083222 0.073946 0.092497 0.083222 0.073946 0.23163 0.2409 0 0.04612 0.23163 0.49134 0.036844 0 0.30583 0.23163 0.89946 0.68613 0.82526 0.53772 0.53772 0.54699 0.46352 0.48207 0.63975 0.80671 0.87164 0.29656 0.1667 0.29656 0.50062 0.17598 0.018294 0.31511 0.18525 0.80671 0.57482 0.26873 0.2409 0.29656 0.33366 0.21308 0.28728 0.36149 0.38004 0.56555 0.14815 0.19453 0.28728 0.43569 0.036844 0 0.25018 0.21308 0.55627 0 0 0.19453 0 0 0.055395 0 0 0.018294 0.018294 0 0 0.17598 0.34293 0 0 0.26873 0.13887 0.46352 0 0.092497 0.42641 0.12032 0 0.1296 0.23163 0.28728 0.36149 0.25946 0.19453 0.083222 0.027569 0.14815 0 0 0.12032 0.32438 0.25018 0.064671 0.018294 0.93656 0.38004 0.073946 0.32438 0.32438 0.49134 0.70468 0.88091 0.56555 0.23163 0.036844 0.11105 0 0.25946 0.34293 0.2038 0.17598 0 0 0 0.10177 0.13887 0.42641 0.55627 0.57482 0.6954 0.66758 0.70468 0.42641 0.073946 0 0 0.22235 0.26873 0.29656 0.32438 0 0.04612 0 0.036844 0.14815 0.35221 0.50989 0.68613 0.63047 0.61192 0.60265 0.63047 0.19453 0.064671 0.018294 0.15743 0.19453 0.1296 0.14815 0 0 0 0 0.11105 0.38931 0.42641 0.6212 0.5841 0.50989 0.43569 0.47279 0.39859 0.25018 0.34293 0.50989 0.41714 0.19453 0.12032 0 0.027569 0 0 0.064671 0.13887 0.23163 0.41714 0.43569 0.37076 0.38004 0.40786 0.35221 0.38004 0.32438 0.26873 0.13887 0 0 0.027569 0 0.0090181 0.036844 0.064671 0.13887 0.30583 0.37076 0.37076 0.26873 0.28728 0.28728 0.19453 0.073946 0 0 0 0</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a>0.20667 0.095859 0.0020948 0.10438 0 0.053239 0.17258 0.41977 0.45387 0.3942 0.31748 0.24929 0.28339 0.27486 0.15553 0.053239 0.019143 0.070287 0 0.3942 0.23224 0.027667 0 0 0 0.11291 0.15553 0.33453 0.44534 0.38568 0.41977 0.32601 0.35158 0.30896 0.24929 0.16405 0.0020948 0 0.61582 0.47944 0 0 0 0 0.061763 0.31748 0.36863 0.45387 0.47092 0.38568 0.37715 0.33453 0.33453 0.35158 0.30896 0.26634 0.15553 0.71811 0.59025 0 0.11291 0.66697 0.0020948 0.16405 0.34306 0.51354 0.59878 0.58173 0.46239 0.4283 0.45387 0.41977 0.29191 0.20667 0.33453 0.29191 0.81188 0.55616 0 0 0 0.1811 0.22372 0.40272 0.56468 0.61582 0.6414 0.50501 0.50501 0.59025 0.28339 0.078811 0.053239 0.095859 0.12143 0.78631 0.53911 0 0 0.31748 0.12996 0.15553 0.47092 0.55616 0.6414 0.81188 0.73516 0.59025 0.4283 0.11291 0.061763 0 0.10438 0.26634 0.8204 0.56468 0.18962 0.095859 0.078811 0.019143 0.10438 0.29191 0.30896 0.4283 0.59025 0.62435 0.55616 0.30896 0.027667 0.15553 0 0 0.23224 0.99088 0.64992 0.29191 0.15553 0.34306 0 0.30896 0.35158 0.25782 0.20667 0.10438 0.010619 0.12143 0.095859 0.12996 0.23224 0 0 0.22372 0.93121 0.72664 0.41977 0.070287 0.16405 0.070287 0.070287 0.087335 0.078811 0.087335 0.25782 0.12143 0 0.095859 0.29191 0.32601 0 0.12996 0.30044 0.8545 0.77778 0.6073 0.81188 0.49649 0.50501 0.48796 0.41125 0.49649 0.6073 0.81188 0.67549 0.15553 0.24929 0.28339 0.40272 0.061763 0.2152 0.30044 0.93121 0.65845 0.44534 0.19815 0.23224 0.30896 0.26634 0.20667 0.27486 0.34306 0.3942 0.47092 0.061763 0.24077 0.28339 0.28339 0 0.18962 0.19815 0.70959 0.37715 0 0.0020948 0.24929 0 0 0.044715 0 0 0.044715 0 0.070287 0 0.25782 0.15553 0 0.11291 0.24077 0.62435 0.2152 0.053239 0.12143 0.55616 0 0.010619 0.147 0.23224 0.26634 0.32601 0.20667 0.18962 0 0.087335 0.036191 0 0.010619 0.1811 0.53911 0.078811 0.036191 0.095859 0.98236 0.15553 0.13848 0.30044 0.35158 0.49649 0.71811 0.76926 0.43682 0.12996 0.053239 0.027667 0 0.28339 0.26634 0.58173 0 0 0 0 0.12143 0.18962 0.52206 0.45387 0.58173 0.6414 0.6073 0.65845 0.24077 0.027667 0 0 0.2152 0.26634 0.59878 0.10438 0 0 0 0.036191 0.24077 0.4283 0.47092 0.64992 0.5732 0.54763 0.58173 0.48796 0.13848 0.044715 0.044715 0.12996 0.19815 0.31748 0.061763 0 0 0 0 0.20667 0.40272 0.41977 0.59878 0.52206 0.44534 0.40272 0.43682 0.30896 0.24929 0.3601 0.47944 0.33453 0.24929 0.053239 0 0.027667 0 0 0.087335 0.16405 0.24077 0.4283 0.38568 0.32601 0.3601 0.36863 0.32601 0.32601 0.29191 0.22372 0.087335 0 0 0.0020948 0 0.019143 0.036191 0.070287 0.16405 0.33453 0.33453 0.31748 0.24077 0.28339 0.24077 0.16405 0.044715 0 0 0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>No header line.</li>
+<li>Not fixed-width as we can see violations of that format in the last few entries on both lines.</li>
+<li>Delimited, since a single space character, <code>' '</code>, is used to separate values.</li>
+<li>An invisible line ending is used to place rows on separate lines. Should be <code>'\n'</code>. Verify this on your own.</li>
+<li>The data happens to be numeric floating point numbers. Is <code>Float64</code> optimal here? Maybe we could get away with <code>Float32</code>…</li>
+</ul>
+<p><strong>Even if a parser’s heuristic defaults work, you should practice fully specifying how you load the data</strong>:</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="im">using</span> <span class="bu">DelimitedFiles</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>mydata <span class="op">=</span> <span class="fu">readdlm</span>(<span class="st">"../hw/assets/nnmf-2429-by-361-face.txt"</span>, <span class="ch">' '</span>, <span class="dt">Float64</span>; header <span class="op">=</span> <span class="cn">false</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a>mydata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2429×361 Matrix{Float64}:
+ 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0
+ 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0
+ 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0
+ 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0
+ 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0
+ 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156
+ 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135
+ 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566
+ 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828
+ 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778
+ ⋮                                          ⋱                      ⋮
+ 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0
+ 0.0        0.0       0.0        0.0           0.0       0.0       0.0
+ 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529
+ 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001
+ 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0
+ 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023
+ 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951
+ 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0
+ 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908</code></pre>
+</div>
+</div>
+<ul>
+<li>Same result.</li>
+<li>This approach documents what <strong>we</strong> relied on to parse the data into an appropriate Julia object.</li>
+<li>People living in the future will thank you for your benevolence.</li>
+</ul>
+<p>Alternatively, we can use the combination of CSV.jl with Tables.jl to parse and import the data as a <code>Matrix{Float64}</code>:</p>
+<div id="10" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">Tables</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>mydata <span class="op">=</span> CSV.<span class="fu">read</span>(<span class="st">"../hw/assets/nnmf-2429-by-361-face.txt"</span>, Tables.matrix; header <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Tables.jl: provides a specification for what “tabular data” means. The CSV.jl package uses it to some extent.</li>
+<li>CSV.jl: handles parsing a CSV file based on a careful definition of how these files are defined. Will work with other delimiters like tabs, <code>\t</code>, pipes <code>|</code>, and so on.</li>
+<li>Both of these packages have too many features to list here.</li>
+</ul>
+</section>
+<section id="how-to-write-a-file" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-write-a-file">How to write a file</h3>
+<p>Using DelimitedFiles.jl:</p>
+<div id="12" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="im">using</span> <span class="bu">DelimitedFiles</span>, <span class="bu">Images</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a>myitem <span class="op">=</span> mydata[<span class="op">:</span>, <span class="fl">1</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-label="4"></a><span class="fu">writedlm</span>(<span class="st">"whatisthis.txt"</span>, myitem, <span class="ch">' '</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Using CSV.jl + Tables.jl:</p>
+<div id="14" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="im">using</span> <span class="bu">CSV</span>, <span class="bu">Tables</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>myitem <span class="op">=</span> mydata[<span class="op">:</span>, <span class="fl">1</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>CSV.<span class="fu">write</span>(<span class="st">"whatisthis.txt"</span>, Tables.<span class="fu">table</span>(myitem), delim <span class="op">=</span> <span class="ch">' '</span>, header<span class="op">=</span><span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>CSV expects the object to be saved to generate “rows”. Since a <code>Vector{Float64}</code> iterates <code>Float64</code> values, CSV.jl will complain that your object is not a table.</li>
+<li>Wrap it in <code>Tables.table()</code> to specify a table-like structure. You use it to add a <code>header</code>.</li>
+</ul>
+</section>
+</section>
+<section id="handling-file-paths" class="level2">
+<h2 class="anchored" data-anchor-id="handling-file-paths">Handling file paths</h2>
+<p>Earlier you encountered the relative file path <code>"../hw/assets/nnmf-2429-by-361-face.txt"</code>. This is bad because Windows and Linux-like systems use different file path separators. The better, robust alternative is to use <code>joinpath()</code> to form paths:</p>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">joinpath</span>(<span class="st">".."</span>, <span class="st">"hw"</span>, <span class="st">"assets"</span>, <span class="st">"nnmf-2429-by-361-face.txt"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>"../hw/assets/nnmf-2429-by-361-face.txt"</code></pre>
+</div>
+</div>
+<p>This will <span class="math inline">\(\text{Do The Right Thing}^{\text{TM}}\)</span> depending on the underlying operating system.</p>
+</section>
+<section id="questions-and-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="questions-and-exercises">Questions and Exercises</h2>
+<ul>
+<li>This lab involves applying the ideas above to do a bit of exploration on handling different file types.</li>
+<li>Create a file named <code>io.qmd</code> under a <code>lab3</code> directory.</li>
+<li>You are free to include as much or as little code as you wish. The only requirement is that you answer the following questions.</li>
+</ul>
+<section id="question-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1">Question 1</h3>
+<p>Create a copy of the file <code>nnmf-2429-by-361-face.txt</code> named <code>nnmf-2429-by-361-face.dat</code>. <strong>Does changing the file extension change how DelimitedFiles or CSV interpret this file?</strong> Explain why you think this is the case.</p>
+</section>
+<section id="question-2" class="level3">
+<h3 class="anchored" data-anchor-id="question-2">Question 2</h3>
+<p>Navigate to the UCI Machine Learning Repository page for the <a href="https://archive.ics.uci.edu/dataset/9/auto+mpg">Auto MPG</a> dataset. Download the <a href="https://en.wikipedia.org/wiki/ZIP_(file_format)">ZIP file</a> <strong>and decompress it.</strong> You can do this any way you find suitable, but challenge yourself to do it all through our class Linux container. <strong>How can you load the <code>auto-mpg.data-original</code> file contained in the ZIP archive to Julia?</strong></p>
+</section>
+<section id="question-3-optional" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-optional">Question 3 (Optional)</h3>
+<p>Bundling files into archives (like ZIP or Tar) is a common and popular way to share files with others. Often, this involves some compression to reduce file size and make transfers as fast as possible. The <a href="https://github.com/JuliaIO/ZipArchives.jl">ZipArchives</a> package provides an interface to working with the ZIP file format.</p>
+<p><strong>Repeat the task in Question 2, operating directly on the ZIP file you downloaded.</strong> Use it to read <code>auto-mpg.data-original</code> directly from the ZIP file and correctly encode missing values as the <code>missing</code> type in Julia. The <a href="https://github.com/JuliaData/DataFrames.jl">DataFrames</a> can be useful for this purpose. See the tutorial here: <a href="https://csv.juliadata.org/stable/examples/#zip_example">https://csv.juliadata.org/stable/examples/#zip_example</a>.</p>
+</section>
+<section id="question-4-optional" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-optional">Question 4 (Optional)</h3>
+<p><strong>In a simple step-by-step procedure, describe how you can create a ZIP archive to store several outputs generated by Some Fancy Algorithm.</strong> For the sake of this example, let’s assume the outputs are all <code>Matrix{Float64}</code> objects.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/UCR-STAT-206\.github\.io\/2026-Fall-STAT\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -326,17 +326,26 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Computer Architecture</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">Algorithms Introduction</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
  <span class="menu-text">Linear Algebra Introduction</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">BLAS/LAPACK</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -494,6 +503,12 @@ window.Quarto = {
  <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -515,6 +530,24 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
   </div>
 </li>
       </ul>
@@ -756,9 +789,9 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 7
- 8
  9
+ 7
+ 6
  7</code></pre>
 </div>
 </div>
@@ -766,9 +799,9 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
+ 6
  7
  7
- 8
  9</code></pre>
 </div>
 </div>
@@ -776,9 +809,9 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
+ 6
  7
  7
- 8
  9</code></pre>
 </div>
 </div>
@@ -1013,11 +1046,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
-  0.686436   0.0769262   0.33019
- -0.985308   0.00672457  0.887064
-  0.266668   0.00652624  0.872478
-  0.0374378  0.00549298  0.00864445
-  0.999201   0.0417441   0.766578</code></pre>
+ 0.997268   -0.0168433    0.173011
+ 0.0988369   0.845168     0.000414856
+ 0.964144    0.000470944  0.369004
+ 0.277459    0.466148     0.154253
+ 0.853662    0.0275793    0.187636</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1028,29 +1061,29 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  0.7845104734699669
-  0.7460423108469615
-  0.20041655906924533
- -1.8274808495338382
-  0.8161687467678965
-  0.5678510153441932
- -1.2990040476568823
- -0.5966450099938441
-  0.1404465655575188
-  0.07651360431456712</code></pre>
+  0.8514162602285454
+  2.015071939962398
+  0.45887315833635267
+ -0.24292456877272134
+  0.6464295581523427
+ -0.9484431217616838
+ -0.03933907146372941
+ -0.03785742725933738
+  0.6337591778711342
+ -1.1966025811570489</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.7845104734699669
- 0.7460423108469615
- 0.20041655906924533
+ 0.8514162602285454
+ 2.015071939962398
+ 0.45887315833635267
  0.0
- 0.8161687467678965
- 0.5678510153441932
+ 0.6464295581523427
  0.0
  0.0
- 0.1404465655575188
- 0.07651360431456712</code></pre>
+ 0.0
+ 0.6337591778711342
+ 0.0</code></pre>
 </div>
 </div>
 </section>
@@ -1065,11 +1098,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9695390858734714
- 0.08452176179197328
- 0.008791777051793494
- 0.6608686954606049
- 0.2515873554685138</code></pre>
+ 0.9575371525799714
+ 0.9522902123593857
+ 0.6532631114665138
+ 0.9857701683616067
+ 0.24650238004125935</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1079,11 +1112,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9695390858734714
- 0.08452176179197328
- 0.008791777051793494
- 0.6608686954606049
- 0.2515873554685138</code></pre>
+ 0.9575371525799714
+ 0.9522902123593857
+ 0.6532631114665138
+ 0.9857701683616067
+ 0.24650238004125935</code></pre>
 </div>
 </div>
 </section>
