@@ -104,8 +104,8 @@ website:
             href: labs/lab1-submit.qmd
           - text: Lab 2 (Errors and Debugging)
             href: labs/lab2-debug.qmd
-          # - text: Lab 3 (I/O Handling)
-          #   href: labs/lab3-io.qmd
+          - text: Lab 3 (File I/O)
+            href: labs/lab3-io.qmd
           # - text: Lab 4 (Reproducibility)
           #   href: labs/lab4-reproducibility.qmd
           # - text: Lab 5 (Code Review)
