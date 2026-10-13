@@ -42,6 +42,19 @@ See [documentation](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#BLAS-
 
 ## BLAS & LAPACK
 
+> HAIGH: BLAS provided portability performance and the ability to write structured code. I
+believe that was what Lawson said in his interview. He agrees with the advantages you’ve
+outlined. So in the case of the BLAS, people were prepared to add that extra layer of abstraction
+to get portability, neatness, and improved performance?
+> KAHAN: It wasn’t even abstraction. **It was just condensing the sizes of your codes and
+regularizing the names.** If you have a BLAS that multiplies a matrix by a vector and adds a
+vector—you know, ax + b would really be the way you’d like to write it—but you can’t write it
+like that in the older versions of Fortran. **You had to write out this damned loop. Everybody’s
+rewriting the same loops.** What happens if people give names to subprograms that do this, so
+they don’t have to rewrite the same loops?
+
+-- Thomas Haigh interviewing William Kahan as part of an [oral history](https://amturing.acm.org/interviews/kahan_1023746.cfm) for an ACM AM Turing Award.
+
 BLAS stands for *basic linear algebra subprograms*.
 
 Basic Linear Algebra Subprograms (BLAS)
