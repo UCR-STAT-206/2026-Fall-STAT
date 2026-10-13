@@ -789,30 +789,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 9
- 7
- 6
- 7</code></pre>
+ 8
+ 5
+ 8
+ 2</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 6
- 7
- 7
- 9</code></pre>
+ 2
+ 5
+ 8
+ 8</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
- 6
- 7
- 7
- 9</code></pre>
+ 2
+ 5
+ 8
+ 8</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -1046,11 +1046,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
- 0.997268   -0.0168433    0.173011
- 0.0988369   0.845168     0.000414856
- 0.964144    0.000470944  0.369004
- 0.277459    0.466148     0.154253
- 0.853662    0.0275793    0.187636</code></pre>
+ 0.00953527  0.199319    0.180556
+ 0.992379    0.00283232  0.981989
+ 0.703052    0.999339    0.536242
+ 0.913035    0.429849    0.106026
+ 0.250001    0.219603    0.00783446</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1061,28 +1061,28 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  0.8514162602285454
-  2.015071939962398
-  0.45887315833635267
- -0.24292456877272134
-  0.6464295581523427
- -0.9484431217616838
- -0.03933907146372941
- -0.03785742725933738
-  0.6337591778711342
- -1.1966025811570489</code></pre>
+  0.2890612837557979
+ -1.0576621126138226
+  0.21458547764469085
+ -0.05737916236469092
+ -0.23827785898009082
+  1.1617765049624502
+  0.16796484203249054
+ -0.9094748855428268
+  0.3684234427321341
+ -1.2834521124452616</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.8514162602285454
- 2.015071939962398
- 0.45887315833635267
+ 0.2890612837557979
  0.0
- 0.6464295581523427
+ 0.21458547764469085
  0.0
  0.0
+ 1.1617765049624502
+ 0.16796484203249054
  0.0
- 0.6337591778711342
+ 0.3684234427321341
  0.0</code></pre>
 </div>
 </div>
@@ -1098,11 +1098,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9575371525799714
- 0.9522902123593857
- 0.6532631114665138
- 0.9857701683616067
- 0.24650238004125935</code></pre>
+ 0.3366169725061036
+ 0.5759735821006706
+ 0.9744734413949526
+ 0.2528909989255888
+ 0.023922045529967444</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1112,11 +1112,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 0.9575371525799714
- 0.9522902123593857
- 0.6532631114665138
- 0.9857701683616067
- 0.24650238004125935</code></pre>
+ 0.3366169725061036
+ 0.5759735821006706
+ 0.9744734413949526
+ 0.2528909989255888
+ 0.023922045529967444</code></pre>
 </div>
 </div>
 </section>
