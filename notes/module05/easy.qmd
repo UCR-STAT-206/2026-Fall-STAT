@@ -1,6 +1,5 @@
 ---
 title: Easy Linear Systems
-eval: false
 ---
 
 
@@ -448,7 +447,7 @@ Base.summarysize(W), Base.summarysize(Wfull)
 @benchmark det($W)
 ```
 
-# Easy plus border
+## Easy plus border
 
 Easy plus border: For $\mathbf{A}$ pd and $\mathbf{V}$ full row rank,
 $$
@@ -461,11 +460,11 @@ $$
 	\end{pmatrix}.
 $$
 
-# Orthogonal matrix
+## Orthogonal matrix
 
 Orthogonal $\mathbf{A}$: $n^2$ flops **at most**. Why? Permutation matrix, Householder matrix, Jacobi matrix, ... take less.
 
-# Toeplitz matrix
+## Toeplitz matrix
 
 Toeplitz systems (constant diagonals):
 $$
@@ -492,7 +491,7 @@ $$
 
 The [`ToeplitzMatrices.jl`](https://github.com/JuliaMatrices/ToeplitzMatrices.jl) package deals with these types of matrices.
 
-# Circulant matrix
+## Circulant matrix
 
 Circulant systems: Toeplitz matrix with wraparound
 $$
@@ -506,7 +505,7 @@ $$
 $$
 FFT type algorithms: DCT (discrete cosine transform) and DST (discrete sine transform).
 
-# Vandermonde matrix
+## Vandermonde matrix
 
 Appears in interpolation and approximation problems.
 $$
