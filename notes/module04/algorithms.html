@@ -797,19 +797,19 @@ Note
 <span id="cb5-4"><a href="#cb5-4" aria-label="4"></a>x <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">10</span><span class="op">^</span><span class="fl">3</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-label="5"></a>ref <span class="op">=</span> <span class="fu">sum</span>(x) <span class="co"># reference solution</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>14.276856201159307</code></pre>
+<pre><code>14.27685620115929</code></pre>
 </div>
 </div>
 <div id="8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>ref <span class="op">-</span> <span class="fu">sum_direct</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>1.4210854715202004e-14</code></pre>
+<pre><code>-1.7763568394002505e-15</code></pre>
 </div>
 </div>
 <div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>ref <span class="op">-</span> <span class="fu">sum_kb</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>8.881784197001252e-15</code></pre>
+<pre><code>-7.105427357601002e-15</code></pre>
 </div>
 </div>
 <p>Now test against poorly-behaved inputs.</p>
