@@ -1,0 +1,243 @@
+---
+title: "Condition Numbers"
+execute:
+  eval: false
+---
+
+```{julia}
+using DelimitedFiles, LinearAlgebra, StatsBase, StatsPlots
+```
+
+# Definition
+
+Assume $\mathbf{A} \in \mathbb{R}^{n \times n}$ is nonsingular and consider the system of linear equation 
+
+$$
+\mathbf{A} \mathbf{x} = \mathbf{b}.
+$$
+
+The solution is 
+
+$$
+\mathbf{x} = \mathbf{A}^{-1}  \mathbf{b}.
+$$
+
+We want to know how the solution changes with a small perturbation of the input $\mathbf{b}$ (or $\mathbf{A}$).
+
+Let 
+
+$$
+\mathbf{b}_{\text{new}} = \mathbf{b} + \Delta \mathbf{b}.
+$$
+
+Then 
+
+$$
+\mathbf{x}_{\text{new}} = \mathbf{A}^{-1} (\mathbf{b} + \Delta \mathbf{b}) = \mathbf{x} + \Delta \mathbf{x}.
+$$
+
+It follows that
+
+$$
+\|\Delta \mathbf{x}\| = \|\mathbf{A}^{-1} \Delta \mathbf{b}\| \le \|\mathbf{A}^{-1}\| \|\Delta \mathbf{b}\|
+$$
+
+for any matrix norm $\| \cdot \|$. Because $\mathbf{b} = \mathbf{A} \mathbf{x}$, $\|\mathbf{b}\| \le \|\mathbf{A}\| \|\mathbf{x}\|$ and
+
+$$
+\frac{1}{\|\mathbf{x}\|} \le \|\mathbf{A}\| \frac{1}{\|\mathbf{b}\|}.
+$$
+
+This yields
+
+$$
+\frac{ \|\Delta \mathbf{x}\|}{\|\mathbf{x}\|} \le \|\mathbf{A}\|\|\mathbf{A}^{-1}\| \frac{\|\Delta \mathbf{b}\|}{\|\mathbf{b}\|}.
+$$
+
+The quantity $\kappa(\mathbf{A}) = \|\mathbf{A}\| \|\mathbf{A}^{-1}\|$ is known as the **condition number for linear equation**. It depends on the matrix norm being used. For example, $\kappa_p$ means condition number defined from matrix-$p$ norm. **Large condition numbers are "bad".**
+
+# Facts about $\kappa(\mathbf{A})$
+
+Some facts about condition numbers:
+
+$$
+\begin{eqnarray*}
+\kappa(\mathbf{A}) &=& \kappa(\mathbf{A}^{-1})	\\
+\kappa(c\mathbf{A}) &=& \kappa(\mathbf{A})	\\
+\kappa(\mathbf{A}) &\ge& 1	\\
+%\kappa_1(\mathbf{A}) &=& \kappa_\infty (\mathbf{A}^T)	\\
+\kappa_2 (\mathbf{A}) &=& \kappa_2 (\mathbf{A}^T) = \frac{\sigma_1(\mathbf{A})}{\sigma_n(\mathbf{A})}	\\
+\kappa_2(\mathbf{A}^T \mathbf{A}) &=& \frac{\lambda_1(\mathbf{A}^T \mathbf{A})}{\lambda_n(\mathbf{A}^T \mathbf{A})} =  \kappa_2^2(\mathbf{A}) \ge \kappa_2(\mathbf{A}).
+\end{eqnarray*}
+$$
+
+- Here $\sigma_{i}(\mathbf{A})$ denotes the $i$-th *singular value* of $\mathbf{A}$, ordered as $\sigma_{1}(\mathbf{A}) \ge \sigma_{2}(\mathbf{A}) \ge \ldots \ge \sigma_{n}(\mathbf{A})$.
+- The last fact says that the condition number of $\mathbf{A}^T \mathbf{A}$ can be much larger than that of $\mathbf{A}$.
+- The smallest singular value $\sigma_n$ measures the _distance to trouble_.
+
+# Application to Regression
+
+The **condition number for the least squares problem** is more complicated. Roughly speaking, 
+
+- methods based on normal equations (Cholesky, sweep) have a condition number depending on $[\kappa_2(\mathbf{X})]^2$
+- QR for a _small norm_ least squares problem has a condition depending on $\kappa_2(\mathbf{X})$; i.e. solution to 
+
+    $$
+    \mathrm{minimize}~\|\mathbf{x}\| \quad \text{subject to} \quad \mathbf{A} \mathbf{x} = \mathbf{b}
+    $$
+    
+
+Consider the simple case
+
+$$
+\begin{eqnarray*}
+	\mathbf{X} = \begin{pmatrix}
+	1 & 1 \\
+	10^{-3} & 0 \\
+	0 & 10^{-3}
+	\end{pmatrix}.
+\end{eqnarray*}
+$$
+Forming normal equations yields a singular Gramian matrix
+$$
+\begin{eqnarray*}
+	\mathbf{X}^T \mathbf{X} = \begin{pmatrix}
+	1 & 1 \\
+	1 & 1
+	\end{pmatrix}
+\end{eqnarray*}
+$$
+if executed with a precision of 6 decimal digits.
+
+# Julia Implementation
+
+The Julia function [`cond`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.cond) computes $\kappa_p$ for $p=1$, 2 (default), or $\infty$.
+
+# Longley Example
+
+The [Longley (1967)](https://www.jstor.org/stable/2283673?seq=1#page_scan_tab_contents) macroeconomic data set is a famous test example for numerical software in the early days.
+
+```{julia}
+longley = readdlm(joinpath("assets", "longley.txt"))
+```
+
+
+```{julia}
+corrplot(longley, 
+  label = ["Employ" "Price" "GNP" "Jobless" "Military" "PopSize" "Year"],
+  xrotation = 45,
+  size = (1000, 800)
+)
+```
+
+Let's regress `Employment` on other variables:
+
+```{julia}
+# response: Employment
+y = longley[:, 1]
+
+# predictor matrix
+X = [ones(length(y)) longley[:, 2:end]]
+```
+
+```{julia}
+cond(X)
+```
+
+```{julia}
+# we see the smallest singular value (aka trouble number) is very small
+xsvals = svdvals(X)
+```
+
+```{julia}
+# condition number of the design matrix
+xcond = maximum(xsvals) / minimum(xsvals)
+```
+
+```{julia}
+# X is full rank from SVD
+xrksvd = rank(X)
+```
+
+```{julia}
+# least squares from QR
+X \ y
+```
+
+```{julia}
+# Gram matrix
+G = X'X
+```
+
+```{julia}
+# rank of Gram matrix from SVD
+# rank deficient! We lost precision when forming Gram matrix
+rank(G)
+```
+
+```{julia}
+svdvals(G)
+```
+
+```{julia}
+# rank of Gram matrix from cholesky
+# full!
+gchol = cholesky(Symmetric(G), Val(true))
+rank(gchol)
+```
+
+```{julia}
+# least squares solution from Cholesky matches those from QR
+gchol \ (X'y)
+```
+
+Now let us re-run above example using **single precision**.
+
+```{julia}
+Xsp = Float32.(X)
+ysp = Float32.(y)
+
+# least squares by QR: dramatically different from Float64 solution
+Xsp \ ysp
+```
+
+```{julia}
+# least squares by Cholesky: failed
+G = Xsp'Xsp
+gchol = cholesky(Symmetric(G), Val(true), check=false)
+gchol \ (Xsp'ysp)
+```
+
+```{julia}
+rank(Xsp)
+```
+
+```{julia}
+# rank of Gram matrix by Cholesky
+rank(gchol)
+```
+
+```{julia}
+# rank of Gram matrix by SVD
+rank(G)
+```
+
+**Standardizing the predictors** improves the condition number.
+
+```{julia}
+# center and standardize matrix along dimension 1
+Xcs = zscore(X[:, 2:end], 1)
+Xcs = [ones(length(y)) Xcs]
+```
+
+```{julia}
+cond(Xcs)
+```
+
+```{julia}
+rank(Xcs)
+```
+
+```{julia}
+rank(Xcs'Xcs)
+```

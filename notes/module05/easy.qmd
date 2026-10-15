@@ -1,0 +1,535 @@
+---
+title: Easy Linear Systems
+---
+
+
+## Goals
+
+For the next couple of lectures, we consider computer algorithms for solving linear equations $\mathbf{A} \mathbf{x} = \mathbf{b}$, a ubiquitous task in statistics. 
+
+**Key idea**: turn original problem into an **easy** one, e.g., triangular system.
+
+- Consider $\mathbf{A} \mathbf{x} = \mathbf{b}$, $\mathbf{A} \in \mathbb{R}^{n \times n}$. Or, consider matrix inverse.
+- $\mathbf{A}$ may be huge in applications. Keep massive data in mind: 1000 Genome Project, Netflix Problem, Google PageRank, finance, spatial statistics, ...
+- We should be aware of many easy linear systems.
+
+Don't blindly use `A \ b` and `inv()` in Julia or `solve()` in R. **Don't waste computing resources with bad algorithm choices!**
+Here we simply survey some of these systems and highlight key properties one can exploit.
+
+## Environment
+
+```{julia}
+import Pkg; Pkg.status()
+```
+
+```{julia}
+using BenchmarkTools
+using MatrixDepot
+using LinearAlgebra, Random, SparseArrays, WoodburyMatrices
+using IterativeSolvers, Preconditioners
+using UnicodePlots
+```
+
+## Triangular Systems
+
+### Lower Triangular System
+
+To solve $\mathbf{A} \mathbf{x} = \mathbf{b}$, where $\mathbf{A} \in \mathbb{R}^{n \times n}$ is **lower triangular**
+
+$$
+\begin{pmatrix}
+    a_{11} & 0 & \cdots & 0 \\
+    a_{21} & a_{22} & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\ x_2 \\ \vdots \\ x_n
+\end{pmatrix} = \begin{pmatrix}
+b_1 \\ b_2 \\ \vdots \\ b_n
+\end{pmatrix}.
+$$
+
+we use **forward substitution**: 
+$$
+\begin{eqnarray*}
+    x_1 &=& b_1 / a_{11} \\
+    x_2 &=& (b_2 - a_{21} x_1) / a_{22} \\
+    x_3 &=& (b_3 - a_{31} x_1 - a_{32} x_2) / a_{33} \\
+    &\vdots& \\
+    x_n &=& (b_n - a_{n1} x_1 - a_{n2} x_2 - \cdots - a_{n,n-1} x_{n-1}) / a_{nn}.
+\end{eqnarray*}
+$$
+
+- $1 + 3 + 5 + \cdots + (2n-1) = n^2$ flops. 
+- $\mathbf{A}$ can be accessed by row ($ij$ loop) or column ($ji$ loop).
+
+### Upper Triangular System
+
+To solve $\mathbf{A} \mathbf{x} = \mathbf{b}$, where $\mathbf{A} \in \mathbb{R}^{n \times n}$ is upper triangular  
+$$
+\begin{pmatrix}
+    a_{11} & \cdots & a_{1,n-1} & a_{1n} \\
+    \vdots & \ddots & \vdots & \vdots \\
+    0 & \cdots & a_{n-1,n-1} & a_{n-1,n} \\
+    0 & 0 & 0 & a_{nn}
+\end{pmatrix}
+\begin{pmatrix}
+x_1 \\ \vdots \\ x_{n-1} \\ x_n
+\end{pmatrix} = \begin{pmatrix}
+b_1 \\ \vdots \\ b_{n-1} \\ b_n
+\end{pmatrix}.
+$$
+
+we use **back substitution** 
+$$
+\begin{eqnarray*}
+    x_n &=& b_n / a_{nn} \\
+    x_{n-1} &=& (b_{n-1} - a_{n-1,n} x_n) / a_{n-1,n-1} \\
+    x_{n-2} &=& (b_{n-2} - a_{n-2,n-1} x_{n-1} - a_{n-2,n} x_n) / a_{n-2,n-2} \\
+    &\vdots& \\
+    x_1 &=& (b_1 - a_{12} x_2 - a_{13} x_3 - \cdots - a_{1,n} x_{n}) / a_{11}.
+\end{eqnarray*}
+$$
+
+- $n^2$ flops.
+- $\mathbf{A}$ can be accessed by row ($ij$ loop) or column ($ji$ loop).
+
+### Implementation
+
+- BLAS level 2 function: [?trsv](http://www.netlib.org/lapack/explore-html/d6/d96/dtrsv_8f.html) (triangular solve with one right hand side).
+- BLAS level 3 function: [?trsm](http://www.netlib.org/lapack/explore-html/de/da7/dtrsm_8f.html) (matrix triangular solve, i.e., multiple right hand sides).
+- In Julia  
+    - The left division `\` operator in Julia is used for solving linear equations or least squares problem.  
+    - If `A` is a triangular matrix, the command `A \ b` uses forward or backward substitution  
+    - Or we can call the BLAS wrapper functions directly: [trsv!](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.BLAS.trsv!), [trsv](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.BLAS.trsv), [trsm!](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.BLAS.trsm!), [trsm](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.BLAS.trsm)
+
+```{julia}
+Random.seed!(1903) # seed
+n = 5
+A = randn(n, n)
+b = randn(n)
+# a random matrix
+A
+```
+
+```{julia}
+Al = LowerTriangular(A) # does not create extra matrix
+```
+
+```{julia}
+dump(Al)
+```
+
+```{julia}
+Al.data
+```
+
+```{julia}
+# same data
+pointer(Al.data), pointer(A)
+```
+
+```{julia}
+Al \ b # dispatched to BLAS function for triangular solve
+```
+
+```{julia}
+# or use BLAS wrapper directly
+BLAS.trsv('L', 'N', 'N', A, b)
+```
+
+### Algebraic Facts
+
+- Eigenvalues of a triangular matrix $\mathbf{A}$ are diagonal entries $\lambda_i = a_{ii}$. 
+- Determinant $\det(\mathbf{A}) = \prod_i a_{ii}$.
+- The product of two upper (lower) triangular matrices is upper (lower) triangular.
+- The inverse of an upper (lower) triangular matrix is upper (lower) triangular.
+- The product of two unit upper (lower) triangular matrices is unit upper (lower) triangular.
+- The inverse of a unit upper (lower) triangular matrix is unit upper (lower) triangular.
+
+## A few comments on Julia types
+
+[LowerTriangular](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.LowerTriangular), UnitLowerTriangular, 
+[UpperTriangular](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.UpperTriangular), UnitUpperTriangular.  
+
+```{julia}
+A
+```
+
+```{julia}
+LowerTriangular(A)
+```
+
+```{julia}
+LinearAlgebra.UnitLowerTriangular(A)
+```
+
+```{julia}
+Random.seed!(2222) # seed
+A = randn(1000, 1000);
+```
+
+```{julia}
+# if we don't tell Julia it's triangular: O(n^3) complexity
+# tril(A) returns a full triangular matrix, same as Matlab
+@benchmark eigvals(tril($A))
+```
+
+```{julia}
+# if we tell Julia it's triangular: O(n) complexity
+@benchmark eigvals(LowerTriangular($A))
+```
+
+```{julia}
+# if we don't tell Julia it's triangular: O(n^3) complexity
+# tril(A) returns a full triangular matrix, same as Matlab
+@benchmark det(tril($A))
+```
+
+```{julia}
+# if we tell Julia it's triangular: O(n) complexity
+@benchmark det(LowerTriangular($A))
+```
+
+
+
+## Diagonal matrix
+
+Diagonal $\mathbf{A}$: $n$ flops. Use the `Diagonal` type of Julia.
+
+```{julia}
+# generate random data
+Random.seed!(206)
+n = 1000
+A = diagm(0 => randn(n)) # a diagonal matrix stored as Matrix{Float64}
+b = randn(n);
+```
+
+```{julia}
+# should give link to the source code
+@which A \ b
+```
+
+```{julia}
+# checks `istril(A)` and `istriu(A)` (O(n^2)), then calls `Diagonal(A) \ b` (O(n))
+@benchmark $A \ $b
+```
+
+```{julia}
+# O(n) computation, no extra array allocation
+@benchmark Diagonal($A) \ $b
+```
+
+## Bidiagonal, Tridiagonal, and Banded Matrices
+
+- Bidiagonal, tridiagonal, or banded $\mathbf{A}$: Band LU, band Cholesky, ... roughly $O(n)$ flops.
+- Use [`Bidiagonal`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.Bidiagonal), [`Tridiagonal`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.Tridiagonal), [`SymTridiagonal`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.SymTridiagonal) types in Julia.
+
+```{julia}
+Random.seed!(206) 
+n  = 1000
+dv = randn(n)
+ev = randn(n - 1)
+b  = randn(n); # rhs
+```
+
+```{julia}
+# symmetric tridiagonal matrix
+A  = SymTridiagonal(dv, ev)
+```
+
+```{julia}
+# convert to a full matrix
+Afull = Matrix(A)
+```
+
+```{julia}
+# LU decomposition (2/3) n^3 flops!
+@benchmark $Afull \ $b
+```
+
+```{julia}
+# specialized algorithm for tridiagonal matrix, O(n) flops
+@benchmark $A \ $b
+```
+
+
+
+## Block Diagonal Matrix
+
+Block diagonal: Suppose $n = \sum_b n_b$. For linear equations, $(\sum_b n_b)^3$ (without using block diagonal structure) vs $\sum_b n_b^3$ (using block diagonal structure).
+
+```{julia}
+Random.seed!(206)
+
+B  = 10 # number of blocks
+ni = 100
+A  = blockdiag([sprandn(ni, ni, 0.01) for b in 1:B]...)
+spy(A)
+```
+
+## Kronecker product
+
+Use
+$$
+\begin{eqnarray*}
+    (\mathbf{A} \otimes \mathbf{B})^{-1} &=& \mathbf{A}^{-1} \otimes \mathbf{B}^{-1} \\
+    (\mathbf{C}^T \otimes \mathbf{A}) \text{vec}(\mathbf{B}) &=& \text{vec}(\mathbf{A} \mathbf{B} \mathbf{C}) \\
+    \text{det}(\mathbf{A} \otimes \mathbf{B}) &=& [\text{det}(\mathbf{A})]^p [\text{det}(\mathbf{B})]^m, \quad \mathbf{A} \in \mathbb{R}^{m \times m}, \mathbf{B} \in \mathbb{R}^{p \times p}
+\end{eqnarray*}    
+$$
+to avoid forming and doing costly computation on the potentially huge Kronecker $\mathbf{A} \otimes \mathbf{B}$.
+
+```{julia}
+using MatrixDepot, LinearAlgebra
+
+A = matrixdepot("lehmer", 50) # a pd matrix
+B = matrixdepot("oscillate", 100) # pd matrix
+M = kron(A, B)
+c = ones(size(M, 2)); # rhs
+```
+
+```{julia}
+# Method 1: form Kronecker product and Cholesky solve
+x1 = cholesky(Symmetric(M)) \ c;
+```
+
+```{julia}
+# Method 2: use (A ⊗ B)^{-1} = A^{-1} ⊗ B^{-1}
+m, p = size(A, 1), size(B, 1)
+x2 = vec(transpose(cholesky(Symmetric(A)) \ 
+    transpose(cholesky(Symmetric(B)) \ reshape(c, p, m))));
+```
+
+```{julia}
+# relative error
+norm(x1 - x2) / norm(x1)
+```
+
+```{julia}
+# Method 1: form Kronecker and Cholesky solve
+@benchmark cholesky(Symmetric(kron($A, $B))) \ c
+```
+
+```{julia}
+# Method 2: use (A ⊗ B)^{-1} = A^{-1} ⊗ B^{-1}
+@benchmark vec(transpose(cholesky(Symmetric($A)) \ 
+    transpose(cholesky(Symmetric($B)) \ reshape($c, p, m))))
+```
+
+## Sparse matrices
+
+Use a *sparse matrix decomposition* or *iterative method*.  
+
+This is the easiest recognizable structure. Familiarize yourself with the sparse matrix computation tools in Julia, Python, R (`Matrix` package), MKL (sparse BLAS), ... as much as possible.
+
+```{julia}
+Random.seed!(206)
+
+# a 7701-by-7701 sparse pd matrix
+A = matrixdepot("wathen", 50)
+# random generated rhs
+b = randn(size(A, 1))
+Afull = Matrix(A)
+count(!iszero, A) / length(A) # sparsity
+```
+
+```{julia}
+spy(A)
+```
+
+Matrix-vector multiplication:
+
+```{julia}
+# dense matrix-vector multiplication
+@benchmark $Afull * $b
+```
+
+```{julia}
+# sparse matrix-vector multiplication
+@benchmark $A * $b
+```
+
+Solving linear systems:
+
+```{julia}
+# solve via dense Cholesky
+xchol = cholesky(Symmetric(Afull)) \ b
+@benchmark cholesky($(Symmetric(Afull))) \ $b
+```
+
+```{julia}
+# solve via sparse Cholesky
+xcholsp = cholesky(Symmetric(A)) \ b
+@show norm(xchol - xcholsp)
+@benchmark cholesky($(Symmetric(A))) \ $b
+```
+
+```{julia}
+# sparse solve via conjugate gradient
+xcg = cg(A, b)
+@show norm(xcg - xchol)
+@benchmark cg($A, $b)
+```
+
+```{julia}
+# sparse solve via preconditioned conjugate gradient
+xpcg = cg(A, b, Pl = DiagonalPreconditioner(A))
+@show norm(xpcg - xchol)
+@benchmark cg($A, $b, Pl = $(DiagonalPreconditioner(A)))
+```
+
+## Easy plus low rank
+
+Easy plus low rank: $\mathbf{U} \in \mathbb{R}^{n \times r}$, $\mathbf{V} \in \mathbb{R}^{r \times n}$, $r \ll n$.
+The [Woodbury](https://en.wikipedia.org/wiki/Woodbury_matrix_identity) and [Sherman-Morrison](https://en.wikipedia.org/wiki/Sherman%E2%80%93Morrison_formula) formulas can sometimes be used to reduce complexity:
+
+\begin{eqnarray*}
+	(\mathbf{A} + \mathbf{U} \mathbf{V}^T)^{-1} &=& \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (\mathbf{I}_r + \mathbf{V} \mathbf{A}^{-1} \mathbf{U}^T)^{-1} \mathbf{V}^T \mathbf{A}^{-1} \\
+    \text{det}(\mathbf{A} + \mathbf{U} \mathbf{V}^T) &=& \text{det}(\mathbf{A}) \text{det}(\mathbf{I}_r + \mathbf{V} \mathbf{A}^{-1} \mathbf{U}^T).
+\end{eqnarray*}  
+
+* [`WoodburyMatrices.jl`](https://github.com/timholy/WoodburyMatrices.jl) package can be useful.
+
+```{julia}
+Random.seed!(206)
+n = 1000
+r = 5
+
+A = Diagonal(rand(n))
+B = randn(n, r)
+D = Diagonal(rand(r))
+b = randn(n);
+```
+
+```{julia}
+# Woodbury structure: W = A + B * D * B'
+W = SymWoodbury(A, B, D)
+Wfull = Matrix(W) # stored as a Matrix{Float64}
+```
+
+```
+# compares storage
+Base.summarysize(W), Base.summarysize(Wfull)
+```
+
+```{julia}
+### Solve linear equation
+# solve via Cholesky
+@benchmark cholesky($(Symmetric(Wfull))) \ $b
+```
+
+```{julia}
+# solve using Woodbury formula
+@benchmark $W \ reshape($b, n, 1) # hack; need to file an issue 
+```
+
+```{julia}
+### Matrix-vector multiplication
+# multiplication without using Woodbury structure
+@benchmark $Wfull * $b
+```
+
+```{julia}
+# multiplication using Woodbury structure
+@benchmark $W * $b
+```
+
+```{julia}
+### Determinant
+# determinant without using Woodbury structure
+@benchmark det($Wfull)
+```
+
+```{julia}
+# determinant using Woodbury structure
+@benchmark det($W)
+```
+
+# Easy plus border
+
+Easy plus border: For $\mathbf{A}$ pd and $\mathbf{V}$ full row rank,
+$$
+	\begin{pmatrix}
+	\mathbf{A} & \mathbf{V}^T \\
+	\mathbf{V} & \mathbf{0}
+	\end{pmatrix}^{-1} = \begin{pmatrix}
+	\mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{V}^T (\mathbf{V} \mathbf{A}^{-1} \mathbf{V}^T)^{-1} \mathbf{V} \mathbf{A}^{-1} & \mathbf{A}^{-1} \mathbf{V}^T (\mathbf{V} \mathbf{A}^{-1} \mathbf{V}^T)^{-1} \\
+	(\mathbf{V} \mathbf{A}^{-1} \mathbf{V}^T)^{-1} \mathbf{V} \mathbf{A}^{-1} & - (\mathbf{V} \mathbf{A}^{-1} \mathbf{V}^T)^{-1}
+	\end{pmatrix}.
+$$
+
+# Orthogonal matrix
+
+Orthogonal $\mathbf{A}$: $n^2$ flops **at most**. Why? Permutation matrix, Householder matrix, Jacobi matrix, ... take less.
+
+# Toeplitz matrix
+
+Toeplitz systems (constant diagonals):
+$$
+	\mathbf{T} = \begin{pmatrix}
+	r_0 & r_1 & r_2 & r_3 \\
+	r_{-1} & r_0 & r_1 & r_2 \\
+	r_{-2} & r_{-1} & r_0 & r_1 \\
+	r_{-3} & r_{-2} & r_{-1} & r_0
+	\end{pmatrix}.
+$$
+
+- $\mathbf{T} \mathbf{x} = \mathbf{b}$, where $\mathbf{T}$ is positive definite and Toeplitz, can be solved in $O(n^2)$ flops.
+- Durbin algorithm (Yule-Walker equation)
+- Levinson algorithm (general $\mathbf{b}$)
+- Trench algorithm (inverse)
+- These matrices occur in auto-regressive models and econometrics.
+
+**Example**: Toeplitz correlation structure
+
+```{julia}
+ρ = 0.5 # baseline
+Σ = [ρ ^ abs(i - j) for i in 1:10, j in 1:10]
+```
+
+The [`ToeplitzMatrices.jl`](https://github.com/JuliaMatrices/ToeplitzMatrices.jl) package deals with these types of matrices.
+
+# Circulant matrix
+
+Circulant systems: Toeplitz matrix with wraparound
+$$
+	C(\mathbf{z}) = \begin{pmatrix}
+	z_0 & z_4 & z_3 & z_2 & z_1 \\
+	z_1 & z_0 & z_4 & z_3 & z_2 \\
+	z_2 & z_1 & z_0 & z_4 & z_3 \\
+	z_3 & z_2 & z_1 & z_0 & z_4 \\
+	z_4 & z_3 & z_2 & z_1 & z_0
+	\end{pmatrix},
+$$
+FFT type algorithms: DCT (discrete cosine transform) and DST (discrete sine transform).
+
+# Vandermonde matrix
+
+Appears in interpolation and approximation problems.
+$$
+	\mathbf{V}(x_0,\ldots,x_n) = \begin{pmatrix}
+	1 & 1 & \cdots & 1 \\
+	x_0 & x_1 & \cdots & x_m \\
+	\vdots & \vdots & & \vdots \\
+	x_0^n & x_1^n & \cdots & x_m^n
+	\end{pmatrix}.
+$$
+
+In the univariate case:
+
+- $x_{i}$ are numbers sampled from some domain.
+- The monomials $x_{i}^{k}$ are powers of the data.
+- Fit a polynomial through $n$ data points by estimating coefficients for each monomial.
+
+$\mathbf{V} \mathbf{x} = \mathbf{b}$ or $\mathbf{V}^T \mathbf{x} = \mathbf{b}$ can be solved in $O(n^2)$ flops.
+
+
+
+# References
+
+::: {#refs}
+
+:::
+

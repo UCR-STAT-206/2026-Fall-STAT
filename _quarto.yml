@@ -64,7 +64,9 @@ website:
       - section: Module 5 (Linear Systems)
         contents:
           - text: Easy Systems
+            href: notes/module05/easy.qmd
           - text: Condition Numbers
+            href: notes/module05/condition.qmd
           - text: QR 
           - text: Cholesky
           - text: Eigen
