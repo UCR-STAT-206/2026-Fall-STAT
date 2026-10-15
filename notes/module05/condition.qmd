@@ -1,7 +1,5 @@
 ---
 title: "Condition Numbers"
-execute:
-  eval: false
 ---
 
 ```{julia}
