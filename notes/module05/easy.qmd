@@ -1,5 +1,6 @@
 ---
 title: Easy Linear Systems
+eval: false
 ---
 
 
@@ -524,12 +525,4 @@ In the univariate case:
 - Fit a polynomial through $n$ data points by estimating coefficients for each monomial.
 
 $\mathbf{V} \mathbf{x} = \mathbf{b}$ or $\mathbf{V}^T \mathbf{x} = \mathbf{b}$ can be solved in $O(n^2)$ flops.
-
-
-
-# References
-
-::: {#refs}
-
-:::
 
