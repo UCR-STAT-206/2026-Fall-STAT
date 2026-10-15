@@ -358,11 +358,17 @@ window.Quarto = {
       </div>
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
- <span class="menu-text">Easy Systems</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
- <span class="menu-text">Condition Numbers</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
           <li class="sidebar-item">
  <span class="menu-text">QR</span>
   </li>
@@ -684,7 +690,7 @@ window.Quarto = {
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-   1245.8 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerJSONExt<span class="ansi-bright-black-fg"> (serial)</span>
+   1171.8 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerJSONExt<span class="ansi-bright-black-fg"> (serial)</span>
   1 dependency successfully precompiled in 1 seconds
 </pre>
 </div>
@@ -897,13 +903,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 15 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">336.328 ms</span> … <span class="ansi-magenta-fg">351.510 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">339.797 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.25%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">340.538 ms</span> ± <span class="ansi-green-fg">  3.971 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.40% ± 0.42%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">333.908 ms</span> … <span class="ansi-magenta-fg">341.838 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.24%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">336.966 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.24%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">337.189 ms</span> ± <span class="ansi-green-fg">  1.942 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.35% ± 0.30%
 
-  ▁   ▁ █▁ ▁▁<span class="ansi-blue-fg"> </span> ▁ ▁▁<span class="ansi-green-fg">▁</span>▁▁                        ▁               ▁  
-  █▁▁▁█▁██▁██<span class="ansi-blue-fg">▁</span>▁█▁██<span class="ansi-green-fg">█</span>██▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█ ▁
-  336 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          352 ms <span class="ansi-bold">&lt;</span>
+  ▁         ▁  ▁ ▁    █▁<span class="ansi-blue-fg"> </span>█▁<span class="ansi-green-fg">▁</span>          ▁   ▁  ▁                ▁  
+  █▁▁▁▁▁▁▁▁▁█▁▁█▁█▁▁▁▁██<span class="ansi-blue-fg">▁</span>██<span class="ansi-green-fg">█</span>▁▁▁▁▁▁▁▁▁▁█▁▁▁█▁▁█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█ ▁
+  334 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          342 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.52 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -915,14 +921,14 @@ window.Quarto = {
 <span id="cb7-3"><a href="#cb7-3" aria-label="3"></a><span class="pp">@benchmark</span> <span class="op">$</span>A <span class="op">*</span> <span class="op">$</span>D</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 1411 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.962 ms</span> … <span class="ansi-magenta-fg">6.976 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 18.04%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.388 ms             </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.541 ms</span> ± <span class="ansi-green-fg">1.025 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>14.70% ± 14.77%
+<pre>BenchmarkTools.Trial: 1423 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.872 ms</span> … <span class="ansi-magenta-fg">5.357 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 18.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.545 ms             </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>17.34%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.512 ms</span> ± <span class="ansi-green-fg">1.066 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>15.34% ± 16.57%
 
-    ▁ ▁▂              ▁▃▇█<span class="ansi-blue-fg">▃</span>▇<span class="ansi-green-fg">▂</span>                      ▁▁▃       
-  ▄█████▇▆▄▄▃▃▂▁▂▃▃▅█▆████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>▆▆▅▄▃▃▃▂▁▂▂▁▁▂▂▂▁▂▃▄▅▆████▆▅▄▃ ▄
-  1.96 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>       5.41 ms <span class="ansi-bold">&lt;</span>
+   █▅                     ▂▆▂ <span class="ansi-green-fg"> </span><span class="ansi-blue-fg"> </span>▃▁                    ▂▃     
+  ▇██▆▄▃▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▅███▅<span class="ansi-green-fg">▇</span><span class="ansi-blue-fg">█</span>██▇▆▄▃▂▂▁▁▁▁▂▁▁▁▁▁▁▂▄███▆▆▄ ▃
+  1.87 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>       5.18 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.52 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -933,14 +939,14 @@ window.Quarto = {
 <span id="cb8-2"><a href="#cb8-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="op">$</span>A <span class="op">.*</span> <span class="fu">transpose</span>(<span class="op">$</span>d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 1370 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.981 ms</span> … <span class="ansi-magenta-fg">7.693 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 15.52%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.492 ms             </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>10.65%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.648 ms</span> ± <span class="ansi-green-fg">1.050 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>14.64% ± 14.72%
+<pre>BenchmarkTools.Trial: 1441 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.843 ms</span> … <span class="ansi-magenta-fg">5.401 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 14.66%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.511 ms             </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.470 ms</span> ± <span class="ansi-green-fg">1.052 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>15.42% ± 16.56%
 
-      ▁▄▂             ▇▇▆█<span class="ansi-blue-fg">▇</span>▆<span class="ansi-green-fg">▄</span>▂                  ▁▁ ▁▄▂       
-  ▄▇█████▇▆▇▄▃▃▃▄▅▅▄▆▇████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>██▆▄▃▃▃▃▃▁▂▁▁▂▁▂▁▃▆██████▆▆▄▄▃ ▄
-  1.98 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>       5.63 ms <span class="ansi-bold">&lt;</span>
+   █▇                     ▄▅▂ <span class="ansi-green-fg"> </span><span class="ansi-blue-fg">▁</span>▃▅▁                   ▄▃▁    
+  ▅██▇▃▃▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃███▅<span class="ansi-green-fg">▆</span><span class="ansi-blue-fg">█</span>███▄▃▂▂▃▁▁▁▁▁▁▁▁▁▁▁▁▃▇███▅▃ ▃
+  1.84 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>       5.12 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.52 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -952,14 +958,14 @@ window.Quarto = {
 <span id="cb9-3"><a href="#cb9-3" aria-label="3"></a><span class="pp">@benchmark</span> <span class="fu">rmul!</span>(<span class="op">$</span>A, <span class="op">$</span>D)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 4208 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">992.023 μs</span> … <span class="ansi-magenta-fg"> 1.749 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">  1.169 ms              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">  1.187 ms</span> ± <span class="ansi-green-fg">93.896 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 6044 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">478.734 μs</span> … <span class="ansi-magenta-fg">  1.271 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">885.703 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">825.997 μs</span> ± <span class="ansi-green-fg">173.180 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-            ▁▁▃▄▇▆▇▆▇▇█▆<span class="ansi-blue-fg">▄</span>▄<span class="ansi-green-fg">▄</span>▂▂▁▁                                 
-  ▁▁▁▁▂▃▃▄▆▆████████████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>████▇██▇▆▆▆▅▄▆▅▅▄▃▃▃▃▂▃▂▂▂▂▂▂▂▂▁▁▁▁ ▄
-  992 μs<span class="ansi-bright-black-fg">          Histogram: frequency by time</span>         1.48 ms <span class="ansi-bold">&lt;</span>
+                                     <span class="ansi-green-fg"> </span>    <span class="ansi-blue-fg"> </span>  ▁▆▆██▇▅▅▃▂          
+  ▃▇▇▆▆▆▅▆▄▅▅▅▅▅▅▅▅▅▆▄▄▄▅▅▄▅▄▅▅▄▅▅▅▅▆<span class="ansi-green-fg">▅</span>▅▆▆▆<span class="ansi-blue-fg">▇</span>▇███████████▇█▆▄▄▃▂▂ ▄
+  479 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>         1.09 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -970,14 +976,14 @@ window.Quarto = {
 <span id="cb10-2"><a href="#cb10-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="op">$</span>A <span class="op">.=</span> <span class="op">$</span>A <span class="op">.*</span> <span class="fu">transpose</span>(<span class="op">$</span>d)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 2398 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.826 ms</span> … <span class="ansi-magenta-fg">  4.712 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">2.068 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">2.085 ms</span> ± <span class="ansi-green-fg">159.032 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 2717 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.563 ms</span> … <span class="ansi-magenta-fg">  3.440 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">1.839 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">1.840 ms</span> ± <span class="ansi-green-fg">121.412 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-             ▂▂▂▄█▆▆▅▆▇▆<span class="ansi-blue-fg">█</span>▆<span class="ansi-green-fg">▆</span>▄▅▄▅▁                               
-  ▁▂▂▃▄▄▄▅▅█████████████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>██████▇█▇▆▆▅▅▄▄▃▃▃▃▂▂▂▂▂▁▁▂▂▁▁▁▁▁▁ ▄
-  1.83 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>        2.48 ms <span class="ansi-bold">&lt;</span>
+                      ▁▁▂▄▅▅▅▇<span class="ansi-blue-fg">▅</span>█▇▅▄▃▁▁                         
+  ▂▁▁▂▂▂▂▃▃▃▄▃▄▄▃▆▄▅▇▇████████<span class="ansi-blue-fg">█</span>███████▇▆▄▃▃▄▃▃▂▂▂▃▂▁▂▁▂▁▂▁▁▁▁ ▄
+  1.56 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>        2.15 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1000,13 +1006,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 15 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">337.455 ms</span> … <span class="ansi-magenta-fg">345.772 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.23%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">340.345 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.23%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">340.225 ms</span> ± <span class="ansi-green-fg">  1.998 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.27% ± 0.14%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">333.497 ms</span> … <span class="ansi-magenta-fg">337.477 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.24%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">336.490 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.24%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">336.208 ms</span> ± <span class="ansi-green-fg">  1.108 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.29% ± 0.12%
 
-  ▃           █    <span class="ansi-blue-fg"> </span>  <span class="ansi-green-fg"> </span>    █                                     
-  █▁▁▁▁▁▁▁▁▇▁▁█▁▁▁▇<span class="ansi-blue-fg">▁</span>▁▁<span class="ansi-green-fg">▁</span>▇▁▁▇█▁▇▁▇▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▇ ▁
-  337 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          346 ms <span class="ansi-bold">&lt;</span>
+  ▁                         █ ▁▁    ▁       <span class="ansi-green-fg">▁</span><span class="ansi-blue-fg"> </span> ▁    ▁▁   ▁█ ▁ ▁  
+  █▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁██▁▁▁▁█▁▁▁▁▁▁▁<span class="ansi-green-fg">█</span><span class="ansi-blue-fg">▁</span>▁█▁▁▁▁██▁▁▁██▁█▁█ ▁
+  333 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          337 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.52 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -1018,14 +1024,14 @@ window.Quarto = {
 <span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="fu">dot</span>(<span class="op">$</span>A, <span class="op">$</span>B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 3090 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.288 ms</span> … <span class="ansi-magenta-fg">  2.504 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">1.591 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">1.617 ms</span> ± <span class="ansi-green-fg">150.641 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 3644 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">1.252 ms</span> … <span class="ansi-magenta-fg"> 1.739 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">1.359 ms              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">1.371 ms</span> ± <span class="ansi-green-fg">66.411 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-              ▁▃▃▇▅▆█▅▅▃▅<span class="ansi-blue-fg">▄</span>▅<span class="ansi-green-fg">▆</span>▃▃▂ ▁                              
-  ▁▂▁▂▂▃▃▃▄▄▅▇███████████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>█████▇▇▆▆▇▆▅▅▄▄▄▄▄▃▄▃▂▃▃▃▂▂▂▂▁▂▂▂ ▄
-  1.29 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>        2.06 ms <span class="ansi-bold">&lt;</span>
+        ▂▃▄▆▆▆▆▇███▆<span class="ansi-blue-fg">▆</span>▇<span class="ansi-green-fg">▄</span>▄▂▃▃▂▁ ▁                               
+  ▂▂▃▄▆█████████████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>█████████▇█▆▅▆▅▅▄▄▃▃▃▃▂▂▂▂▂▂▂▁▂▁▂▁▂▁▂ ▄
+  1.25 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>        1.59 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1041,13 +1047,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 15 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">336.947 ms</span> … <span class="ansi-magenta-fg">342.698 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.27%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">340.415 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.24%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">340.069 ms</span> ± <span class="ansi-green-fg">  1.368 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.29% ± 0.13%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">334.433 ms</span> … <span class="ansi-magenta-fg">339.003 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.26%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">337.404 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.26%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">337.098 ms</span> ± <span class="ansi-green-fg">  1.115 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.30% ± 0.12%
 
-                   ▃               <span class="ansi-green-fg"> </span>  <span class="ansi-blue-fg">█</span>  ▃                       
-  ▇▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁▁▁▁▁▇▇▁▁▁▁▁▇<span class="ansi-green-fg">▁</span>▁▁<span class="ansi-blue-fg">█</span>▇▁█▁▇▁▁▁▁▁▁▇▁▁▁▁▁▁▁▁▁▁▁▇ ▁
-  337 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          343 ms <span class="ansi-bold">&lt;</span>
+  ▁                    ▁▁   ▁ ▁▁  ▁<span class="ansi-blue-fg"> </span>  <span class="ansi-green-fg"> </span>  ▁█     ▁▁█           ▁  
+  █▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁██▁▁▁█▁██▁▁█<span class="ansi-blue-fg">▁</span>▁▁<span class="ansi-green-fg">▁</span>▁▁██▁▁▁▁▁███▁▁▁▁▁▁▁▁▁▁▁█ ▁
+  334 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          339 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.53 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">6</span>.</pre>
 </div>
@@ -1058,14 +1064,14 @@ window.Quarto = {
 <span id="cb14-2"><a href="#cb14-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="fu">Diagonal</span>(<span class="fu">vec</span>(<span class="fu">sum</span>(<span class="op">$</span>A <span class="op">.*</span> <span class="op">$</span>B, dims <span class="op">=</span> <span class="fl">1</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 746 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">4.416 ms</span> … <span class="ansi-magenta-fg"> 12.031 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 12.86%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">6.713 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>11.46%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">6.702 ms</span> ± <span class="ansi-green-fg">648.292 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>12.23% ± 10.07%
+<pre>BenchmarkTools.Trial: 822 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">4.025 ms</span> … <span class="ansi-magenta-fg">  7.540 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 9.98%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">5.944 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>12.65%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">6.088 ms</span> ± <span class="ansi-green-fg">526.740 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>11.96% ± 9.69%
 
-                        ▁▃█▇▄▃     <span class="ansi-blue-fg"> </span> ▁▅▄ ▃▂▁                   
-  ▂▁▁▃▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▃▃▆██████▇▇▆▅▅<span class="ansi-blue-fg">▆</span>████████▆▆▆▃▄▃▄▂▂▂▁▃▂▁▁▂▂ ▄
-  4.42 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>         8.5 ms <span class="ansi-bold">&lt;</span>
+                              ▁▇▅▅█▄▆<span class="ansi-blue-fg">▂</span>  <span class="ansi-green-fg"> </span>      ▁               
+  ▂▂▃▂▂▁▁▂▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▃▄▆▇███████<span class="ansi-blue-fg">█</span>▇▆<span class="ansi-green-fg">▆</span>▅▆▅▆▇▇██▇▇▅▅▅▆▄▄▃▄▃▃ ▄
+  4.03 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>        7.27 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">30.53 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">7</span>.</pre>
 </div>
@@ -1087,14 +1093,14 @@ window.Quarto = {
 <span id="cb15-12"><a href="#cb15-12" aria-label="12"></a><span class="pp">@benchmark</span> <span class="fu">diag_matmul!</span>(<span class="op">$</span>d, <span class="op">$</span>A, <span class="op">$</span>B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 1298 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">3.811 ms</span> … <span class="ansi-magenta-fg"> 4.852 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.844 ms              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.853 ms</span> ± <span class="ansi-green-fg">43.857 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 1293 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">3.823 ms</span> … <span class="ansi-magenta-fg"> 5.405 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">3.858 ms              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">3.867 ms</span> ± <span class="ansi-green-fg">52.830 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-        ▂▃▄█▆▄<span class="ansi-blue-fg">▂</span>▃ <span class="ansi-green-fg"> </span>                                            
-  ▂▂▃▅▅▅██████<span class="ansi-blue-fg">█</span>██<span class="ansi-green-fg">▇</span>▆▆▅▅▅▅▄▄▃▄▃▃▂▃▃▃▃▂▂▃▂▂▃▂▂▂▂▂▂▂▂▂▂▂▁▂▂▂▂▂▁▂ ▃
-  3.81 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>        3.97 ms <span class="ansi-bold">&lt;</span>
+        ▁▃▅▆█▃▆▄▅<span class="ansi-blue-fg">▄</span>▃▂▁<span class="ansi-green-fg"> </span>                                        
+  ▂▂▄▄▅▆█████████<span class="ansi-blue-fg">█</span>███<span class="ansi-green-fg">█</span>█▇▅▇▅▇▄▅▅▄▅▄▄▄▃▃▃▃▃▄▃▃▃▃▂▃▂▂▂▁▂▃▂▂▃▂▁▂ ▄
+  3.82 ms<span class="ansi-bright-black-fg">        Histogram: frequency by time</span>        3.96 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1265,14 +1271,14 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="pp">@benchmark</span> <span class="fu">matmul_by_loop!</span>(<span class="op">$</span>A, <span class="op">$</span>B, <span class="op">$</span>C, <span class="st">"jki"</span>) <span class="co"># best</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 82 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">58.507 ms</span> … <span class="ansi-magenta-fg"> 62.850 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">61.759 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">61.562 ms</span> ± <span class="ansi-green-fg">885.420 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 92 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">53.246 ms</span> … <span class="ansi-magenta-fg">60.593 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">53.713 ms              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">54.804 ms</span> ± <span class="ansi-green-fg"> 2.309 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-                                            <span class="ansi-green-fg"> </span>▄ <span class="ansi-blue-fg">█</span> ▂▄ ▁           
-  ▃▃▁▁▁▃▁▃▁▁▁▁▃▁▁▁▁▁▁▃▁▁▁▁▁▃▃▁▃▅▃▁▅▁▁▁▃▃▃▅▅▅<span class="ansi-green-fg">▆</span>██<span class="ansi-blue-fg">█</span>▅██▆█▅▆▁▃▁▃▃▃▅ ▁
-  58.5 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>         62.8 ms <span class="ansi-bold">&lt;</span>
+    ██<span class="ansi-blue-fg">▂</span>        <span class="ansi-green-fg"> </span>                                               
+  ▇▇██<span class="ansi-blue-fg">█</span>▆▄▁▃▁▁▁▁<span class="ansi-green-fg">▁</span>▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▃▄▃▄▃▃▃▁▁▁▁▁▃▃▃ ▁
+  53.2 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>        60.4 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1282,14 +1288,14 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="pp">@benchmark</span> <span class="fu">matmul_by_loop!</span>(<span class="op">$</span>A, <span class="op">$</span>B, <span class="op">$</span>C, <span class="st">"kji"</span>) <span class="co"># second best</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 41 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">112.763 ms</span> … <span class="ansi-magenta-fg">142.826 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">121.311 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">122.562 ms</span> ± <span class="ansi-green-fg">  5.313 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 50 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold"> 88.587 ms</span> … <span class="ansi-magenta-fg">118.619 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">101.272 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">101.007 ms</span> ± <span class="ansi-green-fg">  6.942 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-             ▅ ▂█  <span class="ansi-blue-fg">▂</span>▂ <span class="ansi-green-fg"> </span>  ▅                                       
-  ▅▁▁▁▁▁▁▁▁▅▅█▅██▅█<span class="ansi-blue-fg">█</span>█▅<span class="ansi-green-fg">█</span>▅▁█▁▁▅█▁▁▁█▁▁▁▁▁▁▁▁▁▁▅▁▁▁▅▁▁▁▁▁▁▁▁▁▁▁▁▁▅ ▁
-  113 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          143 ms <span class="ansi-bold">&lt;</span>
+           ▂ ▂▅        ▂  <span class="ansi-blue-fg"> </span><span class="ansi-green-fg"> </span>  ▅   █        ▂                     
+  ▅▁▁▅▁▅▁▁▅█▅██▁██▁▁▁▅▁█▅▅<span class="ansi-blue-fg">▁</span><span class="ansi-green-fg">▁</span>▁▅█▁▁▅███▁▁▅▅▁▁█▁▅▁▁▁▁▅▁▁█▁▁▁▁▁▁▁▁▅ ▁
+  88.6 ms<span class="ansi-bright-black-fg">          Histogram: frequency by time</span>          119 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1300,13 +1306,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">545.472 ms</span> … <span class="ansi-magenta-fg">554.877 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">546.643 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">547.577 ms</span> ± <span class="ansi-green-fg">  2.785 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">547.052 ms</span> … <span class="ansi-magenta-fg">550.388 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">549.368 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">549.068 ms</span> ± <span class="ansi-green-fg">  1.041 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-  ▁▁  ▁▁ <span class="ansi-blue-fg">▁</span>█     <span class="ansi-green-fg"> </span>     █                                       ▁  
-  ██▁▁██▁<span class="ansi-blue-fg">█</span>█▁▁▁▁▁<span class="ansi-green-fg">▁</span>▁▁▁▁▁█▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁█ ▁
-  545 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          555 ms <span class="ansi-bold">&lt;</span>
+  ▁            ▁             ▁   ▁     <span class="ansi-green-fg"> </span>    <span class="ansi-blue-fg">█</span>   ▁▁        ▁   ▁  
+  █▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁▁▁▁▁▁▁▁▁▁▁█▁▁▁█▁▁▁▁▁<span class="ansi-green-fg">▁</span>▁▁▁▁<span class="ansi-blue-fg">█</span>▁▁▁██▁▁▁▁▁▁▁▁█▁▁▁█ ▁
+  547 ms<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          550 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1317,14 +1323,14 @@ window.Quarto = {
 <span id="cb21-2"><a href="#cb21-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="fu">mul!</span>(<span class="op">$</span>C, <span class="op">$</span>A, <span class="op">$</span>B)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 264 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">18.654 ms</span> … <span class="ansi-magenta-fg"> 26.577 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">18.946 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">19.008 ms</span> ± <span class="ansi-green-fg">556.658 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 269 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">18.397 ms</span> … <span class="ansi-magenta-fg"> 19.274 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">18.566 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">18.589 ms</span> ± <span class="ansi-green-fg">117.673 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-       ▂▂▁▇▅▃ █▄▇<span class="ansi-blue-fg">▃</span>▆▃<span class="ansi-green-fg">▃</span>▆▃                                         
-  ▃▁▄▃▇██████▇███<span class="ansi-blue-fg">█</span>██<span class="ansi-green-fg">█</span>██▇█▅▇▅▇▄▃▃▃▃▄▁▁▄▁▄▁▁▁▁▁▁▁▁▁▁▁▁▃▁▁▁▁▁▁▁▁▃ ▄
-  18.7 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>         19.8 ms <span class="ansi-bold">&lt;</span>
+       ▂   ▆▃  ▆▅▂█<span class="ansi-blue-fg">▃</span> ▆<span class="ansi-green-fg">▂</span>▁  ▄                                     
+  ▃▄▄▇▄█▆▇▅██▅█████<span class="ansi-blue-fg">█</span>▄█<span class="ansi-green-fg">█</span>█▆▇█▅█▄▇▇▅▄▅▄▅█▃▃▄▄▄▁▄▁▃▁▃▃▃▁▁▁▁▁▁▁▁▁▁▃ ▄
+  18.4 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>           19 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1335,14 +1341,14 @@ window.Quarto = {
 <span id="cb22-2"><a href="#cb22-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="bu">LinearAlgebra</span>.BLAS.<span class="fu">gemm!</span>(<span class="ch">'N'</span>, <span class="ch">'N'</span>, <span class="fl">1.0</span>, <span class="op">$</span>A, <span class="op">$</span>B, <span class="fl">0.0</span>, <span class="op">$</span>C)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 265 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">18.642 ms</span> … <span class="ansi-magenta-fg"> 19.602 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">18.894 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">18.909 ms</span> ± <span class="ansi-green-fg">139.345 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+<pre>BenchmarkTools.Trial: 270 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">18.374 ms</span> … <span class="ansi-magenta-fg"> 19.448 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">18.524 ms               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">18.543 ms</span> ± <span class="ansi-green-fg">112.567 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-        ▁  ▂ ▁▃   ▄▇█▇▁<span class="ansi-blue-fg">▅</span>▄<span class="ansi-green-fg">▁</span>▆ ▄  ▄▁▁▁ ▂                           
-  ▃▁▆▄▄▇█▄▅█▇██████████<span class="ansi-blue-fg">█</span>█<span class="ansi-green-fg">█</span>█▇██▄████▆█▃▁▇▆▆▃▁▃▁▄▄▁▆▃▁▁▁▁▁▁▁▁▁▁▃ ▄
-  18.6 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>         19.4 ms <span class="ansi-bold">&lt;</span>
+        ▁  ▁ ▁▅▇▁▁█▁▂<span class="ansi-blue-fg">▄</span>▆ <span class="ansi-green-fg">▁</span>▁▂▁ ▃                                  
+  ▃▁▄▄▄▄█▅▃██████████<span class="ansi-blue-fg">█</span>█▆<span class="ansi-green-fg">█</span>███▅█▇▄▆▅▅▄▃▇▄▄▁▄▃▇▃▁▃▁▁▁▁▃▁▁▁▃▃▃▁▃▁▃ ▄
+  18.4 ms<span class="ansi-bright-black-fg">         Histogram: frequency by time</span>         18.8 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1395,7 +1401,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb29-1"><a href="#cb29-1" aria-label="1"></a><span class="co"># same data in tranpose(A) and original matrix A</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-label="2"></a><span class="fu">pointer</span>(<span class="fu">transpose</span>(A).parent), <span class="fu">pointer</span>(A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(Ptr{Float64}(0x000000002d323180), Ptr{Float64}(0x000000002d323180))</code></pre>
+<pre><code>(Ptr{Float64}(0x000000000be0b700), Ptr{Float64}(0x000000000be0b700))</code></pre>
 </div>
 </div>
 <div id="52" class="cell" data-execution_count="1">
@@ -1405,13 +1411,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">116.117 μs</span> … <span class="ansi-magenta-fg"> 1.867 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 87.55%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">151.844 μs              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">152.705 μs</span> ± <span class="ansi-green-fg">19.512 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.11% ±  0.88%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">114.356 μs</span> … <span class="ansi-magenta-fg"> 1.521 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 89.09%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">115.668 μs              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">117.921 μs</span> ± <span class="ansi-green-fg">14.882 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.11% ±  0.89%
 
-  ▄▂                              ▁▂▃▆█<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">▅</span>▃▂▁▁ ▁▂▄▅▅▃▂▁         ▂
-  ██▇▄▅▅▄▄▄▅▆█▇▆▆▄▅▃▃▃▁▁▁▁▃▄▁▃▄▄▃▆█████<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">█</span>███████████████▇▇▆▆▇▇ █
-  116 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>       174 μs <span class="ansi-bold">&lt;</span>
+  ▃▇█<span class="ansi-blue-fg">█</span>▆▅▄▃▂<span class="ansi-green-fg">▂</span>▂▁▁              ▃▄▃▂▂▁▁▁▁                         ▂
+  ███<span class="ansi-blue-fg">█</span>█████<span class="ansi-green-fg">█</span>█████▇▇█▇▆▅▆▇▅▆▇███████████▇▇▆▇▆▇▆▄▅▅▄▅▄▄▅▄▅▅▃▅▄▅▆ █
+  114 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>       137 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">7.88 KiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -1424,13 +1430,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">113.913 μs</span> … <span class="ansi-magenta-fg">200.735 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">115.415 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">117.169 μs</span> ± <span class="ansi-green-fg">  4.638 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">113.795 μs</span> … <span class="ansi-magenta-fg">158.860 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">114.757 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">117.013 μs</span> ± <span class="ansi-green-fg">  4.977 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-   ▅█▇<span class="ansi-blue-fg">█</span>▇▅▃▂▂<span class="ansi-green-fg">▁</span>▁▁                  ▂▃▃▃▃▂▁▁▁▁                     ▂
-  ████<span class="ansi-blue-fg">█</span>█████<span class="ansi-green-fg">█</span>███▇▇▇▆▆▆▆▂▅▅▆▆▅▆▅▆████████████▇█▇▇▅▆▆▄▄▄▄▄▄▄▂▃▄▂▅ █
-  114 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>        134 μs <span class="ansi-bold">&lt;</span>
+  ▃▇█<span class="ansi-blue-fg">▅</span>▄▃▂▂<span class="ansi-green-fg">▂</span>▁                 ▃▄▂▂▁▁▁                            ▁
+  ███<span class="ansi-blue-fg">█</span>████<span class="ansi-green-fg">█</span>███▇▇▇▇▇▆▅▅▅▆▆▆▆▆██████████▇█▇▆▆▆▆▅▅▅▄▄▅▄▄▄▅▅▄▅▅▅▆▆▆ █
+  114 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>        137 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1442,13 +1448,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">114.564 μs</span> … <span class="ansi-magenta-fg">213.900 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">115.636 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">118.136 μs</span> ± <span class="ansi-green-fg">  5.800 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">113.815 μs</span> … <span class="ansi-magenta-fg">160.332 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">114.807 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">117.063 μs</span> ± <span class="ansi-green-fg">  5.072 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-  ▁▆█<span class="ansi-blue-fg">▆</span>▄▂▁ ▁<span class="ansi-green-fg"> </span>                 ▃▄▃▂▁▁▁▁                           ▁
-  ███<span class="ansi-blue-fg">█</span>█████<span class="ansi-green-fg">█</span>▇▆▅▅▅▄▆▆▆▄▃▅▆▆▅███████████▇▆▇▆▆▄▅▃▃▄▄▄▄▄▄▄▄▅▄▆▅▆▄▆▅ █
-  115 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>        139 μs <span class="ansi-bold">&lt;</span>
+  ▃▇█<span class="ansi-blue-fg">▆</span>▄▃▂▂▂<span class="ansi-green-fg">▁</span>                 ▃▄▂▁ ▁▁                            ▁
+  ███<span class="ansi-blue-fg">█</span>█████<span class="ansi-green-fg">█</span>███▇▇▇▆▇▅▅▅▅▆▇▅▅██████████▇▇▆▆▆▇▄▄▆▅▆▄▆▆▅▅▅▅▃▅▆▅▆▆▇ █
+  114 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>        137 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1471,14 +1477,14 @@ window.Quarto = {
 <span id="cb36-2"><a href="#cb36-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="fu">max</span>.(<span class="fu">abs</span>.(<span class="op">$</span>X), <span class="fu">abs</span>.(<span class="op">$</span>Y))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 7280 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">468.054 μs</span> … <span class="ansi-magenta-fg">  2.895 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 51.64%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">552.567 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">686.334 μs</span> ± <span class="ansi-green-fg">310.326 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>17.75% ± 20.05%
+<pre>BenchmarkTools.Trial: 8321 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">415.565 μs</span> … <span class="ansi-magenta-fg">  1.530 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 60.91%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">491.118 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">600.472 μs</span> ± <span class="ansi-green-fg">252.389 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>18.27% ± 20.96%
 
-  ▃▇███<span class="ansi-blue-fg">▇</span>▆▅▄▃▂▁<span class="ansi-green-fg">▁</span>                        ▁▂▃▄▃▃▂▂▁▁▁▁ ▁▂▁▁▂▁▁▁▁   ▃
-  █████<span class="ansi-blue-fg">█</span>██████<span class="ansi-green-fg">█</span>██▇▆▇▆▆▅▆▆▁▆▅▃▃▃▃▄▁▄▅▄▅████████████████████████▆ █
-  468 μs<span class="ansi-bright-black-fg">        </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>       1.59 ms <span class="ansi-bold">&lt;</span>
+     ▅█<span class="ansi-blue-fg">▆</span>▁      <span class="ansi-green-fg"> </span>                                                 
+  ▂▄███<span class="ansi-blue-fg">█</span>█▆▄▃▂▂▂<span class="ansi-green-fg">▂</span>▁▂▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂▃▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▂ ▃
+  416 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          1.3 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">7.63 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -1492,13 +1498,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">293.448 μs</span> … <span class="ansi-magenta-fg">722.389 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">345.070 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">348.669 μs</span> ± <span class="ansi-green-fg"> 41.385 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">389.676 μs</span> … <span class="ansi-magenta-fg">543.226 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">407.760 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">413.558 μs</span> ± <span class="ansi-green-fg"> 18.898 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-  ▆█   ▄▁            <span class="ansi-blue-fg"> </span><span class="ansi-green-fg"> </span>                                          
-  ██▇▅███▇▆▆▇▇▆▆▆▇▆▇▇<span class="ansi-blue-fg">▇</span><span class="ansi-green-fg">▇</span>▆▇▇▇▇▇▇▆▇▆▅▅▅▅▅▄▄▄▄▃▃▃▃▂▃▂▂▂▂▂▂▂▁▂▁▁▁▁▁▁ ▄
-  293 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          462 μs <span class="ansi-bold">&lt;</span>
+     █▁      ▃  <span class="ansi-blue-fg"> </span>   <span class="ansi-green-fg"> </span>                                            
+  ▁▃███▅▄▃▃▄▇█▇▆<span class="ansi-blue-fg">▅</span>▅▄▄<span class="ansi-green-fg">▄</span>▄▄▄▃▃▃▃▃▄▃▃▃▃▃▂▃▃▃▃▂▂▂▂▂▂▂▂▂▂▁▂▂▁▁▁▁▁▁▁▁▁▁ ▂
+  390 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          471 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1536,13 +1542,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">38.442 μs</span> … <span class="ansi-magenta-fg"> 1.020 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 91.63%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">49.011 μs              </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">66.431 μs</span> ± <span class="ansi-green-fg">94.920 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>15.33% ± 10.03%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">49.083 μs</span> … <span class="ansi-magenta-fg">986.473 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 90.72%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">52.539 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">64.633 μs</span> ± <span class="ansi-green-fg"> 92.751 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>15.50% ± 10.03%
 
-  █<span class="ansi-blue-fg">▅</span><span class="ansi-green-fg">▆</span>▃                                                        ▁
-  █<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">█</span>██▅▅▄▁▄▁▁▃▃▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▄▅▇ █
-  38.4 μs<span class="ansi-bright-black-fg">      </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>       868 μs <span class="ansi-bold">&lt;</span>
+  <span class="ansi-blue-fg">█</span><span class="ansi-green-fg">▄</span>                                                           ▁
+  <span class="ansi-blue-fg">█</span><span class="ansi-green-fg">█</span>█▆▄▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▅▇ █
+  49.1 μs<span class="ansi-bright-black-fg">       </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>       872 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">488.40 KiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">3</span>.</pre>
 </div>
@@ -1554,13 +1560,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">60.973 μs</span> … <span class="ansi-magenta-fg">120.195 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">61.505 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">62.669 μs</span> ± <span class="ansi-green-fg">  3.829 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">63.439 μs</span> … <span class="ansi-magenta-fg">141.377 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">63.970 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">65.394 μs</span> ± <span class="ansi-green-fg">  4.177 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-  ▂█<span class="ansi-blue-fg">▇</span>▄▃▁<span class="ansi-green-fg"> </span>                                ▂▂▁                   ▁
-  ██<span class="ansi-blue-fg">█</span>███<span class="ansi-green-fg">█</span>█▇▇▇▇▇▆▆▄▅▅▅▄▄▅▄▄▄▄▄▄▄▄▅▄▄▃▄▅▆▆██████▇▇▆▆▇▆▅▅▅▄▃▄▃▄▃▃ █
-  61 μs<span class="ansi-bright-black-fg">         </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>      76.9 μs <span class="ansi-bold">&lt;</span>
+  ▃█<span class="ansi-blue-fg">▆</span>▂▃▂▁<span class="ansi-green-fg">▅</span>▃▁▁                            ▂▃▁                   ▁
+  ██<span class="ansi-blue-fg">█</span>████<span class="ansi-green-fg">█</span>████▇▇▇▆▅▆▄▄▄▃▄▄▄▂▃▂▃▃▂▃▃▄▅▄▄▄▆███▇▇▇▇▆▆▇▆▇▆▅▄▄▅▃▃▄▄ █
+  63.4 μs<span class="ansi-bright-black-fg">       </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>      79.2 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
@@ -1572,13 +1578,13 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
 <pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">80.370 μs</span> … <span class="ansi-magenta-fg">150.651 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">80.566 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">82.088 μs</span> ± <span class="ansi-green-fg">  4.555 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">62.198 μs</span> … <span class="ansi-magenta-fg">152.788 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span>0.00% … 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">62.898 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span>0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">64.573 μs</span> ± <span class="ansi-green-fg">  4.305 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>0.00% ± 0.00%
 
-  █<span class="ansi-blue-fg">▄</span>▂▁ <span class="ansi-green-fg"> </span>                          ▂▂▁                          ▁
-  █<span class="ansi-blue-fg">█</span>███<span class="ansi-green-fg">▇</span>▆▇█▇▆▆▅▆▅▅▄▅▅▃▄▄▄▃▃▃▄▃▅▆▆██████▇▇▇▆▄▅▄▃▅▄▅▂▃▃▃▄▂▂▃▃▃▃▂ █
-  80.4 μs<span class="ansi-bright-black-fg">       </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>      99.3 μs <span class="ansi-bold">&lt;</span>
+   ▇<span class="ansi-blue-fg">█</span>▄▃▃▂▁<span class="ansi-green-fg">▁</span>▁▂▄▄                      ▂▃▁                       ▁
+  ▅█<span class="ansi-blue-fg">█</span>█████<span class="ansi-green-fg">█</span>██████▇▇█▇▇▇▆▆▅▆▆▅▅▅▆▅▅▃▅▆█████▇▇▇▇▇▇▇▆▅▅▅▆▅▄▄▄▄▅▅▂ █
+  62.2 μs<span class="ansi-bright-black-fg">       </span><span class="ansi-bright-black-fg">Histogram: </span><span class="ansi-bright-black-fg ansi-bold">log(</span><span class="ansi-bright-black-fg">frequency</span><span class="ansi-bright-black-fg ansi-bold">)</span><span class="ansi-bright-black-fg"> by time</span>      79.7 μs <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0 bytes</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">0</span>.</pre>
 </div>
