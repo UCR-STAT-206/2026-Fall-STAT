@@ -67,11 +67,14 @@ website:
             href: notes/module05/easy.qmd
           - text: Condition Numbers
             href: notes/module05/condition.qmd
-          - text: QR 
+          - text: QR
+            href: notes/module05/qr.qmd
           - text: Cholesky
-          - text: Eigen
-          - text: SVD
+            href: notes/module05/cholesky.qmd
+          - text: Eigen-Decomposition and SVD
+            href: notes/module05/spectral.qmd
           - text: Iterative Methods
+            href: notes/module05/krylov.qmd
       - section: Module 6 (Simulation)
         contents:
           - text: RNG and PRNGs

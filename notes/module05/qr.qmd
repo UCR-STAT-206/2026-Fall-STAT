@@ -1,0 +1,320 @@
+---
+title: QR Decomposition
+---
+
+## Packages
+
+```{julia}
+using LinearAlgebra
+using CSV, DataFrames, RCall
+using LaTeXStrings, Plots
+```
+
+## QR decomposition
+
+Given $\mathbf{A} \in \mathbb{R}^{n \times p}$, QR decomposition factorizes $\mathbf{A}$ as $\mathbf{A} = \mathbf{Q} \mathbf{R}$.
+
+- Usually use *economy QR*, $\mathbf{Q} \in \mathbb{R}^{n \times r}$ where $r$ is numerical rank.
+- $\mathbf{Q}$ has orthonormal columns; i.e. $\mathbf{Q}^\top \mathbf{Q} = \mathbf{I}$ (identity matrix).
+- $\mathbf{R}$ has upper triangular structure (but not square in general).
+- Complexity: $2np^{2} - \frac{2}{3} p^{3}$ flops; $\mathbf{Q}$ is not stored and requires additional $2np^{2} - \frac{2}{3} p^{3}$ flops (Householder method)
+- Less numerically stable compared to other methods for linear systems.
+
+## Gram-Schmidt Algorithm
+
+**Input**: Vectors $\mathbf{a}_1, \ldots, \mathbf{a}_k \in \mathbb{R}^n$.
+
+**Output**: The *Gram-Schmidt algorithm* generates a sequence of orthonormal vectors $\mathbf{q}_1, \mathbf{q}_2, \ldots$.
+
+- For $i=1,\ldots,k$:  
+
+    1. Orthogonalization: $\tilde{\mathbf{q}}_i = \mathbf{a}_i - [(\mathbf{q}_1' \mathbf{a}_i) \mathbf{q}_1 + \cdots + (\mathbf{q}_{i-1}' \mathbf{a}_i) \mathbf{q}_{i-1}]$.  
+    
+    2. Test for linear independence: if $\tilde{\mathbf{q}}_i = \mathbf{0}$, quit.  
+    
+    3. Normalization: $\mathbf{q}_i = \tilde{\mathbf{q}}_i / \|\tilde{\mathbf{q}}_i\|$.
+    
+- If G-S does not stop early (in step 2), $\mathbf{a}_1, \ldots, \mathbf{a}_k$ are linearly independent. 
+
+- If G-S stops early in iteration $i=j$, then $\mathbf{a}_j$ is a linear combination of $\mathbf{a}_1, \ldots, \mathbf{a}_{j-1}$ and $\mathbf{a}_1, \ldots, \mathbf{a}_{j-1}$ are linearly independent.
+
+```{julia}
+#| code-fold: true
+
+# Inputs
+a1 = [0.5, 2]
+a2 = [1.5, 0.5]
+
+p1 = plot([0 0; a1[1] a2[1]], [0 0; a1[2] a2[2]],
+  arrow = true, color = :purple, axis = ([], false), legend = :none,
+  xlims = (-2, 2), ylims = (-2, 2),
+  annotations = [
+    (a1[1] + 0.2, a1[2], L"a_1"),
+    (a2[1] + 0.2, a2[2], L"a_2")
+  ],
+  framestyle = :origin,
+  aspect_ratio = :equal,
+  title = "1"
+)
+t = 0:0.01:2π
+plot!(p1, sin.(t), cos.(t), color = :gray)
+
+# orthogonalizing a1
+q̃1 = copy(a1) 
+p2 = plot([0 0; q̃1[1] a2[1]], [0 0; q̃1[2] a2[2]],
+  arrow = true, color = [:red :purple], axis = ([], false), legend = :none,
+  xlims = (-2, 2), ylims = (-2, 2),
+  annotations = [
+    (q̃1[1] + 0.2, q̃1[2], L"\tilde{q}_1"),
+    (a2[1] + 0.2, a2[2], L"a_2")
+  ],
+  framestyle = :origin,
+  aspect_ratio = :equal,
+  title = "2"
+)
+t = 0:0.01:2π
+plot!(p2, sin.(t), cos.(t), color = :gray)
+
+# normalizing q̃1
+q1 = q̃1 / norm(q̃1) 
+p3 = plot([0 0; q1[1] a2[1]], [0 0; q1[2] a2[2]],
+  arrow = true, color = [:green :purple],
+  axis = ([], false), legend = :none,
+  xlims = (-2, 2), ylims = (-2, 2),
+  annotations = [
+    (q1[1] + 0.2, q1[2], L"q_1"),
+    (a2[1] + 0.2, a2[2], L"a_2")
+  ],
+  framestyle = :origin,
+  aspect_ratio = :equal,
+  title = "3"
+)
+t = 0:0.01:2π
+plot!(p3, sin.(t), cos.(t), color = :gray)
+
+# orthogonalizing a2
+q̃2 = a2 - dot(a2, q1) * q1
+p4 = plot([0 0 0; q1[1] a2[1] q̃2[1]], [0 0 0; q1[2] a2[2] q̃2[2]], 
+  arrow = true, color = [:green :purple :red], axis = ([], false), legend = :none,
+  xlims = (-1.5, 1.5), ylims = (-1.5, 1.5),
+  annotations = [
+    (q1[1] + 0.2, q1[2], L"q_1"),
+    (a2[1] + 0.2, a2[2], L"a_2"),
+    (q̃2[1] + 0.2, q̃2[2] - 0.2, L"\tilde{q}_2"),
+    ((a2[1] + q̃2[1]) / 2 + 1.2, (a2[2] + q̃2[2]) / 2, L"-(q_1' a_2)q_1")
+  ],
+  framestyle = :origin,
+  aspect_ratio = :equal,
+  title = "4"
+)
+t = 0:0.01:2π
+plot!(p4, sin.(t), cos.(t), color = :gray)
+plot!(p4, [a2[1]; q̃2[1]], [a2[2]; q̃2[2]], arrow = true, color = :black)
+
+# normalizing q̃2
+q2 = q̃2 / norm(q̃2) 
+p5 = plot([0 0; q1[1] q2[1]], [0 0; q1[2] q2[2]],
+  arrow = true, color = :green,
+  axis = ([], false), legend = :none,
+  xlims = (-1.5, 1.5), ylims = (-1.5, 1.5),
+  annotations = [
+    (q1[1] + 0.3, q1[2] + 0.1, L"q_1"),
+    (q2[1] + 0.3, q2[2], L"q_2")
+  ],
+  framestyle = :origin,
+  aspect_ratio = :equal,
+  title = "5"
+)
+t = 0:0.01:2π
+plot!(p5, sin.(t), cos.(t), color = :gray)
+
+plot(p1, p2, p3, p4, p5)
+```
+
+::: callout-note
+All circles shown here are unit circles with radius 1. The first three circles appear smaller to work around a "clipping" issue in the plotting engine.
+:::
+
+```{julia}
+# n = 5, k = 3
+@show a1 = randn(5)
+@show a2 = randn(5)
+@show a3 = randn(5);
+```
+
+```{julia}
+# for i = 1
+# orthogonalization
+@show q̃1 = copy(a1)
+# test for linear independence
+@show norm(q̃1) ≈ 0
+# normalization
+@show q1 = q̃1 / norm(q̃1);
+```
+
+```{julia}
+# for i = 2
+# orthogonalization
+@show q̃2 = a2 - (q1'a2) * q1
+# test for linear independence
+@show norm(q̃2) ≈ 0
+# normalization
+@show q2 = q̃2 / norm(q̃2);
+```
+
+```{julia}
+# for i = 3
+# orthogonalization
+@show q̃3 = a3 - (q1'a3) * q1 - (q2'a3) * q2
+# test for linear independence
+@show norm(q̃3) ≈ 0
+# Normalization
+@show q3 = q̃3 / norm(q̃3);
+```
+
+```{julia}
+# test for orthonormality of q1, q2, q3
+@show norm(q1), norm(q2), norm(q3)
+@show q1'q2
+@show q1'q3
+@show q2'q3;
+```
+
+## Complexity
+
+Computational complexity of G-S algorithm:
+
+- Step 1 of iteration $i$ requires (1) $i-1$ inner products, $\mathbf{q}_1' \mathbf{a}_i, \ldots, \mathbf{q}_{i-1}' \mathbf{a}_i$, which costs $(i-1)(2n-1)$ flops, and (2) $2n(i-1)$ flops to compute $\tilde{\mathbf{q}}_i$.
+
+- Step 2 of iteration $i$ requires less than $n$ flops.  
+
+- Step 3 of iteration $i$ requires $3n$ flops to normalize $\|\tilde{\mathbf{q}}_i\|$. 
+
+- Assuming no early termination, total computational cost of the GS algorithm to orthonormalize a set of $k$ vectors in $\mathbb{R}^n$ is:
+$$
+\sum_{i=1}^k [(4n-1) (i - 1) + 3n] = (4n - 1) \frac{k(k-1)}{2} + 3nk \approx 2nk^2 = O(nk^2),
+$$
+
+using $\sum_{i=1}^k (i - 1) = k(k-1)/2$. 
+
+## GS Algorithm and QR Factorization
+
+The operations in GS can be compactly expressed as
+
+$$
+\mathbf{A} = \mathbf{Q} \mathbf{R},
+$$
+
+where $\mathbf{A} = (\mathbf{a}_1 \, \cdots \, \mathbf{a}_k) \in \mathbb{R}^{n \times k}$, $\mathbf{Q} = (\mathbf{q}_1 \, \cdots \, \mathbf{q}_k) \in \mathbb{R}^{n \times k}$ satisfying $\mathbf{Q}'\mathbf{Q} = \mathbf{I}_k$ ($\mathbf{Q}$ has orthonormal columns), and $\mathbf{R} \in \mathbb{R}^{k \times k}$ is an upper triangular matrix with positive diagonal elements.
+
+What are the entries in $\mathbf{R}$? In the $i$-th iteration of the Gram-Schmidt algorithm
+
+\begin{eqnarray*}
+\text{Orthogonalization step: } & & \tilde{\mathbf{q}}_i = \mathbf{a}_i - (\mathbf{q}_1' \mathbf{a}_i) \mathbf{q}_1 - \cdots - (\mathbf{q}_{i-1}' \mathbf{a}_i) \mathbf{q}_{i-1} \\
+\text{Normalization step: } & & \mathbf{q}_i = \tilde{\mathbf{q}}_i / \|\tilde{\mathbf{q}}_i\|.
+\end{eqnarray*}
+
+Therefore, 
+$$
+\mathbf{a}_i =  (\mathbf{q}_1' \mathbf{a}_i) \mathbf{q}_1 + \cdots + (\mathbf{q}_{i-1}' \mathbf{a}_i) \mathbf{q}_{i-1} + \|\tilde{\mathbf{q}}_i\| \mathbf{q}_i.
+$$
+
+This tells us $R_{ij} = \mathbf{q}_i' \mathbf{a}_j$ for $i < j$ and $R_{ii} = \|\tilde{\mathbf{q}}_i\|$.
+
+Thus overall Gram-Schmidt algorithm performs
+$$
+\mathbf{A} = \begin{pmatrix} | & | & & | & | \\ \mathbf{a}_1 & \mathbf{a}_2 & \cdots & \mathbf{a}_{k-1} & \mathbf{a}_k \\ | & | & & | & | \end{pmatrix} = \begin{pmatrix} | & | & & | & | \\ \mathbf{q}_1 & \mathbf{q}_2 & \cdots & \mathbf{q}_{k-1} & \mathbf{q}_k \\ | & | & & | & | \end{pmatrix} \begin{pmatrix} 
+\|\tilde{\mathbf{q}}_1\| & \mathbf{q}_1'\mathbf{a}_2 & \cdots & \mathbf{q}_1' \mathbf{a}_{k-1}  & \mathbf{q}_1' \mathbf{a}_k \\
+& \|\tilde{\mathbf{q}}_2\| & \cdots & \mathbf{q}_2' \mathbf{a}_{k-1} & \mathbf{q}_2' \mathbf{a}_k \\
+& & \ddots & \vdots & \vdots \\
+& & & \|\tilde{\mathbf{q}}_{k-1}\| & \mathbf{q}_{k-1}' \mathbf{a}_k \\
+& & & & \|\tilde{\mathbf{q}}_k\|
+\end{pmatrix} = \mathbf{Q} \mathbf{R}.
+$$
+
+::: {.callout-warning}
+The Gram-Schmidt algorithm is **numerically unstable**. The specific issue that arises is that the basis vectors $\mathbf{q}_{k}$ may lose their orthogonality. The [*modified* Gram-Schmidt](https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process#Numerical_stability) is preferred. In your homework you will implement QR via Householder reflections, which is more stable and efficient (the basis vectors are computed implicitly).
+:::
+
+## Solving linear systems
+
+Now look at solving linear systems (full column rank), assuming we already have $\mathbf{Q}$ and $\mathbf{R}$:
+
+$$
+\mathbf{A} \mathbf{x} = \mathbf{b} \equiv \mathbf{Q} \mathbf{R} \mathbf{x} = \mathbf{b} \implies \text{Solve}~\mathbf{R} \mathbf{x} = \mathbf{Q}^\top \mathbf{y}
+$$
+
+- Form RHS: $2np$ flops (since $\mathbf{Q}$ is $n \times p$)
+- Solve with backward substitution: $p^{2}$ flops
+- Total: $2np + p^{2}$
+
+## Solving least squares
+
+Least squares problem $\min_{\beta}~\frac{1}{2} \|\mathbf{y} - \mathbf{X}\beta\|_{2}^{2}$ has the same complexity:
+
+- **Why?** Use properties of orthonormal matrices...
+- Reduction to $\min_{\beta}~\frac{1}{2}\|\mathbf{Q}^\top \mathbf{y} - \mathbf{R}\beta\|_{2}^{2}$.
+- **Fit $\beta$** (QR + solve): $2(n-1)p^{2} - \frac{2}{3} p^{3} + 2np$ 
+- **Standard errors for estimates**: Requires inverting $\mathbf{X}^\top \mathbf{X}$ (one of a few cases where it is acceptable!)
+
+We can be far more clever about inverting the matrix. View the problem of computing $(\mathbf{X}^\top \mathbf{X})^{-1}$ as:
+
+$$
+\text{Solve}~\mathbf{X}^{\top}\mathbf{X} \mathbf{\Sigma} = \mathbf{I} \quad \equiv \quad \mathbf{R}^\top \mathbf{R} \mathbf{\Sigma} = \mathbf{I};
+$$
+
+that is, we solve two triangular systems for the matrix-valued variable $\mathbf{\Sigma}$.
+
+::: {.callout-note}
+Note that $\operatorname{Var}(\hat{\beta})$ depends on $\mathbf{X}$ in linear regression, but the explicit form for the standard errors depends on whatever assumptions we are willing to make about the random component (e.g. normal errors).
+:::
+
+## Example: Longley data
+
+```{julia}
+column_labels = ["Employed", "Price", "GNP", "Jobless", "Military", "PopSize", "Year"]
+longley = CSV.read(joinpath("assets", "longley.txt"), DataFrame;
+  header = column_labels,
+  delim = ' ',
+  ignorerepeated = true
+)
+```
+
+```{julia}
+y = longley.Employed
+X = [ones(length(y)) Matrix(select(longley, Not(:Employed)))]
+```
+
+Solve for coefficients:
+
+```{julia}
+qrX = qr(X)
+β = qrX \ y
+```
+
+Get standard errors:
+
+```{julia}
+r = y - X*β # residuals
+s² = r'r / (length(y) - length(β)) # correction: n - p
+tmp = UpperTriangular(qrX.R)' \ (1.0 * I(length(β))) # trisolve 1
+Σβ = UpperTriangular(qrX.R) \ tmp # trisolve 2
+sqrt.(s² * diag(Σβ)) # variances on diagonal
+```
+
+Back in R:
+
+```{r}
+# Regress Employed on all other variables; add intercept
+fit.longley <- lm(Employed ~ . + 1, data = $longley)
+```
+
+```{r}
+# Fitted β
+coef(fit.longley)
+```
+
+```{r}
+# Can see standard errors here
+print(coef(summary(fit.longley)));
+```
