@@ -1,6 +1,6 @@
 ---
 title: "Final Project"
-subtitle: "Due Finals Week (TBD)"
+subtitle: "Wednesday, December 9"
 format:
   html:
     theme: cosmo
@@ -12,4 +12,34 @@ execute:
   freeze: auto
 ---
 
-To be announced at a later date.
+## Overview
+
+Working in teams of 2 to 4 students, students will plan, implement, and prepare a report on an original computational project in statistics.
+**The primary task is to implement and experiment with your own Julia package.**
+Student projects must extend beyond the application of existing software, methods, or data analysis.
+
+## Guidelines and expectations
+
+- Teams will be assigned. Exceptions to this rule are exceedingly rare.
+- The final project should not be a huge undertaking. It should be relatively easy to complete if your team works together. *Pick a well-defined, achievable project.*
+- Your work does not need to be *novel*, but it must represent your own ideas and effort. Translating existing software from one language to Julia, writing a wrapper package for an existing tool, or reproducing published work is not sufficient for a successful project. *Your project should push beyond what others have done, even if it is incremental*.
+- Your project **must** be implemented in Julia as a Julia package, complete with documentation and instructions. Any numerical experiments or benchmarks must be reproducible.
+    + I am open to making exceptions to the Julia language rule, but students should be prepared to make a strong case on why the project **must** use another programming language.
+    + You are allowed to use other languages for support. For example, data pre-processing or figure preparation. That said, be mindful that adding other languages to a project sometimes has the effect of making reproducibility slightly more challenging.
+- Projects must use Git for version control.
+- Reports must be prepared using Quarto.
+- Your report must contain a *quantitative deliverable*.
+    + This is to discourage reports that merely contain figures with little meaningful analysis.
+
+## Project ideas
+
+1. **Implement** an algorithm or method related to statistical computing from scratch.
+2. **Replicate** a published study by implementing any required methods and identifying/using appropriate data sets.
+    + Start with reproducing the original work.
+    + If your replication study involves little programming, then you will be asked to make a strong case for why your idea is an appropriate computational project.
+3. **Design** a visualization tool for a type of data you are familiar with, taking great care to ensure nuances is quantitative interpretation are conveyed appropriately.
+    + Use a recipe system (either in Makie.jl or Plots.jl) to implement the visualization.
+    + Think carefully about the user interface: What are the main inputs and outputs?
+    + Think carefully about the design itself: How does each distinct visual element contribute to strong, visual communication of a statistical or quantitative concept?
+
+See the handout on Canvas for specific papers or software packages you might consider for inspiration.
