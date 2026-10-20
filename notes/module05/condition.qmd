@@ -6,7 +6,7 @@ title: "Condition Numbers"
 using DelimitedFiles, LinearAlgebra, StatsBase, StatsPlots
 ```
 
-# Definition
+## Definition
 
 Assume $\mathbf{A} \in \mathbb{R}^{n \times n}$ is nonsingular and consider the system of linear equation 
 
@@ -54,7 +54,7 @@ $$
 
 The quantity $\kappa(\mathbf{A}) = \|\mathbf{A}\| \|\mathbf{A}^{-1}\|$ is known as the **condition number for linear equation**. It depends on the matrix norm being used. For example, $\kappa_p$ means condition number defined from matrix-$p$ norm. **Large condition numbers are "bad".**
 
-# Facts about $\kappa(\mathbf{A})$
+## Facts about $\kappa(\mathbf{A})$
 
 Some facts about condition numbers:
 
@@ -73,7 +73,7 @@ $$
 - The last fact says that the condition number of $\mathbf{A}^T \mathbf{A}$ can be much larger than that of $\mathbf{A}$.
 - The smallest singular value $\sigma_n$ measures the _distance to trouble_.
 
-# Application to Regression
+## Application to Regression
 
 The **condition number for the least squares problem** is more complicated. Roughly speaking, 
 
@@ -107,11 +107,11 @@ $$
 $$
 if executed with a precision of 6 decimal digits.
 
-# Julia Implementation
+## Julia Implementation
 
 The Julia function [`cond`](https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/#LinearAlgebra.cond) computes $\kappa_p$ for $p=1$, 2 (default), or $\infty$.
 
-# Longley Example
+## Longley Example
 
 The [Longley (1967)](https://www.jstor.org/stable/2283673?seq=1#page_scan_tab_contents) macroeconomic data set is a famous test example for numerical software in the early days.
 
