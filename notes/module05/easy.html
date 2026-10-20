@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-604b5d79a7ca3bc6f5a5ef3780c226de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -370,20 +370,26 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">QR</span>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Cholesky</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Eigen</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">SVD</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Iterative Methods</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -1062,8 +1068,8 @@ Base.summarysize(W), Base.summarysize(Wfull)</code></pre>
 <span id="cb50-2"><a href="#cb50-2" aria-label="2"></a><span class="pp">@benchmark</span> <span class="fu">det</span>(<span class="op">$</span>W)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="easy-plus-border" class="level1">
-<h1>Easy plus border</h1>
+<section id="easy-plus-border" class="level2">
+<h2 class="anchored" data-anchor-id="easy-plus-border">Easy plus border</h2>
 <p>Easy plus border: For <span class="math inline">\(\mathbf{A}\)</span> pd and <span class="math inline">\(\mathbf{V}\)</span> full row rank, <span class="math display">\[
     \begin{pmatrix}
     \mathbf{A} &amp; \mathbf{V}^T \\
@@ -1074,12 +1080,12 @@ Base.summarysize(W), Base.summarysize(Wfull)</code></pre>
     \end{pmatrix}.
 \]</span></p>
 </section>
-<section id="orthogonal-matrix" class="level1">
-<h1>Orthogonal matrix</h1>
+<section id="orthogonal-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="orthogonal-matrix">Orthogonal matrix</h2>
 <p>Orthogonal <span class="math inline">\(\mathbf{A}\)</span>: <span class="math inline">\(n^2\)</span> flops <strong>at most</strong>. Why? Permutation matrix, Householder matrix, Jacobi matrix, … take less.</p>
 </section>
-<section id="toeplitz-matrix" class="level1">
-<h1>Toeplitz matrix</h1>
+<section id="toeplitz-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="toeplitz-matrix">Toeplitz matrix</h2>
 <p>Toeplitz systems (constant diagonals): <span class="math display">\[
     \mathbf{T} = \begin{pmatrix}
     r_0 &amp; r_1 &amp; r_2 &amp; r_3 \\
@@ -1102,8 +1108,8 @@ Base.summarysize(W), Base.summarysize(Wfull)</code></pre>
 </div>
 <p>The <a href="https://github.com/JuliaMatrices/ToeplitzMatrices.jl"><code>ToeplitzMatrices.jl</code></a> package deals with these types of matrices.</p>
 </section>
-<section id="circulant-matrix" class="level1">
-<h1>Circulant matrix</h1>
+<section id="circulant-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="circulant-matrix">Circulant matrix</h2>
 <p>Circulant systems: Toeplitz matrix with wraparound <span class="math display">\[
     C(\mathbf{z}) = \begin{pmatrix}
     z_0 &amp; z_4 &amp; z_3 &amp; z_2 &amp; z_1 \\
@@ -1114,8 +1120,8 @@ Base.summarysize(W), Base.summarysize(Wfull)</code></pre>
     \end{pmatrix},
 \]</span> FFT type algorithms: DCT (discrete cosine transform) and DST (discrete sine transform).</p>
 </section>
-<section id="vandermonde-matrix" class="level1">
-<h1>Vandermonde matrix</h1>
+<section id="vandermonde-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="vandermonde-matrix">Vandermonde matrix</h2>
 <p>Appears in interpolation and approximation problems. <span class="math display">\[
     \mathbf{V}(x_0,\ldots,x_n) = \begin{pmatrix}
     1 &amp; 1 &amp; \cdots &amp; 1 \\

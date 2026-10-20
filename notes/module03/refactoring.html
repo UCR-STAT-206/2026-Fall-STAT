@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-604b5d79a7ca3bc6f5a5ef3780c226de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -373,20 +373,26 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">QR</span>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Cholesky</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Eigen</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">SVD</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Iterative Methods</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -721,14 +727,6 @@ Y = y_{0} N^{a} + \text{noise},
 <span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>  dpi<span class="op">=</span><span class="fl">100</span>,</span>
 <span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>  size<span class="op">=</span>(<span class="fl">600</span>, <span class="fl">400</span>),</span>
 <span id="cb1-9"><a href="#cb1-9" aria-label="9"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-   1596.9 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerLaTeXStringsExt<span class="ansi-bright-black-fg"> (serial)</span>
-  1 dependency successfully precompiled in 2 seconds
-</pre>
-</div>
-</div>
 </div>
 <p>Here is some code that loads GMP data and plots it with a trend line based on the model above:</p>
 <div id="6" class="cell" data-execution_count="1">
@@ -989,7 +987,7 @@ a_{t+1} = a_{t} \propto -\mathrm{MSE}^{\prime}(a)
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="im">import</span> <span class="bu">Pkg;</span> Pkg.status()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Status</span> `~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module03/Project.toml`
+<pre><span class="ansi-green-fg ansi-bold">Status</span> `~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module03/Project.toml`
   <span class="ansi-bright-black-fg">[336ed68f] </span>CSV v1.1.0
   <span class="ansi-bright-black-fg">[a93c6f00] </span>DataFrames v1.8.2
   <span class="ansi-bright-black-fg">[91a5bcdd] </span>Plots v1.41.7
@@ -1006,14 +1004,15 @@ Commit 6d172b025e4 (2026-08-15 08:05 UTC)
 Build Info:
   Official https://julialang.org release
 Platform Info:
-  OS: Linux (x86_64-linux-gnu)
-  CPU: 4 × AMD EPYC 9V74 80-Core Processor
+  OS: macOS (arm64-apple-darwin25.5.0)
+  CPU: 12 × Apple M3 Pro
   WORD_SIZE: 64
-  LLVM: libLLVM-18.1.7 (ORCJIT, znver4)
+  LLVM: libLLVM-18.1.7 (ORCJIT, apple-m3)
   GC: Built with stock GC
-Threads: 1 default, 1 interactive, 1 GC (on 4 virtual cores)
+Threads: 1 default, 1 interactive, 1 GC (on 6 virtual cores)
 Environment:
-  JULIA_LOAD_PATH = @:@stdlib</code></pre>
+  JULIA_LOAD_PATH = @:@stdlib
+  DYLD_FALLBACK_LIBRARY_PATH = /Users/alanderos/.julia/artifacts/c1600fa286afe4bf3616780a19b65285c63968ca/lib:/Users/alanderos/.julia/juliaup/julia-1.12.7+0.aarch64.apple.darwin14/Julia-1.12.app/Contents/Resources/julia/lib/julia:/Users/alanderos/.julia/artifacts/b820a0a437e8501d06a17439abd84feaa5b6cca3/lib:/Users/alanderos/.julia/artifacts/ccab86a3f5c2e11b743d3c30a624a3a95c3dc170/lib:/Users/alanderos/.julia/artifacts/a313d7c1b6344b380ad5425226ece4d3952012c3/lib:/Users/alanderos/.julia/artifacts/071fe09a26fdd7101e1382b060089c0d2b5053ae/lib:/Users/alanderos/.julia/artifacts/c3cd65ef447d334eaf72548c62f4ec77d7c95054/lib:/Users/alanderos/.julia/artifacts/56af375f37c126f64c0644367fb301eab0acbbc6/lib:/Users/alanderos/.julia/artifacts/91dd992a18db71015b86b81e2c686edd8da3ff10/lib:/Users/alanderos/.julia/artifacts/ff409e4617cbf695ca820e05b8df1d0ab105e356/lib:/Users/alanderos/.julia/artifacts/82ceadca455e4efbc705d73dfecc4e3a278b1b03/lib:/Users/alanderos/.julia/artifacts/886df745cefeb82992e03223358349fb95adde15/lib:/Users/alanderos/.julia/artifacts/cc27541b389e8cddac0a1b501e1137e3588f434e/lib:/Users/alanderos/.julia/artifacts/1994697285dfe8747ff7ec6927666edc88750202/lib:/Users/alanderos/.julia/artifacts/29a1ad425d1c44162c7dd9ba691a1769cd4e84f7/lib:/Users/alanderos/.julia/artifacts/995ff260ac1555fb27d71e40231aedb8ea0024ac/lib:/Users/alanderos/.julia/artifacts/1f2d7e12b6a9be67ac655059c97c7fd968ae12de/lib:/Users/alanderos/.julia/artifacts/98553abcb30b9dd3d08a0eb5db9d80db3fa4d47d/lib:/Users/alanderos/.julia/artifacts/ebbb9485b8a2f32f9ab907b08b38b039acaae6cf/lib:/Users/alanderos/.julia/artifacts/b3ac9a674d35c322d3739673265d95e54938f516/lib:/Users/alanderos/.julia/artifacts/a3e5b0f98e80defaec4ba488a9ceeace69feb32c/lib:/Users/alanderos/.julia/artifacts/0f7add55a4e028ca1b0b729cf2eb313566d3ebce/lib:/Users/alanderos/.julia/artifacts/946f83a35722fcae46f1f49c71466ba14dc17fd1/lib:/Users/alanderos/.julia/artifacts/c70ffd15b6adfc269b041a77ed26af364f9969c4/lib:/Users/alanderos/.julia/artifacts/e341acbb8e88a9c1226b540766fa9e1c12e860cf/lib:/Users/alanderos/.julia/artifacts/c51fd522a9f5f2242ff234734cea3098b1138e47/lib:/Users/alanderos/.julia/artifacts/54c650f7b5f1371d0a372cd7daaf318153a9a77f/lib:/Users/alanderos/.julia/artifacts/7b7d2b32af731cfcc1bbbffb753b9f4ad22dbd88/lib:/Users/alanderos/.julia/artifacts/28dbf2d18b9275d632ce4f4359e6b989daa7b3a9/lib:/Users/alanderos/.julia/artifacts/9988e893a32a319463b388ec493a6e30291cf421/lib:/Users/alanderos/.julia/artifacts/8da603395acfbdbef8c5de3b7223aeb9276ecbdb/lib:/Users/alanderos/.julia/artifacts/3d2f81d56d625350ab51e51734a5c247bdea83ad/lib:/Users/alanderos/.julia/artifacts/4b3b2d79556cc3aef6e3d8a234649cc85b91bb87/lib:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtConcurrent.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtCore.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtDBus.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtGui.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtNetwork.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtOpenGL.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtOpenGLWidgets.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtPrintSupport.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtSql.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtTest.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtWidgets.framework/Versions/A:/Users/alanderos/.julia/artifacts/1247750a0cc2737b2ab44d0b05442ec3679c0046/lib/QtXml.framework/Versions/A:/Users/alanderos/.julia/artifacts/409ca6ad26370ca1187eded28b7264d2fde20cd6/lib:/Users/alanderos/.julia/juliaup/julia-1.12.7+0.aarch64.apple.darwin14/Julia-1.12.app/Contents/Resources/julia/bin/../lib/julia:/Users/alanderos/.julia/juliaup/julia-1.12.7+0.aarch64.apple.darwin14/Julia-1.12.app/Contents/Resources/julia/bin/../lib:</code></pre>
 </div>
 </div>
 

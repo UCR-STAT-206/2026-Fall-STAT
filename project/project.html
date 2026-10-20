@@ -45,7 +45,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5a76141f77d867fb867d14d57f46a0f6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-ad0c7e6f8317772690e43269785d02a4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -306,20 +306,26 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">QR</span>
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Cholesky</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Eigen</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">SVD</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Iterative Methods</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -566,7 +572,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Final Project</h1>
-<p class="subtitle lead">Due Finals Week (TBD)</p>
+<p class="subtitle lead">Wednesday, December 9</p>
 </div>
 
 
@@ -583,9 +589,49 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>To be announced at a later date.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Working in teams of 2 to 4 students, students will plan, implement, and prepare a report on an original computational project in statistics. <strong>The primary task is to implement and experiment with your own Julia package.</strong> Student projects must extend beyond the application of existing software, methods, or data analysis.</p>
+</section>
+<section id="guidelines-and-expectations" class="level2">
+<h2 class="anchored" data-anchor-id="guidelines-and-expectations">Guidelines and expectations</h2>
+<ul>
+<li>Teams will be assigned. Exceptions to this rule are exceedingly rare.</li>
+<li>The final project should not be a huge undertaking. It should be relatively easy to complete if your team works together. <em>Pick a well-defined, achievable project.</em></li>
+<li>Your work does not need to be <em>novel</em>, but it must represent your own ideas and effort. Translating existing software from one language to Julia, writing a wrapper package for an existing tool, or reproducing published work is not sufficient for a successful project. <em>Your project should push beyond what others have done, even if it is incremental</em>.</li>
+<li>Your project <strong>must</strong> be implemented in Julia as a Julia package, complete with documentation and instructions. Any numerical experiments or benchmarks must be reproducible.
+<ul>
+<li>I am open to making exceptions to the Julia language rule, but students should be prepared to make a strong case on why the project <strong>must</strong> use another programming language.</li>
+<li>You are allowed to use other languages for support. For example, data pre-processing or figure preparation. That said, be mindful that adding other languages to a project sometimes has the effect of making reproducibility slightly more challenging.</li>
+</ul></li>
+<li>Projects must use Git for version control.</li>
+<li>Reports must be prepared using Quarto.</li>
+<li>Your report must contain a <em>quantitative deliverable</em>.
+<ul>
+<li>This is to discourage reports that merely contain figures with little meaningful analysis.</li>
+</ul></li>
+</ul>
+</section>
+<section id="project-ideas" class="level2">
+<h2 class="anchored" data-anchor-id="project-ideas">Project ideas</h2>
+<ol type="1">
+<li><strong>Implement</strong> an algorithm or method related to statistical computing from scratch.</li>
+<li><strong>Replicate</strong> a published study by implementing any required methods and identifying/using appropriate data sets.
+<ul>
+<li>Start with reproducing the original work.</li>
+<li>If your replication study involves little programming, then you will be asked to make a strong case for why your idea is an appropriate computational project.</li>
+</ul></li>
+<li><strong>Design</strong> a visualization tool for a type of data you are familiar with, taking great care to ensure nuances is quantitative interpretation are conveyed appropriately.
+<ul>
+<li>Use a recipe system (either in Makie.jl or Plots.jl) to implement the visualization.</li>
+<li>Think carefully about the user interface: What are the main inputs and outputs?</li>
+<li>Think carefully about the design itself: How does each distinct visual element contribute to strong, visual communication of a statistical or quantitative concept?</li>
+</ul></li>
+</ol>
+<p>See the handout on Canvas for specific papers or software packages you might consider for inspiration.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

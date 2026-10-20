@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-604b5d79a7ca3bc6f5a5ef3780c226de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -370,20 +370,26 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">QR</span>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Cholesky</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Eigen</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">SVD</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Iterative Methods</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -795,30 +801,30 @@ Note
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  9
- 10
-  4
-  6</code></pre>
+ 9
+ 7
+ 6
+ 6</code></pre>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">sort!</span>(x) <span class="co"># in-place; vs sort(x) which is out-of-place</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  4
-  6
-  9
- 10</code></pre>
+ 6
+ 6
+ 7
+ 9</code></pre>
 </div>
 </div>
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>4-element Vector{Int64}:
-  4
-  6
-  9
- 10</code></pre>
+ 6
+ 6
+ 7
+ 9</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
@@ -1052,11 +1058,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb40-2"><a href="#cb40-2" aria-label="2"></a><span class="fu">myfunc</span>.(x) <span class="co"># this is applied element-wise; always opt-in</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5×3 Matrix{Float64}:
-  0.984648    0.174153  -0.897057
-  0.411653    0.911635   0.0741722
-  0.975249   -0.337067   0.0141542
- -0.552607    0.107248   0.112708
-  0.0426908   0.254083   0.935384</code></pre>
+ -0.875237  0.132016   0.539914
+  0.813657  0.0949356  0.000800675
+  0.961001  0.052414   0.0770759
+  0.943313  0.752338   0.143938
+  0.98669   0.976872   0.0624895</code></pre>
 </div>
 </div>
 <p>Several levels of vectorization can be achieved using <code>@.</code>. In particular, this <em>macro</em> is a mechanism for <em>loop fusion</em>.</p>
@@ -1067,29 +1073,29 @@ myfactorial(6) = 720</code></pre>
 <span id="cb42-4"><a href="#cb42-4" aria-label="4"></a>@. x <span class="op">=</span> <span class="fu">max</span>(<span class="fl">0</span>, y) <span class="co"># vectorize `max()` AND `=`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
-  0.7045325520654624
-  0.3745835293022493
-  0.4913484627937948
- -1.3007021684540465
- -0.7158338619666488
- -1.0474732375411593
- -0.9944865027432827
- -1.4813616957036473
-  0.12503206523287394
- -0.1539931325013449</code></pre>
+ -1.421911337494403
+ -1.6167717418626635
+ -0.7243949683868441
+  1.0844290843313644
+ -0.18635209843632042
+  1.2256355353834942
+ -0.7495685831028557
+  0.7674252451713037
+ -1.2054847843830778
+  0.8037208248500304</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.7045325520654624
- 0.3745835293022493
- 0.4913484627937948
  0.0
  0.0
  0.0
+ 1.0844290843313644
  0.0
+ 1.2256355353834942
  0.0
- 0.12503206523287394
- 0.0</code></pre>
+ 0.7674252451713037
+ 0.0
+ 0.8037208248500304</code></pre>
 </div>
 </div>
 </section>
@@ -1104,11 +1110,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb45-2"><a href="#cb45-2" aria-label="2"></a><span class="fu">map</span>(x <span class="op">-&gt;</span> <span class="fu">sin</span>(x<span class="op">^</span><span class="fl">2</span>), xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 2.7086901164137217e-5
- 0.08013596234888454
- 0.618021005965163
- 0.013177987255262699
- 0.7515174475244741</code></pre>
+ -0.298682945514551
+  0.002138996962536602
+  0.039566030261310246
+  0.16661850209842358
+  0.3475143767326903</code></pre>
 </div>
 </div>
 <p>The <code>map()</code> function and its relatives support <code>do</code> block syntax.</p>
@@ -1118,11 +1124,11 @@ myfactorial(6) = 720</code></pre>
 <span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>5-element Vector{Float64}:
- 2.7086901164137217e-5
- 0.08013596234888454
- 0.618021005965163
- 0.013177987255262699
- 0.7515174475244741</code></pre>
+ -0.298682945514551
+  0.002138996962536602
+  0.039566030261310246
+  0.16661850209842358
+  0.3475143767326903</code></pre>
 </div>
 </div>
 </section>
@@ -1300,7 +1306,7 @@ myfactorial(6) = 720</code></pre>
 <pre>TypeError: in keyword argument c, expected Real, got a value of type Vector{Float64}
 Stacktrace:
  [1] top-level scope
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:442</span></pre>
 </div>
 </div>
 </div>
@@ -1327,9 +1333,9 @@ Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
 <span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] <span class="ansi-bold">psi3</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">x</span>::Float64; <span class="ansi-bright-black-fg">c</span>::Vector<span class="ansi-bright-black-fg">{Float64}</span><span class="ansi-bold">)</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:451</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:451</span>
  [3] top-level scope
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:460</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:460</span></pre>
 </div>
 </div>
 </div>
@@ -1343,9 +1349,9 @@ Stacktrace:
  [1] <span class="ansi-bold">error</span><span class="ansi-bold">(</span><span class="ansi-bright-black-fg">s</span>::String<span class="ansi-bold">)</span>
 <span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">Base</span> <span class="ansi-bright-black-fg">./</span><span style="text-decoration:underline" class="ansi-bright-black-fg">error.jl:44</span>
  [2] <span class="ansi-bold">#psi3#17</span>
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span><span class="ansi-bright-black-fg"> [inlined]</span>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:453</span><span class="ansi-bright-black-fg"> [inlined]</span>
  [3] top-level scope
-<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:467</span></pre>
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/Documents/Teaching/UCR/STAT_206/2026F/001/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">functions.qmd:467</span></pre>
 </div>
 </div>
 </div>

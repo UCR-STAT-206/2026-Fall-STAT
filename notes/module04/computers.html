@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-604b5d79a7ca3bc6f5a5ef3780c226de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -373,20 +373,26 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">QR</span>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Cholesky</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Eigen</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">SVD</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Iterative Methods</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -829,48 +835,61 @@ window.Quarto = {
 <span id="cb6-2"><a href="#cb6-2" aria-label="2"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>Hwloc.<span class="fu">topology_graphical</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>┌──────────────────────────────────────────────────────────────────────────────────────────┐
-│ Machine (16GB total)                                                                     │
-│                                                                                          │
-│ ┌────────────────────────────────────────────────┐  ├┤╶───────┬────────────────────────┐ │
-│ │ Package L#0                                    │            │ PCI 3c7e:00:02.0       │ │
-│ │                                                │            │                        │ │
-│ │ ┌────────────────────────────────────────────┐ │            │ ┌────────────────┐     │ │
-│ │ │ NUMANode L#0 P#0 (16GB)                    │ │            │ │ Net enP15486s1 │     │ │
-│ │ └────────────────────────────────────────────┘ │            │ └────────────────┘     │ │
-│ │                                                │            │                        │ │
-│ │ ┌──────────────────────────────┐  ┌──────────┐ │            │ ┌────────────────────┐ │ │
-│ │ │ L3 (32MB)                    │  │ Net eth0 │ │            │ │ OpenFabrics mlx5_0 │ │ │
-│ │ └──────────────────────────────┘  └──────────┘ │            │ └────────────────────┘ │ │
-│ │                                                │            └────────────────────────┘ │
-│ │ ┌─────────────┐  ┌─────────────┐               │                                       │
-│ │ │ L2 (1024KB) │  │ L2 (1024KB) │               │  ├┤╶───────┬───────────────────┐      │
-│ │ └─────────────┘  └─────────────┘               │       4.0  │ PCI c05b:00:00.0  │      │
-│ │                                                │            │                   │      │
-│ │ ┌────────────┐   ┌────────────┐                │            │ ┌───────────────┐ │      │
-│ │ │ L1d (32KB) │   │ L1d (32KB) │                │            │ │ Block nvme0n1 │ │      │
-│ │ └────────────┘   └────────────┘                │            │ │               │ │      │
-│ │                                                │            │ │ 150 GB        │ │      │
-│ │ ┌────────────┐   ┌────────────┐                │            │ └───────────────┘ │      │
-│ │ │ L1i (32KB) │   │ L1i (32KB) │                │            └───────────────────┘      │
-│ │ └────────────┘   └────────────┘                │                                       │
-│ │                                                │                                       │
-│ │ ┌────────────┐   ┌────────────┐                │                                       │
-│ │ │ Core L#0   │   │ Core L#1   │                │                                       │
-│ │ │            │   │            │                │                                       │
-│ │ │ ┌────────┐ │   │ ┌────────┐ │                │                                       │
-│ │ │ │ PU L#0 │ │   │ │ PU L#2 │ │                │                                       │
-│ │ │ │        │ │   │ │        │ │                │                                       │
-│ │ │ │  P#0   │ │   │ │  P#2   │ │                │                                       │
-│ │ │ └────────┘ │   │ └────────┘ │                │                                       │
-│ │ │ ┌────────┐ │   │ ┌────────┐ │                │                                       │
-│ │ │ │ PU L#1 │ │   │ │ PU L#3 │ │                │                                       │
-│ │ │ │        │ │   │ │        │ │                │                                       │
-│ │ │ │  P#1   │ │   │ │  P#3   │ │                │                                       │
-│ │ │ └────────┘ │   │ └────────┘ │                │                                       │
-│ │ └────────────┘   └────────────┘                │                                       │
-│ └────────────────────────────────────────────────┘                                       │
-└──────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
+<pre><code>┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│ Machine (36GB total)                                                                    │
+│                                                                                         │
+│ ┌───────────────────────────────────────────────────────────────┐  ┌──────────────────┐ │
+│ │ Package L#0                                                   │  │ CoProc opencl0d0 │ │
+│ │                                                               │  │                  │ │
+│ │ ┌───────────────────────────────────────────────────────────┐ │  │ 18 compute units │ │
+│ │ │ NUMANode L#0 P#0 (36GB)                                   │ │  │                  │ │
+│ │ └───────────────────────────────────────────────────────────┘ │  │ 27 GB            │ │
+│ │                                                               │  └──────────────────┘ │
+│ │ ┌───────────────────────────────────────────────────────────┐ │                       │
+│ │ │ L2 (4096KB)                                               │ │                       │
+│ │ └───────────────────────────────────────────────────────────┘ │                       │
+│ │                                                               │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ L1d (64KB)  │  │ L1d (64KB)  │  ├┤  ├┤  ├┤  │ L1d (64KB)  │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ │                                    6x total                   │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ L1i (128KB) │  │ L1i (128KB) │              │ L1i (128KB) │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ │                                                               │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ Core L#0    │  │ Core L#1    │              │ Core L#5    │ │                       │
+│ │ │             │  │             │              │             │ │                       │
+│ │ │ ┌─────────┐ │  │ ┌─────────┐ │              │ ┌─────────┐ │ │                       │
+│ │ │ │ PU L#0  │ │  │ │ PU L#1  │ │              │ │ PU L#5  │ │ │                       │
+│ │ │ │         │ │  │ │         │ │              │ │         │ │ │                       │
+│ │ │ │   P#0   │ │  │ │   P#1   │ │              │ │   P#5   │ │ │                       │
+│ │ │ └─────────┘ │  │ └─────────┘ │              │ └─────────┘ │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ │                                                               │                       │
+│ │ ┌───────────────────────────────────────────────────────────┐ │                       │
+│ │ │ L2 (16MB)                                                 │ │                       │
+│ │ └───────────────────────────────────────────────────────────┘ │                       │
+│ │                                                               │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ L1d (128KB) │  │ L1d (128KB) │  ├┤  ├┤  ├┤  │ L1d (128KB) │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ │                                    6x total                   │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ L1i (192KB) │  │ L1i (192KB) │              │ L1i (192KB) │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ │                                                               │                       │
+│ │ ┌─────────────┐  ┌─────────────┐              ┌─────────────┐ │                       │
+│ │ │ Core L#6    │  │ Core L#7    │              │ Core L#11   │ │                       │
+│ │ │             │  │             │              │             │ │                       │
+│ │ │ ┌─────────┐ │  │ ┌─────────┐ │              │ ┌─────────┐ │ │                       │
+│ │ │ │ PU L#6  │ │  │ │ PU L#7  │ │              │ │ PU L#11 │ │ │                       │
+│ │ │ │         │ │  │ │         │ │              │ │         │ │ │                       │
+│ │ │ │   P#6   │ │  │ │   P#7   │ │              │ │  P#11   │ │ │                       │
+│ │ │ └─────────┘ │  │ └─────────┘ │              │ └─────────┘ │ │                       │
+│ │ └─────────────┘  └─────────────┘              └─────────────┘ │                       │
+│ └───────────────────────────────────────────────────────────────┘                       │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</code></pre>
 </div>
 </div>
 </section>
