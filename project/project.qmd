@@ -10,6 +10,8 @@ format:
     code-block-background: true
 execute:
   freeze: auto
+eval: false
+engine: markdown
 ---
 
 ## Overview
@@ -43,3 +45,39 @@ Student projects must extend beyond the application of existing software, method
     + Think carefully about the design itself: How does each distinct visual element contribute to strong, visual communication of a statistical or quantitative concept?
 
 See the handout on Canvas for specific papers or software packages you might consider for inspiration.
+
+## Deadlines
+
+**Thursday, November 12**: Submit a project description on Canvas
+
+- Motivate the problem you are working on: Why do people care about the problem, and what aspect of it is challenging from a computational standpoint?
+- Summarize the methods/tools you are working with, and identify any prior art that might be relevant to your project.
+- Provide an outline of the project's code. The following questions are provided to help you organize your thinking.
+    + What are the main functions a user will interact with?
+    + Are there any custom classes you anticipate will be needed?
+    + Are there any code dependencies (other packages) you might require and need to manage?
+    + What are the main tests for your code?
+    + What applications or data will you test your code on?
+
+**Wednesday, December 9**: Project due on GitHub
+
+- Ensure instructors have access to the project.
+- Repository should include package code and tests.
+- Also include a report prepared with Quarto with the main examples you wish to highlight.
+- Additional details will be provided to you.
+
+Suggested repository structure:
+
+
+```{default}
+.
+├── report
+├── src
+├── Project.toml
+└── README.md
+```
+
+- `report` should contain the files to reproduce your report. **Make sure to include a separate `Project.toml` for any dependencies specific to the examples.
+- `src` contains your package's source code.
+- `Project.toml` records package-level dependencies. Do not include dependencies specific to examples.
+- `README.md` should be a brief project summary with authors and, ideally, at least one short example illustrating how to use your code.
