@@ -5,12 +5,11 @@ title: Office hours
 + **Instructor**: Alfonso Landeros
     - **Where**: Olmsted 1343
     - **When**:
-      - Tuesdays TBD
-      - Thursdays TBD
+      - Tuesdays 2pm - 3pm
+      - Thursdays 2:30 pm - 4pm
     - By appointment
     - Feel free to drop by if my door is open; I'll let you know if I'm available.
 + **TA**: Charlotte
-    - **Where**: TBD
+    - **Where**: [Zoom](https://ucr.zoom.us/j/3819402641)
     - **When**:
-      - Day 1 TBD
-      - Day 2 TBD
+      - Tuesdays 2pm - 3pm, 6pm - 7pm
