@@ -107,12 +107,504 @@ window.Quarto = {
 <link rel="stylesheet" href="../../assets/styles.css">
 </head>
 
-<body class="quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module05/easy.html">Module 5 (Linear Systems)</a></li><li class="breadcrumb-item"><a href="../../notes/module05/lu.html">LU</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 1 (Fundamentals)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 2 (Programming)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Multiple Dispatch</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 3 (Best Practices)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 4 (Numerical Basics)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Linear Algebra Introduction</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 5 (Linear Systems)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 6 (Simulation)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">RNG and PRNGs</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Inverse Method</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Rejection Sampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Monte Carlo Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Distributions.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 7 (Resampling)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 8 (Optimization)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">First-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Second-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Automatic Differentiation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 9 (Data Technologies)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">How to…</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -130,7 +622,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module05/easy.html">Module 5 (Linear Systems)</a></li><li class="breadcrumb-item"><a href="../../notes/module05/lu.html">LU</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">LU Decomposition</h1>
 </div>
@@ -151,7 +643,11 @@ window.Quarto = {
 
 <section id="lu-decomposition" class="level2">
 <h2 class="anchored" data-anchor-id="lu-decomposition">LU decomposition</h2>
-<p>LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, <span class="math inline">\(\mathbf{A} = \mathbf{L}\mathbf{U}\)</span>. - <strong>Uncommon</strong> in statistics because most of the time statisticians deal with positive (semi)definite matrices. - <a href="https://arxiv.org/abs/math/0506382">Applies generally to arbitrary matrices</a>, though factors are only “almost” triangular.</p>
+<p>LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, <span class="math inline">\(\mathbf{A} = \mathbf{L}\mathbf{U}\)</span>.</p>
+<ul>
+<li><strong>Uncommon</strong> in statistics because most of the time statisticians deal with positive (semi)definite matrices.</li>
+<li><a href="https://arxiv.org/abs/math/0506382">Applies generally to arbitrary matrices</a>, though factors are only “almost” triangular.</li>
+</ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -272,7 +768,7 @@ Let <span class="math display">\[\begin{equation*}
 <p>where <span class="math inline">\(\mathbf{L}\)</span> is unit lower triangular and <span class="math inline">\(\mathbf{U}\)</span> is upper triangular.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="LU_decomp.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
+<p><img src="assets/LU_decomp.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:50.0%"></p>
 </figure>
 </div>
 </section>
@@ -288,7 +784,7 @@ Let <span class="math display">\[\begin{equation*}
 <ul>
 <li>Solve <span class="math inline">\(\mathbf{A} \mathbf{X} = \mathbf{I}\)</span>, or <span class="math inline">\(\mathbf{A} \mathbf{x}_{i} = \mathbf{e}_{i}\)</span>.</li>
 <li>Exploiting 0s in RHS reduces complexity of each solve, changing cost of triangular solves from <span class="math inline">\(2n^{3} to \frac{4}{3}n^{3}\)</span>.</li>
-<li>Cost to inverest with Gaussian elimination: <span class="math inline">\(2n^{3}\)</span> flops, which is 3 times more expensive than just solving with LU!</li>
+<li>Cost to invert with Gaussian elimination: <span class="math inline">\(2n^{3}\)</span> flops, which is 3 times more expensive than just solving with LU!</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -302,7 +798,7 @@ Let <span class="math display">\[\begin{equation*}
 <div class="callout-body-container callout-body">
 <ul>
 <li>Need standard errors, and you’re convinced it can’t be done any other way (it can).</li>
-<li>Number of RHSs is much greater than <span class="math inline">\(n\)</span> (multivariate regression)</li>
+<li>Number of RHSs is much greater than <span class="math inline">\(n\)</span> (multivariate regression, <span class="math inline">\(AX = B\)</span>).</li>
 <li><span class="math inline">\(n\)</span> is small, and you use <a href="https://github.com/JuliaArrays/StaticArrays.jl">StaticArrays.jl</a> to do so blazingly fast.</li>
 </ul>
 </div>

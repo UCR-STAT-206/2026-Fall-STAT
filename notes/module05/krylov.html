@@ -366,6 +366,12 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
  <span class="menu-text">Eigen-Decomposition and SVD</span>
   </li>
           <li class="sidebar-item">
@@ -505,6 +511,12 @@ window.Quarto = {
  <span class="menu-text">Lab 3 (File I/O)</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -619,7 +631,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a></li>
-  <li><a href="#example-application-pagerank" id="toc-example-application-pagerank" class="nav-link" data-scroll-target="#example-application-pagerank">Example Application: PageRank</a>
+  <li><a href="#the-pagerank-problem" id="toc-the-pagerank-problem" class="nav-link" data-scroll-target="#the-pagerank-problem">The PageRank Problem</a>
   <ul class="collapse">
   <li><a href="#background-graph-theory" id="toc-background-graph-theory" class="nav-link" data-scroll-target="#background-graph-theory">Background: Graph Theory</a></li>
   <li><a href="#the-problem" id="toc-the-problem" class="nav-link" data-scroll-target="#the-problem">The Problem</a></li>
@@ -706,8 +718,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="example-application-pagerank" class="level2">
-<h2 class="anchored" data-anchor-id="example-application-pagerank">Example Application: PageRank</h2>
+<section id="the-pagerank-problem" class="level2">
+<h2 class="anchored" data-anchor-id="the-pagerank-problem">The PageRank Problem</h2>
 <section id="background-graph-theory" class="level3">
 <h3 class="anchored" data-anchor-id="background-graph-theory">Background: Graph Theory</h3>
 <p>A <strong>graph</strong> is a mathematical abstraction for <em>networks</em>, which in turn model certain kinds of relations in applications (of graph theory). A graph is defined by</p>
@@ -718,15 +730,15 @@ window.Quarto = {
 <p>Graphs can be <em>directed</em> or <em>undirected</em>, depending on whether the underlying relation is asymmetric or symmetric, respectively. As such, a graph can be specified using a (weighted) adjacency matrix <span class="math inline">\(\mathbf{A}\)</span> with entries</p>
 <p><span class="math display">\[
 a_{ij} = \begin{cases}
-1 &amp; \text{if $(i,j) \in E$} \\
+1 &amp; \text{if $(j,i) \in E$} \\
 0 &amp; \text{otherwise}
 \end{cases}.
 \]</span></p>
-<p>Various important quantities can be derived from <span class="math inline">\(\mathbf{A}\)</span></p>
+<p>Here <span class="math inline">\((j,i)\)</span> is a directed edge so that <span class="math inline">\(a_{ij}\)</span> indicates whether node <span class="math inline">\(j\)</span> (source) connects to node <span class="math inline">\(i\)</span> (destination). Various important quantities can be derived from <span class="math inline">\(\mathbf{A}\)</span></p>
 <ul>
-<li>Out Degree: <span class="math inline">\(d_{i}^{+} = \sum_{j} a_{ij} = \mathbf{A}\mathbf{1}\)</span> (if we treat rows of <span class="math inline">\(\mathbf{A}\)</span> as the originating nodes)</li>
-<li>In Degree: <span class="math inline">\(d_{i}^{-} = \sum_{j} a_{ji} = \mathbf{1}^{\top} \mathbf{A}\)</span></li>
-<li>If <span class="math inline">\(\mathbf{A}\)</span> is symmetric, the graph is directed and so we only speak of the degree <span class="math inline">\(d_{i} = d_{i}^{+} = d_{i}^{-}\)</span>.</li>
+<li>Out Degree: <span class="math inline">\(d_{j}^{+} = \sum_{i} a_{ij} = [\mathbf{1}^{\top}\mathbf{A}]_{j}\)</span> (if we treat rows of <span class="math inline">\(\mathbf{A}\)</span> as the originating nodes)</li>
+<li>In Degree: <span class="math inline">\(d_{j}^{-} = \sum_{i} a_{ji} = [\mathbf{A} \mathbf{1}]_{j}\)</span></li>
+<li>If <span class="math inline">\(\mathbf{A}\)</span> is symmetric, the graph is undirected and so we only speak of the degree <span class="math inline">\(d_{i} = d_{i}^{+} = d_{i}^{-}\)</span>.</li>
 </ul>
 <p>Spectral graph theory relates eigenvalues/eigenvectors of <span class="math inline">\(\mathbf{A}\)</span> or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.</p>
 </section>
@@ -739,17 +751,16 @@ a_{ij} = \begin{cases}
 </div>
 <p><a href="https://en.wikipedia.org/wiki/PageRank">Larry Page</a> imagines a random surfer wandering on internet according to following rules:</p>
 <ul>
-<li>From a page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_i&gt;0\)</span>
+<li>From page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} &gt; 0\)</span>:
 <ul>
-<li>with probability <span class="math inline">\(p\)</span>, they randomly choose a link on page <span class="math inline">\(i\)</span> (uniformly) and follows that link to the next page<br>
-</li>
-<li>with probability <span class="math inline">\(1-p\)</span>, they randomly choose one page from the set of all <span class="math inline">\(n\)</span> pages (uniformly) and proceeds to that page</li>
+<li>With probability <span class="math inline">\(1-p\)</span> they choose a link on a page <span class="math inline">\(j\)</span> uniformly at random and follow that link to the next page.</li>
+<li>With probability <span class="math inline">\(p\)</span> they choose one page from the set of all <span class="math inline">\(n\)</span> pages uniformly at random and proceed to that page.</li>
 </ul></li>
-<li>From a page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_i=0\)</span> (a dangling page), they randomly choose one page from the set of all <span class="math inline">\(n\)</span> pages (uniformly) and proceeds to that page</li>
+<li>From a page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} = 0\)</span> (a dangling page), they randomly choose one page from the set of <span class="math inline">\(n\)</span> pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.</li>
 </ul>
-<p>Here <span class="math inline">\(r_i\)</span> is the <em>out-degree</em> of page <span class="math inline">\(i\)</span> and <span class="math inline">\(\mathbf{A}  \in \{0,1\}^{n \times n}\)</span> the connectivity matrix of webpages with entries <span class="math display">\[
+<p>Here <span class="math inline">\(r_j\)</span> is the <em>out-degree</em> of page <span class="math inline">\(j\)</span> and <span class="math inline">\(\mathbf{A}  \in \{0,1\}^{n \times n}\)</span> the connectivity matrix of webpages with entries <span class="math display">\[
 a_{ij} = \begin{cases}
-1 &amp;  \text{if page $i$ links to page $j$} \\
+1 &amp;  \text{if page $j$ links to page $i$} \\
 0 &amp; \text{otherwise}
 \end{cases}.
 \]</span></p>
@@ -758,8 +769,9 @@ a_{ij} = \begin{cases}
 </ul>
 <p>The description above defines a Markov chain on the space of <span class="math inline">\(n\)</span> pages. Markov chain theory tells us that the <em>stationary distribution</em> of this Markov chain gives the ranks (probabilities) of each page.</p>
 <ul>
-<li><p>A vector <span class="math inline">\(\mathbf{x}\)</span> is a stationary distribution if it is a top left eigenvector of the transition matrix <span class="math inline">\(\mathbf{P}\)</span> corresponding to eigenvalue 1.- Equivalently it can be cast as the solution to the linear equation <span class="math display">\[
-(\mathbf{I} - \mathbf{P}^T) \mathbf{x} = \mathbf{0}.
+<li><p>A vector <span class="math inline">\(\mathbf{x}\)</span> is a stationary distribution if it is a top right eigenvector of the transition matrix <span class="math inline">\(\mathbf{P}\)</span> corresponding to eigenvalue 1.</p></li>
+<li><p>Equivalently it can be cast as the solution to the linear equation <span class="math display">\[
+(\mathbf{I}_{n} - \mathbf{P}) \mathbf{x} = \mathbf{0}.
 \]</span></p></li>
 <li><p>GE/LU will take <span class="math inline">\(2 \times (10^9)^3/3/10^{12} \approx 6.66 \times 10^{14}\)</span> seconds <span class="math inline">\(\approx 20\)</span> million years on a tera-flop supercomputer!</p></li>
 <li><p>Numerical analyst <a href="https://en.wikipedia.org/wiki/Gene_H._Golub">Gene Golub</a> called this the largest matrix computation in world.</p></li>
@@ -838,7 +850,7 @@ x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j=i+1}^n a
 <ul>
 <li>Based on theory of <a href="https://en.wikipedia.org/wiki/Krylov_subspace">Krylov subspaces</a>.</li>
 <li><strong>Idea</strong>: Look at the <em>image</em> of a vector <span class="math inline">\(\mathbf{b}\)</span> under powers of a square matrix <span class="math inline">\(\mathbf{A}\)</span>.</li>
-<li>The vectors <span class="math inline">\(\mathbf{b}, \mathbf{A}\mathbf{b}, \mathbf{A}^{2}\mathbf{b}, \ldots \mathbf{A}^{k-1}\mathbf{b}\)</span> for a subspace of rank at most <span class="math inline">\(k\)</span>.</li>
+<li>The vectors <span class="math inline">\(\mathbf{b}, \mathbf{A}\mathbf{b}, \mathbf{A}^{2}\mathbf{b}, \ldots \mathbf{A}^{k-1}\mathbf{b}\)</span> form a subspace of rank at most <span class="math inline">\(k\)</span>.</li>
 <li>This idea can be exploited to accelerate/explain why iterative methods for linear systems are quite fast.</li>
 </ul>
 <section id="conjugate-gradients" class="level3">

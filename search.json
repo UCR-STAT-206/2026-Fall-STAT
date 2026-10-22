@@ -4,7 +4,7 @@
     "href": "office_hours.html",
     "title": "Office hours",
     "section": "",
-    "text": "Instructor: Alfonso Landeros\n\nWhere: Olmsted 1343\nWhen:\n\nTuesdays 2pm - 3pm\nThursdays 2:30 pm - 4pm\n\nBy appointment\nFeel free to drop by if my door is open; I’ll let you know if I’m available.\n\nTA: Charlotte\n\nWhere: Zoom\nWhen:\n\nTuesdays 2pm - 3pm, 6pm - 7pm",
+    "text": "Instructor: Alfonso Landeros\n\nWhere: Olmsted 1343\nWhen:\n\nTuesdays 2pm - 3pm\nThursdays 2:30 pm - 4pm\n\nBy appointment\nFeel free to drop by if my door is open; I’ll let you know if I’m available.\n\nTA: Charlotte\n\nWhere: Zoom; see Canvas for the link.\nWhen:\n\nTuesdays 2pm - 3pm, 6pm - 7pm",
     "crumbs": [
       "Office Hours"
     ]
@@ -1448,80 +1448,124 @@
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html",
-    "href": "labs/lab1-submit.html",
-    "title": "Lab 1: Submitting Assignments",
+    "objectID": "labs/lab4-reproducibility.html",
+    "href": "labs/lab4-reproducibility.html",
+    "title": "Lab 4: Reproducibility",
     "section": "",
-    "text": "By the end of this lab, you should:\n\nHave your local repository set up on your computer within the Docker container.\nBe able to git pull and git push to your remote repository, hosted on GitHub.\nUnderstand the workflow of drafting your solutions using version control and submitting to GitHub.",
+    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#goals",
-    "href": "labs/lab1-submit.html#goals",
-    "title": "Lab 1: Submitting Assignments",
+    "objectID": "labs/lab4-reproducibility.html#before-class",
+    "href": "labs/lab4-reproducibility.html#before-class",
+    "title": "Lab 4: Reproducibility",
     "section": "",
-    "text": "By the end of this lab, you should:\n\nHave your local repository set up on your computer within the Docker container.\nBe able to git pull and git push to your remote repository, hosted on GitHub.\nUnderstand the workflow of drafting your solutions using version control and submitting to GitHub.",
+    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#log-in-to-the-container-environment",
-    "href": "labs/lab1-submit.html#log-in-to-the-container-environment",
-    "title": "Lab 1: Submitting Assignments",
-    "section": "1. Log in to the container environment",
-    "text": "1. Log in to the container environment\n\nMake sure the Docker container is running.\nConnect VSCode to the container.\nOpen a terminal",
+    "objectID": "labs/lab4-reproducibility.html#overview-instructions",
+    "href": "labs/lab4-reproducibility.html#overview-instructions",
+    "title": "Lab 4: Reproducibility",
+    "section": "Overview & Instructions",
+    "text": "Overview & Instructions\nIn this lab you will try to reproduce a headline result from a published study (to be revealed later).\nRR-processed.csv is an unbalanced panel (longitudinal) dataset of economic indicators for 20 countries, 1946 – 2009, with one row per country-year (1,175 rows). The two variables you need are:\n\ndebtgdp: public debt as a percentage of GDP. A value of 100 means public debt equals one year of economic output. It is positive and can be smaller or larger than 100.\ndRGDP: real GDP growth, in percent per year.\n\nEach country-year is assigned to one of four categories: 0-30%, 30-60%, 60-90%, and above 90% debt/GDP. The provided file analysis.jl defines default_bins(), debtgdp_category(), load_data(), and report_mean_growth(), which you will use to load the data and compute mean real GDP growth in each category by averaging over all country-year observations. You can use ?&lt;function_name&gt; to quickly review what each function does.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#clone-your-personal-repository-to-the-container",
-    "href": "labs/lab1-submit.html#clone-your-personal-repository-to-the-container",
-    "title": "Lab 1: Submitting Assignments",
-    "section": "2. Clone your personal repository to the container",
-    "text": "2. Clone your personal repository to the container\n\nMake sure you are in /home/student; e.g. check the output of pwd.\nRun git clone git@github.com:UCR-STAT-206/LASTNAME_FIRSTNAME.git work. Be sure to edit LASTNAME and FIRSTNAME; we used the information on Canvas.\ncd into the newly created work directory and check the files with ls. It should match what is currently on GitHub.\n\n\n\n\n\n\n\nNote\n\n\n\nYou only need to clone your repo from GitHub once.",
+    "objectID": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
+    "href": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 1: Reproduce the study",
+    "text": "Task 1: Reproduce the study\n\nSkim through analysis.jl. In a fresh Julia session, run using Revise and load the source file with includet(\"analysis.jl\").\n\nNote: Use includet(\"analysis.jl\") in the Julia REPL only.\nIn your report, you can load the source file using the regular include(\"analysis.jl\") command.\n\nUse the provided tools to load RR-processed.csv. Create a reproduce.qmd report file to report mean growth in real GDP. Edit this file as you work through each task in the REPL.\nAdd the published values from RR-published.csv to your report.\nComment on the differences, if any, between the two tables.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#organize-the-files",
-    "href": "labs/lab1-submit.html#organize-the-files",
-    "title": "Lab 1: Submitting Assignments",
-    "section": "3. Organize the files",
-    "text": "3. Organize the files\n\nEdit README.md by adding yourself as an author. For example, add a line like Author: FIRSTNAME LASTNAME.\nCreate a new directory named lab1. Use this name exactly as printed here.\nMove all the files (except README.md) into lab1.\nVerify the file structure inside lab1 using the tree command. You should see the following:\n.\n├── lab1\n│   ├── demo.jl\n│   ├── Project.toml\n│   └── ucr-and-bell-tower.jpg\n└── README.md\nStage all the changes you’ve made and commit them. Use the message Completed Step 3 of Lab 1.\n\n\n\n\n\n\n\nNoteMake it a habit to check your work\n\n\n\nDepending on how you use git add, Git may not detect the file movements accurately. Verify with git status before you commit. You should see\nOn branch main\nYour branch is up to date with 'origin/main'.\n\nChanges to be committed:\n  (use \"git restore --staged &lt;file&gt;...\" to unstage)\n    renamed:    Project.toml -&gt; lab1/Project.toml\n    renamed:    demo.jl -&gt; lab1/demo.jl\n    renamed:    ucr-and-bell-tower.jpg -&gt; lab1/ucr-and-bell-tower.jpg",
+    "objectID": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
+    "href": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 2: Investigate the discrepancy",
+    "text": "Task 2: Investigate the discrepancy\n\nCarefully review the script and identify at least two decisions an analyst must make between the panel dataset and the final table. Document these in your report. For each decision, propose an alternative the authors might have used.\nTry changing the script to test your hypotheses about why your table differs from the published result. Try to match as many columns as you can (to one decimal place).\n\nCreate your own function within analysis.jl, using report_mean_growth() as a starting point.\n\nRecord which columns matched (if any), and try to explain what additional information you would need to account for any remaining discrepancy.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#create-a-quarto-document-based-on-the-script",
-    "href": "labs/lab1-submit.html#create-a-quarto-document-based-on-the-script",
-    "title": "Lab 1: Submitting Assignments",
-    "section": "4. Create a Quarto document based on the script",
-    "text": "4. Create a Quarto document based on the script\n\nCall the file demo.qmd. Name yourself as the author.\n\nMost of the comments in demo.jl should become regular text in your Quarto document.\nYou may need to run the instantiate command in Julia’s package manager to get everything working.\nTest it out as you work using quarto preview demo.qmd.\n\nCreate a new snapshot once you’ve finished working on demo.qmd.\n\nBe sure to only commit demo.qmd. Exclude everything else.\nUse the message Completed Step 4 of Lab 1.",
+    "objectID": "labs/lab4-reproducibility.html#task-3-reflection",
+    "href": "labs/lab4-reproducibility.html#task-3-reflection",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 3: Reflection",
+    "text": "Task 3: Reflection\n\nWhich parts of the gap could you detect from the data alone, and which would need the authors’ files?\nIf reproducing a study hinges on very few observations, how much should a headline result rest on them?\nWhat would the authors have needed to publish for you to find the problem in 5 minutes instead of however long it took you?\nIs averaging the country mean, rather than pooling every country-year, an error or a choice? Where is the line between them?\nIn your own results, growth is still lower in the highest debt group. Do the differences between your table and the published one change anything about the conclusion?",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
     ]
   },
   {
-    "objectID": "labs/lab1-submit.html#review-your-work-and-submit",
-    "href": "labs/lab1-submit.html#review-your-work-and-submit",
-    "title": "Lab 1: Submitting Assignments",
-    "section": "5. Review your work and submit",
-    "text": "5. Review your work and submit\n\nReview your work.\n\nDoes the code run in the REPL?\nDoes the Quarto document render successfully?\nWhat does git log look like?\n\nRun the command git tag Lab1 to tag a specific version with an easy-to-read label.\nRun the command git push to push all your work to GitHub.\nRun the command git push --tags to push the easy-to-read label.",
+    "objectID": "labs/lab4-reproducibility.html#reminders",
+    "href": "labs/lab4-reproducibility.html#reminders",
+    "title": "Lab 4: Reproducibility",
+    "section": "Reminders",
+    "text": "Reminders\n\nMake sure you tag the assignment: git tag lab4.\nMake sure you push the tags, too: git push followed by git push --tags.",
     "crumbs": [
       "Labs",
-      "Lab 1 (Submitting Assignments)"
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html",
+    "href": "labs/lab2-debug.html",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "",
+    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#goals",
+    "href": "labs/lab2-debug.html#goals",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "",
+    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#instructions",
+    "href": "labs/lab2-debug.html#instructions",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "Instructions",
+    "text": "Instructions\n\nThere is no required programming for this assignment.\nWorking on your own or as a class, you will identify and fix 4 bugs lurking in Julia code.\nYou will submit your work in a file named bugs.qmd under a lab2 directory. This file must contain the following information for each bug:\n\nWhat is the bug/error? Briefly describe it.\nWhat line number does the error/bug occur on?\nDoes Julia produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?\nHow can it be fixed? Briefly describe a solution.\n\nIn addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.\nIf you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.\nParticipate in the discussion, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#the-code",
+    "href": "labs/lab2-debug.html#the-code",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "The Code",
+    "text": "The Code\nfunction process_order(items, tax_rate)\n  subtotal = 0.0\n\n  # Process each item in the order\n  for item in items\n    price = item[\"price\"]\n    quantity = item[\"quantity\"]\n\n    # Calculate item cost and add to subtotal\n    subtotal = price * quantity\n\n  # Calculate shipping\n  if subtotal &gt; 50.0\n    shipping = 0.0\n  else\n    shipping = 5.00\n  end\n\n  total = subtotal * (1.0 + tax_rate) + shipping\n  return total\nend",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
     ]
   },
   {
@@ -1602,47 +1646,80 @@
     ]
   },
   {
-    "objectID": "labs/lab2-debug.html",
-    "href": "labs/lab2-debug.html",
-    "title": "Lab 2: Errors and Debugging",
+    "objectID": "labs/lab1-submit.html",
+    "href": "labs/lab1-submit.html",
+    "title": "Lab 1: Submitting Assignments",
     "section": "",
-    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "text": "By the end of this lab, you should:\n\nHave your local repository set up on your computer within the Docker container.\nBe able to git pull and git push to your remote repository, hosted on GitHub.\nUnderstand the workflow of drafting your solutions using version control and submitting to GitHub.",
     "crumbs": [
       "Labs",
-      "Lab 2 (Errors and Debugging)"
+      "Lab 1 (Submitting Assignments)"
     ]
   },
   {
-    "objectID": "labs/lab2-debug.html#goals",
-    "href": "labs/lab2-debug.html#goals",
-    "title": "Lab 2: Errors and Debugging",
+    "objectID": "labs/lab1-submit.html#goals",
+    "href": "labs/lab1-submit.html#goals",
+    "title": "Lab 1: Submitting Assignments",
     "section": "",
-    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "text": "By the end of this lab, you should:\n\nHave your local repository set up on your computer within the Docker container.\nBe able to git pull and git push to your remote repository, hosted on GitHub.\nUnderstand the workflow of drafting your solutions using version control and submitting to GitHub.",
     "crumbs": [
       "Labs",
-      "Lab 2 (Errors and Debugging)"
+      "Lab 1 (Submitting Assignments)"
     ]
   },
   {
-    "objectID": "labs/lab2-debug.html#instructions",
-    "href": "labs/lab2-debug.html#instructions",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "Instructions",
-    "text": "Instructions\n\nThere is no required programming for this assignment.\nWorking on your own or as a class, you will identify and fix 4 bugs lurking in Julia code.\nYou will submit your work in a file named bugs.qmd under a lab2 directory. This file must contain the following information for each bug:\n\nWhat is the bug/error? Briefly describe it.\nWhat line number does the error/bug occur on?\nDoes Julia produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?\nHow can it be fixed? Briefly describe a solution.\n\nIn addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.\nIf you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.\nParticipate in the discussion, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.",
+    "objectID": "labs/lab1-submit.html#log-in-to-the-container-environment",
+    "href": "labs/lab1-submit.html#log-in-to-the-container-environment",
+    "title": "Lab 1: Submitting Assignments",
+    "section": "1. Log in to the container environment",
+    "text": "1. Log in to the container environment\n\nMake sure the Docker container is running.\nConnect VSCode to the container.\nOpen a terminal",
     "crumbs": [
       "Labs",
-      "Lab 2 (Errors and Debugging)"
+      "Lab 1 (Submitting Assignments)"
     ]
   },
   {
-    "objectID": "labs/lab2-debug.html#the-code",
-    "href": "labs/lab2-debug.html#the-code",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "The Code",
-    "text": "The Code\nfunction process_order(items, tax_rate)\n  subtotal = 0.0\n\n  # Process each item in the order\n  for item in items\n    price = item[\"price\"]\n    quantity = item[\"quantity\"]\n\n    # Calculate item cost and add to subtotal\n    subtotal = price * quantity\n\n  # Calculate shipping\n  if subtotal &gt; 50.0\n    shipping = 0.0\n  else\n    shipping = 5.00\n  end\n\n  total = subtotal * (1.0 + tax_rate) + shipping\n  return total\nend",
+    "objectID": "labs/lab1-submit.html#clone-your-personal-repository-to-the-container",
+    "href": "labs/lab1-submit.html#clone-your-personal-repository-to-the-container",
+    "title": "Lab 1: Submitting Assignments",
+    "section": "2. Clone your personal repository to the container",
+    "text": "2. Clone your personal repository to the container\n\nMake sure you are in /home/student; e.g. check the output of pwd.\nRun git clone git@github.com:UCR-STAT-206/LASTNAME_FIRSTNAME.git work. Be sure to edit LASTNAME and FIRSTNAME; we used the information on Canvas.\ncd into the newly created work directory and check the files with ls. It should match what is currently on GitHub.\n\n\n\n\n\n\n\nNote\n\n\n\nYou only need to clone your repo from GitHub once.",
     "crumbs": [
       "Labs",
-      "Lab 2 (Errors and Debugging)"
+      "Lab 1 (Submitting Assignments)"
+    ]
+  },
+  {
+    "objectID": "labs/lab1-submit.html#organize-the-files",
+    "href": "labs/lab1-submit.html#organize-the-files",
+    "title": "Lab 1: Submitting Assignments",
+    "section": "3. Organize the files",
+    "text": "3. Organize the files\n\nEdit README.md by adding yourself as an author. For example, add a line like Author: FIRSTNAME LASTNAME.\nCreate a new directory named lab1. Use this name exactly as printed here.\nMove all the files (except README.md) into lab1.\nVerify the file structure inside lab1 using the tree command. You should see the following:\n.\n├── lab1\n│   ├── demo.jl\n│   ├── Project.toml\n│   └── ucr-and-bell-tower.jpg\n└── README.md\nStage all the changes you’ve made and commit them. Use the message Completed Step 3 of Lab 1.\n\n\n\n\n\n\n\nNoteMake it a habit to check your work\n\n\n\nDepending on how you use git add, Git may not detect the file movements accurately. Verify with git status before you commit. You should see\nOn branch main\nYour branch is up to date with 'origin/main'.\n\nChanges to be committed:\n  (use \"git restore --staged &lt;file&gt;...\" to unstage)\n    renamed:    Project.toml -&gt; lab1/Project.toml\n    renamed:    demo.jl -&gt; lab1/demo.jl\n    renamed:    ucr-and-bell-tower.jpg -&gt; lab1/ucr-and-bell-tower.jpg",
+    "crumbs": [
+      "Labs",
+      "Lab 1 (Submitting Assignments)"
+    ]
+  },
+  {
+    "objectID": "labs/lab1-submit.html#create-a-quarto-document-based-on-the-script",
+    "href": "labs/lab1-submit.html#create-a-quarto-document-based-on-the-script",
+    "title": "Lab 1: Submitting Assignments",
+    "section": "4. Create a Quarto document based on the script",
+    "text": "4. Create a Quarto document based on the script\n\nCall the file demo.qmd. Name yourself as the author.\n\nMost of the comments in demo.jl should become regular text in your Quarto document.\nYou may need to run the instantiate command in Julia’s package manager to get everything working.\nTest it out as you work using quarto preview demo.qmd.\n\nCreate a new snapshot once you’ve finished working on demo.qmd.\n\nBe sure to only commit demo.qmd. Exclude everything else.\nUse the message Completed Step 4 of Lab 1.",
+    "crumbs": [
+      "Labs",
+      "Lab 1 (Submitting Assignments)"
+    ]
+  },
+  {
+    "objectID": "labs/lab1-submit.html#review-your-work-and-submit",
+    "href": "labs/lab1-submit.html#review-your-work-and-submit",
+    "title": "Lab 1: Submitting Assignments",
+    "section": "5. Review your work and submit",
+    "text": "5. Review your work and submit\n\nReview your work.\n\nDoes the code run in the REPL?\nDoes the Quarto document render successfully?\nWhat does git log look like?\n\nRun the command git tag Lab1 to tag a specific version with an easy-to-read label.\nRun the command git push to push all your work to GitHub.\nRun the command git push --tags to push the easy-to-read label.",
+    "crumbs": [
+      "Labs",
+      "Lab 1 (Submitting Assignments)"
     ]
   },
   {
@@ -2477,11 +2554,11 @@
     ]
   },
   {
-    "objectID": "notes/module05/krylov.html#example-application-pagerank",
-    "href": "notes/module05/krylov.html#example-application-pagerank",
+    "objectID": "notes/module05/krylov.html#the-pagerank-problem",
+    "href": "notes/module05/krylov.html#the-pagerank-problem",
     "title": "Iterative Methods",
-    "section": "Example Application: PageRank",
-    "text": "Example Application: PageRank\n\nBackground: Graph Theory\nA graph is a mathematical abstraction for networks, which in turn model certain kinds of relations in applications (of graph theory). A graph is defined by\n\na set of vertices \\(V\\) (or nodes or points or actors…), and\na set of edges \\(E = \\{(x,y) : x,y \\in V\\}\\) (or links or arcs or…).\n\nGraphs can be directed or undirected, depending on whether the underlying relation is asymmetric or symmetric, respectively. As such, a graph can be specified using a (weighted) adjacency matrix \\(\\mathbf{A}\\) with entries\n\\[\na_{ij} = \\begin{cases}\n1 & \\text{if $(i,j) \\in E$} \\\\\n0 & \\text{otherwise}\n\\end{cases}.\n\\]\nVarious important quantities can be derived from \\(\\mathbf{A}\\)\n\nOut Degree: \\(d_{i}^{+} = \\sum_{j} a_{ij} = \\mathbf{A}\\mathbf{1}\\) (if we treat rows of \\(\\mathbf{A}\\) as the originating nodes)\nIn Degree: \\(d_{i}^{-} = \\sum_{j} a_{ji} = \\mathbf{1}^{\\top} \\mathbf{A}\\)\nIf \\(\\mathbf{A}\\) is symmetric, the graph is directed and so we only speak of the degree \\(d_{i} = d_{i}^{+} = d_{i}^{-}\\).\n\nSpectral graph theory relates eigenvalues/eigenvectors of \\(\\mathbf{A}\\) or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.\n\n\nThe Problem\n\n\n\n\n\nLarry Page imagines a random surfer wandering on internet according to following rules:\n\nFrom a page \\(i\\) with \\(r_i&gt;0\\)\n\nwith probability \\(p\\), they randomly choose a link on page \\(i\\) (uniformly) and follows that link to the next page\n\nwith probability \\(1-p\\), they randomly choose one page from the set of all \\(n\\) pages (uniformly) and proceeds to that page\n\nFrom a page \\(i\\) with \\(r_i=0\\) (a dangling page), they randomly choose one page from the set of all \\(n\\) pages (uniformly) and proceeds to that page\n\nHere \\(r_i\\) is the out-degree of page \\(i\\) and \\(\\mathbf{A}  \\in \\{0,1\\}^{n \\times n}\\) the connectivity matrix of webpages with entries \\[\na_{ij} = \\begin{cases}\n1 &  \\text{if page $i$ links to page $j$} \\\\\n0 & \\text{otherwise}\n\\end{cases}.\n\\]\n\n\\(n \\approx 10^9\\) in May 2017.\n\nThe description above defines a Markov chain on the space of \\(n\\) pages. Markov chain theory tells us that the stationary distribution of this Markov chain gives the ranks (probabilities) of each page.\n\nA vector \\(\\mathbf{x}\\) is a stationary distribution if it is a top left eigenvector of the transition matrix \\(\\mathbf{P}\\) corresponding to eigenvalue 1.- Equivalently it can be cast as the solution to the linear equation \\[\n(\\mathbf{I} - \\mathbf{P}^T) \\mathbf{x} = \\mathbf{0}.\n\\]\nGE/LU will take \\(2 \\times (10^9)^3/3/10^{12} \\approx 6.66 \\times 10^{14}\\) seconds \\(\\approx 20\\) million years on a tera-flop supercomputer!\nNumerical analyst Gene Golub called this the largest matrix computation in world.\nIterative methods come to the rescue.",
+    "section": "The PageRank Problem",
+    "text": "The PageRank Problem\n\nBackground: Graph Theory\nA graph is a mathematical abstraction for networks, which in turn model certain kinds of relations in applications (of graph theory). A graph is defined by\n\na set of vertices \\(V\\) (or nodes or points or actors…), and\na set of edges \\(E = \\{(x,y) : x,y \\in V\\}\\) (or links or arcs or…).\n\nGraphs can be directed or undirected, depending on whether the underlying relation is asymmetric or symmetric, respectively. As such, a graph can be specified using a (weighted) adjacency matrix \\(\\mathbf{A}\\) with entries\n\\[\na_{ij} = \\begin{cases}\n1 & \\text{if $(j,i) \\in E$} \\\\\n0 & \\text{otherwise}\n\\end{cases}.\n\\]\nHere \\((j,i)\\) is a directed edge so that \\(a_{ij}\\) indicates whether node \\(j\\) (source) connects to node \\(i\\) (destination). Various important quantities can be derived from \\(\\mathbf{A}\\)\n\nOut Degree: \\(d_{j}^{+} = \\sum_{i} a_{ij} = [\\mathbf{1}^{\\top}\\mathbf{A}]_{j}\\) (if we treat rows of \\(\\mathbf{A}\\) as the originating nodes)\nIn Degree: \\(d_{j}^{-} = \\sum_{i} a_{ji} = [\\mathbf{A} \\mathbf{1}]_{j}\\)\nIf \\(\\mathbf{A}\\) is symmetric, the graph is undirected and so we only speak of the degree \\(d_{i} = d_{i}^{+} = d_{i}^{-}\\).\n\nSpectral graph theory relates eigenvalues/eigenvectors of \\(\\mathbf{A}\\) or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.\n\n\nThe Problem\n\n\n\n\n\nLarry Page imagines a random surfer wandering on internet according to following rules:\n\nFrom page \\(j\\) with \\(r_{j} &gt; 0\\):\n\nWith probability \\(1-p\\) they choose a link on a page \\(j\\) uniformly at random and follow that link to the next page.\nWith probability \\(p\\) they choose one page from the set of all \\(n\\) pages uniformly at random and proceed to that page.\n\nFrom a page \\(j\\) with \\(r_{j} = 0\\) (a dangling page), they randomly choose one page from the set of \\(n\\) pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.\n\nHere \\(r_j\\) is the out-degree of page \\(j\\) and \\(\\mathbf{A}  \\in \\{0,1\\}^{n \\times n}\\) the connectivity matrix of webpages with entries \\[\na_{ij} = \\begin{cases}\n1 &  \\text{if page $j$ links to page $i$} \\\\\n0 & \\text{otherwise}\n\\end{cases}.\n\\]\n\n\\(n \\approx 10^9\\) in May 2017.\n\nThe description above defines a Markov chain on the space of \\(n\\) pages. Markov chain theory tells us that the stationary distribution of this Markov chain gives the ranks (probabilities) of each page.\n\nA vector \\(\\mathbf{x}\\) is a stationary distribution if it is a top right eigenvector of the transition matrix \\(\\mathbf{P}\\) corresponding to eigenvalue 1.\nEquivalently it can be cast as the solution to the linear equation \\[\n(\\mathbf{I}_{n} - \\mathbf{P}) \\mathbf{x} = \\mathbf{0}.\n\\]\nGE/LU will take \\(2 \\times (10^9)^3/3/10^{12} \\approx 6.66 \\times 10^{14}\\) seconds \\(\\approx 20\\) million years on a tera-flop supercomputer!\nNumerical analyst Gene Golub called this the largest matrix computation in world.\nIterative methods come to the rescue.",
     "crumbs": [
       "Module 5 (Linear Systems)",
       "Iterative Methods"
@@ -2514,7 +2591,7 @@
     "href": "notes/module05/krylov.html#krylov-methods",
     "title": "Iterative Methods",
     "section": "Krylov Methods",
-    "text": "Krylov Methods\n\nBased on theory of Krylov subspaces.\nIdea: Look at the image of a vector \\(\\mathbf{b}\\) under powers of a square matrix \\(\\mathbf{A}\\).\nThe vectors \\(\\mathbf{b}, \\mathbf{A}\\mathbf{b}, \\mathbf{A}^{2}\\mathbf{b}, \\ldots \\mathbf{A}^{k-1}\\mathbf{b}\\) for a subspace of rank at most \\(k\\).\nThis idea can be exploited to accelerate/explain why iterative methods for linear systems are quite fast.\n\n\nConjugate Gradients\n\nInvented by Magnus Hestenes and Eduard Stiefel in 60s. See Hestenes and Stiefel (1952) for details.\nIdea: Solving \\(\\mathbf{A} \\mathbf{x} = \\mathbf{b}\\) is equivalent to minimizing the quadratic function \\(\\frac{1}{2} \\mathbf{x}^T \\mathbf{A} \\mathbf{x} - \\mathbf{b}^T \\mathbf{x}\\).\nConsider a simple idea: coordinate descent, that is to update components \\(x_j\\) alternatingly. Same as the Gauss-Seidel iteration. Usually it takes too many iterations.\n\nKershaw’s results for a laser fusion problem.\n\n\n\nMethod\nNumber of Iterations\n\n\n\n\nGauss-Seidel\n208,000\n\n\nBlock SOR methods\n765\n\n\nIncomplete Cholesky conjugate gradient\n25\n\n\n\nMessage: Conjugate gradients and its variants are the top-notch iterative methods for solving huge, structured linear systems.\n\n\n\n\n\nHow can we avoid the issue in the picture?\n\nDefine the residual \\(\\nabla f(\\mathbf{x}) = \\mathbf{A} \\mathbf{x} - \\mathbf{b} =: \\mathbf{r}(\\mathbf{x})\\)\nA set of vectors \\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(t)}\\}\\) are said to be conjugate with respect to \\(\\mathbf{A}\\) if \\[\n\\begin{eqnarray*}\n  \\mathbf{p}_i^T \\mathbf{A} \\mathbf{p}_j = 0, \\quad \\text{for all } i \\ne j.\n\\end{eqnarray*}\n\\]\nFor example, eigen-vectors of \\(\\mathbf{A}\\) are conjugate to each other. Why?\n\nConjugate Direction Method: Given a set of conjugate vectors \\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(n-1)}\\}\\), at iteration \\(t\\), we search along the conjugate direction \\(\\mathbf{p}^{(t)}\\) \\[\n\\begin{eqnarray*}\n    \\mathbf{x}^{(t+1)} = \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)},\n\\end{eqnarray*}\n\\] where \\[\n\\begin{eqnarray*}\n    \\alpha^{(t)} = - \\frac{\\mathbf{r}^{(t)T} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\n\\end{eqnarray*}\n\\] is the optimal step length.\n\nTheorem: In conjugate direction method, \\(\\mathbf{x}^{(t)}\\) converges to the solution in at most \\(n\\) steps.\nIntuition: Look at a graph.\n\n\n\n\n\n\nConjugate Gradient Method: generate \\(\\mathbf{p}^{(t)}\\) using only \\(\\mathbf{p}^{(t-1)}\\) \\[\n\\begin{eqnarray*}\n    \\mathbf{p}^{(t)} = - \\mathbf{r}^{(t)} + \\beta^{(t)} \\mathbf{p}^{(t-1)},\n\\end{eqnarray*}\n\\] where \\(\\beta^{(t)}\\) is determined by the conjugacy condition \\(\\mathbf{p}^{(t-1)T} \\mathbf{A} \\mathbf{p}^{(t)} = 0\\) \\[\n\\begin{eqnarray*}\n    \\beta^{(t)} = \\frac{\\mathbf{r}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t-1)}}{\\mathbf{p}^{(t-1)T} \\mathbf{A} \\mathbf{p}^{(t-1)}}.\n\\end{eqnarray*}\n\\]\n\n\nAlgorithm (preliminary version)\nGiven \\(\\mathbf{x}^{(0)}\\), \\(\\mathbf{A}\\), and \\(\\mathbf{b}\\).\n\nInitialize: \\(\\mathbf{r}^{(0)} \\gets \\mathbf{A} \\mathbf{x}^{(0)} - \\mathbf{b}\\), \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\), \\(t=0\\)\nWhile \\(\\mathbf{r}^{(t)} \\ne \\mathbf{0}\\)\n\n\\(\\alpha^{(t)} \\gets - \\frac{\\mathbf{r}^{(t)T} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{x}^{(t+1)} \\gets \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)}\\)\n\\(\\mathbf{r}^{(t+1)} \\gets \\mathbf{A} \\mathbf{x}^{(t+1)} - \\mathbf{b}\\)\n\\(\\beta^{(t+1)} \\gets \\frac{\\mathbf{r}^{(t+1)T} \\mathbf{A} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{p}^{(t+1)} \\gets - \\mathbf{r}^{(t+1)} + \\beta^{(t+1)} \\mathbf{p}^{(t)}\\)\n\\(t \\gets t+1\\)\n\n\nThe initial conjugate direction \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\) is crucial.\n\n\nAlgorithm (economical version)\nSaves one matrix-vector multiplication.\nGiven \\(\\mathbf{x}^{(0)}\\), \\(\\mathbf{A}\\), and \\(\\mathbf{b}\\).\n\nInitialize: \\(\\mathbf{r}^{(0)} \\gets \\mathbf{A} \\mathbf{x}^{(0)} - \\mathbf{b}\\), \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\), \\(t=0\\)\nWhile \\(\\mathbf{r}^{(t)} \\ne \\mathbf{0}\\)\n\\(\\alpha^{(t)} \\gets \\frac{\\mathbf{r}^{(t)T} \\mathbf{r}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{x}^{(t+1)} \\gets \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)}\\)\n\\(\\mathbf{r}^{(t+1)} \\gets \\mathbf{r}^{(t)} + \\alpha^{(t)} \\mathbf{A} \\mathbf{p}^{(t)}\\)\n\\(\\beta^{(t+1)} \\gets \\frac{\\mathbf{r}^{(t+1)T} \\mathbf{r}^{(t+1)}}{\\mathbf{r}^{(t)T} \\mathbf{r}^{(t)}}\\)\n\\(\\mathbf{p}^{(t+1)} \\gets - \\mathbf{r}^{(t+1)} + \\beta^{(t+1)} \\mathbf{p}^{(t)}\\)\n\\(t \\gets t+1\\)\n\n\nComputation cost per iteration is one matrix vector multiplication: \\(\\mathbf{A} \\mathbf{p}^{(t)}\\).\n\nConsider the PageRank problem: \\(\\mathbf{A}\\) has dimension \\(n \\approx 10^{9}\\) but is highly structured (sparse + low rank). Each matrix vector multiplication should only take about \\(O(n)\\) flops.\n\n\n\nTheory\n\n\\(\\mathbf{r}^{(t)}\\) are mutually orthogonal.\n\\(\\{\\mathbf{r}^{(0)},\\ldots,\\mathbf{r}^{(t)}\\}\\) is contained in the Krylov subspace of degree \\(t\\) for \\(\\mathbf{r}^{(0)}\\), denoted by \\[\n\\begin{eqnarray*}\n{\\cal K}(\\mathbf{r}^{(0)}; t) = \\text{span} \\{\\mathbf{r}^{(0)},\\mathbf{A} \\mathbf{r}^{(0)}, \\mathbf{A}^2 \\mathbf{r}^{(0)}, \\ldots, \\mathbf{A}^{t} \\mathbf{r}^{(0)}\\}.\n\\end{eqnarray*}\n\\]\n\\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(t)}\\}\\) is contained in \\({\\cal K}(\\mathbf{r}^{(0)}; t)\\).\n\\(\\mathbf{p}^{(0)}, \\ldots, \\mathbf{p}^{(t)}\\) are conjugate with respect to \\(\\mathbf{A}\\).\n\n\nThe iterates \\(\\mathbf{x}^{(t)}\\) converge to the solution in at most \\(n\\) steps.\nTheorem: If \\(\\mathbf{A}\\) has \\(r\\) distinct eigenvalues, \\(\\mathbf{x}^{(t)}\\) converges to solution \\(\\mathbf{x}^*\\) in at most \\(r\\) steps.",
+    "text": "Krylov Methods\n\nBased on theory of Krylov subspaces.\nIdea: Look at the image of a vector \\(\\mathbf{b}\\) under powers of a square matrix \\(\\mathbf{A}\\).\nThe vectors \\(\\mathbf{b}, \\mathbf{A}\\mathbf{b}, \\mathbf{A}^{2}\\mathbf{b}, \\ldots \\mathbf{A}^{k-1}\\mathbf{b}\\) form a subspace of rank at most \\(k\\).\nThis idea can be exploited to accelerate/explain why iterative methods for linear systems are quite fast.\n\n\nConjugate Gradients\n\nInvented by Magnus Hestenes and Eduard Stiefel in 60s. See Hestenes and Stiefel (1952) for details.\nIdea: Solving \\(\\mathbf{A} \\mathbf{x} = \\mathbf{b}\\) is equivalent to minimizing the quadratic function \\(\\frac{1}{2} \\mathbf{x}^T \\mathbf{A} \\mathbf{x} - \\mathbf{b}^T \\mathbf{x}\\).\nConsider a simple idea: coordinate descent, that is to update components \\(x_j\\) alternatingly. Same as the Gauss-Seidel iteration. Usually it takes too many iterations.\n\nKershaw’s results for a laser fusion problem.\n\n\n\nMethod\nNumber of Iterations\n\n\n\n\nGauss-Seidel\n208,000\n\n\nBlock SOR methods\n765\n\n\nIncomplete Cholesky conjugate gradient\n25\n\n\n\nMessage: Conjugate gradients and its variants are the top-notch iterative methods for solving huge, structured linear systems.\n\n\n\n\n\nHow can we avoid the issue in the picture?\n\nDefine the residual \\(\\nabla f(\\mathbf{x}) = \\mathbf{A} \\mathbf{x} - \\mathbf{b} =: \\mathbf{r}(\\mathbf{x})\\)\nA set of vectors \\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(t)}\\}\\) are said to be conjugate with respect to \\(\\mathbf{A}\\) if \\[\n\\begin{eqnarray*}\n  \\mathbf{p}_i^T \\mathbf{A} \\mathbf{p}_j = 0, \\quad \\text{for all } i \\ne j.\n\\end{eqnarray*}\n\\]\nFor example, eigen-vectors of \\(\\mathbf{A}\\) are conjugate to each other. Why?\n\nConjugate Direction Method: Given a set of conjugate vectors \\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(n-1)}\\}\\), at iteration \\(t\\), we search along the conjugate direction \\(\\mathbf{p}^{(t)}\\) \\[\n\\begin{eqnarray*}\n    \\mathbf{x}^{(t+1)} = \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)},\n\\end{eqnarray*}\n\\] where \\[\n\\begin{eqnarray*}\n    \\alpha^{(t)} = - \\frac{\\mathbf{r}^{(t)T} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\n\\end{eqnarray*}\n\\] is the optimal step length.\n\nTheorem: In conjugate direction method, \\(\\mathbf{x}^{(t)}\\) converges to the solution in at most \\(n\\) steps.\nIntuition: Look at a graph.\n\n\n\n\n\n\nConjugate Gradient Method: generate \\(\\mathbf{p}^{(t)}\\) using only \\(\\mathbf{p}^{(t-1)}\\) \\[\n\\begin{eqnarray*}\n    \\mathbf{p}^{(t)} = - \\mathbf{r}^{(t)} + \\beta^{(t)} \\mathbf{p}^{(t-1)},\n\\end{eqnarray*}\n\\] where \\(\\beta^{(t)}\\) is determined by the conjugacy condition \\(\\mathbf{p}^{(t-1)T} \\mathbf{A} \\mathbf{p}^{(t)} = 0\\) \\[\n\\begin{eqnarray*}\n    \\beta^{(t)} = \\frac{\\mathbf{r}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t-1)}}{\\mathbf{p}^{(t-1)T} \\mathbf{A} \\mathbf{p}^{(t-1)}}.\n\\end{eqnarray*}\n\\]\n\n\nAlgorithm (preliminary version)\nGiven \\(\\mathbf{x}^{(0)}\\), \\(\\mathbf{A}\\), and \\(\\mathbf{b}\\).\n\nInitialize: \\(\\mathbf{r}^{(0)} \\gets \\mathbf{A} \\mathbf{x}^{(0)} - \\mathbf{b}\\), \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\), \\(t=0\\)\nWhile \\(\\mathbf{r}^{(t)} \\ne \\mathbf{0}\\)\n\n\\(\\alpha^{(t)} \\gets - \\frac{\\mathbf{r}^{(t)T} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{x}^{(t+1)} \\gets \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)}\\)\n\\(\\mathbf{r}^{(t+1)} \\gets \\mathbf{A} \\mathbf{x}^{(t+1)} - \\mathbf{b}\\)\n\\(\\beta^{(t+1)} \\gets \\frac{\\mathbf{r}^{(t+1)T} \\mathbf{A} \\mathbf{p}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{p}^{(t+1)} \\gets - \\mathbf{r}^{(t+1)} + \\beta^{(t+1)} \\mathbf{p}^{(t)}\\)\n\\(t \\gets t+1\\)\n\n\nThe initial conjugate direction \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\) is crucial.\n\n\nAlgorithm (economical version)\nSaves one matrix-vector multiplication.\nGiven \\(\\mathbf{x}^{(0)}\\), \\(\\mathbf{A}\\), and \\(\\mathbf{b}\\).\n\nInitialize: \\(\\mathbf{r}^{(0)} \\gets \\mathbf{A} \\mathbf{x}^{(0)} - \\mathbf{b}\\), \\(\\mathbf{p}^{(0)} \\gets - \\mathbf{r}^{(0)}\\), \\(t=0\\)\nWhile \\(\\mathbf{r}^{(t)} \\ne \\mathbf{0}\\)\n\\(\\alpha^{(t)} \\gets \\frac{\\mathbf{r}^{(t)T} \\mathbf{r}^{(t)}}{\\mathbf{p}^{(t)T} \\mathbf{A} \\mathbf{p}^{(t)}}\\)\n\\(\\mathbf{x}^{(t+1)} \\gets \\mathbf{x}^{(t)} + \\alpha^{(t)} \\mathbf{p}^{(t)}\\)\n\\(\\mathbf{r}^{(t+1)} \\gets \\mathbf{r}^{(t)} + \\alpha^{(t)} \\mathbf{A} \\mathbf{p}^{(t)}\\)\n\\(\\beta^{(t+1)} \\gets \\frac{\\mathbf{r}^{(t+1)T} \\mathbf{r}^{(t+1)}}{\\mathbf{r}^{(t)T} \\mathbf{r}^{(t)}}\\)\n\\(\\mathbf{p}^{(t+1)} \\gets - \\mathbf{r}^{(t+1)} + \\beta^{(t+1)} \\mathbf{p}^{(t)}\\)\n\\(t \\gets t+1\\)\n\n\nComputation cost per iteration is one matrix vector multiplication: \\(\\mathbf{A} \\mathbf{p}^{(t)}\\).\n\nConsider the PageRank problem: \\(\\mathbf{A}\\) has dimension \\(n \\approx 10^{9}\\) but is highly structured (sparse + low rank). Each matrix vector multiplication should only take about \\(O(n)\\) flops.\n\n\n\nTheory\n\n\\(\\mathbf{r}^{(t)}\\) are mutually orthogonal.\n\\(\\{\\mathbf{r}^{(0)},\\ldots,\\mathbf{r}^{(t)}\\}\\) is contained in the Krylov subspace of degree \\(t\\) for \\(\\mathbf{r}^{(0)}\\), denoted by \\[\n\\begin{eqnarray*}\n{\\cal K}(\\mathbf{r}^{(0)}; t) = \\text{span} \\{\\mathbf{r}^{(0)},\\mathbf{A} \\mathbf{r}^{(0)}, \\mathbf{A}^2 \\mathbf{r}^{(0)}, \\ldots, \\mathbf{A}^{t} \\mathbf{r}^{(0)}\\}.\n\\end{eqnarray*}\n\\]\n\\(\\{\\mathbf{p}^{(0)},\\ldots,\\mathbf{p}^{(t)}\\}\\) is contained in \\({\\cal K}(\\mathbf{r}^{(0)}; t)\\).\n\\(\\mathbf{p}^{(0)}, \\ldots, \\mathbf{p}^{(t)}\\) are conjugate with respect to \\(\\mathbf{A}\\).\n\n\nThe iterates \\(\\mathbf{x}^{(t)}\\) converge to the solution in at most \\(n\\) steps.\nTheorem: If \\(\\mathbf{A}\\) has \\(r\\) distinct eigenvalues, \\(\\mathbf{x}^{(t)}\\) converges to solution \\(\\mathbf{x}^*\\) in at most \\(r\\) steps.",
     "crumbs": [
       "Module 5 (Linear Systems)",
       "Iterative Methods"
@@ -2624,42 +2701,66 @@
     "href": "notes/module05/lu.html",
     "title": "LU Decomposition",
     "section": "",
-    "text": "LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, \\(\\mathbf{A} = \\mathbf{L}\\mathbf{U}\\). - Uncommon in statistics because most of the time statisticians deal with positive (semi)definite matrices. - Applies generally to arbitrary matrices, though factors are only “almost” triangular.\n\n\n\n\n\n\nNote\n\n\n\n\nHistory: Chinese mathematical text The Nine Chapters on the Mathematical Art, Issac Newton and Carl Friedrich Gauss.\nA toy example illustrating GE."
+    "text": "LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, \\(\\mathbf{A} = \\mathbf{L}\\mathbf{U}\\).\n\nUncommon in statistics because most of the time statisticians deal with positive (semi)definite matrices.\nApplies generally to arbitrary matrices, though factors are only “almost” triangular.\n\n\n\n\n\n\n\nNote\n\n\n\n\nHistory: Chinese mathematical text The Nine Chapters on the Mathematical Art, Issac Newton and Carl Friedrich Gauss.\nA toy example illustrating GE.",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module05/lu.html#lu-decomposition",
     "href": "notes/module05/lu.html#lu-decomposition",
     "title": "LU Decomposition",
     "section": "",
-    "text": "LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, \\(\\mathbf{A} = \\mathbf{L}\\mathbf{U}\\). - Uncommon in statistics because most of the time statisticians deal with positive (semi)definite matrices. - Applies generally to arbitrary matrices, though factors are only “almost” triangular.\n\n\n\n\n\n\nNote\n\n\n\n\nHistory: Chinese mathematical text The Nine Chapters on the Mathematical Art, Issac Newton and Carl Friedrich Gauss.\nA toy example illustrating GE."
+    "text": "LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, \\(\\mathbf{A} = \\mathbf{L}\\mathbf{U}\\).\n\nUncommon in statistics because most of the time statisticians deal with positive (semi)definite matrices.\nApplies generally to arbitrary matrices, though factors are only “almost” triangular.\n\n\n\n\n\n\n\nNote\n\n\n\n\nHistory: Chinese mathematical text The Nine Chapters on the Mathematical Art, Issac Newton and Carl Friedrich Gauss.\nA toy example illustrating GE.",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module05/lu.html#elementary-operator-matrix",
     "href": "notes/module05/lu.html#elementary-operator-matrix",
     "title": "LU Decomposition",
     "section": "Elementary operator matrix",
-    "text": "Elementary operator matrix\nAn elementary operator matrix is the identity matrix with the 0 in position \\((j,k)\\) replaced by \\(c\\) \\[\n    \\mathbf{E}_{jk}(c) = \\begin{pmatrix}\n    1 & & \\\\\n    & \\ddots & \\\\\n    & & 1 & \\\\\n    & & & \\ddots & \\\\\n    & & c & & 1 & \\\\\n    & & & & & \\ddots \\\\\n    & & & & & & 1\n    \\end{pmatrix} = \\mathbf{I} + c \\mathbf{e}_j \\mathbf{e}_k^T.\n\\]\n\n\n\n\n\n\nNote\n\n\n\nClosely related to Householder transformation. Reminder that here \\(\\mathbf{e}_{j}\\) is the \\(j\\)-th standard basis vector in \\(\\mathbf{R}^{d}\\), which has all 0s except in the \\(j\\)-th place.\n\n\nEach \\(\\mathbf{E}_{jk}(c)\\) is unit triangular, full rank, and its inverse is\n\\[\n\\mathbf{E}_{jk}^{-1}(c) = \\mathbf{E}_{jk}(-c).\n\\]\n\\(\\mathbf{E}_{jk}(c)\\) left-multiplies an \\(n \\times m\\) matrix \\(\\mathbf{X}\\) effectively replace its \\(j\\)-th row \\(\\mathbf{x}_{j\\cdot}\\) by \\(c \\mathbf{x}_{k \\cdot} + \\mathbf{x}_{j \\cdot}\\)\n\\[\n    \\mathbf{E}_{jk}(c) \\times \\mathbf{X} = \\mathbf{E}_{jk}(c) \\times \\begin{pmatrix}\n    & & \\\\\n    \\cdots & \\mathbf{x}_{k\\cdot} & \\cdots \\\\\n    & & \\\\\n    \\cdots & \\mathbf{x}_{j\\cdot} & \\cdots \\\\\n    & &\n    \\end{pmatrix} = \\begin{pmatrix}\n    & & \\\\\n    \\cdots & \\mathbf{x}_{k\\cdot} & \\cdots \\\\\n    & & \\\\\n    \\cdots & c \\mathbf{x}_{k\\cdot} + \\mathbf{x}_{j\\cdot} & \\cdots \\\\\n    & &\n    \\end{pmatrix}.\n\\]\n\n\n\n\n\n\nNote\n\n\n\nAll for the low cost of \\(2m\\) flops.\n\n\nGaussian elimination applies a sequence of elementary operator matrices to transform the linear system \\(\\mathbf{A} \\mathbf{x} = \\mathbf{b}\\) to an upper triangular system\n\\[\\begin{eqnarray*}\n    \\mathbf{E}_{n,n-1}(c_{n,n-1}) \\cdots \\mathbf{E}_{21}(c_{21}) \\mathbf{A} \\mathbf{x} &=& \\mathbf{E}_{n,n-1}(c_{n,n-1}) \\cdots \\mathbf{E}_{21}(c_{21}) \\mathbf{b} \\\\\n    \\mathbf{U} \\mathbf{x} &=& \\mathbf{b}_{\\text{new}}.\n\\end{eqnarray*}\\]"
+    "text": "Elementary operator matrix\nAn elementary operator matrix is the identity matrix with the 0 in position \\((j,k)\\) replaced by \\(c\\) \\[\n    \\mathbf{E}_{jk}(c) = \\begin{pmatrix}\n    1 & & \\\\\n    & \\ddots & \\\\\n    & & 1 & \\\\\n    & & & \\ddots & \\\\\n    & & c & & 1 & \\\\\n    & & & & & \\ddots \\\\\n    & & & & & & 1\n    \\end{pmatrix} = \\mathbf{I} + c \\mathbf{e}_j \\mathbf{e}_k^T.\n\\]\n\n\n\n\n\n\nNote\n\n\n\nClosely related to Householder transformation. Reminder that here \\(\\mathbf{e}_{j}\\) is the \\(j\\)-th standard basis vector in \\(\\mathbf{R}^{d}\\), which has all 0s except in the \\(j\\)-th place.\n\n\nEach \\(\\mathbf{E}_{jk}(c)\\) is unit triangular, full rank, and its inverse is\n\\[\n\\mathbf{E}_{jk}^{-1}(c) = \\mathbf{E}_{jk}(-c).\n\\]\n\\(\\mathbf{E}_{jk}(c)\\) left-multiplies an \\(n \\times m\\) matrix \\(\\mathbf{X}\\) effectively replace its \\(j\\)-th row \\(\\mathbf{x}_{j\\cdot}\\) by \\(c \\mathbf{x}_{k \\cdot} + \\mathbf{x}_{j \\cdot}\\)\n\\[\n    \\mathbf{E}_{jk}(c) \\times \\mathbf{X} = \\mathbf{E}_{jk}(c) \\times \\begin{pmatrix}\n    & & \\\\\n    \\cdots & \\mathbf{x}_{k\\cdot} & \\cdots \\\\\n    & & \\\\\n    \\cdots & \\mathbf{x}_{j\\cdot} & \\cdots \\\\\n    & &\n    \\end{pmatrix} = \\begin{pmatrix}\n    & & \\\\\n    \\cdots & \\mathbf{x}_{k\\cdot} & \\cdots \\\\\n    & & \\\\\n    \\cdots & c \\mathbf{x}_{k\\cdot} + \\mathbf{x}_{j\\cdot} & \\cdots \\\\\n    & &\n    \\end{pmatrix}.\n\\]\n\n\n\n\n\n\nNote\n\n\n\nAll for the low cost of \\(2m\\) flops.\n\n\nGaussian elimination applies a sequence of elementary operator matrices to transform the linear system \\(\\mathbf{A} \\mathbf{x} = \\mathbf{b}\\) to an upper triangular system\n\\[\\begin{eqnarray*}\n    \\mathbf{E}_{n,n-1}(c_{n,n-1}) \\cdots \\mathbf{E}_{21}(c_{21}) \\mathbf{A} \\mathbf{x} &=& \\mathbf{E}_{n,n-1}(c_{n,n-1}) \\cdots \\mathbf{E}_{21}(c_{21}) \\mathbf{b} \\\\\n    \\mathbf{U} \\mathbf{x} &=& \\mathbf{b}_{\\text{new}}.\n\\end{eqnarray*}\\]",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module05/lu.html#gaussian-transformation",
     "href": "notes/module05/lu.html#gaussian-transformation",
     "title": "LU Decomposition",
     "section": "Gaussian transformation",
-    "text": "Gaussian transformation\nFor the first column, we apply several elementary operator matrices on the left: \\[\n    \\mathbf{M}_1 = \\mathbf{E}_{n1}(c_{n1}) \\cdots \\mathbf{E}_{31}(c_{31}) \\mathbf{E}_{21}(c_{21}) = \\begin{pmatrix}\n    1 & \\\\\n    c_{21} & \\\\\n    & \\ddots & \\\\\n    c_{n1} & & 1\n    \\end{pmatrix}\n\\]\nFor the \\(k\\)-th column, we do the same: \\[\n    \\mathbf{M}_k = \\mathbf{E}_{nk}(c_{nk}) \\cdots \\mathbf{E}_{k+1,k}(c_{k+1,k}) = \\begin{pmatrix}\n    1 & \\\\\n    & \\ddots \\\\\n    & & 1 & \\\\\n    & & c_{k+1,k} & 1\\\\\n    & & \\vdots & & \\ddots \\\\\n    & &  c_{n,k} & & & 1\n    \\end{pmatrix}.\n\\]\nThe \\(\\mathbf{M}_1, \\ldots, \\mathbf{M}_{n-1}\\) matrices are called Gauss transformations. Gaussian elimination does \\[\n\\mathbf{M}_{n-1} \\cdots \\mathbf{M}_1 \\mathbf{A} = \\mathbf{U}.\n\\]\nLet \\[\\begin{equation*}\n\\mathbf{L} = \\mathbf{M}_1^{-1} \\cdots \\mathbf{M}_{n-1}^{-1} = \\begin{pmatrix}  \n    1 & & & & \\\\\n    \\,- c_{21} & \\ddots & & & \\\\\n    & & 1 & & \\\\\n    \\, - c_{k+1,1} & & - c_{k+1,k} & & \\\\\n    & & \\vdots & & \\ddots \\\\\n    \\,- c_{n1} & & - c_{nk} & & & 1\n    \\end{pmatrix}.\n\\end{equation*}\\] Thus we have the LU decomposition \\[\n\\mathbf{A} = \\mathbf{L} \\mathbf{U},\n\\]\nwhere \\(\\mathbf{L}\\) is unit lower triangular and \\(\\mathbf{U}\\) is upper triangular."
+    "text": "Gaussian transformation\nFor the first column, we apply several elementary operator matrices on the left: \\[\n    \\mathbf{M}_1 = \\mathbf{E}_{n1}(c_{n1}) \\cdots \\mathbf{E}_{31}(c_{31}) \\mathbf{E}_{21}(c_{21}) = \\begin{pmatrix}\n    1 & \\\\\n    c_{21} & \\\\\n    & \\ddots & \\\\\n    c_{n1} & & 1\n    \\end{pmatrix}\n\\]\nFor the \\(k\\)-th column, we do the same: \\[\n    \\mathbf{M}_k = \\mathbf{E}_{nk}(c_{nk}) \\cdots \\mathbf{E}_{k+1,k}(c_{k+1,k}) = \\begin{pmatrix}\n    1 & \\\\\n    & \\ddots \\\\\n    & & 1 & \\\\\n    & & c_{k+1,k} & 1\\\\\n    & & \\vdots & & \\ddots \\\\\n    & &  c_{n,k} & & & 1\n    \\end{pmatrix}.\n\\]\nThe \\(\\mathbf{M}_1, \\ldots, \\mathbf{M}_{n-1}\\) matrices are called Gauss transformations. Gaussian elimination does \\[\n\\mathbf{M}_{n-1} \\cdots \\mathbf{M}_1 \\mathbf{A} = \\mathbf{U}.\n\\]\nLet \\[\\begin{equation*}\n\\mathbf{L} = \\mathbf{M}_1^{-1} \\cdots \\mathbf{M}_{n-1}^{-1} = \\begin{pmatrix}  \n    1 & & & & \\\\\n    \\,- c_{21} & \\ddots & & & \\\\\n    & & 1 & & \\\\\n    \\, - c_{k+1,1} & & - c_{k+1,k} & & \\\\\n    & & \\vdots & & \\ddots \\\\\n    \\,- c_{n1} & & - c_{nk} & & & 1\n    \\end{pmatrix}.\n\\end{equation*}\\] Thus we have the LU decomposition \\[\n\\mathbf{A} = \\mathbf{L} \\mathbf{U},\n\\]\nwhere \\(\\mathbf{L}\\) is unit lower triangular and \\(\\mathbf{U}\\) is upper triangular.",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module05/lu.html#complexity",
     "href": "notes/module05/lu.html#complexity",
     "title": "LU Decomposition",
     "section": "Complexity",
-    "text": "Complexity\n\nThe total cost to compute factors is \\(\\frac{2}{3} n^{3}\\) flops for square systems.\nSolving with LU is the cost of two triangular solves: \\(2n^{2}\\)."
+    "text": "Complexity\n\nThe total cost to compute factors is \\(\\frac{2}{3} n^{3}\\) flops for square systems.\nSolving with LU is the cost of two triangular solves: \\(2n^{2}\\).",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module05/lu.html#matrix-inversion",
     "href": "notes/module05/lu.html#matrix-inversion",
     "title": "LU Decomposition",
     "section": "Matrix inversion",
-    "text": "Matrix inversion\n\nSolve \\(\\mathbf{A} \\mathbf{X} = \\mathbf{I}\\), or \\(\\mathbf{A} \\mathbf{x}_{i} = \\mathbf{e}_{i}\\).\nExploiting 0s in RHS reduces complexity of each solve, changing cost of triangular solves from \\(2n^{3} to \\frac{4}{3}n^{3}\\).\nCost to inverest with Gaussian elimination: \\(2n^{3}\\) flops, which is 3 times more expensive than just solving with LU!\n\n\n\n\n\n\n\nNoteReasons to invert a matrix\n\n\n\n\nNeed standard errors, and you’re convinced it can’t be done any other way (it can).\nNumber of RHSs is much greater than \\(n\\) (multivariate regression)\n\\(n\\) is small, and you use StaticArrays.jl to do so blazingly fast."
+    "text": "Matrix inversion\n\nSolve \\(\\mathbf{A} \\mathbf{X} = \\mathbf{I}\\), or \\(\\mathbf{A} \\mathbf{x}_{i} = \\mathbf{e}_{i}\\).\nExploiting 0s in RHS reduces complexity of each solve, changing cost of triangular solves from \\(2n^{3} to \\frac{4}{3}n^{3}\\).\nCost to invert with Gaussian elimination: \\(2n^{3}\\) flops, which is 3 times more expensive than just solving with LU!\n\n\n\n\n\n\n\nNoteReasons to invert a matrix\n\n\n\n\nNeed standard errors, and you’re convinced it can’t be done any other way (it can).\nNumber of RHSs is much greater than \\(n\\) (multivariate regression, \\(AX = B\\)).\n\\(n\\) is small, and you use StaticArrays.jl to do so blazingly fast.",
+    "crumbs": [
+      "Module 5 (Linear Systems)",
+      "LU"
+    ]
   },
   {
     "objectID": "notes/module04/numbers.html",
