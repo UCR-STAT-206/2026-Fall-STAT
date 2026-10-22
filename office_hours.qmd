@@ -10,6 +10,6 @@ title: Office hours
     - By appointment
     - Feel free to drop by if my door is open; I'll let you know if I'm available.
 + **TA**: Charlotte
-    - **Where**: [Zoom](https://ucr.zoom.us/j/3819402641)
+    - **Where**: Zoom; see Canvas for the link.
     - **When**:
       - Tuesdays 2pm - 3pm, 6pm - 7pm
