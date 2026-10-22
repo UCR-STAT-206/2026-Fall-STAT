@@ -17,7 +17,7 @@ We turn to **iterative methods** whenever neat formulas are unavailable.
 | Structure    | Dense          | Sparse          |
 | Reusability  | Usually only RHS can change | Both LHS and RHS can change |
 
-## Example Application: PageRank
+## The PageRank Problem
 
 ### Background: Graph Theory
 
@@ -32,16 +32,17 @@ As such, a graph can be specified using a (weighted) adjacency matrix $\mathbf{A
 
 $$
 a_{ij} = \begin{cases}
-1 & \text{if $(i,j) \in E$} \\
+1 & \text{if $(j,i) \in E$} \\
 0 & \text{otherwise}
 \end{cases}.
 $$
 
+Here $(j,i)$ is a directed edge so that $a_{ij}$ indicates whether node $j$ (source) connects to node $i$ (destination).
 Various important quantities can be derived from $\mathbf{A}$
 
-- Out Degree: $d_{i}^{+} = \sum_{j} a_{ij} = \mathbf{A}\mathbf{1}$ (if we treat rows of $\mathbf{A}$ as the originating nodes)
-- In Degree: $d_{i}^{-} = \sum_{j} a_{ji} = \mathbf{1}^{\top} \mathbf{A}$
-- If $\mathbf{A}$ is symmetric, the graph is directed and so we only speak of the degree $d_{i} = d_{i}^{+} = d_{i}^{-}$.
+- Out Degree: $d_{j}^{+} = \sum_{i} a_{ij} = [\mathbf{1}^{\top}\mathbf{A}]_{j}$ (if we treat rows of $\mathbf{A}$ as the originating nodes)
+- In Degree: $d_{j}^{-} = \sum_{i} a_{ji} = [\mathbf{A} \mathbf{1}]_{j}$
+- If $\mathbf{A}$ is symmetric, the graph is undirected and so we only speak of the degree $d_{i} = d_{i}^{+} = d_{i}^{-}$.
 
 Spectral graph theory relates eigenvalues/eigenvectors of $\mathbf{A}$ or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.
 
@@ -51,15 +52,15 @@ Spectral graph theory relates eigenvalues/eigenvectors of $\mathbf{A}$ or its La
 
 [Larry Page](https://en.wikipedia.org/wiki/PageRank) imagines a random surfer wandering on internet according to following rules:
 
-- From a page $i$ with $r_i>0$
-    * with probability $p$, they randomly choose a link on page $i$ (uniformly) and follows that link to the next page  
-    * with probability $1-p$, they randomly choose one page from the set of all $n$ pages (uniformly) and proceeds to that page 
-- From a page $i$ with $r_i=0$ (a dangling page), they randomly choose one page from the set of all $n$ pages (uniformly) and proceeds to that page
+- From page $j$ with $r_{j} > 0$:
+    - With probability $1-p$ they choose a link on a page $j$ uniformly at random and follow that link to the next page.
+    - With probability $p$ they choose one page from the set of all $n$ pages uniformly at random and proceed to that page.
+- From a page $j$ with $r_{j} = 0$ (a dangling page), they randomly choose one page from the set of $n$ pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.
 
-Here $r_i$ is the *out-degree* of page $i$ and $\mathbf{A}  \in \{0,1\}^{n \times n}$ the connectivity matrix of webpages with entries
+Here $r_j$ is the *out-degree* of page $j$ and $\mathbf{A}  \in \{0,1\}^{n \times n}$ the connectivity matrix of webpages with entries
 $$
 a_{ij} = \begin{cases}
-1 &  \text{if page $i$ links to page $j$} \\
+1 &  \text{if page $j$ links to page $i$} \\
 0 & \text{otherwise}
 \end{cases}.
 $$
@@ -69,9 +70,10 @@ $$
 The description above defines a Markov chain on the space of $n$ pages.
 Markov chain theory tells us that the *stationary distribution* of this Markov chain gives the ranks (probabilities) of each page.
 
-- A vector $\mathbf{x}$ is a stationary distribution if it is a top left eigenvector of the transition matrix $\mathbf{P}$ corresponding to eigenvalue 1.- Equivalently it can be cast as the solution to the linear equation
+- A vector $\mathbf{x}$ is a stationary distribution if it is a top right eigenvector of the transition matrix $\mathbf{P}$ corresponding to eigenvalue 1.
+- Equivalently it can be cast as the solution to the linear equation
 $$
-(\mathbf{I} - \mathbf{P}^T) \mathbf{x} = \mathbf{0}.
+(\mathbf{I}_{n} - \mathbf{P}) \mathbf{x} = \mathbf{0}.
 $$
 
 - GE/LU will take $2 \times (10^9)^3/3/10^{12} \approx 6.66 \times 10^{14}$ seconds $\approx 20$ million years on a tera-flop supercomputer!
@@ -153,7 +155,7 @@ $$
 
 - Based on theory of [Krylov subspaces](https://en.wikipedia.org/wiki/Krylov_subspace).
 - **Idea**: Look at the *image* of a vector $\mathbf{b}$ under powers of a square matrix $\mathbf{A}$.
-- The vectors $\mathbf{b}, \mathbf{A}\mathbf{b}, \mathbf{A}^{2}\mathbf{b}, \ldots \mathbf{A}^{k-1}\mathbf{b}$ for a subspace of rank at most $k$.
+- The vectors $\mathbf{b}, \mathbf{A}\mathbf{b}, \mathbf{A}^{2}\mathbf{b}, \ldots \mathbf{A}^{k-1}\mathbf{b}$ form a subspace of rank at most $k$.
 - This idea can be exploited to accelerate/explain why iterative methods for linear systems are quite fast.
 
 ### Conjugate Gradients

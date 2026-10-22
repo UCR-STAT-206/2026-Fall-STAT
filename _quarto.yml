@@ -71,6 +71,8 @@ website:
             href: notes/module05/qr.qmd
           - text: Cholesky
             href: notes/module05/cholesky.qmd
+          - text: LU
+            href: notes/module05/lu.qmd
           - text: Eigen-Decomposition and SVD
             # href: notes/module05/spectral.qmd
           - text: Iterative Methods

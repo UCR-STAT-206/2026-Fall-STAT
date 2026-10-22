@@ -1,12 +1,11 @@
 ---
 title: LU Decomposition
-execute:
-  eval: false
 ---
 
 ## LU decomposition
 
 LU decomposition is effectively Gaussian Elimination; it records the operations and the result of such operations into two triangular matrices, $\mathbf{A} = \mathbf{L}\mathbf{U}$.
+
 - **Uncommon** in statistics because most of the time statisticians deal with positive (semi)definite matrices.
 - [Applies generally to arbitrary matrices](https://arxiv.org/abs/math/0506382), though factors are only "almost" triangular.
 
@@ -119,7 +118,7 @@ $$
 
 where $\mathbf{L}$ is unit lower triangular and $\mathbf{U}$ is upper triangular.
 
-![](LU_decomp.png){fig-align=center width=50%}
+![](assets/LU_decomp.png){fig-align=center width=50%}
 
 ## Complexity
 
@@ -130,13 +129,13 @@ where $\mathbf{L}$ is unit lower triangular and $\mathbf{U}$ is upper triangular
 
 - Solve $\mathbf{A} \mathbf{X} = \mathbf{I}$, or $\mathbf{A} \mathbf{x}_{i} = \mathbf{e}_{i}$.
 - Exploiting 0s in RHS reduces complexity of each solve, changing cost of triangular solves from $2n^{3} to \frac{4}{3}n^{3}$.
-- Cost to inverest with Gaussian elimination: $2n^{3}$ flops, which is 3 times more expensive than just solving with LU!
+- Cost to invert with Gaussian elimination: $2n^{3}$ flops, which is 3 times more expensive than just solving with LU!
 
 :::::::::::::::: callout-note
 ## Reasons to invert a matrix
 
 - Need standard errors, and you're convinced it can't be done any other way (it can).
-- Number of RHSs is much greater than $n$ (multivariate regression)
+- Number of RHSs is much greater than $n$ (multivariate regression, $AX = B$).
 - $n$ is small, and you use [StaticArrays.jl](https://github.com/JuliaArrays/StaticArrays.jl) to do so blazingly fast.
 
 ::::::::::::::::
