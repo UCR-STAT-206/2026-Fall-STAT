@@ -11,6 +11,16 @@ execute:
 - Refer to the rubric for detailed grading information.
 - You are encouraged to work with other students. **Clearly identify your collaborators** by naming them in the `author` field in the frontmatter.
 
+You will need the following packages:
+
+```{julia}
+using BenchmarkTools
+using MatrixDepot
+using CodecZlib, DelimitedFiles
+using LinearAlgebra, KrylovKit, SparseArrays
+using Plots, Random, Statistics
+```
+
 # Background {.unnumbered}
 
 This assignment will guide you through the implementation of [PageRank](https://en.wikipedia.org/wiki/PageRank) using the numerical methods we've learned so far. Let's refresh our memory of the problem description:
@@ -244,13 +254,6 @@ bm_mv = @benchmark mul!($out, $M, $v) setup=(fill!(out, 0); fill!(v, 1))
 bm_mtv = @benchmark mul!($out, $(transpose(M)), $v) setup=(fill!(out, 0); fill!(v, 1))
 ```
 
-You will lose 1 point for each 100 bytes allocated. Your score is:
-
-```{julia}
-clamp(10 - median(bm_mv).memory / 100, 0, 10) + 
-clamp(10 - median(bm_mtv).memory / 100, 0, 10)
-```
-
 ::: {.callout-tip}
 ### Hint
 
@@ -290,11 +293,7 @@ You will lose points if the following statement throws an `AssertionError`.
 @assert norm(x_gmres - xsol) < 1e-6
 ```
 
-GMRES should be reasonably fast. The points you'll get is
-
-```{julia}
-clamp(20 / time_gmres * 15, 0, 15)
-```
+GMRES should be reasonably fast.
 
 ::: {.callout-tip}
 ### Hint
@@ -323,11 +322,7 @@ x_arnoldi ./= sum(x_arnoldi)
 @assert norm(x_arnoldi - xsol) < 1e-6
 ```
 
-Arnoldi should be reasonably fast. The points you'll get is
-
-```{julia}
-clamp(20 / time_arnoldi * 15, 0, 15)
-```
+Arnoldi should be reasonably fast.
 
 ::: {.callout-tip}
 ### Hint
