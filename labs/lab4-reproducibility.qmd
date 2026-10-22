@@ -1,0 +1,79 @@
+---
+title: "Lab 4: Reproducibility"
+date: "2026-10-23"
+eval: false
+format:
+  html:
+    theme: cosmo
+    css: ../assets/styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+---
+
+## Before class
+
+1. Download `lab4.zip` from Canvas. These materials are needed for this assignment.
+2. Create a `lab4` directory and extract the files into it.
+3. Use the provided `Project.toml` file to install the required packages. Specifically, navigate to `lab4`, start a Julia REPL, activate its environment, and run
+
+```{julia}
+import Pkg
+Pkg.activate(".")
+Pkg.instantiate()
+```
+
+4. Skim through the [DataFrames.jl](https://dataframes.juliadata.org/stable/) documentation. It is very similar to R's `data.frame`, `data.table`, and `tibble` objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other `DataFrame` features you might need you can implement by making modifications to the provided code.
+
+
+
+## Overview & Instructions
+
+In this lab you will try to reproduce a headline result from a published study (to be revealed later).
+
+`RR-processed.csv` is an unbalanced panel (longitudinal) dataset of economic indicators for 20 countries, 1946 -- 2009, with one row per country-year (1,175 rows).
+The two variables you need are:
+
+- `debtgdp`: public debt as a percentage of GDP. A value of 100 means public debt equals one year of economic output. It is positive and can be smaller or larger than 100.
+- `dRGDP`: real GDP growth, in percent per year.
+
+Each country-year is assigned to one of four categories: 0-30%, 30-60%, 60-90%, and above 90% debt/GDP.
+The provided file `analysis.jl` defines `default_bins()`, `debtgdp_category()`, `load_data()`, and `report_mean_growth()`, which you will use to load the data and compute mean real GDP growth in each category by averaging over all country-year observations.
+You can use `?<function_name>` to quickly review what each function does.
+
+
+
+## Task 1: Reproduce the study
+
+1. Skim through `analysis.jl`. In a fresh Julia session, run `using Revise` and load the source file with `includet("analysis.jl")`.
+    + **Note**: Use `includet("analysis.jl")` in the Julia REPL only.
+    + In your report, you can load the source file using the regular `include("analysis.jl")` command.
+2. Use the provided tools to load `RR-processed.csv`. Create a `reproduce.qmd` report file to report mean growth in real GDP. Edit this file as you work through each task in the REPL.
+3. Add the published values from `RR-published.csv` to your report.
+4. Comment on the differences, if any, between the two tables.
+
+
+
+## Task 2: Investigate the discrepancy
+
+1. Carefully review the script and identify at least two decisions an analyst must make between the panel dataset and the final table. Document these in your report. For each decision, propose an alternative the authors might have used.
+2. Try changing the script to test your hypotheses about why your table differs from the published result. Try to match as many columns as you can (to one decimal place).
+    + Create your own function within `analysis.jl`, using `report_mean_growth()` as a starting point.
+3. Record which columns matched (if any), and try to explain what additional information you would need to account for any remaining discrepancy.
+
+
+
+## Task 3: Reflection
+
+1. Which parts of the gap could you detect from the data alone, and which would need the authors' files?
+2. If reproducing a study hinges on very few observations, how much should a headline result rest on them?
+3. What would the authors have needed to publish for you to find the problem in 5 minutes instead of however long it took you?
+4. Is averaging the country mean, rather than pooling every country-year, an error or a choice? Where is the line between them?
+5. In your own results, growth is still lower in the highest debt group. Do the differences between your table and the published one change anything about the conclusion?
+
+
+
+## Reminders
+
+- Make sure you tag the assignment: `git tag lab4`.
+- Make sure you push the tags, too: `git push` followed by `git push --tags`.
