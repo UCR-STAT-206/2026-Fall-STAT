@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>dispatch</title>
+<title>Multiple Dispatch</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -25,6 +25,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -45,7 +80,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-604b5d79a7ca3bc6f5a5ef3780c226de.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,28 +109,1276 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../assets/styles.css">
 </head>
 
-<body class="quarto-light">
+<body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/dispatch.html">Multiple Dispatch</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 1 (Fundamentals)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Module 2 (Programming)</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/dispatch.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Multiple Dispatch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 3 (Best Practices)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 4 (Numerical Basics)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Linear Algebra Introduction</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 5 (Linear Systems)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 6 (Simulation)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">RNG and PRNGs</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Inverse Method</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Rejection Sampling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Monte Carlo Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Distributions.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 7 (Resampling)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 8 (Optimization)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">First-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Second-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Automatic Differentiation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false">
+ <span class="menu-text">Module 9 (Data Technologies)</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false">
+ <span class="menu-text">Labs</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false">
+ <span class="menu-text">Homework</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false">
+ <span class="menu-text">How to…</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#before-reading-these-notes" id="toc-before-reading-these-notes" class="nav-link" data-scroll-target="#before-reading-these-notes">Before reading these notes</a></li>
+  <li><a href="#polymorphism" id="toc-polymorphism" class="nav-link" data-scroll-target="#polymorphism">Polymorphism</a>
+  <ul class="collapse">
+  <li><a href="#polymorphism-in-oop" id="toc-polymorphism-in-oop" class="nav-link" data-scroll-target="#polymorphism-in-oop">Polymorphism in OOP</a></li>
+  <li><a href="#example-cats-and-dogs" id="toc-example-cats-and-dogs" class="nav-link" data-scroll-target="#example-cats-and-dogs">Example: Cats and Dogs</a></li>
+  </ul></li>
+  <li><a href="#multiple-dispatch" id="toc-multiple-dispatch" class="nav-link" data-scroll-target="#multiple-dispatch">Multiple Dispatch</a>
+  <ul class="collapse">
+  <li><a href="#advantages" id="toc-advantages" class="nav-link" data-scroll-target="#advantages">Advantages</a></li>
+  <li><a href="#disadvantages" id="toc-disadvantages" class="nav-link" data-scroll-target="#disadvantages">Disadvantages</a></li>
+  </ul></li>
+  <li><a href="#design-strategies" id="toc-design-strategies" class="nav-link" data-scroll-target="#design-strategies">Design Strategies</a>
+  <ul class="collapse">
+  <li><a href="#leverage-type-information" id="toc-leverage-type-information" class="nav-link" data-scroll-target="#leverage-type-information">Leverage Type Information</a></li>
+  <li><a href="#generic-and-specialized-algorithms" id="toc-generic-and-specialized-algorithms" class="nav-link" data-scroll-target="#generic-and-specialized-algorithms">Generic and Specialized Algorithms</a></li>
+  <li><a href="#dispatching-on-type-parameters" id="toc-dispatching-on-type-parameters" class="nav-link" data-scroll-target="#dispatching-on-type-parameters">Dispatching on Type Parameters</a></li>
+  <li><a href="#traits-advanced" id="toc-traits-advanced" class="nav-link" data-scroll-target="#traits-advanced">Traits (Advanced)</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module02/intro.html">Module 2 (Programming)</a></li><li class="breadcrumb-item"><a href="../../notes/module02/dispatch.html">Multiple Dispatch</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Multiple Dispatch</h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
 
 
+</header>
 
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Be able to describe polymorphism in the context of programming.</li>
+<li>Understand multiple dispatch as a mechanism for implementing polymorphic behavior in Julia.</li>
+<li>Practice using multiple dispatch in implementing simple algorithms.</li>
+</ol>
+</section>
+<section id="before-reading-these-notes" class="level2">
+<h2 class="anchored" data-anchor-id="before-reading-these-notes">Before reading these notes</h2>
+<ul>
+<li>Review notes on <a href="../../notes/module02/types.html">Julia’s type system</a>.</li>
+<li>Watch part of Stefan Karpinski’s JuliaCon 2019 talk on <a href="https://www.youtube.com/live/kc9HwsxE1OY?si=XWdzAHNd0rgcFxK9&amp;t=131">The Unreasonable Effectiveness of Multiple Dispatch</a>. Up to at least 12:56, if not 25:16.</li>
+</ul>
+</section>
+<section id="polymorphism" class="level2">
+<h2 class="anchored" data-anchor-id="polymorphism">Polymorphism</h2>
+<p><strong>Polymorphism</strong> in a programming language is about allowing a function to exhibit different behaviors depending on the <em>types</em> that it sees.</p>
+<ul>
+<li>For example, in Julia we’ve seen that the <code>+</code> operator implements the usual notion of addition for floating point numbers, integers, complex numbers, and various array objects. In these instances, the internal logic changes depending on the type of objects you add together.</li>
+<li>On the other hand, the role of <code>print()</code> and <code>println()</code> is to take objects and display them in the standard output stream. There may be significant differences in converting specific objects to a textual representation, but these functions follow a uniform logic.</li>
+</ul>
+<p>Three major forms of polymorphism are:</p>
+<ol type="1">
+<li><em>Ad hoc</em>: You write a <code>fancy_function()</code> that serves as a common interface for a specific computation or concept. You implement the interface/concept for specific types as you see fit.
+<ul>
+<li><em>Examples</em>: <code>+</code>, <code>length()</code>, <code>show()</code>.</li>
+</ul></li>
+<li><em>Parametric</em>: Your <code>fancy_function()</code> operates on generic or abstract types, providing several concrete types with the same functionality.
+<ul>
+<li><em>Examples</em>: <code>print()</code>, <code>getindex()</code>, <code>setindex!()</code>.</li>
+</ul></li>
+<li><em>Subtyping</em>: You allow a symbol (be it a type or a function) to inherit or extend an existing symbol.
+<ul>
+<li><em>Examples</em>: <code>Float64</code> and <code>Int</code> are both concrete instances of the abstract type <code>Real</code>, which in turn subtypes <code>Number</code>.</li>
+</ul></li>
+</ol>
+<section id="polymorphism-in-oop" class="level3">
+<h3 class="anchored" data-anchor-id="polymorphism-in-oop">Polymorphism in OOP</h3>
+<p>My description of <em>subtyping</em> is phrased somewhat generically because polymorphism can be implemented at different levels. <strong>Object-Oriented Programming (OOP)</strong> achieves polymorphism primarily through different classes.</p>
+<ul>
+<li>You can write interfaces and have classes implement. Classes can also extend others. Both are instances of subtyping.</li>
+<li>Some languages allow fields in a class to be generic. This gives you access parametric polymorphism.</li>
+<li>Function overloading allows you to implement class-specific methods. This is <em>ad hoc</em> polymorphism.</li>
+</ul>
+</section>
+<section id="example-cats-and-dogs" class="level3">
+<h3 class="anchored" data-anchor-id="example-cats-and-dogs">Example: Cats and Dogs</h3>
+<p>Here are the type definitions from the JuliaCon example.</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="kw">abstract type</span> Pet <span class="kw">end</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="kw">struct</span> Dog <span class="op">&lt;:</span><span class="dt"> Pet</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>  name<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a><span class="kw">end</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a><span class="kw">struct</span> Cat <span class="op">&lt;:</span><span class="dt"> Pet</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>  name<span class="op">::</span><span class="dt">String</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>Abstract types are just nodes in a type tree. It cannot have any fields.</li>
+<li>Unlike OOP languages, we’re forced to enumerate common fields across concrete types (<code>Cat</code> and <code>Dog</code>).</li>
+<li>The <code>&lt;:</code> operator is for subtyping; i.e.&nbsp;<code>Cat &lt;: Pet</code> means “<code>Cat</code> inherits from <code>Pet</code>”.</li>
+</ul>
+<p>Now let’s add the generic <code>encounter()</code> function.</p>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">encounter</span>(a<span class="op">::</span><span class="dt">Pet</span>, b<span class="op">::</span><span class="dt">Pet</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>  verb <span class="op">=</span> <span class="fu">meets</span>(a, b)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>  <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(a.name)<span class="st"> meets </span><span class="sc">$</span>(b.name)<span class="st"> and </span><span class="sc">$</span>verb<span class="st">."</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>encounter (generic function with 1 method)</code></pre>
+</div>
+</div>
+<ul>
+<li>This is parametric in the sense that we want any <code>Pet</code> subtype to support the <code>enconter()</code> function.</li>
+<li>Whatever objects we pass, they better have a <code>name</code> field. Julia has no mechanism to enforce this.</li>
+<li>Ditto for the <code>meets()</code> function call.</li>
+</ul>
+<p>Now for the specifics.</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Pet</span>, b<span class="op">::</span><span class="dt">Pet</span>) <span class="op">=</span> <span class="st">"stares"</span> <span class="co"># generic fallback</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Dog</span>, b<span class="op">::</span><span class="dt">Dog</span>) <span class="op">=</span> <span class="st">"sniffs"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-label="3"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Dog</span>, b<span class="op">::</span><span class="dt">Cat</span>) <span class="op">=</span> <span class="st">"chases"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-label="4"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Cat</span>, b<span class="op">::</span><span class="dt">Dog</span>) <span class="op">=</span> <span class="st">"hisses"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Cat</span>, b<span class="op">::</span><span class="dt">Cat</span>) <span class="op">=</span> <span class="st">"slinks"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>meets (generic function with 5 methods)</code></pre>
+</div>
+</div>
+<ul>
+<li>Idea: We want this function to exhibit a different behavior depending on what kind of <code>Pet</code> objects encounter each other.</li>
+<li>Notice there is an implied directionality. The order of the arguments matter.</li>
+<li>The function definitions specializing on types are <strong>methods</strong>. The code is fairly intuitive.</li>
+</ul>
+<p>Let’s test it. Perhaps unsurprisingly, the code does exactly what we expect it to do.</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>fido      <span class="op">=</span> <span class="fu">Dog</span>(<span class="st">"Fido"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>rex       <span class="op">=</span> <span class="fu">Dog</span>(<span class="st">"Rex"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a>whiskers  <span class="op">=</span> <span class="fu">Cat</span>(<span class="st">"Whiskers"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a>spots     <span class="op">=</span> <span class="fu">Cat</span>(<span class="st">"Spots"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a><span class="fu">encounter</span>(fido, rex)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a><span class="fu">encounter</span>(fido, whiskers)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-label="8"></a><span class="fu">encounter</span>(whiskers, rex)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-label="9"></a><span class="fu">encounter</span>(whiskers, spots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fido meets Rex and sniffs.
+Fido meets Whiskers and chases.
+Whiskers meets Rex and hisses.
+Whiskers meets Spots and slinks.</code></pre>
+</div>
+</div>
+<p>Try it with Python. It has the same flaw as the C++ implementation, and can be fixed using single dispatch. The issue is the granularity for pattern matching in OOP vs that of multiple dispatch.</p>
+<div id="10" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="co"># Class Definitions</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a>class Pet<span class="op">:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a>  def <span class="fu">__init__</span>(self, name)<span class="op">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-label="4"></a>    self.name <span class="op">=</span> name</span>
+<span id="cb8-5"><a href="#cb8-5" aria-label="5"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-label="6"></a>class <span class="fu">Dog</span>(Pet)<span class="op">:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-label="7"></a>  pass</span>
+<span id="cb8-8"><a href="#cb8-8" aria-label="8"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-label="9"></a>class <span class="fu">Cat</span>(Pet)<span class="op">:</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-label="10"></a>  pass</span>
+<span id="cb8-11"><a href="#cb8-11" aria-label="11"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-label="12"></a><span class="co"># Function definitions</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-label="13"></a>def <span class="fu">encounter</span>(a<span class="op">:</span> Pet, b<span class="op">:</span> Pet)<span class="op">:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-label="14"></a>  verb <span class="op">=</span> <span class="fu">meets</span>(a, b)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-label="15"></a>  <span class="fu">print</span>(f<span class="st">"{a.name} meets {b.name} and {verb}"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-label="16"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-label="17"></a>def <span class="fu">meets</span>(a<span class="op">:</span> Pet, b<span class="op">:</span> Pet)<span class="op">:</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-label="18"></a>  <span class="cf">return</span> <span class="st">"stares"</span> <span class="co"># generic fallback</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-label="19"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-label="20"></a>def <span class="fu">meets</span>(a<span class="op">:</span> Dog, b<span class="op">:</span> Dog)<span class="op">:</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-label="21"></a>  <span class="cf">return</span> <span class="st">"sniffs"</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-label="22"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-label="23"></a>def <span class="fu">meets</span>(a<span class="op">:</span> Dog, b<span class="op">:</span> Cat)<span class="op">:</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-label="24"></a>  <span class="cf">return</span> <span class="st">"chases"</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-label="25"></a></span>
+<span id="cb8-26"><a href="#cb8-26" aria-label="26"></a>def <span class="fu">meets</span>(a<span class="op">:</span> Cat, b<span class="op">:</span> Dog)<span class="op">:</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-label="27"></a>  <span class="cf">return</span> <span class="st">"hisses"</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-label="28"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-label="29"></a>def <span class="fu">meets</span>(a<span class="op">:</span> Cat, b<span class="op">:</span> Cat)<span class="op">:</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-label="30"></a>  <span class="cf">return</span> <span class="st">"slinks"</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-label="31"></a></span>
+<span id="cb8-32"><a href="#cb8-32" aria-label="32"></a><span class="co"># The example</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-label="33"></a>fido      <span class="op">=</span> <span class="fu">Dog</span>(<span class="st">"Fido"</span>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-label="34"></a>rex       <span class="op">=</span> <span class="fu">Dog</span>(<span class="st">"Rex"</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-label="35"></a>whiskers  <span class="op">=</span> <span class="fu">Cat</span>(<span class="st">"Whiskers"</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-label="36"></a>spots     <span class="op">=</span> <span class="fu">Cat</span>(<span class="st">"Spots"</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-label="37"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-label="38"></a><span class="fu">encounter</span>(fido, rex)</span>
+<span id="cb8-39"><a href="#cb8-39" aria-label="39"></a><span class="fu">encounter</span>(fido, whiskers)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-label="40"></a><span class="fu">encounter</span>(whiskers, rex)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-label="41"></a><span class="fu">encounter</span>(whiskers, spots)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="multiple-dispatch" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-dispatch">Multiple Dispatch</h2>
+<p>Julia’s functions support <strong>multiple dispatch</strong>. You can write a method for a generic function that pattern matches based on none, some, or all of its argument types. There have been programming languages that support multiple dispatch in the past, but Julia is the first to ensure it is a “fast” language feature. Making this work well is non-trivial and is the subject of <a href="https://dspace.mit.edu/entities/publication/1ae90f80-6797-4711-a72f-2a5fd99672ae">Jeff Bezanson’s PhD Thesis</a> (Julia co-creator).</p>
+<section id="advantages" class="level3">
+<h3 class="anchored" data-anchor-id="advantages">Advantages</h3>
+<section id="expressiveness" class="level4">
+<h4 class="anchored" data-anchor-id="expressiveness">Expressiveness</h4>
+<p>An important benefit of multiple dispatch is its expressive power. It lets us write fairly intuitive code. This style turns out to be excellent for numerical code.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 36%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Dispatch Type</th>
+<th style="text-align: center;">Syntax</th>
+<th style="text-align: center;">Arguments</th>
+<th style="text-align: center;">Expressive Order</th>
+<th style="text-align: center;">Expressive Power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">none</td>
+<td style="text-align: center;"><span class="math inline">\(f(x_{1}, x_{2}, \ldots)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\{\}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\mathcal{O}(1)\)</span></td>
+<td style="text-align: center;">constant</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">single</td>
+<td style="text-align: center;"><span class="math inline">\(x.f(x_{2}, \ldots)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\{x_{1}\}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\mathcal{O}(X_{1})\)</span></td>
+<td style="text-align: center;">linear</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">multiple</td>
+<td style="text-align: center;"><span class="math inline">\(f(x_{1}, x_{2}, \ldots)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\{x_{1}, x_{2}, \ldots\}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\mathcal{O}(X_{1} \cdot X_{2} \cdot \cdots)\)</span></td>
+<td style="text-align: center;">combinatorial</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="interoperability" class="level4">
+<h4 class="anchored" data-anchor-id="interoperability">Interoperability</h4>
+<p>A consequence of high expressiveness (see the <a href="https://en.wikipedia.org/wiki/Expression_problem">Expression Problem</a>) is the ability to readily extend systems. Lots of packages in the Julia ecosystem are written independently of each other, yet it is common for packages to interact in productive ways with minimal intervention from package authors.</p>
+<ul>
+<li><em>Example</em>: <a href="https://github.com/juliaphysics/measurements.jl">Measurements.jl</a> and most packages in the <a href="https://sciml.ai/">SciML</a> Julia ecosystem “just work”.</li>
+<li><em>Example</em>: Compatibility of various packages with <a href="https://github.com/JuliaDiff/ForwardDiff.jl">ForwardDiff.jl</a>.</li>
+</ul>
+</section>
+<section id="generic-vs-specialized-algorithms" class="level4">
+<h4 class="anchored" data-anchor-id="generic-vs-specialized-algorithms">Generic vs Specialized Algorithms</h4>
+<p>It is easy to write generic code without talking about types. Within your own code, you implement specific algorithms by assuming your functions’ inputs support certain functionality; e.g.&nbsp;indexing, iteration, addition, etc. If you notice a trick that accelerate performance based on problem information, it is easy to patch in a better algorithm without re-writing everything. The Julia stack, in turn, may apply further performance optimizations based on your code.</p>
+<ul>
+<li><em>Example</em>: See the one-hot vector example in the JuliaCon talk. With a bit of effort, you can turn that code into a versatile one-hot tensor implementation <a href="https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.one_hot.html">just as in PyTorch</a>.</li>
+</ul>
+</section>
+<section id="symmetry" class="level4">
+<h4 class="anchored" data-anchor-id="symmetry">Symmetry</h4>
+<p>Notions such as <code>*</code> are either inherently symmetric or multivariate. The single dispatch syntax <code>object.f(x)</code> introduces asymmetry in such cases. For example, matrix-matrix multiplication is not commutative in general there is no reason the evaluation cannot be carried out left-to-right versus right-to-left.</p>
+</section>
+<section id="simpler-design-strategies" class="level4">
+<h4 class="anchored" data-anchor-id="simpler-design-strategies">Simpler Design Strategies</h4>
+<p>This is somewhat subjective. At a minimum, the dynamism in Julia eliminates the need for <a href="https://en.wikipedia.org/wiki/Design_Patterns">Gang of Four design patterns</a>, as demonstrated by <a href="https://www.norvig.com/design-patterns/">Peter Norvig’s 1996 critique</a>.</p>
+<ul>
+<li><em>Example</em>: OOP languages sometimes use the <a href="https://en.wikipedia.org/wiki/Visitor_pattern">Visitor Pattern</a> to implement <em>double dispatch</em>.</li>
+</ul>
+</section>
+<section id="separation-of-concerns" class="level4">
+<h4 class="anchored" data-anchor-id="separation-of-concerns">Separation of Concerns</h4>
+<p>In Julia, an object is just a <code>struct</code> with type information. Because methods are not “owned” by a class, you’re free to use a combination of generic functions and methods to specialize algorithms on problem information.</p>
+<ul>
+<li><em>Example</em>: <code>A \ b</code> uses a polyalgorithm to select the “best” method for solving a linear system based on the data type of <code>A</code>.</li>
+<li><em>Example</em>: The <a href="https://github.com/JuliaWeb/HTTP.jl">HTTP.jl</a> package for client and server functionality has a careful and composable approach to designing its <code>request()</code> function.</li>
+</ul>
+</section>
+</section>
+<section id="disadvantages" class="level3">
+<h3 class="anchored" data-anchor-id="disadvantages">Disadvantages</h3>
+<section id="compilation-penalty" class="level4">
+<h4 class="anchored" data-anchor-id="compilation-penalty">Compilation Penalty</h4>
+<p>The <a href="../../notes/module02/intro.html##what-does-julia-do-different">Julia Stack</a> must handle an incredibly large number of function definitions. That means the JIT compiler must quickly compile new functions and methods, especially when calling a function for the first time or after loading packages.</p>
+<ul>
+<li>Historically, running <code>using Plots</code> and generating a plot was painfully slow compared to other dynamic languages.</li>
+<li>Lots of work in this area, such as pre-compilation, to reduce the “Time To First Plot” problem.</li>
+<li>Little control over this issue as a user. As a developer, you can write your packages to support pre-compilation.</li>
+</ul>
+</section>
+<section id="method-ambiguity" class="level4">
+<h4 class="anchored" data-anchor-id="method-ambiguity">Method Ambiguity</h4>
+<p>It is “easy” to write ambiguous method definitions. For example:</p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">f</span>(x<span class="op">::</span><span class="dt">Number</span>, y<span class="op">::</span><span class="dt">Any</span>) <span class="op">=</span> <span class="st">"A"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a><span class="fu">f</span>(x<span class="op">::</span><span class="dt">Any</span>, y<span class="op">::</span><span class="dt">Number</span>) <span class="op">=</span> <span class="st">"B"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>f (generic function with 2 methods)</code></pre>
+</div>
+</div>
+<p>Trying to use <code>f()</code> as written will trigger a <code>MethodError</code>.</p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">f</span>(<span class="fl">1</span>, <span class="fl">1.2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>MethodError: f(::Int64, ::Float64) is ambiguous.
+
+Candidates:
+  f(<span class="ansi-bright-black-fg">x</span>, <span class="ansi-bright-black-fg">y</span>::<span class="ansi-bold">Number</span>)
+<span class="ansi-bright-black-fg">    @</span> <span class="ansi-bright-black-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:243</span>
+  f(<span class="ansi-bright-black-fg">x</span>::<span class="ansi-bold">Number</span>, <span class="ansi-bright-black-fg">y</span>)
+<span class="ansi-bright-black-fg">    @</span> <span class="ansi-bright-black-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:242</span>
+
+Possible fix, define
+  f(::Number, ::Number)
+
+Stacktrace:
+ [1] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:250</span></pre>
+</div>
+</div>
+</div>
+<ul>
+<li>This usually stems from misuse of type annotations. In both Python and Julia, novices tend to sprinkle type annotations in their code believing it avoids type instability or otherwise improves performance.</li>
+<li><em>Fix</em>: Avoid talking about types unless you need to specialize a function.</li>
+</ul>
+</section>
+<section id="type-piracy" class="level4">
+<h4 class="anchored" data-anchor-id="type-piracy">Type Piracy</h4>
+<p>It is “easy” to accidentally overwrite existing methods, which is especially bad if you do it on methods or types you did not write yourself. This can silently break the functionality of a package.</p>
+<ul>
+<li><em>Fix</em>: Only overload functions on types that you own. Use your own function names for types you do not own.</li>
+</ul>
+</section>
+<section id="discoverability" class="level4">
+<h4 class="anchored" data-anchor-id="discoverability">Discoverability</h4>
+<p>Finding methods in single dispatch systems by typing <code>x.</code> is easy. In Julia’s multiple dispatch system, you rely on people writing good documentation so that <code>object?</code> or <code>?method</code> helps you discover other methods.</p>
+</section>
+<section id="type-instability" class="level4">
+<h4 class="anchored" data-anchor-id="type-instability">Type Instability</h4>
+<p>All dynamic languages pay a performance penalty for type instability, which are instances in which a language is unable to trace the type on object. Julia’s performance is quite sensitive to type instability because of multiple dispatch.</p>
+<p>The classic example of this issue is the following <code>for</code> loop:</p>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">mysum</span>(x)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>  s <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>  <span class="cf">for</span> xi <span class="kw">in</span> x</span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>    s <span class="op">+=</span> xi</span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>  <span class="cf">end</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a>  <span class="cf">return</span> s</span>
+<span id="cb12-7"><a href="#cb12-7" aria-label="7"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>mysum (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">randn</span>(<span class="dt">Float64</span>, <span class="fl">1000</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a><span class="fu">mysum</span>(x) <span class="op">≈</span> <span class="fu">sum</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>true</code></pre>
+</div>
+</div>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a><span class="pp">@code_warntype</span> <span class="fu">mysum</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>MethodInstance for Main.Notebook.mysum(::Vector{Float64})
+  from mysum(<span class="ansi-bright-black-fg">x</span>)<span class="ansi-bright-black-fg"> @</span> <span class="ansi-bright-black-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:274</span>
+Arguments
+  #self#<span class="ansi-cyan-fg">::Core.Const(Main.Notebook.mysum)</span>
+  x<span class="ansi-cyan-fg">::Vector{Float64}</span>
+Locals
+  @_3<span class="ansi-yellow-fg ansi-bold">::Union{Nothing, Tuple{Float64, Int64}}</span>
+  s<span class="ansi-yellow-fg ansi-bold">::Union{Float64, Int64}</span>
+  xi<span class="ansi-cyan-fg">::Float64</span>
+Body<span class="ansi-yellow-fg ansi-bold">::Union{Float64, Int64}</span>
+<span class="ansi-bright-black-fg">1 ─</span>       (s = 0)
+<span class="ansi-bright-black-fg">│  </span> %2  = x<span class="ansi-cyan-fg">::Vector{Float64}</span>
+<span class="ansi-bright-black-fg">│  </span>       (@_3 = Base.iterate(%2))
+<span class="ansi-bright-black-fg">│  </span> %4  = @_3<span class="ansi-yellow-fg ansi-bold">::Union{Nothing, Tuple{Float64, Int64}}</span>
+<span class="ansi-bright-black-fg">│  </span> %5  = (%4 === nothing)<span class="ansi-cyan-fg">::Bool</span>
+<span class="ansi-bright-black-fg">│  </span> %6  = Base.not_int(%5)<span class="ansi-cyan-fg">::Bool</span>
+<span class="ansi-bright-black-fg">└──</span>       goto #4 if not %6
+<span class="ansi-bright-black-fg">2 ┄</span> %8  = @_3<span class="ansi-cyan-fg">::Tuple{Float64, Int64}</span>
+<span class="ansi-bright-black-fg">│  </span>       (xi = Core.getfield(%8, 1))
+<span class="ansi-bright-black-fg">│  </span> %10 = Core.getfield(%8, 2)<span class="ansi-cyan-fg">::Int64</span>
+<span class="ansi-bright-black-fg">│  </span> %11 = Main.Notebook.:+<span class="ansi-cyan-fg">::Core.Const(+)</span>
+<span class="ansi-bright-black-fg">│  </span> %12 = s<span class="ansi-yellow-fg ansi-bold">::Union{Float64, Int64}</span>
+<span class="ansi-bright-black-fg">│  </span> %13 = xi<span class="ansi-cyan-fg">::Float64</span>
+<span class="ansi-bright-black-fg">│  </span>       (s = (%11)(%12, %13))
+<span class="ansi-bright-black-fg">│  </span>       (@_3 = Base.iterate(%2, %10))
+<span class="ansi-bright-black-fg">│  </span> %16 = @_3<span class="ansi-yellow-fg ansi-bold">::Union{Nothing, Tuple{Float64, Int64}}</span>
+<span class="ansi-bright-black-fg">│  </span> %17 = (%16 === nothing)<span class="ansi-cyan-fg">::Bool</span>
+<span class="ansi-bright-black-fg">│  </span> %18 = Base.not_int(%17)<span class="ansi-cyan-fg">::Bool</span>
+<span class="ansi-bright-black-fg">└──</span>       goto #4 if not %18
+<span class="ansi-bright-black-fg">3 ─</span>       goto #2
+<span class="ansi-bright-black-fg">4 ┄</span> %21 = s<span class="ansi-yellow-fg ansi-bold">::Union{Float64, Int64}</span>
+<span class="ansi-bright-black-fg">└──</span>       return %21
+
+</pre>
+</div>
+</div>
+</div>
+<ul>
+<li>The macro <code>@code_warntype</code> maps Julia expressions to a lower-level representation where type information is available.</li>
+<li>Here our accumulator variable <code>s</code> is inferred as having a <em>union type</em>, <code>Union{Float64,Int64}</code>.</li>
+<li>When we initialize <code>s = 0</code> its type is <code>Int64</code>.</li>
+<li>Once we update <code>s</code> with the first number, its type changes to <code>Float64</code>.</li>
+<li>This happens even if the loop does not run. The Julia compiler is unable to prove <code>s</code> has a definite type <em>at compile time</em>. The only way to check is <em>during runtime</em>.</li>
+</ul>
+<p>Compare to the <code>sum()</code> function:</p>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a><span class="pp">@code_warntype</span> <span class="fu">sum</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<div class="ansi-escaped-output">
+<pre>MethodInstance for sum(::Vector{Float64})
+  from sum(<span class="ansi-bright-black-fg">a</span>::<span class="ansi-bold">AbstractArray</span>; dims, kw...)<span class="ansi-bright-black-fg"> @</span> <span class="ansi-bright-black-fg">Base</span> <span style="text-decoration:underline" class="ansi-bright-black-fg">reducedim.jl:979</span>
+Arguments
+  #self#<span class="ansi-cyan-fg">::Core.Const(sum)</span>
+  a<span class="ansi-cyan-fg">::Vector{Float64}</span>
+Body<span class="ansi-cyan-fg">::Float64</span>
+<span class="ansi-bright-black-fg">1 ─</span>      nothing
+<span class="ansi-bright-black-fg">│  </span> %2 = Base.:(var"#sum#757")<span class="ansi-cyan-fg">::Core.Const(Base.var"#sum#757")</span>
+<span class="ansi-bright-black-fg">│  </span> %3 = Base.:(:)<span class="ansi-cyan-fg">::Core.Const(Colon())</span>
+<span class="ansi-bright-black-fg">│  </span> %4 = Core.NamedTuple()<span class="ansi-cyan-fg">::Core.Const(NamedTuple())</span>
+<span class="ansi-bright-black-fg">│  </span> %5 = Base.pairs(%4)<span class="ansi-cyan-fg">::Core.Const(Base.Pairs{Symbol, Union{}, Nothing, @NamedTuple{}}())</span>
+<span class="ansi-bright-black-fg">│  </span> %6 = (%2)(%3, %5, #self#, a)<span class="ansi-cyan-fg">::Float64</span>
+<span class="ansi-bright-black-fg">└──</span>      return %6
+
+</pre>
+</div>
+</div>
+</div>
+<ul>
+<li>No red or yellow. The function is type-stable.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="design-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="design-strategies">Design Strategies</h2>
+<section id="leverage-type-information" class="level3">
+<h3 class="anchored" data-anchor-id="leverage-type-information">Leverage Type Information</h3>
+<p>The “fix” for the type instability in the <code>for</code> loop example is to use type information. Type annotations are the wrong tool to reach for here. Instead, programmatically access types with various functions:</p>
+<div id="24" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">mysum</span>(x<span class="op">::</span><span class="dt">Vector{Float64}</span>) <span class="co"># bad</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a>  s <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-label="3"></a>  <span class="cf">for</span> xi <span class="kw">in</span> x</span>
+<span id="cb18-4"><a href="#cb18-4" aria-label="4"></a>    s <span class="op">+=</span> xi</span>
+<span id="cb18-5"><a href="#cb18-5" aria-label="5"></a>  <span class="cf">end</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-label="6"></a>  <span class="cf">return</span> s</span>
+<span id="cb18-7"><a href="#cb18-7" aria-label="7"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="26" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">mysum</span>(x<span class="op">::</span><span class="dt">Vector{T}</span>) <span class="kw">where</span> T <span class="co"># bad</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a>  s <span class="op">=</span> <span class="fu">zero</span>(T)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-label="3"></a>  <span class="cf">for</span> xi <span class="kw">in</span> x</span>
+<span id="cb19-4"><a href="#cb19-4" aria-label="4"></a>    s <span class="op">+=</span> xi</span>
+<span id="cb19-5"><a href="#cb19-5" aria-label="5"></a>  <span class="cf">end</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-label="6"></a>  <span class="cf">return</span> s</span>
+<span id="cb19-7"><a href="#cb19-7" aria-label="7"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="28" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">mysum</span>(x)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a>  s <span class="op">=</span> <span class="fu">zero</span>(<span class="fu">eltype</span>(x))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-label="3"></a>  <span class="cf">for</span> xi <span class="kw">in</span> x</span>
+<span id="cb20-4"><a href="#cb20-4" aria-label="4"></a>    s <span class="op">+=</span> xi</span>
+<span id="cb20-5"><a href="#cb20-5" aria-label="5"></a>  <span class="cf">end</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-label="6"></a>  <span class="cf">return</span> s</span>
+<span id="cb20-7"><a href="#cb20-7" aria-label="7"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>We assume <code>x</code> is some kind of container that supports iteration, with a common type.</li>
+<li>Use <code>eltype()</code> to retrieve type of elements stored in <code>x</code>.</li>
+<li>Use <code>zero()</code> to use correct zero specific to element type.</li>
+</ul>
+</section>
+<section id="generic-and-specialized-algorithms" class="level3">
+<h3 class="anchored" data-anchor-id="generic-and-specialized-algorithms">Generic and Specialized Algorithms</h3>
+<p>Let’s revisit the <code>OneHotVector</code> example from the JuliaCon 2019 talk.</p>
+<p>Let’s start with a generic algorithm for <code>inner_sum()</code>:</p>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a><span class="kw">function</span> <span class="fu">inner_sum</span>(A, vs)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>  t <span class="op">=</span> <span class="fu">zero</span>(<span class="fu">eltype</span>(A))</span>
+<span id="cb21-5"><a href="#cb21-5" aria-label="5"></a>  <span class="cf">for</span> v <span class="kw">in</span> vs</span>
+<span id="cb21-6"><a href="#cb21-6" aria-label="6"></a>    t <span class="op">+=</span> <span class="fu">inner</span>(v, A, v) <span class="co"># delegate</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-label="7"></a>  <span class="cf">end</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-label="8"></a>  <span class="cf">return</span> t</span>
+<span id="cb21-9"><a href="#cb21-9" aria-label="9"></a><span class="kw">end</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-label="10"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-label="11"></a><span class="fu">inner</span>(v, A, w) <span class="op">=</span> <span class="fu">dot</span>(v, A<span class="op">*</span>w) <span class="co"># generic definition</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>inner (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>A <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">3</span>, <span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3×3 Matrix{Float64}:
+ 0.847442   0.656987  0.310824
+ 0.0827482  0.394739  0.388582
+ 0.95576    0.835712  0.763079</code></pre>
+</div>
+</div>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">rand</span>(<span class="fl">3</span>) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>100-element Vector{Vector{Float64}}:
+ [0.4160682194518257, 0.7257025281751587, 0.38237988119438715]
+ [0.8531234162283806, 0.7776472288144701, 0.7860638887512297]
+ [0.9941420150572974, 0.8108001528798975, 0.8028144849443912]
+ [0.3492779584834539, 0.8418488920885917, 0.6353951252211467]
+ [0.8346475774480967, 0.8076966361290485, 0.33972388012639054]
+ [0.6316923146542757, 0.7135766700113402, 0.8643628766429353]
+ [0.781401758473852, 0.7990266941766828, 0.0775778045022022]
+ [0.14621962032186742, 0.34858552448645563, 0.13192396616290425]
+ [0.19596347640160372, 0.5357399076801611, 0.7448905958688917]
+ [0.7268547580909063, 0.7434895100773721, 0.7763631878029659]
+ ⋮
+ [0.6812021088312186, 0.20250236288262569, 0.6567824079202675]
+ [0.3950145854180642, 0.9149521473425557, 0.5843524472627121]
+ [0.4265017230197481, 0.637426576498414, 0.4241733657248494]
+ [0.8716068653043524, 0.5578142928415967, 0.5116464028678127]
+ [0.04279646950181193, 0.37104344043129256, 0.566712365405327]
+ [0.8376581150688008, 0.665808476463288, 0.6361494862166432]
+ [0.7735244719259476, 0.7181852796215868, 0.27102726185810555]
+ [0.5368336596289064, 0.7379948320687468, 0.4410939465628163]
+ [0.7185620825797828, 0.9638540456712185, 0.6038951425284834]</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.054618 seconds (224.06 k allocations: 11.005 MiB, 99.93% compilation time)
+  0.000017 seconds (201 allocations: 7.828 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>155.88303686010914</code></pre>
+</div>
+</div>
+<p>Now let’s implement a specialized version for <code>OneHotVector</code>:</p>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a><span class="im">import</span> <span class="bu">Base</span>: size, getindex, *</span>
+<span id="cb30-2"><a href="#cb30-2" aria-label="2"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-label="3"></a><span class="kw">struct</span> OneHotVector <span class="op">&lt;:</span><span class="dt"> AbstractVector{Bool}</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-label="4"></a>  len<span class="op">::</span><span class="dt">Int  </span><span class="co"># length of vector</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-label="5"></a>  ind<span class="op">::</span><span class="dt">Int  </span><span class="co"># index with nonzero entry</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-label="6"></a><span class="kw">end</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-label="7"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-label="8"></a><span class="bu">Base</span>.<span class="fu">size</span>(v<span class="op">::</span><span class="dt">OneHotVector</span>) <span class="op">=</span> (v.len,)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-label="9"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-label="10"></a><span class="fu">getindex</span>(v<span class="op">::</span><span class="dt">OneHotVector</span>, i<span class="op">::</span><span class="dt">Integer</span>) <span class="op">=</span> i <span class="op">==</span> v.ind</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>getindex (generic function with 218 methods)</code></pre>
+</div>
+</div>
+<p>Notice we automatically get a reasonable display of our object because it implements <code>getindex()</code>.</p>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">OneHotVector</span>(<span class="fl">3</span>, <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>)) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>100-element Vector{OneHotVector}:
+ [0, 0, 1]
+ [0, 0, 1]
+ [0, 1, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+ [0, 0, 1]
+ [1, 0, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+ [0, 1, 0]
+ ⋮
+ [1, 0, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+ [0, 1, 0]
+ [0, 1, 0]
+ [0, 0, 1]
+ [0, 0, 1]
+ [1, 0, 0]
+ [0, 1, 0]</code></pre>
+</div>
+</div>
+<p>The following is using our generic code.</p>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.101209 seconds (311.31 k allocations: 15.421 MiB, 18.19% gc time, 99.96% compilation time)
+  0.000009 seconds (201 allocations: 7.828 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>67.75770602748804</code></pre>
+</div>
+</div>
+<p>We can improve performance by writing a custom matrix-vector multiplication algorithm specialized to <code>OneHotVector</code>:</p>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1" aria-label="1"></a><span class="fu">*</span>(A<span class="op">::</span><span class="dt">AbstractMatrix</span>, v<span class="op">::</span><span class="dt">OneHotVector</span>) <span class="op">=</span> A[<span class="op">:</span>, v.ind]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>* (generic function with 189 methods)</code></pre>
+</div>
+</div>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.038736 seconds (60.58 k allocations: 2.991 MiB, 99.95% compilation time: 100% of which was recompilation)
+  0.000007 seconds (101 allocations: 4.703 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>67.75770602748804</code></pre>
+</div>
+</div>
+<p>Even better: specialize the <code>inner()</code> function:</p>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb42-1"><a href="#cb42-1" aria-label="1"></a><span class="fu">inner</span>(v<span class="op">::</span><span class="dt">OneHotVector</span>, A, w<span class="op">::</span><span class="dt">OneHotVector</span>) <span class="op">=</span> A[v.ind, w.ind]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>inner (generic function with 2 methods)</code></pre>
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.010275 seconds (9.53 k allocations: 471.266 KiB, 99.84% compilation time: 100% of which was recompilation)
+  0.000006 seconds (1 allocation: 16 bytes)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>67.75770602748804</code></pre>
+</div>
+</div>
+</section>
+<section id="dispatching-on-type-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="dispatching-on-type-parameters">Dispatching on Type Parameters</h3>
+<p>Dispatch is not limited to completely abstract types. You can dispatch on type parameters within a parametric type.</p>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-label="1"></a><span class="fu">funny_dispatch</span>(x<span class="op">::</span><span class="dt">Vector{Float64}</span>) <span class="op">=</span> <span class="st">"This array has 64-bit floating point numbers"</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-label="2"></a><span class="fu">funny_dispatch</span>(x<span class="op">::</span><span class="dt">Vector{T}</span>) <span class="kw">where</span> T <span class="op">&lt;:</span><span class="dt"> Integer </span><span class="op">=</span> <span class="st">"This array has integers"</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-label="3"></a><span class="fu">funny_dispatch</span>(x<span class="op">::</span><span class="dt">AbstractArray{Bool}</span>) <span class="op">=</span> <span class="st">"This container stores `Bool` objects"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>funny_dispatch (generic function with 3 methods)</code></pre>
+</div>
+</div>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1" aria-label="1"></a>x1 <span class="op">=</span> <span class="fu">randn</span>(<span class="fl">3</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-label="2"></a>x2 <span class="op">=</span> <span class="dt">Int32</span>[<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>]</span>
+<span id="cb49-3"><a href="#cb49-3" aria-label="3"></a>x3 <span class="op">=</span> <span class="fu">zeros</span>(<span class="dt">Bool</span>, <span class="fl">3</span>)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-label="4"></a>x4 <span class="op">=</span> [<span class="st">"STAT 206"</span>]</span>
+<span id="cb49-5"><a href="#cb49-5" aria-label="5"></a></span>
+<span id="cb49-6"><a href="#cb49-6" aria-label="6"></a><span class="cf">for</span> x <span class="kw">in</span> (x1, x2, x3, x4)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-label="7"></a>  <span class="fu">println</span>(<span class="fu">funny_dispatch</span>(x))</span>
+<span id="cb49-8"><a href="#cb49-8" aria-label="8"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>This array has 64-bit floating point numbers
+This array has integers
+This array has integers</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre>MethodError: no method matching funny_dispatch(::Vector{String})
+The function `funny_dispatch` exists, but no method is defined for this combination of argument types.
+
+Closest candidates are:
+  funny_dispatch(<span class="ansi-bright-red-fg">::Vector{Float64}</span>)
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:442</span>
+  funny_dispatch(<span class="ansi-bright-red-fg">::Vector{T}</span>) where T&lt;:Integer
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:443</span>
+  funny_dispatch(<span class="ansi-bright-red-fg">::AbstractArray{Bool}</span>)
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-magenta-fg">Main.Notebook</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:444</span>
+
+Stacktrace:
+ [1] top-level scope
+<span class="ansi-bright-black-fg">   @</span> <span class="ansi-bright-black-fg">~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/</span><span style="text-decoration:underline" class="ansi-bright-black-fg">dispatch.qmd:455</span></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="traits-advanced" class="level3">
+<h3 class="anchored" data-anchor-id="traits-advanced">Traits (Advanced)</h3>
+<p>Certain programming languages, notably <a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>, allow objects to hook into multiple interfaces at once. <a href="https://ahsmart.com/posts/holy-traits-design-patterns-and-best-practice-book/">Tom Kwong’s book</a> has several examples explaining this concept in Julia, even though the language does not have formal support for the feature (due to technical issues). Briefly, a <em>trait</em> is a behavior a Julia type supports, formalized through a separate type. The idea is to use a trait type to determine whether an object supports a particular behavior, allowing you to formalize an interface.</p>
+<p>Let’s illustrate this with our <code>Pet</code> objects. We’ll add a new concrete <code>Pet</code> type without a <code>name</code> field and define a trait to let us safely use it in our <code>encounter()</code> method.</p>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb51-1"><a href="#cb51-1" aria-label="1"></a><span class="co"># This trait is binary. Either you've got it or you don't.</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-label="2"></a><span class="kw">struct</span> HasName <span class="kw">end</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-label="3"></a></span>
+<span id="cb51-4"><a href="#cb51-4" aria-label="4"></a><span class="fu">HasName</span>(<span class="op">::</span><span class="dt">Pet</span>) <span class="op">=</span> <span class="cn">false</span> <span class="co"># default</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-label="5"></a><span class="fu">HasName</span>(<span class="op">::</span><span class="dt">Dog</span>) <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-label="6"></a><span class="fu">HasName</span>(<span class="op">::</span><span class="dt">Cat</span>) <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-label="7"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-label="8"></a><span class="co"># A new Pet...</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-label="9"></a><span class="kw">struct</span> Roach <span class="op">&lt;:</span><span class="dt"> Pet </span><span class="kw">end</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-label="10"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-label="11"></a><span class="fu">meets</span>(a<span class="op">::</span><span class="dt">Roach</span>, b<span class="op">::</span><span class="dt">Pet</span>) <span class="op">=</span> <span class="st">"scurries"</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-label="12"></a></span>
+<span id="cb51-13"><a href="#cb51-13" aria-label="13"></a><span class="co"># Safely access the name field. I would not use this in practice.</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-label="14"></a><span class="fu">getname</span>(a<span class="op">::</span><span class="dt">Pet</span>) <span class="op">=</span> <span class="fu">HasName</span>(a) ? a.name <span class="op">:</span> <span class="st">"Nameless Creature"</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-label="15"></a></span>
+<span id="cb51-16"><a href="#cb51-16" aria-label="16"></a><span class="co"># overwrite the original definition; must match signature!</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-label="17"></a><span class="kw">function</span> <span class="fu">encounter</span>(a<span class="op">::</span><span class="dt">Pet</span>, b<span class="op">::</span><span class="dt">Pet</span>)</span>
+<span id="cb51-18"><a href="#cb51-18" aria-label="18"></a>  verb <span class="op">=</span> <span class="fu">meets</span>(a, b)</span>
+<span id="cb51-19"><a href="#cb51-19" aria-label="19"></a>  <span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(<span class="fu">getname</span>(a))<span class="st"> meets </span><span class="sc">$</span>(<span class="fu">getname</span>(b))<span class="st"> and </span><span class="sc">$</span>verb<span class="st">."</span>)</span>
+<span id="cb51-20"><a href="#cb51-20" aria-label="20"></a><span class="kw">end</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-label="21"></a></span>
+<span id="cb51-22"><a href="#cb51-22" aria-label="22"></a><span class="co"># Examples</span></span>
+<span id="cb51-23"><a href="#cb51-23" aria-label="23"></a><span class="fu">encounter</span>(fido, rex)</span>
+<span id="cb51-24"><a href="#cb51-24" aria-label="24"></a><span class="fu">encounter</span>(<span class="fu">Roach</span>(), fido)</span>
+<span id="cb51-25"><a href="#cb51-25" aria-label="25"></a><span class="fu">encounter</span>(fido, <span class="fu">Roach</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fido meets Rex and sniffs.
+Nameless Creature meets Fido and scurries.
+Fido meets Nameless Creature and stares.</code></pre>
+</div>
+</div>
+<p>Julia’s iterator interface uses the <code>IteratorSize</code> trait, which takes different values. In particular, the value <code>IsInfinite()</code> for this trait allows you to implement support for infinite objects. See the <a href="https://github.com/JuliaArrays/InfiniteArrays.jl">InfiniteArrays.jl</a> for an interesting application of this trait.</p>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
