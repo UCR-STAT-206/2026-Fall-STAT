@@ -15,7 +15,7 @@ You will need the following packages:
 
 ```{julia}
 using BenchmarkTools
-using MatrixDepot
+using MatrixMarket
 using CodecZlib, DelimitedFiles
 using LinearAlgebra, KrylovKit, SparseArrays
 using Plots, Random, Statistics
@@ -76,13 +76,14 @@ The [Perron-Frobenius Theorem](https://en.wikipedia.org/wiki/Perron%E2%80%93Frob
 
 # Problem 1: Data Exploration {#sec-prob1}
 
-Obtain the connectivity matrix `A` from the `SNAP/web-Google` data in the [MatrixDepot](https://github.com/JuliaLinearAlgebra/MatrixDepot.jl) package.
+Obtain the connectivity matrix `A` from Canvas.
+This is normally hosted by [SuiteSparse Matrix Collection](https://sparse.tamu.edu/) but the service is down.
+Instead using MatrixMarket to load the MTX file.
 It will automatically be formatted as a `SparseMatrixCSC` object for efficiency.
 
 ```{julia}
-# make sure MatrixDepot is installed first!
-md = mdopen("SNAP/web-Google")
-A = md.A
+# make sure MatrixMarket is installed first!
+A = MatrixMarket.mmread("web-Google.mtx")
 ```
 
 Using the `A`, provide code/visuals to answer the following questions:
