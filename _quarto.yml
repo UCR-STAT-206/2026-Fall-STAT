@@ -40,6 +40,7 @@ website:
           - text: Functions
             href: notes/module02/functions.qmd
           - text: Multiple Dispatch
+            href: notes/module02/dispatch.qmd
       - section: Module 3 (Best Practices)
         contents:
           - text: Package Management

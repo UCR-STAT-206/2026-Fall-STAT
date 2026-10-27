@@ -1,0 +1,501 @@
+---
+title: Multiple Dispatch
+---
+
+## Goals
+
+1. Be able to describe polymorphism in the context of programming.
+2. Understand multiple dispatch as a mechanism for implementing polymorphic behavior in Julia.
+3. Practice using multiple dispatch in implementing simple algorithms.
+
+
+
+## Before reading these notes
+
+- Review notes on [Julia's type system](types.qmd).
+- Watch part of Stefan Karpinski's JuliaCon 2019 talk on [The Unreasonable Effectiveness of Multiple Dispatch](https://www.youtube.com/live/kc9HwsxE1OY?si=XWdzAHNd0rgcFxK9&t=131). Up to at least 12:56, if not 25:16.
+
+
+
+## Polymorphism
+
+**Polymorphism** in a programming language is about allowing a function to exhibit different behaviors depending on the *types* that it sees.
+
+- For example, in Julia we've seen that the `+` operator implements the usual notion of addition for floating point numbers, integers, complex numbers, and various array objects. In these instances, the internal logic changes depending on the type of objects you add together.
+- On the other hand, the role of `print()` and `println()` is to take objects and display them in the standard output stream. There may be significant differences in converting specific objects to a textual representation, but these functions follow a uniform logic.
+
+Three major forms of polymorphism are:
+
+1. *Ad hoc*: You write a `fancy_function()` that serves as a common interface for a specific computation or concept. You implement the interface/concept for specific types as you see fit.
+    - *Examples*: `+`, `length()`, `show()`.
+2. *Parametric*: Your `fancy_function()` operates on generic or abstract types, providing several concrete types with the same functionality.
+    - *Examples*: `print()`, `getindex()`, `setindex!()`.
+3. *Subtyping*: You allow a symbol (be it a type or a function) to inherit or extend an existing symbol.
+    - *Examples*: `Float64` and `Int` are both concrete instances of the abstract type `Real`, which in turn subtypes `Number`.
+
+
+
+### Polymorphism in OOP
+
+My description of *subtyping* is phrased somewhat generically because polymorphism can be implemented at different levels.
+**Object-Oriented Programming (OOP)** achieves polymorphism primarily through different classes.
+
++ You can write interfaces and have classes implement. Classes can also extend others. Both are instances of subtyping.
++ Some languages allow fields in a class to be generic. This gives you access parametric polymorphism.
++ Function overloading allows you to implement class-specific methods. This is *ad hoc* polymorphism.
+
+
+
+### Example: Cats and Dogs
+
+Here are the type definitions from the JuliaCon example.
+
+```{julia}
+abstract type Pet end
+
+struct Dog <: Pet
+  name::String
+end
+
+struct Cat <: Pet
+  name::String
+end
+```
+
+- Abstract types are just nodes in a type tree. It cannot have any fields.
+- Unlike OOP languages, we're forced to enumerate common fields across concrete types (`Cat` and `Dog`).
+- The `<:` operator is for subtyping; i.e. `Cat <: Pet` means "`Cat` inherits from `Pet`".
+
+Now let's add the generic `encounter()` function.
+
+```{julia}
+function encounter(a::Pet, b::Pet)
+  verb = meets(a, b)
+  println("$(a.name) meets $(b.name) and $verb.")
+end
+```
+
+- This is parametric in the sense that we want any `Pet` subtype to support the `enconter()` function.
+- Whatever objects we pass, they better have a `name` field. Julia has no mechanism to enforce this.
+- Ditto for the `meets()` function call.
+
+Now for the specifics.
+
+```{julia}
+meets(a::Pet, b::Pet) = "stares" # generic fallback
+meets(a::Dog, b::Dog) = "sniffs"
+meets(a::Dog, b::Cat) = "chases"
+meets(a::Cat, b::Dog) = "hisses"
+meets(a::Cat, b::Cat) = "slinks"
+```
+
+- Idea: We want this function to exhibit a different behavior depending on what kind of `Pet` objects encounter each other.
+- Notice there is an implied directionality. The order of the arguments matter.
+- The function definitions specializing on types are **methods**. The code is fairly intuitive.
+
+Let's test it. Perhaps unsurprisingly, the code does exactly what we expect it to do.
+
+```{julia}
+fido      = Dog("Fido")
+rex       = Dog("Rex")
+whiskers  = Cat("Whiskers")
+spots     = Cat("Spots")
+
+encounter(fido, rex)
+encounter(fido, whiskers)
+encounter(whiskers, rex)
+encounter(whiskers, spots)
+```
+
+Try it with Python.
+It has the same flaw as the C++ implementation, and can be fixed using single dispatch.
+The issue is the granularity for pattern matching in OOP vs that of multiple dispatch.
+
+```{python}
+#| eval: false
+# Class Definitions
+class Pet:
+  def __init__(self, name):
+    self.name = name
+
+class Dog(Pet):
+  pass
+
+class Cat(Pet):
+  pass
+
+# Function definitions
+def encounter(a: Pet, b: Pet):
+  verb = meets(a, b)
+  print(f"{a.name} meets {b.name} and {verb}")
+
+def meets(a: Pet, b: Pet):
+  return "stares" # generic fallback
+
+def meets(a: Dog, b: Dog):
+  return "sniffs"
+
+def meets(a: Dog, b: Cat):
+  return "chases"
+
+def meets(a: Cat, b: Dog):
+  return "hisses"
+
+def meets(a: Cat, b: Cat):
+  return "slinks"
+
+# The example
+fido      = Dog("Fido")
+rex       = Dog("Rex")
+whiskers  = Cat("Whiskers")
+spots     = Cat("Spots")
+
+encounter(fido, rex)
+encounter(fido, whiskers)
+encounter(whiskers, rex)
+encounter(whiskers, spots)
+```
+
+
+
+## Multiple Dispatch
+
+Julia's functions support **multiple dispatch**.
+You can write a method for a generic function that pattern matches based on none, some, or all of its argument types.
+There have been programming languages that support multiple dispatch in the past, but Julia is the first to ensure it is a "fast" language feature.
+Making this work well is non-trivial and is the subject of [Jeff Bezanson's PhD Thesis](https://dspace.mit.edu/entities/publication/1ae90f80-6797-4711-a72f-2a5fd99672ae) (Julia co-creator).
+
+### Advantages
+
+#### Expressiveness
+
+An important benefit of multiple dispatch is its expressive power.
+It lets us write fairly intuitive code.
+This style turns out to be excellent for numerical code.
+
+| Dispatch Type |          Syntax           |         Arguments          |               Expressive Order                | Expressive Power |
+| :-----------: | :-----------------------: | :------------------------: | :-------------------------------------------: | :--------------: |
+|     none      | $f(x_{1}, x_{2}, \ldots)$ |           $\{\}$           |               $\mathcal{O}(1)$                |     constant     |
+|    single     |   $x.f(x_{2}, \ldots)$    |        $\{x_{1}\}$         |             $\mathcal{O}(X_{1})$              |      linear      |
+|   multiple    | $f(x_{1}, x_{2}, \ldots)$ | $\{x_{1}, x_{2}, \ldots\}$ | $\mathcal{O}(X_{1} \cdot X_{2} \cdot \cdots)$ |   combinatorial    |
+
+#### Interoperability
+
+A consequence of high expressiveness (see the [Expression Problem](https://en.wikipedia.org/wiki/Expression_problem)) is the ability to readily extend systems.
+Lots of packages in the Julia ecosystem are written independently of each other, yet it is common for packages to interact in productive ways with minimal intervention from package authors.
+
++ *Example*: [Measurements.jl](https://github.com/juliaphysics/measurements.jl) and most packages in the [SciML](https://sciml.ai/) Julia ecosystem "just work".
++ *Example*: Compatibility of various packages with [ForwardDiff.jl](https://github.com/JuliaDiff/ForwardDiff.jl).
+
+#### Generic vs Specialized Algorithms
+
+It is easy to write generic code without talking about types.
+Within your own code, you implement specific algorithms by assuming your functions' inputs support certain functionality; e.g. indexing, iteration, addition, etc.
+If you notice a trick that accelerate performance based on problem information, it is easy to patch in a better algorithm without re-writing everything.
+The Julia stack, in turn, may apply further performance optimizations based on your code.
+
++ *Example*: See the one-hot vector example in the JuliaCon talk. With a bit of effort, you can turn that code into a versatile one-hot tensor implementation [just as in PyTorch](https://docs.pytorch.org/docs/2.14/generated/torch.nn.functional.one_hot.html).
+
+#### Symmetry
+
+Notions such as `*` are either inherently symmetric or multivariate.
+The single dispatch syntax `object.f(x)` introduces asymmetry in such cases.
+For example, matrix-matrix multiplication is not commutative in general there is no reason the evaluation cannot be carried out left-to-right versus right-to-left.
+
+
+
+#### Simpler Design Strategies
+
+This is somewhat subjective.
+At a minimum, the dynamism in Julia eliminates the need for [Gang of Four design patterns](https://en.wikipedia.org/wiki/Design_Patterns), as demonstrated by [Peter Norvig's 1996 critique](https://www.norvig.com/design-patterns/).
+
++ *Example*: OOP languages sometimes use the [Visitor Pattern](https://en.wikipedia.org/wiki/Visitor_pattern) to implement *double dispatch*.
+
+
+#### Separation of Concerns
+
+In Julia, an object is just a `struct` with type information.
+Because methods are not "owned" by a class, you're free to use a combination of generic functions and methods to specialize algorithms on problem information.
+
++ *Example*: `A \ b` uses a polyalgorithm to select the "best" method for solving a linear system based on the data type of `A`.
++ *Example*: The [HTTP.jl](https://github.com/JuliaWeb/HTTP.jl) package for client and server functionality has a careful and composable approach to designing its `request()` function.
+
+
+### Disadvantages
+
+#### Compilation Penalty
+
+The [Julia Stack](../module02/intro.qmd##what-does-julia-do-different) must handle an incredibly large number of function definitions. That means the JIT compiler must quickly compile new functions and methods, especially when calling a function for the first time or after loading packages.
+
++ Historically, running `using Plots` and generating a plot was painfully slow compared to other dynamic languages.
++ Lots of work in this area, such as pre-compilation, to reduce the "Time To First Plot" problem.
++ Little control over this issue as a user. As a developer, you can write your packages to support pre-compilation.
+
+
+
+#### Method Ambiguity
+
+It is "easy" to write ambiguous method definitions.
+For example:
+
+```{julia}
+f(x::Number, y::Any) = "A"
+f(x::Any, y::Number) = "B"
+```
+
+Trying to use `f()` as written will trigger a `MethodError`.
+
+```{julia}
+#| error: true
+f(1, 1.2)
+```
+
++ This usually stems from misuse of type annotations. In both Python and Julia, novices tend to sprinkle type annotations in their code believing it avoids type instability or otherwise improves performance.
++ *Fix*: Avoid talking about types unless you need to specialize a function.
+
+#### Type Piracy
+
+It is "easy" to accidentally overwrite existing methods, which is especially bad if you do it on methods or types you did not write yourself. This can silently break the functionality of a package.
+
++ *Fix*: Only overload functions on types that you own. Use your own function names for types you do not own.
+
+#### Discoverability
+
+Finding methods in single dispatch systems by typing `x.` is easy. In Julia's multiple dispatch system, you rely on people writing good documentation so that `object?` or `?method` helps you discover other methods.
+
+
+#### Type Instability
+
+All dynamic languages pay a performance penalty for type instability, which are instances in which a language is unable to trace the type on object. Julia's performance is quite sensitive to type instability because of multiple dispatch.
+
+The classic example of this issue is the following `for` loop:
+
+```{julia}
+function mysum(x)
+  s = 0
+  for xi in x
+    s += xi
+  end
+  return s
+end
+```
+
+```{julia}
+x = randn(Float64, 1000)
+mysum(x) ≈ sum(x)
+```
+
+```{julia}
+@code_warntype mysum(x)
+```
+
+- The macro `@code_warntype` maps Julia expressions to a lower-level representation where type information is available.
+- Here our accumulator variable `s` is inferred as having a *union type*, `Union{Float64,Int64}`.
+- When we initialize `s = 0` its type is `Int64`.
+- Once we update `s` with the first number, its type changes to `Float64`.
+- This happens even if the loop does not run. The Julia compiler is unable to prove `s` has a definite type *at compile time*. The only way to check is *during runtime*.
+
+Compare to the `sum()` function:
+
+```{julia}
+@code_warntype sum(x)
+```
+
+- No red or yellow. The function is type-stable.
+
+## Design Strategies
+
+### Leverage Type Information
+
+The "fix" for the type instability in the `for` loop example is to use type information.
+Type annotations are the wrong tool to reach for here.
+Instead, programmatically access types with various functions:
+
+```{julia}
+#| eval: false
+function mysum(x::Vector{Float64}) # bad
+  s = 0.0
+  for xi in x
+    s += xi
+  end
+  return s
+end
+```
+
+```{julia}
+#| eval: false
+function mysum(x::Vector{T}) where T # bad
+  s = zero(T)
+  for xi in x
+    s += xi
+  end
+  return s
+end
+```
+
+```{julia}
+#| eval: false
+function mysum(x)
+  s = zero(eltype(x))
+  for xi in x
+    s += xi
+  end
+  return s
+end
+```
+
+- We assume `x` is some kind of container that supports iteration, with a common type.
+- Use `eltype()` to retrieve type of elements stored in `x`.
+- Use `zero()` to use correct zero specific to element type.
+
+### Generic and Specialized Algorithms
+
+Let's revisit the `OneHotVector` example from the JuliaCon 2019 talk.
+
+Let's start with a generic algorithm for `inner_sum()`:
+
+```{julia}
+using LinearAlgebra
+
+function inner_sum(A, vs)
+  t = zero(eltype(A))
+  for v in vs
+    t += inner(v, A, v) # delegate
+  end
+  return t
+end
+
+inner(v, A, w) = dot(v, A*w) # generic definition
+```
+
+```{julia}
+A = rand(3, 3)
+```
+
+```{julia}
+vs = [rand(3) for _ in 1:100]
+```
+
+```{julia}
+@time inner_sum(A, vs)
+@time inner_sum(A, vs)
+```
+
+Now let's implement a specialized version for `OneHotVector`:
+
+```{julia}
+import Base: size, getindex, *
+
+struct OneHotVector <: AbstractVector{Bool}
+  len::Int  # length of vector
+  ind::Int  # index with nonzero entry
+end
+
+Base.size(v::OneHotVector) = (v.len,)
+
+getindex(v::OneHotVector, i::Integer) = i == v.ind
+```
+
+Notice we automatically get a reasonable display of our object because it implements `getindex()`.
+
+```{julia}
+vs = [OneHotVector(3, rand(1:3)) for _ in 1:100]
+```
+
+The following is using our generic code.
+
+```{julia}
+@time inner_sum(A, vs)
+@time inner_sum(A, vs)
+```
+
+We can improve performance by writing a custom matrix-vector multiplication algorithm specialized to `OneHotVector`:
+
+```{julia}
+*(A::AbstractMatrix, v::OneHotVector) = A[:, v.ind]
+```
+
+```{julia}
+@time inner_sum(A, vs)
+@time inner_sum(A, vs)
+```
+
+Even better: specialize the `inner()` function:
+
+```{julia}
+inner(v::OneHotVector, A, w::OneHotVector) = A[v.ind, w.ind]
+```
+
+```{julia}
+@time inner_sum(A, vs)
+@time inner_sum(A, vs)
+```
+
+
+
+### Dispatching on Type Parameters
+
+Dispatch is not limited to completely abstract types.
+You can dispatch on type parameters within a parametric type.
+
+```{julia}
+funny_dispatch(x::Vector{Float64}) = "This array has 64-bit floating point numbers"
+funny_dispatch(x::Vector{T}) where T <: Integer = "This array has integers"
+funny_dispatch(x::AbstractArray{Bool}) = "This container stores `Bool` objects"
+```
+
+```{julia}
+#| error: true
+x1 = randn(3)
+x2 = Int32[1, 2, 3]
+x3 = zeros(Bool, 3)
+x4 = ["STAT 206"]
+
+for x in (x1, x2, x3, x4)
+  println(funny_dispatch(x))
+end
+```
+
+
+### Traits (Advanced)
+
+Certain programming languages, notably [Rust](https://en.wikipedia.org/wiki/Rust_(programming_language)), allow objects to hook into multiple interfaces at once.
+[Tom Kwong's book](https://ahsmart.com/posts/holy-traits-design-patterns-and-best-practice-book/) has several examples explaining this concept in Julia, even though the language does not have formal support for the feature (due to technical issues).
+Briefly, a *trait* is a behavior a Julia type supports, formalized through a separate type.
+The idea is to use a trait type to determine whether an object supports a particular behavior, allowing you to formalize an interface.
+
+
+Let's illustrate this with our `Pet` objects.
+We'll add a new concrete `Pet` type without a `name` field and define a trait to let us safely use it in our `encounter()` method.
+
+```{julia}
+# This trait is binary. Either you've got it or you don't.
+struct HasName end
+
+HasName(::Pet) = false # default
+HasName(::Dog) = true
+HasName(::Cat) = true
+
+# A new Pet...
+struct Roach <: Pet end
+
+meets(a::Roach, b::Pet) = "scurries"
+
+# Safely access the name field. I would not use this in practice.
+getname(a::Pet) = HasName(a) ? a.name : "Nameless Creature"
+
+# overwrite the original definition; must match signature!
+function encounter(a::Pet, b::Pet)
+  verb = meets(a, b)
+  println("$(getname(a)) meets $(getname(b)) and $verb.")
+end
+
+# Examples
+encounter(fido, rex)
+encounter(Roach(), fido)
+encounter(fido, Roach())
+```
+
+Julia's iterator interface uses the `IteratorSize` trait, which takes different values.
+In particular, the value `IsInfinite()` for this trait allows you to implement support for infinite objects.
+See the [InfiniteArrays.jl](https://github.com/JuliaArrays/InfiniteArrays.jl) for an interesting application of this trait.
