@@ -1159,46 +1159,46 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>A <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">3</span>, <span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3×3 Matrix{Float64}:
- 0.847442   0.656987  0.310824
- 0.0827482  0.394739  0.388582
- 0.95576    0.835712  0.763079</code></pre>
+ 0.000677633  0.240597  0.637567
+ 0.567165     0.546729  0.290025
+ 0.662376     0.479682  0.751376</code></pre>
 </div>
 </div>
 <div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">rand</span>(<span class="fl">3</span>) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>100-element Vector{Vector{Float64}}:
- [0.4160682194518257, 0.7257025281751587, 0.38237988119438715]
- [0.8531234162283806, 0.7776472288144701, 0.7860638887512297]
- [0.9941420150572974, 0.8108001528798975, 0.8028144849443912]
- [0.3492779584834539, 0.8418488920885917, 0.6353951252211467]
- [0.8346475774480967, 0.8076966361290485, 0.33972388012639054]
- [0.6316923146542757, 0.7135766700113402, 0.8643628766429353]
- [0.781401758473852, 0.7990266941766828, 0.0775778045022022]
- [0.14621962032186742, 0.34858552448645563, 0.13192396616290425]
- [0.19596347640160372, 0.5357399076801611, 0.7448905958688917]
- [0.7268547580909063, 0.7434895100773721, 0.7763631878029659]
+ [0.04950807507958965, 0.9046958011271689, 0.09358654351517393]
+ [0.3126029690734834, 0.6971905809014427, 0.5837594951947686]
+ [0.9949917626234844, 0.14784386985032538, 0.9979520414624937]
+ [0.8245099766003461, 0.023890159815572187, 0.46034031689796784]
+ [0.24526380312105867, 0.4210184745179121, 0.2105997766807437]
+ [0.8377797374553426, 0.7083137547443499, 0.12610721809820913]
+ [0.33760758037827343, 0.8719779578741914, 0.683840939969099]
+ [0.7404835504015991, 0.7894007916906668, 0.8921005540476602]
+ [0.906052869310403, 0.5569739724153097, 0.6804393375950423]
+ [0.7487799256067339, 0.2781101608918769, 0.9021125106182736]
  ⋮
- [0.6812021088312186, 0.20250236288262569, 0.6567824079202675]
- [0.3950145854180642, 0.9149521473425557, 0.5843524472627121]
- [0.4265017230197481, 0.637426576498414, 0.4241733657248494]
- [0.8716068653043524, 0.5578142928415967, 0.5116464028678127]
- [0.04279646950181193, 0.37104344043129256, 0.566712365405327]
- [0.8376581150688008, 0.665808476463288, 0.6361494862166432]
- [0.7735244719259476, 0.7181852796215868, 0.27102726185810555]
- [0.5368336596289064, 0.7379948320687468, 0.4410939465628163]
- [0.7185620825797828, 0.9638540456712185, 0.6038951425284834]</code></pre>
+ [0.7919146219669458, 0.1905142545394135, 0.9123899146578781]
+ [0.9271368353947408, 0.6657526844073981, 0.9688308557627658]
+ [0.468231298400801, 0.5128927548133699, 0.1969331291299844]
+ [0.1627170420490951, 0.4578046070551599, 0.1320497976838657]
+ [0.9906214319534095, 0.7369461100631738, 0.2984349260685768]
+ [0.7498337071611532, 0.5689594341951716, 0.14907254300028583]
+ [0.49900215471916354, 0.4585466147342485, 0.8133065694260665]
+ [0.5500689192981479, 0.26305362815055144, 0.5414180346328921]
+ [0.30313003190666443, 0.9885979974551455, 0.7619619903502854]</code></pre>
 </div>
 </div>
 <div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.054618 seconds (224.06 k allocations: 11.005 MiB, 99.93% compilation time)
-  0.000017 seconds (201 allocations: 7.828 KiB)</code></pre>
+<pre><code>  0.050249 seconds (224.06 k allocations: 11.006 MiB, 99.92% compilation time)
+  0.000015 seconds (201 allocations: 7.828 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>155.88303686010914</code></pre>
+<pre><code>109.37042455806873</code></pre>
 </div>
 </div>
 <p>Now let’s implement a specialized version for <code>OneHotVector</code>:</p>
@@ -1222,25 +1222,25 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">OneHotVector</span>(<span class="fl">3</span>, <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>)) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>100-element Vector{OneHotVector}:
- [0, 0, 1]
+ [0, 1, 0]
+ [1, 0, 0]
+ [1, 0, 0]
+ [0, 1, 0]
+ [1, 0, 0]
  [0, 0, 1]
  [0, 1, 0]
- [0, 1, 0]
- [0, 0, 1]
- [0, 0, 1]
  [1, 0, 0]
  [0, 1, 0]
  [0, 0, 1]
- [0, 1, 0]
  ⋮
+ [0, 0, 1]
+ [0, 0, 1]
+ [0, 1, 0]
+ [1, 0, 0]
  [1, 0, 0]
  [0, 1, 0]
  [0, 0, 1]
- [0, 1, 0]
- [0, 1, 0]
  [0, 0, 1]
- [0, 0, 1]
- [1, 0, 0]
  [0, 1, 0]</code></pre>
 </div>
 </div>
@@ -1249,11 +1249,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.101209 seconds (311.31 k allocations: 15.421 MiB, 18.19% gc time, 99.96% compilation time)
-  0.000009 seconds (201 allocations: 7.828 KiB)</code></pre>
+<pre><code>  0.066562 seconds (311.31 k allocations: 15.421 MiB, 99.96% compilation time)
+  0.000010 seconds (201 allocations: 7.828 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>67.75770602748804</code></pre>
+<pre><code>40.60840509285834</code></pre>
 </div>
 </div>
 <p>We can improve performance by writing a custom matrix-vector multiplication algorithm specialized to <code>OneHotVector</code>:</p>
@@ -1267,11 +1267,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.038736 seconds (60.58 k allocations: 2.991 MiB, 99.95% compilation time: 100% of which was recompilation)
-  0.000007 seconds (101 allocations: 4.703 KiB)</code></pre>
+<pre><code>  0.034766 seconds (60.58 k allocations: 2.991 MiB, 99.95% compilation time: 100% of which was recompilation)
+  0.000008 seconds (101 allocations: 4.703 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>67.75770602748804</code></pre>
+<pre><code>40.60840509285834</code></pre>
 </div>
 </div>
 <p>Even better: specialize the <code>inner()</code> function:</p>
@@ -1285,11 +1285,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.010275 seconds (9.53 k allocations: 471.266 KiB, 99.84% compilation time: 100% of which was recompilation)
-  0.000006 seconds (1 allocation: 16 bytes)</code></pre>
+<pre><code>  0.009760 seconds (9.53 k allocations: 471.266 KiB, 99.84% compilation time: 100% of which was recompilation)
+  0.000005 seconds (1 allocation: 16 bytes)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>67.75770602748804</code></pre>
+<pre><code>40.60840509285834</code></pre>
 </div>
 </div>
 </section>
