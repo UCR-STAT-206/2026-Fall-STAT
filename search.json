@@ -652,7 +652,7 @@
     "href": "notes/module02/dispatch.html#design-strategies",
     "title": "Multiple Dispatch",
     "section": "Design Strategies",
-    "text": "Design Strategies\n\nLeverage Type Information\nThe “fix” for the type instability in the for loop example is to use type information. Type annotations are the wrong tool to reach for here. Instead, programmatically access types with various functions:\n\nfunction mysum(x::Vector{Float64}) # bad\n  s = 0.0\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nfunction mysum(x::Vector{T}) where T # bad\n  s = zero(T)\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nfunction mysum(x)\n  s = zero(eltype(x))\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nWe assume x is some kind of container that supports iteration, with a common type.\nUse eltype() to retrieve type of elements stored in x.\nUse zero() to use correct zero specific to element type.\n\n\n\nGeneric and Specialized Algorithms\nLet’s revisit the OneHotVector example from the JuliaCon 2019 talk.\nLet’s start with a generic algorithm for inner_sum():\n\nusing LinearAlgebra\n\nfunction inner_sum(A, vs)\n  t = zero(eltype(A))\n  for v in vs\n    t += inner(v, A, v) # delegate\n  end\n  return t\nend\n\ninner(v, A, w) = dot(v, A*w) # generic definition\n\ninner (generic function with 1 method)\n\n\n\nA = rand(3, 3)\n\n3×3 Matrix{Float64}:\n 0.000677633  0.240597  0.637567\n 0.567165     0.546729  0.290025\n 0.662376     0.479682  0.751376\n\n\n\nvs = [rand(3) for _ in 1:100]\n\n100-element Vector{Vector{Float64}}:\n [0.04950807507958965, 0.9046958011271689, 0.09358654351517393]\n [0.3126029690734834, 0.6971905809014427, 0.5837594951947686]\n [0.9949917626234844, 0.14784386985032538, 0.9979520414624937]\n [0.8245099766003461, 0.023890159815572187, 0.46034031689796784]\n [0.24526380312105867, 0.4210184745179121, 0.2105997766807437]\n [0.8377797374553426, 0.7083137547443499, 0.12610721809820913]\n [0.33760758037827343, 0.8719779578741914, 0.683840939969099]\n [0.7404835504015991, 0.7894007916906668, 0.8921005540476602]\n [0.906052869310403, 0.5569739724153097, 0.6804393375950423]\n [0.7487799256067339, 0.2781101608918769, 0.9021125106182736]\n ⋮\n [0.7919146219669458, 0.1905142545394135, 0.9123899146578781]\n [0.9271368353947408, 0.6657526844073981, 0.9688308557627658]\n [0.468231298400801, 0.5128927548133699, 0.1969331291299844]\n [0.1627170420490951, 0.4578046070551599, 0.1320497976838657]\n [0.9906214319534095, 0.7369461100631738, 0.2984349260685768]\n [0.7498337071611532, 0.5689594341951716, 0.14907254300028583]\n [0.49900215471916354, 0.4585466147342485, 0.8133065694260665]\n [0.5500689192981479, 0.26305362815055144, 0.5414180346328921]\n [0.30313003190666443, 0.9885979974551455, 0.7619619903502854]\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.050249 seconds (224.06 k allocations: 11.006 MiB, 99.92% compilation time)\n  0.000015 seconds (201 allocations: 7.828 KiB)\n\n\n109.37042455806873\n\n\nNow let’s implement a specialized version for OneHotVector:\n\nimport Base: size, getindex, *\n\nstruct OneHotVector &lt;: AbstractVector{Bool}\n  len::Int  # length of vector\n  ind::Int  # index with nonzero entry\nend\n\nBase.size(v::OneHotVector) = (v.len,)\n\ngetindex(v::OneHotVector, i::Integer) = i == v.ind\n\ngetindex (generic function with 218 methods)\n\n\nNotice we automatically get a reasonable display of our object because it implements getindex().\n\nvs = [OneHotVector(3, rand(1:3)) for _ in 1:100]\n\n100-element Vector{OneHotVector}:\n [0, 1, 0]\n [1, 0, 0]\n [1, 0, 0]\n [0, 1, 0]\n [1, 0, 0]\n [0, 0, 1]\n [0, 1, 0]\n [1, 0, 0]\n [0, 1, 0]\n [0, 0, 1]\n ⋮\n [0, 0, 1]\n [0, 0, 1]\n [0, 1, 0]\n [1, 0, 0]\n [1, 0, 0]\n [0, 1, 0]\n [0, 0, 1]\n [0, 0, 1]\n [0, 1, 0]\n\n\nThe following is using our generic code.\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.066562 seconds (311.31 k allocations: 15.421 MiB, 99.96% compilation time)\n  0.000010 seconds (201 allocations: 7.828 KiB)\n\n\n40.60840509285834\n\n\nWe can improve performance by writing a custom matrix-vector multiplication algorithm specialized to OneHotVector:\n\n*(A::AbstractMatrix, v::OneHotVector) = A[:, v.ind]\n\n* (generic function with 189 methods)\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.034766 seconds (60.58 k allocations: 2.991 MiB, 99.95% compilation time: 100% of which was recompilation)\n  0.000008 seconds (101 allocations: 4.703 KiB)\n\n\n40.60840509285834\n\n\nEven better: specialize the inner() function:\n\ninner(v::OneHotVector, A, w::OneHotVector) = A[v.ind, w.ind]\n\ninner (generic function with 2 methods)\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.009760 seconds (9.53 k allocations: 471.266 KiB, 99.84% compilation time: 100% of which was recompilation)\n  0.000005 seconds (1 allocation: 16 bytes)\n\n\n40.60840509285834\n\n\n\n\nDispatching on Type Parameters\nDispatch is not limited to completely abstract types. You can dispatch on type parameters within a parametric type.\n\nfunny_dispatch(x::Vector{Float64}) = \"This array has 64-bit floating point numbers\"\nfunny_dispatch(x::Vector{T}) where T &lt;: Integer = \"This array has integers\"\nfunny_dispatch(x::AbstractArray{Bool}) = \"This container stores `Bool` objects\"\n\nfunny_dispatch (generic function with 3 methods)\n\n\n\nx1 = randn(3)\nx2 = Int32[1, 2, 3]\nx3 = zeros(Bool, 3)\nx4 = [\"STAT 206\"]\n\nfor x in (x1, x2, x3, x4)\n  println(funny_dispatch(x))\nend\n\nThis array has 64-bit floating point numbers\nThis array has integers\nThis array has integers\n\n\n\nMethodError: no method matching funny_dispatch(::Vector{String})\nThe function `funny_dispatch` exists, but no method is defined for this combination of argument types.\n\nClosest candidates are:\n  funny_dispatch(::Vector{Float64})\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:442\n  funny_dispatch(::Vector{T}) where T&lt;:Integer\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:443\n  funny_dispatch(::AbstractArray{Bool})\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:444\n\nStacktrace:\n [1] top-level scope\n   @ ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:455\n\n\n\n\n\nTraits (Advanced)\nCertain programming languages, notably Rust, allow objects to hook into multiple interfaces at once. Tom Kwong’s book has several examples explaining this concept in Julia, even though the language does not have formal support for the feature (due to technical issues). Briefly, a trait is a behavior a Julia type supports, formalized through a separate type. The idea is to use a trait type to determine whether an object supports a particular behavior, allowing you to formalize an interface.\nLet’s illustrate this with our Pet objects. We’ll add a new concrete Pet type without a name field and define a trait to let us safely use it in our encounter() method.\n\n# This trait is binary. Either you've got it or you don't.\nstruct HasName end\n\nHasName(::Pet) = false # default\nHasName(::Dog) = true\nHasName(::Cat) = true\n\n# A new Pet...\nstruct Roach &lt;: Pet end\n\nmeets(a::Roach, b::Pet) = \"scurries\"\n\n# Safely access the name field. I would not use this in practice.\ngetname(a::Pet) = HasName(a) ? a.name : \"Nameless Creature\"\n\n# overwrite the original definition; must match signature!\nfunction encounter(a::Pet, b::Pet)\n  verb = meets(a, b)\n  println(\"$(getname(a)) meets $(getname(b)) and $verb.\")\nend\n\n# Examples\nencounter(fido, rex)\nencounter(Roach(), fido)\nencounter(fido, Roach())\n\nFido meets Rex and sniffs.\nNameless Creature meets Fido and scurries.\nFido meets Nameless Creature and stares.\n\n\nJulia’s iterator interface uses the IteratorSize trait, which takes different values. In particular, the value IsInfinite() for this trait allows you to implement support for infinite objects. See the InfiniteArrays.jl for an interesting application of this trait.",
+    "text": "Design Strategies\n\nLeverage Type Information\nThe “fix” for the type instability in the for loop example is to use type information. Type annotations are the wrong tool to reach for here. Instead, programmatically access types with various functions:\n\nfunction mysum(x::Vector{Float64}) # bad\n  s = 0.0\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nfunction mysum(x::Vector{T}) where T # bad\n  s = zero(T)\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nfunction mysum(x)\n  s = zero(eltype(x))\n  for xi in x\n    s += xi\n  end\n  return s\nend\n\n\nWe assume x is some kind of container that supports iteration, with a common type.\nUse eltype() to retrieve type of elements stored in x.\nUse zero() to use correct zero specific to element type.\n\n\n\nGeneric and Specialized Algorithms\nLet’s revisit the OneHotVector example from the JuliaCon 2019 talk.\nLet’s start with a generic algorithm for inner_sum():\n\nusing LinearAlgebra\n\nfunction inner_sum(A, vs)\n  t = zero(eltype(A))\n  for v in vs\n    t += inner(v, A, v) # delegate\n  end\n  return t\nend\n\ninner(v, A, w) = dot(v, A*w) # generic definition\n\ninner (generic function with 1 method)\n\n\n\nA = rand(3, 3)\n\n3×3 Matrix{Float64}:\n 0.0812231  0.0843965  0.114721\n 0.429298   0.13978    0.694433\n 0.188857   0.956112   0.905292\n\n\n\nvs = [rand(3) for _ in 1:100]\n\n100-element Vector{Vector{Float64}}:\n [0.15794376009710942, 0.46663840001752677, 0.051954963090545814]\n [0.2745433767372141, 0.24279913749743642, 0.6389533180282437]\n [0.5581609369565799, 0.15535083339217792, 0.6796784302947131]\n [0.09733781628495053, 0.3535896750139754, 0.3744296006229324]\n [0.21021736916987965, 0.5400105075873035, 0.3570936024250625]\n [0.6178516304913728, 0.9646091286670369, 0.9841593131088394]\n [0.3931259606342754, 0.5957476583054342, 0.8962579126834892]\n [0.9891959771600142, 0.9823347366663132, 0.1052032840555811]\n [0.7484751079364002, 0.3116161921368866, 0.24031248125738713]\n [0.0930697692208361, 0.5394123244896977, 0.5684479325340918]\n ⋮\n [0.07234163120767922, 0.47848512413073574, 0.22151029866524286]\n [0.27893169136603935, 0.7474107888507573, 0.3394648286324443]\n [0.17777581686577315, 0.08643300209493365, 0.9332702791569036]\n [0.9094148951452843, 0.0714997214455434, 0.6390121059018748]\n [0.13704858256682406, 0.30568187621423626, 0.598241079449452]\n [0.4805711596298251, 0.26169343119097255, 0.7768170213024091]\n [0.8267550902640475, 0.23755492087296126, 0.6808475153764955]\n [0.4932147592419136, 0.3751442594224206, 0.3124601423748403]\n [0.5205469516078313, 0.7021629889569115, 0.8583384820422112]\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.077002 seconds (224.06 k allocations: 11.005 MiB, 14.69% gc time, 99.94% compilation time)\n  0.000012 seconds (201 allocations: 7.828 KiB)\n\n\n92.94677741765524\n\n\nNow let’s implement a specialized version for OneHotVector:\n\nimport Base: size, getindex, *\n\nstruct OneHotVector &lt;: AbstractVector{Bool}\n  len::Int  # length of vector\n  ind::Int  # index with nonzero entry\nend\n\nBase.size(v::OneHotVector) = (v.len,)\n\ngetindex(v::OneHotVector, i::Integer) = i == v.ind\n\ngetindex (generic function with 218 methods)\n\n\nNotice we automatically get a reasonable display of our object because it implements getindex().\n\nvs = [OneHotVector(3, rand(1:3)) for _ in 1:100]\n\n100-element Vector{OneHotVector}:\n [0, 1, 0]\n [0, 1, 0]\n [0, 0, 1]\n [0, 1, 0]\n [1, 0, 0]\n [0, 0, 1]\n [0, 0, 1]\n [1, 0, 0]\n [0, 0, 1]\n [0, 0, 1]\n ⋮\n [0, 1, 0]\n [0, 0, 1]\n [1, 0, 0]\n [1, 0, 0]\n [1, 0, 0]\n [0, 1, 0]\n [1, 0, 0]\n [1, 0, 0]\n [0, 0, 1]\n\n\nThe following is using our generic code.\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.096567 seconds (311.31 k allocations: 15.421 MiB, 99.98% compilation time)\n  0.000008 seconds (201 allocations: 7.828 KiB)\n\n\n40.13532945971307\n\n\nWe can improve performance by writing a custom matrix-vector multiplication algorithm specialized to OneHotVector:\n\n*(A::AbstractMatrix, v::OneHotVector) = A[:, v.ind]\n\n* (generic function with 189 methods)\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.043873 seconds (60.59 k allocations: 2.991 MiB, 99.97% compilation time: 100% of which was recompilation)\n  0.000005 seconds (101 allocations: 4.703 KiB)\n\n\n40.13532945971307\n\n\nEven better: specialize the inner() function:\n\ninner(v::OneHotVector, A, w::OneHotVector) = A[v.ind, w.ind]\n\ninner (generic function with 2 methods)\n\n\n\n@time inner_sum(A, vs)\n@time inner_sum(A, vs)\n\n  0.011799 seconds (9.52 k allocations: 471.078 KiB, 99.92% compilation time: 100% of which was recompilation)\n  0.000003 seconds (1 allocation: 16 bytes)\n\n\n40.13532945971307\n\n\n\n\nDispatching on Type Parameters\nDispatch is not limited to completely abstract types. You can dispatch on type parameters within a parametric type.\n\nfunny_dispatch(x::Vector{Float64}) = \"This array has 64-bit floating point numbers\"\nfunny_dispatch(x::Vector{T}) where T &lt;: Integer = \"This array has integers\"\nfunny_dispatch(x::AbstractArray{Bool}) = \"This container stores `Bool` objects\"\n\nfunny_dispatch (generic function with 3 methods)\n\n\n\nx1 = randn(3)\nx2 = Int32[1, 2, 3]\nx3 = zeros(Bool, 3)\nx4 = [\"STAT 206\"]\n\nfor x in (x1, x2, x3, x4)\n  println(funny_dispatch(x))\nend\n\nThis array has 64-bit floating point numbers\nThis array has integers\nThis array has integers\n\n\n\nMethodError: no method matching funny_dispatch(::Vector{String})\nThe function `funny_dispatch` exists, but no method is defined for this combination of argument types.\n\nClosest candidates are:\n  funny_dispatch(::Vector{Float64})\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:442\n  funny_dispatch(::Vector{T}) where T&lt;:Integer\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:443\n  funny_dispatch(::AbstractArray{Bool})\n   @ Main.Notebook ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:444\n\nStacktrace:\n [1] top-level scope\n   @ ~/work/2026-Fall-STAT/2026-Fall-STAT/notes/module02/dispatch.qmd:455\n\n\n\n\n\nTraits (Advanced)\nCertain programming languages, notably Rust, allow objects to hook into multiple interfaces at once. Tom Kwong’s book has several examples explaining this concept in Julia, even though the language does not have formal support for the feature (due to technical issues). Briefly, a trait is a behavior a Julia type supports, formalized through a separate type. The idea is to use a trait type to determine whether an object supports a particular behavior, allowing you to formalize an interface.\nLet’s illustrate this with our Pet objects. We’ll add a new concrete Pet type without a name field and define a trait to let us safely use it in our encounter() method.\n\n# This trait is binary. Either you've got it or you don't.\nstruct HasName end\n\nHasName(::Pet) = false # default\nHasName(::Dog) = true\nHasName(::Cat) = true\n\n# A new Pet...\nstruct Roach &lt;: Pet end\n\nmeets(a::Roach, b::Pet) = \"scurries\"\n\n# Safely access the name field. I would not use this in practice.\ngetname(a::Pet) = HasName(a) ? a.name : \"Nameless Creature\"\n\n# overwrite the original definition; must match signature!\nfunction encounter(a::Pet, b::Pet)\n  verb = meets(a, b)\n  println(\"$(getname(a)) meets $(getname(b)) and $verb.\")\nend\n\n# Examples\nencounter(fido, rex)\nencounter(Roach(), fido)\nencounter(fido, Roach())\n\nFido meets Rex and sniffs.\nNameless Creature meets Fido and scurries.\nFido meets Nameless Creature and stares.\n\n\nJulia’s iterator interface uses the IteratorSize trait, which takes different values. In particular, the value IsInfinite() for this trait allows you to implement support for infinite objects. See the InfiniteArrays.jl for an interesting application of this trait.",
     "crumbs": [
       "Module 2 (Programming)",
       "Multiple Dispatch"
@@ -1514,201 +1514,58 @@
     ]
   },
   {
-    "objectID": "labs/lab4-reproducibility.html",
-    "href": "labs/lab4-reproducibility.html",
-    "title": "Lab 4: Reproducibility",
+    "objectID": "labs/lab0-setup.html",
+    "href": "labs/lab0-setup.html",
+    "title": "Lab 0: Setting Up Your Workspace",
     "section": "",
-    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
+    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
     "crumbs": [
       "Labs",
-      "Lab 4 (Reproducibility)"
+      "Lab 0 (Getting Started)"
     ]
   },
   {
-    "objectID": "labs/lab4-reproducibility.html#before-class",
-    "href": "labs/lab4-reproducibility.html#before-class",
-    "title": "Lab 4: Reproducibility",
+    "objectID": "labs/lab0-setup.html#goals",
+    "href": "labs/lab0-setup.html#goals",
+    "title": "Lab 0: Setting Up Your Workspace",
     "section": "",
-    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
+    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
     "crumbs": [
       "Labs",
-      "Lab 4 (Reproducibility)"
+      "Lab 0 (Getting Started)"
     ]
   },
   {
-    "objectID": "labs/lab4-reproducibility.html#overview-instructions",
-    "href": "labs/lab4-reproducibility.html#overview-instructions",
-    "title": "Lab 4: Reproducibility",
-    "section": "Overview & Instructions",
-    "text": "Overview & Instructions\nIn this lab you will try to reproduce a headline result from a published study (to be revealed later).\nRR-processed.csv is an unbalanced panel (longitudinal) dataset of economic indicators for 20 countries, 1946 – 2009, with one row per country-year (1,175 rows). The two variables you need are:\n\ndebtgdp: public debt as a percentage of GDP. A value of 100 means public debt equals one year of economic output. It is positive and can be smaller or larger than 100.\ndRGDP: real GDP growth, in percent per year.\n\nEach country-year is assigned to one of four categories: 0-30%, 30-60%, 60-90%, and above 90% debt/GDP. The provided file analysis.jl defines default_bins(), debtgdp_category(), load_data(), and report_mean_growth(), which you will use to load the data and compute mean real GDP growth in each category by averaging over all country-year observations. You can use ?&lt;function_name&gt; to quickly review what each function does.",
+    "objectID": "labs/lab0-setup.html#the-tools",
+    "href": "labs/lab0-setup.html#the-tools",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "The Tools",
+    "text": "The Tools\nYou are responsible for installing the following on your machine:\n\nDocker Desktop\nVS Code\n\nOnce you create a container using the class image, you will have access to:\n\na Unix Shell (we will use zsh by default),\nGit,\nQuarto, and\nJulia 1.12.7.\n\nIn addition to various tools installed on the image (i.e. Unix utilities), you also have access to\n\nPython 3.14,\nR 4.5, and\nDuckDB 1.5.5.",
     "crumbs": [
       "Labs",
-      "Lab 4 (Reproducibility)"
+      "Lab 0 (Getting Started)"
     ]
   },
   {
-    "objectID": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
-    "href": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
-    "title": "Lab 4: Reproducibility",
-    "section": "Task 1: Reproduce the study",
-    "text": "Task 1: Reproduce the study\n\nSkim through analysis.jl. In a fresh Julia session, run using Revise and load the source file with includet(\"analysis.jl\").\n\nNote: Use includet(\"analysis.jl\") in the Julia REPL only.\nIn your report, you can load the source file using the regular include(\"analysis.jl\") command.\n\nUse the provided tools to load RR-processed.csv. Create a reproduce.qmd report file to report mean growth in real GDP. Edit this file as you work through each task in the REPL.\nAdd the published values from RR-published.csv to your report.\nComment on the differences, if any, between the two tables.",
+    "objectID": "labs/lab0-setup.html#on-your-own",
+    "href": "labs/lab0-setup.html#on-your-own",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "On Your Own",
+    "text": "On Your Own\n\n1. Get the class Docker image working on your computer\nRead the guide on how to use Docker in this class.\n\n\n2. Practice using the terminal\nRead the notes on the Unix shell and experiment inside a container.\n\n\n3. Read up on Git, GitHub, the SSH protocol\nTry setting up Git on your container and create your GitHub account.\n\nWhat is Git? and How to configure Git.\nHow to set up your GitHub account.\nWhat is SSH?.",
     "crumbs": [
       "Labs",
-      "Lab 4 (Reproducibility)"
+      "Lab 0 (Getting Started)"
     ]
   },
   {
-    "objectID": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
-    "href": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
-    "title": "Lab 4: Reproducibility",
-    "section": "Task 2: Investigate the discrepancy",
-    "text": "Task 2: Investigate the discrepancy\n\nCarefully review the script and identify at least two decisions an analyst must make between the panel dataset and the final table. Document these in your report. For each decision, propose an alternative the authors might have used.\nTry changing the script to test your hypotheses about why your table differs from the published result. Try to match as many columns as you can (to one decimal place).\n\nCreate your own function within analysis.jl, using report_mean_growth() as a starting point.\n\nRecord which columns matched (if any), and try to explain what additional information you would need to account for any remaining discrepancy.",
+    "objectID": "labs/lab0-setup.html#in-person",
+    "href": "labs/lab0-setup.html#in-person",
+    "title": "Lab 0: Setting Up Your Workspace",
+    "section": "In Person",
+    "text": "In Person\nThe following tasks involve using the class Docker image. Instructions are to be carried out inside a running container unless otherwise specified.\n\n1. Download and install Quarto\n\nInside your terminal, run uname -m to determine whether your container is setup with an arm64 or x86_64 architecture.\nBased on the result in the previous step, download Quarto using curl:\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz\nor\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz\nNext, unpack files from the tarball into /home/student/.local:\ntar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local\nFinally, check that Quarto can be run from your terminal (and therefore seen by other programs) with\nquarto check\n\n\n\n2. Let us know your GitHub username\nFill out the Google form to record the username you wish to use for this course. It will be used to set up your private repository for this class.\n\n\n3. Fill out the class survey\nSee this Google form to answer a few questions. It will help the instructors understand everyone’s background.\n\n\n4. Practice creating your first Quarto document\nSee the notes on Quarto and explore Quarto’s features.",
     "crumbs": [
       "Labs",
-      "Lab 4 (Reproducibility)"
-    ]
-  },
-  {
-    "objectID": "labs/lab4-reproducibility.html#task-3-reflection",
-    "href": "labs/lab4-reproducibility.html#task-3-reflection",
-    "title": "Lab 4: Reproducibility",
-    "section": "Task 3: Reflection",
-    "text": "Task 3: Reflection\n\nWhich parts of the gap could you detect from the data alone, and which would need the authors’ files?\nIf reproducing a study hinges on very few observations, how much should a headline result rest on them?\nWhat would the authors have needed to publish for you to find the problem in 5 minutes instead of however long it took you?\nIs averaging the country mean, rather than pooling every country-year, an error or a choice? Where is the line between them?\nIn your own results, growth is still lower in the highest debt group. Do the differences between your table and the published one change anything about the conclusion?",
-    "crumbs": [
-      "Labs",
-      "Lab 4 (Reproducibility)"
-    ]
-  },
-  {
-    "objectID": "labs/lab4-reproducibility.html#reminders",
-    "href": "labs/lab4-reproducibility.html#reminders",
-    "title": "Lab 4: Reproducibility",
-    "section": "Reminders",
-    "text": "Reminders\n\nMake sure you tag the assignment: git tag lab4.\nMake sure you push the tags, too: git push followed by git push --tags.",
-    "crumbs": [
-      "Labs",
-      "Lab 4 (Reproducibility)"
-    ]
-  },
-  {
-    "objectID": "labs/lab2-debug.html",
-    "href": "labs/lab2-debug.html",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "",
-    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
-    "crumbs": [
-      "Labs",
-      "Lab 2 (Errors and Debugging)"
-    ]
-  },
-  {
-    "objectID": "labs/lab2-debug.html#goals",
-    "href": "labs/lab2-debug.html#goals",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "",
-    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
-    "crumbs": [
-      "Labs",
-      "Lab 2 (Errors and Debugging)"
-    ]
-  },
-  {
-    "objectID": "labs/lab2-debug.html#instructions",
-    "href": "labs/lab2-debug.html#instructions",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "Instructions",
-    "text": "Instructions\n\nThere is no required programming for this assignment.\nWorking on your own or as a class, you will identify and fix 4 bugs lurking in Julia code.\nYou will submit your work in a file named bugs.qmd under a lab2 directory. This file must contain the following information for each bug:\n\nWhat is the bug/error? Briefly describe it.\nWhat line number does the error/bug occur on?\nDoes Julia produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?\nHow can it be fixed? Briefly describe a solution.\n\nIn addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.\nIf you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.\nParticipate in the discussion, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.",
-    "crumbs": [
-      "Labs",
-      "Lab 2 (Errors and Debugging)"
-    ]
-  },
-  {
-    "objectID": "labs/lab2-debug.html#the-code",
-    "href": "labs/lab2-debug.html#the-code",
-    "title": "Lab 2: Errors and Debugging",
-    "section": "The Code",
-    "text": "The Code\nfunction process_order(items, tax_rate)\n  subtotal = 0.0\n\n  # Process each item in the order\n  for item in items\n    price = item[\"price\"]\n    quantity = item[\"quantity\"]\n\n    # Calculate item cost and add to subtotal\n    subtotal = price * quantity\n\n  # Calculate shipping\n  if subtotal &gt; 50.0\n    shipping = 0.0\n  else\n    shipping = 5.00\n  end\n\n  total = subtotal * (1.0 + tax_rate) + shipping\n  return total\nend",
-    "crumbs": [
-      "Labs",
-      "Lab 2 (Errors and Debugging)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html",
-    "href": "labs/lab3-io.html",
-    "title": "Lab 3: I/O Handling",
-    "section": "",
-    "text": "By the end of this lab, you should\n\nhave an understanding of text versus binary files,\nbe able to distinguish between flat versus hierarchical file types, and\nbe able to load numeric data using DelimitedFiles.jl or CSV.jl.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#goals",
-    "href": "labs/lab3-io.html#goals",
-    "title": "Lab 3: I/O Handling",
-    "section": "",
-    "text": "By the end of this lab, you should\n\nhave an understanding of text versus binary files,\nbe able to distinguish between flat versus hierarchical file types, and\nbe able to load numeric data using DelimitedFiles.jl or CSV.jl.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#data-storage-formats",
-    "href": "labs/lab3-io.html#data-storage-formats",
-    "title": "Lab 3: I/O Handling",
-    "section": "Data storage formats",
-    "text": "Data storage formats\n\nFiles on a computer can be categorized as text files or binary files. Both file types are encoded as bit patterns.\nText files encode individual characters, allowing text editor programs to easily display the contents of a file to a user.\n\nExamples: CSV (.csv), TSV (.tsv), HTML (.html), XML (.xml), JSON (.json)\nOften has a specific standard defining how these files are formatted; for example valid CSV files should adhere to RFC 41800.\nInternal markup language/syntax is fairly simple.\nUsually, but not always, related to storing a dataset in the sense that is familiar to statisticians/data scientists.\n\nBinary files have their contents encoded in a (sometimes proprietary) specialized format. These types of files are typically not meant to be manipulated by text editors, and instead use their specialized representation to minimize file size or enhance performance in certain workflows.\n\nExamples: R data (.Rda and similar file types), Arrow (.arrow), Parquet (.parquet), Python’s Pickle format (.pkl or .pickle), HDF5 (.hdf5), JLD2 (.jld2).\nWho knows how the contents are stored… it does not matter for the intended use.\nOften, but not always, related to the idea of serializing objects in a programming language so they can be reused across sessions.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#text-file-types",
-    "href": "labs/lab3-io.html#text-file-types",
-    "title": "Lab 3: I/O Handling",
-    "section": "Text file types",
-    "text": "Text file types\n\nFlat text files\nFlat text files are straightforward. Other than relying on a few special characters to separate distinct items, the textual representation you see exactly defines the data.\n\nCommon format for tabular data: 1 row = 1 observation and 1 column = 1 variable, field, or parameter.\nMight rely on fixed width format in which each value must be encoded as text of a certain length.\nMight rely on a delimiter to separate distinct values.\n\nOne annoying quirk: Windows and Linux-like systems use different line endings!\n\nLine endings typically handled by invisible ASCII characters.\nIf you create a file on Windows: newline \\n and carriage return \\r.\nIf you create a file on MacOS/UNIX/Linux: only newline \\n.\n\n\n\nHierarchical text files\nSome text files rely on a hierarchical structure defined by an elaborate markup language. A classic example is HTML:\n\nUsually starts with &lt;!DOCTYPE html&gt; as a document type declaration (if adhering to W3C standards).\nFollowed by an opening &lt;html&gt; tag…\nFollowed by a nested &lt;head&gt;&lt;/head&gt; section…\nFollowed by a nested &lt;body&gt;&lt;/body&gt;…\nAnd finally closed out by an &lt;/html&gt; tag.\n\nWe can edit these by hand, but its best to use a specialized editor to parse and edit, whenever possible.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#how-to-read-and-write",
-    "href": "labs/lab3-io.html#how-to-read-and-write",
-    "title": "Lab 3: I/O Handling",
-    "section": "How to read and write",
-    "text": "How to read and write\n\nStreams\nJulia’s support for powerful abstraction makes it so you can get by only knowing about the open() command \\(\\pm\\) 1 or 2 additional tools. Specifically, the patterns you should commit to memory are:\n\n# to read a file\nopen(\"path/to/file\", \"r\") do io\n  # do something with the IO stream\nend\n\n\n# to (over)write to a file\nopen(\"path/to/file\", \"w\") do io\n  # do something with the IO stream\nend\n\nIn both instances, you are manipulating an IOStream object that handles the logic of reading and writing the contents of a file. The patterns above ensure you always close out the underlying stream. There are many convenience functions like read(), readlines(), and write() that you might also find helpful.\nYou’ve already been working with streams:\n\nstdout, the standard output stream. This is used to handle the logic of displaying information to you when you run commands in the Julia REPL.\nstdin, the standard input stream. This is used to handle the logic of reading and parsing commands you enter in the Julia REPL.\n\nThe following focuses on the DelimitedFiles.jl and CSV.jl packages.\n\n\nHow to read a file\nUsing DelimitedFiles (part of the standard library):\n\nusing DelimitedFiles\n\nmydata = readdlm(\"../hw/assets/nnmf-2429-by-361-face.txt\")\nmydata\n\n2429×361 Matrix{Float64}:\n 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0\n 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0\n 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0\n 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0\n 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0\n 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156\n 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135\n 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566\n 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828\n 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778\n ⋮                                          ⋱                      ⋮\n 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0\n 0.0        0.0       0.0        0.0           0.0       0.0       0.0\n 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529\n 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001\n 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0\n 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023\n 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951\n 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0\n 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908\n\n\nThis “just works”, but we blindly relied on the readdlm() function to detect structure in the file. Here’s what the first 2 lines look like (output from head -n 2 nnmf-2429-by-361-face.txt):\n0.14815 0.018294 0.027569 0 0.083222 0.10177 0.38004 0.51917 0.43569 0.38004 0.29656 0.25946 0.31511 0.2038 0.083222 0.018294 0.064671 0.018294 0 0.31511 0.1296 0.018294 0 0 0.055395 0.15743 0.25946 0.55627 0.42641 0.45424 0.37076 0.38931 0.34293 0.28728 0.21308 0.04612 0 0 0.50062 0.25946 0 0 0 0 0.2409 0.41714 0.45424 0.53772 0.43569 0.40786 0.38004 0.35221 0.38931 0.35221 0.30583 0.22235 0.018294 0.6583 0.29656 0.1296 0.51917 0.11105 0.073946 0.34293 0.53772 0.63975 0.6583 0.52844 0.45424 0.50989 0.47279 0.36149 0.22235 0.30583 0.36149 0.055395 0.68613 0.14815 0 0 0.18525 0.18525 0.31511 0.63975 0.64902 0.71395 0.59337 0.50989 0.63975 0.42641 0.11105 0.092497 0.027569 0.15743 0.19453 0.64902 0.073946 0 0.15743 0.2038 0.15743 0.37076 0.6212 0.63047 0.84381 0.87164 0.63975 0.57482 0.2038 0.04612 0 0 0.18525 0.40786 0.7325 0.29656 0 0.1296 0.018294 0.073946 0.28728 0.31511 0.41714 0.59337 0.67685 0.64902 0.46352 0.036844 0.17598 0 0 0.22235 0.32438 0.82526 0.36149 0.28728 0.12032 0.064671 0.21308 0.38931 0.32438 0.2409 0.13887 0.04612 0.055395 0.1667 0.073946 0.33366 0 0 0.18525 0.25018 0.89946 0.50989 0.21308 0.1667 0.083222 0.073946 0.092497 0.083222 0.073946 0.23163 0.2409 0 0.04612 0.23163 0.49134 0.036844 0 0.30583 0.23163 0.89946 0.68613 0.82526 0.53772 0.53772 0.54699 0.46352 0.48207 0.63975 0.80671 0.87164 0.29656 0.1667 0.29656 0.50062 0.17598 0.018294 0.31511 0.18525 0.80671 0.57482 0.26873 0.2409 0.29656 0.33366 0.21308 0.28728 0.36149 0.38004 0.56555 0.14815 0.19453 0.28728 0.43569 0.036844 0 0.25018 0.21308 0.55627 0 0 0.19453 0 0 0.055395 0 0 0.018294 0.018294 0 0 0.17598 0.34293 0 0 0.26873 0.13887 0.46352 0 0.092497 0.42641 0.12032 0 0.1296 0.23163 0.28728 0.36149 0.25946 0.19453 0.083222 0.027569 0.14815 0 0 0.12032 0.32438 0.25018 0.064671 0.018294 0.93656 0.38004 0.073946 0.32438 0.32438 0.49134 0.70468 0.88091 0.56555 0.23163 0.036844 0.11105 0 0.25946 0.34293 0.2038 0.17598 0 0 0 0.10177 0.13887 0.42641 0.55627 0.57482 0.6954 0.66758 0.70468 0.42641 0.073946 0 0 0.22235 0.26873 0.29656 0.32438 0 0.04612 0 0.036844 0.14815 0.35221 0.50989 0.68613 0.63047 0.61192 0.60265 0.63047 0.19453 0.064671 0.018294 0.15743 0.19453 0.1296 0.14815 0 0 0 0 0.11105 0.38931 0.42641 0.6212 0.5841 0.50989 0.43569 0.47279 0.39859 0.25018 0.34293 0.50989 0.41714 0.19453 0.12032 0 0.027569 0 0 0.064671 0.13887 0.23163 0.41714 0.43569 0.37076 0.38004 0.40786 0.35221 0.38004 0.32438 0.26873 0.13887 0 0 0.027569 0 0.0090181 0.036844 0.064671 0.13887 0.30583 0.37076 0.37076 0.26873 0.28728 0.28728 0.19453 0.073946 0 0 0 0\n0.20667 0.095859 0.0020948 0.10438 0 0.053239 0.17258 0.41977 0.45387 0.3942 0.31748 0.24929 0.28339 0.27486 0.15553 0.053239 0.019143 0.070287 0 0.3942 0.23224 0.027667 0 0 0 0.11291 0.15553 0.33453 0.44534 0.38568 0.41977 0.32601 0.35158 0.30896 0.24929 0.16405 0.0020948 0 0.61582 0.47944 0 0 0 0 0.061763 0.31748 0.36863 0.45387 0.47092 0.38568 0.37715 0.33453 0.33453 0.35158 0.30896 0.26634 0.15553 0.71811 0.59025 0 0.11291 0.66697 0.0020948 0.16405 0.34306 0.51354 0.59878 0.58173 0.46239 0.4283 0.45387 0.41977 0.29191 0.20667 0.33453 0.29191 0.81188 0.55616 0 0 0 0.1811 0.22372 0.40272 0.56468 0.61582 0.6414 0.50501 0.50501 0.59025 0.28339 0.078811 0.053239 0.095859 0.12143 0.78631 0.53911 0 0 0.31748 0.12996 0.15553 0.47092 0.55616 0.6414 0.81188 0.73516 0.59025 0.4283 0.11291 0.061763 0 0.10438 0.26634 0.8204 0.56468 0.18962 0.095859 0.078811 0.019143 0.10438 0.29191 0.30896 0.4283 0.59025 0.62435 0.55616 0.30896 0.027667 0.15553 0 0 0.23224 0.99088 0.64992 0.29191 0.15553 0.34306 0 0.30896 0.35158 0.25782 0.20667 0.10438 0.010619 0.12143 0.095859 0.12996 0.23224 0 0 0.22372 0.93121 0.72664 0.41977 0.070287 0.16405 0.070287 0.070287 0.087335 0.078811 0.087335 0.25782 0.12143 0 0.095859 0.29191 0.32601 0 0.12996 0.30044 0.8545 0.77778 0.6073 0.81188 0.49649 0.50501 0.48796 0.41125 0.49649 0.6073 0.81188 0.67549 0.15553 0.24929 0.28339 0.40272 0.061763 0.2152 0.30044 0.93121 0.65845 0.44534 0.19815 0.23224 0.30896 0.26634 0.20667 0.27486 0.34306 0.3942 0.47092 0.061763 0.24077 0.28339 0.28339 0 0.18962 0.19815 0.70959 0.37715 0 0.0020948 0.24929 0 0 0.044715 0 0 0.044715 0 0.070287 0 0.25782 0.15553 0 0.11291 0.24077 0.62435 0.2152 0.053239 0.12143 0.55616 0 0.010619 0.147 0.23224 0.26634 0.32601 0.20667 0.18962 0 0.087335 0.036191 0 0.010619 0.1811 0.53911 0.078811 0.036191 0.095859 0.98236 0.15553 0.13848 0.30044 0.35158 0.49649 0.71811 0.76926 0.43682 0.12996 0.053239 0.027667 0 0.28339 0.26634 0.58173 0 0 0 0 0.12143 0.18962 0.52206 0.45387 0.58173 0.6414 0.6073 0.65845 0.24077 0.027667 0 0 0.2152 0.26634 0.59878 0.10438 0 0 0 0.036191 0.24077 0.4283 0.47092 0.64992 0.5732 0.54763 0.58173 0.48796 0.13848 0.044715 0.044715 0.12996 0.19815 0.31748 0.061763 0 0 0 0 0.20667 0.40272 0.41977 0.59878 0.52206 0.44534 0.40272 0.43682 0.30896 0.24929 0.3601 0.47944 0.33453 0.24929 0.053239 0 0.027667 0 0 0.087335 0.16405 0.24077 0.4283 0.38568 0.32601 0.3601 0.36863 0.32601 0.32601 0.29191 0.22372 0.087335 0 0 0.0020948 0 0.019143 0.036191 0.070287 0.16405 0.33453 0.33453 0.31748 0.24077 0.28339 0.24077 0.16405 0.044715 0 0 0\n\nNo header line.\nNot fixed-width as we can see violations of that format in the last few entries on both lines.\nDelimited, since a single space character, ' ', is used to separate values.\nAn invisible line ending is used to place rows on separate lines. Should be '\\n'. Verify this on your own.\nThe data happens to be numeric floating point numbers. Is Float64 optimal here? Maybe we could get away with Float32…\n\nEven if a parser’s heuristic defaults work, you should practice fully specifying how you load the data:\n\nusing DelimitedFiles\n\nmydata = readdlm(\"../hw/assets/nnmf-2429-by-361-face.txt\", ' ', Float64; header = false)\nmydata\n\n2429×361 Matrix{Float64}:\n 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0\n 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0\n 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0\n 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0\n 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0\n 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156\n 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135\n 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566\n 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828\n 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778\n ⋮                                          ⋱                      ⋮\n 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0\n 0.0        0.0       0.0        0.0           0.0       0.0       0.0\n 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529\n 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001\n 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0\n 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023\n 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951\n 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0\n 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908\n\n\n\nSame result.\nThis approach documents what we relied on to parse the data into an appropriate Julia object.\nPeople living in the future will thank you for your benevolence.\n\nAlternatively, we can use the combination of CSV.jl with Tables.jl to parse and import the data as a Matrix{Float64}:\n\nusing CSV, Tables\nmydata = CSV.read(\"../hw/assets/nnmf-2429-by-361-face.txt\", Tables.matrix; header = false)\n\n\nTables.jl: provides a specification for what “tabular data” means. The CSV.jl package uses it to some extent.\nCSV.jl: handles parsing a CSV file based on a careful definition of how these files are defined. Will work with other delimiters like tabs, \\t, pipes |, and so on.\nBoth of these packages have too many features to list here.\n\n\n\nHow to write a file\nUsing DelimitedFiles.jl:\n\nusing DelimitedFiles, Images\n\nmyitem = mydata[:, 1]\nwritedlm(\"whatisthis.txt\", myitem, ' ')\n\nUsing CSV.jl + Tables.jl:\n\nusing CSV, Tables\n\nmyitem = mydata[:, 1]\nCSV.write(\"whatisthis.txt\", Tables.table(myitem), delim = ' ', header=false)\n\n\nCSV expects the object to be saved to generate “rows”. Since a Vector{Float64} iterates Float64 values, CSV.jl will complain that your object is not a table.\nWrap it in Tables.table() to specify a table-like structure. You use it to add a header.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#handling-file-paths",
-    "href": "labs/lab3-io.html#handling-file-paths",
-    "title": "Lab 3: I/O Handling",
-    "section": "Handling file paths",
-    "text": "Handling file paths\nEarlier you encountered the relative file path \"../hw/assets/nnmf-2429-by-361-face.txt\". This is bad because Windows and Linux-like systems use different file path separators. The better, robust alternative is to use joinpath() to form paths:\n\njoinpath(\"..\", \"hw\", \"assets\", \"nnmf-2429-by-361-face.txt\")\n\n\"../hw/assets/nnmf-2429-by-361-face.txt\"\n\n\nThis will \\(\\text{Do The Right Thing}^{\\text{TM}}\\) depending on the underlying operating system.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
-    ]
-  },
-  {
-    "objectID": "labs/lab3-io.html#questions-and-exercises",
-    "href": "labs/lab3-io.html#questions-and-exercises",
-    "title": "Lab 3: I/O Handling",
-    "section": "Questions and Exercises",
-    "text": "Questions and Exercises\n\nThis lab involves applying the ideas above to do a bit of exploration on handling different file types.\nCreate a file named io.qmd under a lab3 directory.\nYou are free to include as much or as little code as you wish. The only requirement is that you answer the following questions.\n\n\nQuestion 1\nCreate a copy of the file nnmf-2429-by-361-face.txt named nnmf-2429-by-361-face.dat. Does changing the file extension change how DelimitedFiles or CSV interpret this file? Explain why you think this is the case.\n\n\nQuestion 2\nNavigate to the UCI Machine Learning Repository page for the Auto MPG dataset. Download the ZIP file and decompress it. You can do this any way you find suitable, but challenge yourself to do it all through our class Linux container. How can you load the auto-mpg.data-original file contained in the ZIP archive to Julia?\n\n\nQuestion 3 (Optional)\nBundling files into archives (like ZIP or Tar) is a common and popular way to share files with others. Often, this involves some compression to reduce file size and make transfers as fast as possible. The ZipArchives package provides an interface to working with the ZIP file format.\nRepeat the task in Question 2, operating directly on the ZIP file you downloaded. Use it to read auto-mpg.data-original directly from the ZIP file and correctly encode missing values as the missing type in Julia. The DataFrames can be useful for this purpose. See the tutorial here: https://csv.juliadata.org/stable/examples/#zip_example.\n\n\nQuestion 4 (Optional)\nIn a simple step-by-step procedure, describe how you can create a ZIP archive to store several outputs generated by Some Fancy Algorithm. For the sake of this example, let’s assume the outputs are all Matrix{Float64} objects.",
-    "crumbs": [
-      "Labs",
-      "Lab 3 (File I/O)"
+      "Lab 0 (Getting Started)"
     ]
   },
   {
@@ -1789,58 +1646,267 @@
     ]
   },
   {
-    "objectID": "labs/lab0-setup.html",
-    "href": "labs/lab0-setup.html",
-    "title": "Lab 0: Setting Up Your Workspace",
+    "objectID": "labs/lab3-io.html",
+    "href": "labs/lab3-io.html",
+    "title": "Lab 3: I/O Handling",
     "section": "",
-    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
+    "text": "By the end of this lab, you should\n\nhave an understanding of text versus binary files,\nbe able to distinguish between flat versus hierarchical file types, and\nbe able to load numeric data using DelimitedFiles.jl or CSV.jl.",
     "crumbs": [
       "Labs",
-      "Lab 0 (Getting Started)"
+      "Lab 3 (File I/O)"
     ]
   },
   {
-    "objectID": "labs/lab0-setup.html#goals",
-    "href": "labs/lab0-setup.html#goals",
-    "title": "Lab 0: Setting Up Your Workspace",
+    "objectID": "labs/lab3-io.html#goals",
+    "href": "labs/lab3-io.html#goals",
+    "title": "Lab 3: I/O Handling",
     "section": "",
-    "text": "Access a virtualized computing environment as a local Docker container.\nIntegrate your computing environment with VS Code.\nConfigure Git for documenting your work and submitting assignments.\nPractice setting up software in a Unix-like environment.",
+    "text": "By the end of this lab, you should\n\nhave an understanding of text versus binary files,\nbe able to distinguish between flat versus hierarchical file types, and\nbe able to load numeric data using DelimitedFiles.jl or CSV.jl.",
     "crumbs": [
       "Labs",
-      "Lab 0 (Getting Started)"
+      "Lab 3 (File I/O)"
     ]
   },
   {
-    "objectID": "labs/lab0-setup.html#the-tools",
-    "href": "labs/lab0-setup.html#the-tools",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "The Tools",
-    "text": "The Tools\nYou are responsible for installing the following on your machine:\n\nDocker Desktop\nVS Code\n\nOnce you create a container using the class image, you will have access to:\n\na Unix Shell (we will use zsh by default),\nGit,\nQuarto, and\nJulia 1.12.7.\n\nIn addition to various tools installed on the image (i.e. Unix utilities), you also have access to\n\nPython 3.14,\nR 4.5, and\nDuckDB 1.5.5.",
+    "objectID": "labs/lab3-io.html#data-storage-formats",
+    "href": "labs/lab3-io.html#data-storage-formats",
+    "title": "Lab 3: I/O Handling",
+    "section": "Data storage formats",
+    "text": "Data storage formats\n\nFiles on a computer can be categorized as text files or binary files. Both file types are encoded as bit patterns.\nText files encode individual characters, allowing text editor programs to easily display the contents of a file to a user.\n\nExamples: CSV (.csv), TSV (.tsv), HTML (.html), XML (.xml), JSON (.json)\nOften has a specific standard defining how these files are formatted; for example valid CSV files should adhere to RFC 41800.\nInternal markup language/syntax is fairly simple.\nUsually, but not always, related to storing a dataset in the sense that is familiar to statisticians/data scientists.\n\nBinary files have their contents encoded in a (sometimes proprietary) specialized format. These types of files are typically not meant to be manipulated by text editors, and instead use their specialized representation to minimize file size or enhance performance in certain workflows.\n\nExamples: R data (.Rda and similar file types), Arrow (.arrow), Parquet (.parquet), Python’s Pickle format (.pkl or .pickle), HDF5 (.hdf5), JLD2 (.jld2).\nWho knows how the contents are stored… it does not matter for the intended use.\nOften, but not always, related to the idea of serializing objects in a programming language so they can be reused across sessions.",
     "crumbs": [
       "Labs",
-      "Lab 0 (Getting Started)"
+      "Lab 3 (File I/O)"
     ]
   },
   {
-    "objectID": "labs/lab0-setup.html#on-your-own",
-    "href": "labs/lab0-setup.html#on-your-own",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "On Your Own",
-    "text": "On Your Own\n\n1. Get the class Docker image working on your computer\nRead the guide on how to use Docker in this class.\n\n\n2. Practice using the terminal\nRead the notes on the Unix shell and experiment inside a container.\n\n\n3. Read up on Git, GitHub, the SSH protocol\nTry setting up Git on your container and create your GitHub account.\n\nWhat is Git? and How to configure Git.\nHow to set up your GitHub account.\nWhat is SSH?.",
+    "objectID": "labs/lab3-io.html#text-file-types",
+    "href": "labs/lab3-io.html#text-file-types",
+    "title": "Lab 3: I/O Handling",
+    "section": "Text file types",
+    "text": "Text file types\n\nFlat text files\nFlat text files are straightforward. Other than relying on a few special characters to separate distinct items, the textual representation you see exactly defines the data.\n\nCommon format for tabular data: 1 row = 1 observation and 1 column = 1 variable, field, or parameter.\nMight rely on fixed width format in which each value must be encoded as text of a certain length.\nMight rely on a delimiter to separate distinct values.\n\nOne annoying quirk: Windows and Linux-like systems use different line endings!\n\nLine endings typically handled by invisible ASCII characters.\nIf you create a file on Windows: newline \\n and carriage return \\r.\nIf you create a file on MacOS/UNIX/Linux: only newline \\n.\n\n\n\nHierarchical text files\nSome text files rely on a hierarchical structure defined by an elaborate markup language. A classic example is HTML:\n\nUsually starts with &lt;!DOCTYPE html&gt; as a document type declaration (if adhering to W3C standards).\nFollowed by an opening &lt;html&gt; tag…\nFollowed by a nested &lt;head&gt;&lt;/head&gt; section…\nFollowed by a nested &lt;body&gt;&lt;/body&gt;…\nAnd finally closed out by an &lt;/html&gt; tag.\n\nWe can edit these by hand, but its best to use a specialized editor to parse and edit, whenever possible.",
     "crumbs": [
       "Labs",
-      "Lab 0 (Getting Started)"
+      "Lab 3 (File I/O)"
     ]
   },
   {
-    "objectID": "labs/lab0-setup.html#in-person",
-    "href": "labs/lab0-setup.html#in-person",
-    "title": "Lab 0: Setting Up Your Workspace",
-    "section": "In Person",
-    "text": "In Person\nThe following tasks involve using the class Docker image. Instructions are to be carried out inside a running container unless otherwise specified.\n\n1. Download and install Quarto\n\nInside your terminal, run uname -m to determine whether your container is setup with an arm64 or x86_64 architecture.\nBased on the result in the previous step, download Quarto using curl:\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-arm64.tar.gz\nor\ncurl -fL -o quarto.tar.gz \\\nhttps://github.com/quarto-dev/quarto-cli/releases/download/v1.10.18/quarto-1.10.18-linux-amd64.tar.gz\nNext, unpack files from the tarball into /home/student/.local:\ntar -xvzf quarto.tar.gz --strip-components=1 -C ~/.local\nFinally, check that Quarto can be run from your terminal (and therefore seen by other programs) with\nquarto check\n\n\n\n2. Let us know your GitHub username\nFill out the Google form to record the username you wish to use for this course. It will be used to set up your private repository for this class.\n\n\n3. Fill out the class survey\nSee this Google form to answer a few questions. It will help the instructors understand everyone’s background.\n\n\n4. Practice creating your first Quarto document\nSee the notes on Quarto and explore Quarto’s features.",
+    "objectID": "labs/lab3-io.html#how-to-read-and-write",
+    "href": "labs/lab3-io.html#how-to-read-and-write",
+    "title": "Lab 3: I/O Handling",
+    "section": "How to read and write",
+    "text": "How to read and write\n\nStreams\nJulia’s support for powerful abstraction makes it so you can get by only knowing about the open() command \\(\\pm\\) 1 or 2 additional tools. Specifically, the patterns you should commit to memory are:\n\n# to read a file\nopen(\"path/to/file\", \"r\") do io\n  # do something with the IO stream\nend\n\n\n# to (over)write to a file\nopen(\"path/to/file\", \"w\") do io\n  # do something with the IO stream\nend\n\nIn both instances, you are manipulating an IOStream object that handles the logic of reading and writing the contents of a file. The patterns above ensure you always close out the underlying stream. There are many convenience functions like read(), readlines(), and write() that you might also find helpful.\nYou’ve already been working with streams:\n\nstdout, the standard output stream. This is used to handle the logic of displaying information to you when you run commands in the Julia REPL.\nstdin, the standard input stream. This is used to handle the logic of reading and parsing commands you enter in the Julia REPL.\n\nThe following focuses on the DelimitedFiles.jl and CSV.jl packages.\n\n\nHow to read a file\nUsing DelimitedFiles (part of the standard library):\n\nusing DelimitedFiles\n\nmydata = readdlm(\"../hw/assets/nnmf-2429-by-361-face.txt\")\nmydata\n\n2429×361 Matrix{Float64}:\n 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0\n 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0\n 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0\n 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0\n 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0\n 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156\n 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135\n 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566\n 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828\n 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778\n ⋮                                          ⋱                      ⋮\n 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0\n 0.0        0.0       0.0        0.0           0.0       0.0       0.0\n 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529\n 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001\n 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0\n 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023\n 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951\n 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0\n 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908\n\n\nThis “just works”, but we blindly relied on the readdlm() function to detect structure in the file. Here’s what the first 2 lines look like (output from head -n 2 nnmf-2429-by-361-face.txt):\n0.14815 0.018294 0.027569 0 0.083222 0.10177 0.38004 0.51917 0.43569 0.38004 0.29656 0.25946 0.31511 0.2038 0.083222 0.018294 0.064671 0.018294 0 0.31511 0.1296 0.018294 0 0 0.055395 0.15743 0.25946 0.55627 0.42641 0.45424 0.37076 0.38931 0.34293 0.28728 0.21308 0.04612 0 0 0.50062 0.25946 0 0 0 0 0.2409 0.41714 0.45424 0.53772 0.43569 0.40786 0.38004 0.35221 0.38931 0.35221 0.30583 0.22235 0.018294 0.6583 0.29656 0.1296 0.51917 0.11105 0.073946 0.34293 0.53772 0.63975 0.6583 0.52844 0.45424 0.50989 0.47279 0.36149 0.22235 0.30583 0.36149 0.055395 0.68613 0.14815 0 0 0.18525 0.18525 0.31511 0.63975 0.64902 0.71395 0.59337 0.50989 0.63975 0.42641 0.11105 0.092497 0.027569 0.15743 0.19453 0.64902 0.073946 0 0.15743 0.2038 0.15743 0.37076 0.6212 0.63047 0.84381 0.87164 0.63975 0.57482 0.2038 0.04612 0 0 0.18525 0.40786 0.7325 0.29656 0 0.1296 0.018294 0.073946 0.28728 0.31511 0.41714 0.59337 0.67685 0.64902 0.46352 0.036844 0.17598 0 0 0.22235 0.32438 0.82526 0.36149 0.28728 0.12032 0.064671 0.21308 0.38931 0.32438 0.2409 0.13887 0.04612 0.055395 0.1667 0.073946 0.33366 0 0 0.18525 0.25018 0.89946 0.50989 0.21308 0.1667 0.083222 0.073946 0.092497 0.083222 0.073946 0.23163 0.2409 0 0.04612 0.23163 0.49134 0.036844 0 0.30583 0.23163 0.89946 0.68613 0.82526 0.53772 0.53772 0.54699 0.46352 0.48207 0.63975 0.80671 0.87164 0.29656 0.1667 0.29656 0.50062 0.17598 0.018294 0.31511 0.18525 0.80671 0.57482 0.26873 0.2409 0.29656 0.33366 0.21308 0.28728 0.36149 0.38004 0.56555 0.14815 0.19453 0.28728 0.43569 0.036844 0 0.25018 0.21308 0.55627 0 0 0.19453 0 0 0.055395 0 0 0.018294 0.018294 0 0 0.17598 0.34293 0 0 0.26873 0.13887 0.46352 0 0.092497 0.42641 0.12032 0 0.1296 0.23163 0.28728 0.36149 0.25946 0.19453 0.083222 0.027569 0.14815 0 0 0.12032 0.32438 0.25018 0.064671 0.018294 0.93656 0.38004 0.073946 0.32438 0.32438 0.49134 0.70468 0.88091 0.56555 0.23163 0.036844 0.11105 0 0.25946 0.34293 0.2038 0.17598 0 0 0 0.10177 0.13887 0.42641 0.55627 0.57482 0.6954 0.66758 0.70468 0.42641 0.073946 0 0 0.22235 0.26873 0.29656 0.32438 0 0.04612 0 0.036844 0.14815 0.35221 0.50989 0.68613 0.63047 0.61192 0.60265 0.63047 0.19453 0.064671 0.018294 0.15743 0.19453 0.1296 0.14815 0 0 0 0 0.11105 0.38931 0.42641 0.6212 0.5841 0.50989 0.43569 0.47279 0.39859 0.25018 0.34293 0.50989 0.41714 0.19453 0.12032 0 0.027569 0 0 0.064671 0.13887 0.23163 0.41714 0.43569 0.37076 0.38004 0.40786 0.35221 0.38004 0.32438 0.26873 0.13887 0 0 0.027569 0 0.0090181 0.036844 0.064671 0.13887 0.30583 0.37076 0.37076 0.26873 0.28728 0.28728 0.19453 0.073946 0 0 0 0\n0.20667 0.095859 0.0020948 0.10438 0 0.053239 0.17258 0.41977 0.45387 0.3942 0.31748 0.24929 0.28339 0.27486 0.15553 0.053239 0.019143 0.070287 0 0.3942 0.23224 0.027667 0 0 0 0.11291 0.15553 0.33453 0.44534 0.38568 0.41977 0.32601 0.35158 0.30896 0.24929 0.16405 0.0020948 0 0.61582 0.47944 0 0 0 0 0.061763 0.31748 0.36863 0.45387 0.47092 0.38568 0.37715 0.33453 0.33453 0.35158 0.30896 0.26634 0.15553 0.71811 0.59025 0 0.11291 0.66697 0.0020948 0.16405 0.34306 0.51354 0.59878 0.58173 0.46239 0.4283 0.45387 0.41977 0.29191 0.20667 0.33453 0.29191 0.81188 0.55616 0 0 0 0.1811 0.22372 0.40272 0.56468 0.61582 0.6414 0.50501 0.50501 0.59025 0.28339 0.078811 0.053239 0.095859 0.12143 0.78631 0.53911 0 0 0.31748 0.12996 0.15553 0.47092 0.55616 0.6414 0.81188 0.73516 0.59025 0.4283 0.11291 0.061763 0 0.10438 0.26634 0.8204 0.56468 0.18962 0.095859 0.078811 0.019143 0.10438 0.29191 0.30896 0.4283 0.59025 0.62435 0.55616 0.30896 0.027667 0.15553 0 0 0.23224 0.99088 0.64992 0.29191 0.15553 0.34306 0 0.30896 0.35158 0.25782 0.20667 0.10438 0.010619 0.12143 0.095859 0.12996 0.23224 0 0 0.22372 0.93121 0.72664 0.41977 0.070287 0.16405 0.070287 0.070287 0.087335 0.078811 0.087335 0.25782 0.12143 0 0.095859 0.29191 0.32601 0 0.12996 0.30044 0.8545 0.77778 0.6073 0.81188 0.49649 0.50501 0.48796 0.41125 0.49649 0.6073 0.81188 0.67549 0.15553 0.24929 0.28339 0.40272 0.061763 0.2152 0.30044 0.93121 0.65845 0.44534 0.19815 0.23224 0.30896 0.26634 0.20667 0.27486 0.34306 0.3942 0.47092 0.061763 0.24077 0.28339 0.28339 0 0.18962 0.19815 0.70959 0.37715 0 0.0020948 0.24929 0 0 0.044715 0 0 0.044715 0 0.070287 0 0.25782 0.15553 0 0.11291 0.24077 0.62435 0.2152 0.053239 0.12143 0.55616 0 0.010619 0.147 0.23224 0.26634 0.32601 0.20667 0.18962 0 0.087335 0.036191 0 0.010619 0.1811 0.53911 0.078811 0.036191 0.095859 0.98236 0.15553 0.13848 0.30044 0.35158 0.49649 0.71811 0.76926 0.43682 0.12996 0.053239 0.027667 0 0.28339 0.26634 0.58173 0 0 0 0 0.12143 0.18962 0.52206 0.45387 0.58173 0.6414 0.6073 0.65845 0.24077 0.027667 0 0 0.2152 0.26634 0.59878 0.10438 0 0 0 0.036191 0.24077 0.4283 0.47092 0.64992 0.5732 0.54763 0.58173 0.48796 0.13848 0.044715 0.044715 0.12996 0.19815 0.31748 0.061763 0 0 0 0 0.20667 0.40272 0.41977 0.59878 0.52206 0.44534 0.40272 0.43682 0.30896 0.24929 0.3601 0.47944 0.33453 0.24929 0.053239 0 0.027667 0 0 0.087335 0.16405 0.24077 0.4283 0.38568 0.32601 0.3601 0.36863 0.32601 0.32601 0.29191 0.22372 0.087335 0 0 0.0020948 0 0.019143 0.036191 0.070287 0.16405 0.33453 0.33453 0.31748 0.24077 0.28339 0.24077 0.16405 0.044715 0 0 0\n\nNo header line.\nNot fixed-width as we can see violations of that format in the last few entries on both lines.\nDelimited, since a single space character, ' ', is used to separate values.\nAn invisible line ending is used to place rows on separate lines. Should be '\\n'. Verify this on your own.\nThe data happens to be numeric floating point numbers. Is Float64 optimal here? Maybe we could get away with Float32…\n\nEven if a parser’s heuristic defaults work, you should practice fully specifying how you load the data:\n\nusing DelimitedFiles\n\nmydata = readdlm(\"../hw/assets/nnmf-2429-by-361-face.txt\", ' ', Float64; header = false)\nmydata\n\n2429×361 Matrix{Float64}:\n 0.14815    0.018294  0.027569   0.0        …  0.0       0.0       0.0\n 0.20667    0.095859  0.0020948  0.10438       0.0       0.0       0.0\n 0.020835   0.0       0.13617    0.0030917     0.0       0.0       0.0\n 0.0        0.25467   0.0        0.076619      0.14222   0.020391  0.0\n 0.0082034  0.0       0.16066    0.0           0.089516  0.059024  0.0\n 0.0        0.0       0.0        0.32852    …  0.21551   0.11192   0.027156\n 0.0        0.0       0.0        0.027593      0.28612   0.26544   0.14135\n 0.16249    0.15444   0.0095702  0.0           0.33151   0.33956   0.35566\n 0.090691   0.11932   0.1408     0.04774       0.34839   0.32692   0.29828\n 0.0        0.069167  0.098722   0.1135        0.34994   0.36472   0.32778\n ⋮                                          ⋱                      ⋮\n 0.2064     0.13341   0.04714    0.0        …  0.086955  0.067048  0.0\n 0.0        0.0       0.0        0.0           0.0       0.0       0.0\n 0.02175    0.16895   0.19282    0.10927       0.1411    0.12519   0.10529\n 0.053085   0.14702   0.22053    0.11026       0.14293   0.11843   0.049001\n 0.0        0.21869   0.27531    0.14588       0.085213  0.073079  0.0\n 0.0        0.040962  0.13268    0.14066    …  0.12072   0.076853  0.021023\n 0.0        0.010794  0.15355    0.11277       0.125     0.088292  0.018951\n 0.0        0.067969  0.2094     0.20132       0.16899   0.11646   0.0\n 0.0        0.0       0.0        0.0           0.2962    0.2268    0.17908\n\n\n\nSame result.\nThis approach documents what we relied on to parse the data into an appropriate Julia object.\nPeople living in the future will thank you for your benevolence.\n\nAlternatively, we can use the combination of CSV.jl with Tables.jl to parse and import the data as a Matrix{Float64}:\n\nusing CSV, Tables\nmydata = CSV.read(\"../hw/assets/nnmf-2429-by-361-face.txt\", Tables.matrix; header = false)\n\n\nTables.jl: provides a specification for what “tabular data” means. The CSV.jl package uses it to some extent.\nCSV.jl: handles parsing a CSV file based on a careful definition of how these files are defined. Will work with other delimiters like tabs, \\t, pipes |, and so on.\nBoth of these packages have too many features to list here.\n\n\n\nHow to write a file\nUsing DelimitedFiles.jl:\n\nusing DelimitedFiles, Images\n\nmyitem = mydata[:, 1]\nwritedlm(\"whatisthis.txt\", myitem, ' ')\n\nUsing CSV.jl + Tables.jl:\n\nusing CSV, Tables\n\nmyitem = mydata[:, 1]\nCSV.write(\"whatisthis.txt\", Tables.table(myitem), delim = ' ', header=false)\n\n\nCSV expects the object to be saved to generate “rows”. Since a Vector{Float64} iterates Float64 values, CSV.jl will complain that your object is not a table.\nWrap it in Tables.table() to specify a table-like structure. You use it to add a header.",
     "crumbs": [
       "Labs",
-      "Lab 0 (Getting Started)"
+      "Lab 3 (File I/O)"
+    ]
+  },
+  {
+    "objectID": "labs/lab3-io.html#handling-file-paths",
+    "href": "labs/lab3-io.html#handling-file-paths",
+    "title": "Lab 3: I/O Handling",
+    "section": "Handling file paths",
+    "text": "Handling file paths\nEarlier you encountered the relative file path \"../hw/assets/nnmf-2429-by-361-face.txt\". This is bad because Windows and Linux-like systems use different file path separators. The better, robust alternative is to use joinpath() to form paths:\n\njoinpath(\"..\", \"hw\", \"assets\", \"nnmf-2429-by-361-face.txt\")\n\n\"../hw/assets/nnmf-2429-by-361-face.txt\"\n\n\nThis will \\(\\text{Do The Right Thing}^{\\text{TM}}\\) depending on the underlying operating system.",
+    "crumbs": [
+      "Labs",
+      "Lab 3 (File I/O)"
+    ]
+  },
+  {
+    "objectID": "labs/lab3-io.html#questions-and-exercises",
+    "href": "labs/lab3-io.html#questions-and-exercises",
+    "title": "Lab 3: I/O Handling",
+    "section": "Questions and Exercises",
+    "text": "Questions and Exercises\n\nThis lab involves applying the ideas above to do a bit of exploration on handling different file types.\nCreate a file named io.qmd under a lab3 directory.\nYou are free to include as much or as little code as you wish. The only requirement is that you answer the following questions.\n\n\nQuestion 1\nCreate a copy of the file nnmf-2429-by-361-face.txt named nnmf-2429-by-361-face.dat. Does changing the file extension change how DelimitedFiles or CSV interpret this file? Explain why you think this is the case.\n\n\nQuestion 2\nNavigate to the UCI Machine Learning Repository page for the Auto MPG dataset. Download the ZIP file and decompress it. You can do this any way you find suitable, but challenge yourself to do it all through our class Linux container. How can you load the auto-mpg.data-original file contained in the ZIP archive to Julia?\n\n\nQuestion 3 (Optional)\nBundling files into archives (like ZIP or Tar) is a common and popular way to share files with others. Often, this involves some compression to reduce file size and make transfers as fast as possible. The ZipArchives package provides an interface to working with the ZIP file format.\nRepeat the task in Question 2, operating directly on the ZIP file you downloaded. Use it to read auto-mpg.data-original directly from the ZIP file and correctly encode missing values as the missing type in Julia. The DataFrames can be useful for this purpose. See the tutorial here: https://csv.juliadata.org/stable/examples/#zip_example.\n\n\nQuestion 4 (Optional)\nIn a simple step-by-step procedure, describe how you can create a ZIP archive to store several outputs generated by Some Fancy Algorithm. For the sake of this example, let’s assume the outputs are all Matrix{Float64} objects.",
+    "crumbs": [
+      "Labs",
+      "Lab 3 (File I/O)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html",
+    "href": "labs/lab2-debug.html",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "",
+    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#goals",
+    "href": "labs/lab2-debug.html#goals",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "",
+    "text": "By the end of this lab, you should be able to\n\nUnderstand how to read line numbers and read syntax error messages.\nFollow a stack trace to identify where runtime errors originate.\nTrace the flow of a program to step through changes in variables and catch potential errors.\nFormulate a strategy to identify silent logical errors related to implementation.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#instructions",
+    "href": "labs/lab2-debug.html#instructions",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "Instructions",
+    "text": "Instructions\n\nThere is no required programming for this assignment.\nWorking on your own or as a class, you will identify and fix 4 bugs lurking in Julia code.\nYou will submit your work in a file named bugs.qmd under a lab2 directory. This file must contain the following information for each bug:\n\nWhat is the bug/error? Briefly describe it.\nWhat line number does the error/bug occur on?\nDoes Julia produce a specific signal/message that alerts us to the error? If not, how is the bug/error detected?\nHow can it be fixed? Briefly describe a solution.\n\nIn addition to the required items in Item 3, briefly reflect on (a) whether identifying all 4 errors would have been easy without the knowledge of the number of errors, and (b) whether you feel better equipped to identifying these types of issues.\nIf you are a slow typer, it may be more prudent to take notes on the discussion and write up your work towards the end or after class.\nParticipate in the discussion, but be mindful of how much time you take up. There are multiple ways to approach debugging this problem and you may benefit from hearing other perspectives.",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab2-debug.html#the-code",
+    "href": "labs/lab2-debug.html#the-code",
+    "title": "Lab 2: Errors and Debugging",
+    "section": "The Code",
+    "text": "The Code\nfunction process_order(items, tax_rate)\n  subtotal = 0.0\n\n  # Process each item in the order\n  for item in items\n    price = item[\"price\"]\n    quantity = item[\"quantity\"]\n\n    # Calculate item cost and add to subtotal\n    subtotal = price * quantity\n\n  # Calculate shipping\n  if subtotal &gt; 50.0\n    shipping = 0.0\n  else\n    shipping = 5.00\n  end\n\n  total = subtotal * (1.0 + tax_rate) + shipping\n  return total\nend",
+    "crumbs": [
+      "Labs",
+      "Lab 2 (Errors and Debugging)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html",
+    "href": "labs/lab4-reproducibility.html",
+    "title": "Lab 4: Reproducibility",
+    "section": "",
+    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#before-class",
+    "href": "labs/lab4-reproducibility.html#before-class",
+    "title": "Lab 4: Reproducibility",
+    "section": "",
+    "text": "Download lab4.zip from Canvas. These materials are needed for this assignment.\nCreate a lab4 directory and extract the files into it.\nUse the provided Project.toml file to install the required packages. Specifically, navigate to lab4, start a Julia REPL, activate its environment, and run\n\n\nimport Pkg\nPkg.activate(\".\")\nPkg.instantiate()\n\n\nSkim through the DataFrames.jl documentation. It is very similar to R’s data.frame, data.table, and tibble objects. The first page has a link to a cheat sheet you might find helpful. You only need to understand how to filter/drop/select rows or columns for this exercise. Any other DataFrame features you might need you can implement by making modifications to the provided code.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#overview-instructions",
+    "href": "labs/lab4-reproducibility.html#overview-instructions",
+    "title": "Lab 4: Reproducibility",
+    "section": "Overview & Instructions",
+    "text": "Overview & Instructions\nIn this lab you will try to reproduce a headline result from a published study (to be revealed later).\nRR-processed.csv is an unbalanced panel (longitudinal) dataset of economic indicators for 20 countries, 1946 – 2009, with one row per country-year (1,175 rows). The two variables you need are:\n\ndebtgdp: public debt as a percentage of GDP. A value of 100 means public debt equals one year of economic output. It is positive and can be smaller or larger than 100.\ndRGDP: real GDP growth, in percent per year.\n\nEach country-year is assigned to one of four categories: 0-30%, 30-60%, 60-90%, and above 90% debt/GDP. The provided file analysis.jl defines default_bins(), debtgdp_category(), load_data(), and report_mean_growth(), which you will use to load the data and compute mean real GDP growth in each category by averaging over all country-year observations. You can use ?&lt;function_name&gt; to quickly review what each function does.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
+    "href": "labs/lab4-reproducibility.html#task-1-reproduce-the-study",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 1: Reproduce the study",
+    "text": "Task 1: Reproduce the study\n\nSkim through analysis.jl. In a fresh Julia session, run using Revise and load the source file with includet(\"analysis.jl\").\n\nNote: Use includet(\"analysis.jl\") in the Julia REPL only.\nIn your report, you can load the source file using the regular include(\"analysis.jl\") command.\n\nUse the provided tools to load RR-processed.csv. Create a reproduce.qmd report file to report mean growth in real GDP. Edit this file as you work through each task in the REPL.\nAdd the published values from RR-published.csv to your report.\nComment on the differences, if any, between the two tables.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
+    "href": "labs/lab4-reproducibility.html#task-2-investigate-the-discrepancy",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 2: Investigate the discrepancy",
+    "text": "Task 2: Investigate the discrepancy\n\nCarefully review the script and identify at least two decisions an analyst must make between the panel dataset and the final table. Document these in your report. For each decision, propose an alternative the authors might have used.\nTry changing the script to test your hypotheses about why your table differs from the published result. Try to match as many columns as you can (to one decimal place).\n\nCreate your own function within analysis.jl, using report_mean_growth() as a starting point.\n\nRecord which columns matched (if any), and try to explain what additional information you would need to account for any remaining discrepancy.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#task-3-reflection",
+    "href": "labs/lab4-reproducibility.html#task-3-reflection",
+    "title": "Lab 4: Reproducibility",
+    "section": "Task 3: Reflection",
+    "text": "Task 3: Reflection\n\nWhich parts of the gap could you detect from the data alone, and which would need the authors’ files?\nIf reproducing a study hinges on very few observations, how much should a headline result rest on them?\nWhat would the authors have needed to publish for you to find the problem in 5 minutes instead of however long it took you?\nIs averaging the country mean, rather than pooling every country-year, an error or a choice? Where is the line between them?\nIn your own results, growth is still lower in the highest debt group. Do the differences between your table and the published one change anything about the conclusion?",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab4-reproducibility.html#reminders",
+    "href": "labs/lab4-reproducibility.html#reminders",
+    "title": "Lab 4: Reproducibility",
+    "section": "Reminders",
+    "text": "Reminders\n\nMake sure you tag the assignment: git tag lab4.\nMake sure you push the tags, too: git push followed by git push --tags.",
+    "crumbs": [
+      "Labs",
+      "Lab 4 (Reproducibility)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html",
+    "href": "labs/lab5-codereview.html",
+    "title": "Lab 5: Code Review",
+    "section": "",
+    "text": "Understand the importance of discussing technical issues on programming projects.\nPractice setting up a repository with a team.\nPractice doing a code review.",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html#goals",
+    "href": "labs/lab5-codereview.html#goals",
+    "title": "Lab 5: Code Review",
+    "section": "",
+    "text": "Understand the importance of discussing technical issues on programming projects.\nPractice setting up a repository with a team.\nPractice doing a code review.",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html#before-class",
+    "href": "labs/lab5-codereview.html#before-class",
+    "title": "Lab 5: Code Review",
+    "section": "Before Class",
+    "text": "Before Class\nA team developing software often has individuals contributing features, tests, and other changes to a repository. In the Git/GitHub-like universe, this manifests as proposing pull requests. A pull request is a series changes, packaged as Git commits, that individuals wish to incorporate into a codebase. The practice of code review aims to systematically review such requests to check for (not exhaustive):\n\nconsistency in style, particularly with respect to the rest of the codebase,\npotential bugs or flaws in design,\nreadability, and\ntests for important scenarios or edge cases.\n\nAdhering to a consistent code review approach should, in theory, improve code quality and build a shared sense of ownership and responsibility amongst a team. In this lab, you will practice code (peer) review on one of your assignments.\n\nRead GitHub’s reference manual on pull requests. Don’t worry about the other items on the left hand side menu.\nMake contact with your final project team members.\nAccept the invitation to your team on GitHub.",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html#instructions",
+    "href": "labs/lab5-codereview.html#instructions",
+    "title": "Lab 5: Code Review",
+    "section": "Instructions",
+    "text": "Instructions\n\nPair up in your teams for the Final Project.\nCreate a new repository for this assignment.\n\nDesignate one team member to create a repository within the UCR-STAT-206 organization.\nThat individual should invite everyone else to the repository; navigate to Settings &gt; Collaborators &gt; Manage Access &gt; Add People.\n\nAdd files for code review.\n\nUsing the GitHub web interface, each member should create a separate directory and upload their committed files for Homework 3.\nMake sure directories have distinct names.\n\nCommit the new files.\n\nUsing the GitHub web interface, create a commit as a pull request/separate branch. That is, make sure you select “Create a new branch for this commit and start a pull request”.\n\nWrite the commit message.\n\nInclude a descriptive message as part of the commit.\nExamples: What files are being added, why are you adding them, are there any details a reviewer should be aware of.\n\nNow each team member will go to the pull request made by another team member and look at the code changes.\nRead each other’s code carefully and leave some thoughtful comments.\n\nComments can be about organization, filenames, formatting (in code or the Quarto document), readability, or issues with reproducibility.\nIt is possible to be both constructive and kind.",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html#additional-tasks",
+    "href": "labs/lab5-codereview.html#additional-tasks",
+    "title": "Lab 5: Code Review",
+    "section": "Additional Tasks",
+    "text": "Additional Tasks\n\nTime permitting, discuss your approach to implementing nnmf().\nTime permitting, try downloading someone else’s work to your container and run quarto render somefile.qmd on one of their assignments.",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
+    ]
+  },
+  {
+    "objectID": "labs/lab5-codereview.html#some-questions-to-guide-reviews",
+    "href": "labs/lab5-codereview.html#some-questions-to-guide-reviews",
+    "title": "Lab 5: Code Review",
+    "section": "Some Questions to Guide Reviews",
+    "text": "Some Questions to Guide Reviews\n\nHow is the code organized? Is it organized?\nAre there absolute or relative file paths?\nIs there a Project.toml recording the project’s dependencies?\nAre packages loaded up front or scattered throughout the main report?\nDoes the author explain their implementation or otherwise document the approach taken to the main implementation?\nIs it easy to read the report?\nAre there any tests, checks, or assertions? Any that should be implemented?",
+    "crumbs": [
+      "Labs",
+      "Lab 5 (Code Review)"
     ]
   },
   {
