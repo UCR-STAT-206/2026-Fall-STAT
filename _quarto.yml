@@ -116,8 +116,8 @@ website:
             href: labs/lab3-io.qmd
           - text: Lab 4 (Reproducibility)
             href: labs/lab4-reproducibility.qmd
-          # - text: Lab 5 (Code Review)
-          #   href: labs/lab5-codereview.qmd
+          - text: Lab 5 (Code Review)
+            href: labs/lab5-codereview.qmd
           # - text: Lab 6 (TBD)
           #   href: labs/lab6-tbd.qmd
           # - text: Lab 7 (Simulation)

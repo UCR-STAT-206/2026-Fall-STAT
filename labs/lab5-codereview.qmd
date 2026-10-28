@@ -1,0 +1,72 @@
+---
+title: "Lab 5: Code Review"
+date: "2026-10-30"
+eval: false
+format:
+  html:
+    theme: cosmo
+    css: ../assets/styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+engine: markdown
+---
+
+## Goals
+
+1. Understand the importance of discussing technical issues on programming projects.
+2. Practice setting up a repository with a team.
+3. Practice doing a code review.
+
+## Before Class
+
+A team developing software often has individuals contributing features, tests, and other changes to a repository.
+In the Git/GitHub-like universe, this manifests as proposing *pull requests*.
+A pull request is a series changes, packaged as Git commits, that individuals wish to incorporate into a codebase.
+The practice of *code review* aims to systematically review such requests to check for (not exhaustive):
+
+- consistency in style, particularly with respect to the rest of the codebase,
+- potential bugs or flaws in design,
+- readability, and
+- tests for important scenarios or edge cases.
+
+Adhering to a consistent code review approach should, in theory, improve code quality and build a shared sense of ownership and responsibility amongst a team.
+In this lab, you will practice code (peer) review on one of your assignments.
+
+- Read GitHub's reference manual on [pull requests](https://docs.github.com/en/pull-requests/reference/pull-requests). Don't worry about the other items on the left hand side menu.
+- Make contact with your final project team members.
+- Accept the invitation to your team on GitHub.
+
+## Instructions
+
+1. Pair up in your teams for the Final Project.
+2. Create a new repository for this assignment.
+    + Designate one team member to create a repository within the UCR-STAT-206 organization.
+    + That individual should invite everyone else to the repository; navigate to Settings > Collaborators > Manage Access > Add People.
+3. Add files for code review.
+    + Using the GitHub web interface, each member should create a separate directory and upload their **committed files** for Homework 3.
+    + Make sure directories have distinct names.
+4. Commit the new files.
+    + Using the GitHub web interface, create a commit as a pull request/separate branch. That is, make sure you select "Create a new branch for this commit and start a pull request".
+5. Write the commit message.
+    + Include a descriptive message as part of the commit.
+    + *Examples*: What files are being added, why are you adding them, are there any details a reviewer should be aware of.
+6. Now each team member will go to the pull request made by another team member and look at the code changes.
+7. Read each other's code carefully and leave some thoughtful comments.
+    + Comments can be about organization, filenames, formatting (in code or the Quarto document), readability, or issues with reproducibility.
+    + It is possible to be both constructive and kind.
+
+## Additional Tasks
+
+1. Time permitting, discuss your approach to implementing `nnmf()`.
+2. Time permitting, try downloading someone else's work to your container and run `quarto render somefile.qmd` on one of their assignments.
+
+## Some Questions to Guide Reviews
+
+- How is the code organized? Is it organized?
+- Are there absolute or relative file paths?
+- Is there a `Project.toml` recording the project's dependencies?
+- Are packages loaded up front or scattered throughout the main report?
+- Does the author explain their implementation or otherwise document the approach taken to the main implementation?
+- Is it easy to read the report?
+- Are there any tests, checks, or assertions? Any that should be implemented?
