@@ -32,16 +32,16 @@ As such, a graph can be specified using a (weighted) adjacency matrix $\mathbf{A
 
 $$
 a_{ij} = \begin{cases}
-1 & \text{if $(j,i) \in E$} \\
+1 & \text{if $(i,j) \in E$} \\
 0 & \text{otherwise}
 \end{cases}.
 $$
 
-Here $(j,i)$ is a directed edge so that $a_{ij}$ indicates whether node $j$ (source) connects to node $i$ (destination).
+Here $(i,j)$ is a directed edge so that $a_{ij}$ indicates whether node $i$ (source) connects to node $j$ (destination).
 Various important quantities can be derived from $\mathbf{A}$
 
-- Out Degree: $d_{j}^{+} = \sum_{i} a_{ij} = [\mathbf{1}^{\top}\mathbf{A}]_{j}$ (if we treat rows of $\mathbf{A}$ as the originating nodes)
-- In Degree: $d_{j}^{-} = \sum_{i} a_{ji} = [\mathbf{A} \mathbf{1}]_{j}$
+- Out Degree: $d_{i}^{+} = \sum_{j} a_{ij} = [\mathbf{A} \mathbf{1}]_{i}$ (if we treat rows of $\mathbf{A}$ as the originating nodes).
+- In Degree: $d_{i}^{-} = \sum_{j} a_{ji} = [\mathbf{1}^{\top}\mathbf{A}]_{i}$.
 - If $\mathbf{A}$ is symmetric, the graph is undirected and so we only speak of the degree $d_{i} = d_{i}^{+} = d_{i}^{-}$.
 
 Spectral graph theory relates eigenvalues/eigenvectors of $\mathbf{A}$ or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.
@@ -52,15 +52,15 @@ Spectral graph theory relates eigenvalues/eigenvectors of $\mathbf{A}$ or its La
 
 [Larry Page](https://en.wikipedia.org/wiki/PageRank) imagines a random surfer wandering on internet according to following rules:
 
-- From page $j$ with $r_{j} > 0$:
-    - With probability $1-p$ they choose a link on a page $j$ uniformly at random and follow that link to the next page.
+- From page $i$ with $r_{i} > 0$:
+    - With probability $1-p$ they choose a link on a page $i$ uniformly at random and follow that link to the next page.
     - With probability $p$ they choose one page from the set of all $n$ pages uniformly at random and proceed to that page.
-- From a page $j$ with $r_{j} = 0$ (a dangling page), they randomly choose one page from the set of $n$ pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.
+- From a page $i$ with $r_{i} = 0$ (a dangling page), they randomly choose one page from the set of $n$ pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.
 
-Here $r_j$ is the *out-degree* of page $j$ and $\mathbf{A}  \in \{0,1\}^{n \times n}$ the connectivity matrix of webpages with entries
+Here $r_i$ is the *out-degree* of page $i$ and $\mathbf{A}  \in \{0,1\}^{n \times n}$ the connectivity matrix of webpages with entries
 $$
 a_{ij} = \begin{cases}
-1 &  \text{if page $j$ links to page $i$} \\
+1 &  \text{if page $i$ links to page $j$} \\
 0 & \text{otherwise}
 \end{cases}.
 $$
@@ -70,10 +70,10 @@ $$
 The description above defines a Markov chain on the space of $n$ pages.
 Markov chain theory tells us that the *stationary distribution* of this Markov chain gives the ranks (probabilities) of each page.
 
-- A vector $\mathbf{x}$ is a stationary distribution if it is a top right eigenvector of the transition matrix $\mathbf{P}$ corresponding to eigenvalue 1.
+- A vector $\mathbf{x}^{\top}$ is a stationary distribution if it is a top left eigenvector of the transition matrix $\mathbf{P}$ corresponding to eigenvalue 1.
 - Equivalently it can be cast as the solution to the linear equation
 $$
-(\mathbf{I}_{n} - \mathbf{P}) \mathbf{x} = \mathbf{0}.
+(\mathbf{I}_{n} - \mathbf{P}^{\top}) \mathbf{x} = \mathbf{0}.
 $$
 
 - GE/LU will take $2 \times (10^9)^3/3/10^{12} \approx 6.66 \times 10^{14}$ seconds $\approx 20$ million years on a tera-flop supercomputer!

@@ -29,18 +29,18 @@ Let $\mathbf{A} \in \{0,1\}^{n \times n}$ represent the connectivity matrix of $
 
 $$
 a_{ij} = \begin{cases}
-1, & \text{if page $j$ links to page $i$} \\
+1, & \text{if page $i$ links to page $j$} \\
 0, & \text{otherwise}
 \end{cases}
 $$
 
-Remember that $\mathbf{A}$ is not necessarily symmetric so we define $r_{j} = \sum_{i} a_{ij}$ as the *out-degree* of page $j$, reflecting the number of outgoing links.
+Remember that $\mathbf{A}$ is not necessarily symmetric so we define $r_{i} = \sum_{j} a_{ij}$ as the *out-degree* of page $j$, reflecting the number of outgoing links from page $i$.
 Imagine a random (web) surfer exploring the space of $n$ pages according to the following rules:
 
-- From page $j$ with $r_{j} > 0$:
-    - With probability $1-p$ they choose a link on a page $j$ uniformly at random and follow that link to the next page.
+- From page $i$ with $r_{i} > 0$:
+    - With probability $1-p$ they choose a link on a page $i$ uniformly at random and follow that link to the next page.
     - With probability $p$ they choose one page from the set of all $n$ pages uniformly at random and proceed to that page.
-- From a page $j$ with $r_{j} = 0$ (a dangling page), they randomly choose one page from the set of $n$ pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.
+- From page $i$ with $r_{i} = 0$ (a dangling page), they randomly choose one page from the set of $n$ pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.
 
 We will refer to $p$ as the teleportation parameter, such that higher values correspond to the surfer following links and lower values allowing for more teleportation.
 Put together, the description above defines a Markov chain governed by its [transition matrix](https://en.wikipedia.org/wiki/Stochastic_matrix) $\mathbf{P}$.
@@ -48,17 +48,19 @@ Put together, the description above defines a Markov chain governed by its [tran
 According to standard Markov chain theory, the (random) position of the surfer converges to the stationary distribution $\mathbf{x} = (x_{1}, \ldots x_{n})^{\top}$ of the Markov chain.
 Each component $x_{i}$ has the natural interpretation of the proportion of times the surfer visits page $i$ in the long run.
 Therefore, $\mathbf{x}$ serves as a ranking of pages: a higher $x_{i}$ means page $i$ is visited often.
-It is well-known that $\mathbf{x}$ is the right eigenvector corresponding to the top eigenvalue 1 of the transition matrix $\mathbf{P}$.
+It is well-known that $\mathbf{x}^{\top}$ is the left eigenvector corresponding to the top eigenvalue 1 of the transition matrix $\mathbf{P}$.
 That is,
 $$
-\mathbf{P}\mathbf{x} = \mathbf{x}.
+\mathbf{x}^{\top} \mathbf{P} = \mathbf{x}^{\top}
+\quad \text{or equivalently} \quad
+\mathbf{P}^{\top}\mathbf{x} = \mathbf{x}.
 $$
 This equation can be solved as an eigen-problem.
-It can also be cast as solving a linear system of equations, namely $(\mathbf{I}_{n} - \mathbf{P})\mathbf{x} = \mathbf{0}$ subject to the linear equality constraint $\sum_{i=1}^{n} x_{i} = 1$, ensuring $\mathbf{x}$ represents a probability vector.
+It can also be cast as solving a linear system of equations, namely $(\mathbf{I}_{n} - \mathbf{P}^{\top})\mathbf{x} = \mathbf{0}$ subject to the linear equality constraint $\sum_{i=1}^{n} x_{i} = 1$, ensuring $\mathbf{x}$ represents a probability vector.
 We can view this as the extended system
 $$
 \begin{bmatrix}
-\mathbf{I}_{n} - \mathbf{P} \\
+\mathbf{I}_{n} - \mathbf{P}^{\top} \\
 \mathbf{1}_{n}^{\top}
 \end{bmatrix}
 \mathbf{x}
@@ -68,7 +70,7 @@ $$
 1
 \end{bmatrix},
 $$
-which has full column rank (the original system $\mathbf{I}_{n} - \mathbf{P}$ is rank deficient due to the column-stochastic property $\mathbf{1}_{n}^{\top}\mathbf{P} = \mathbf{1}_{n}^{\top}$).
+which has full column rank (the original system $\mathbf{I}_{n} - \mathbf{P}^{\top}$ is rank deficient due to the row-stochastic property $\mathbf{P} \mathbf{1}_{n} = \mathbf{1}_{n}$).
 The insight we gain from this analysis is that, for an iterative solver, we can seed the initial guess with a vector with all positive entries to guarantee we recover a valid solution to the PageRank problem *without* directly enforcing $\sum_{i=1}^{n} x_{i} = 1$.
 The [Perron-Frobenius Theorem](https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem) guarantees existence and uniqueness here.
 
@@ -106,9 +108,9 @@ Let $Z$ denote the event that the surfer teleports (with probability $\Pr(Z) = p
 
 By the Law of Total Probability and the Markov property, the one-step transition probability from page $j$ to page $i$, which we represent with notation $P_{ij} = \Pr(X_{k+1}=i \mid X_{k} = j)$, is given by
 $$
-P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j,Z^{c})\Pr(Z^{c}).
+P_{ij} = \Pr(X_{k+1} = j \mid X_{k} = i, Z)\Pr(Z) + \Pr(X_{k+1} = j \mid X_{k}=i,Z^{c})\Pr(Z^{c}).
 $$
-These one-step probabilities only depend on the previous state, $X_{k} = j$.
+These one-step probabilities only depend on the previous state, $X_{k} = i$.
 
 Use the relation above to enumerate all possible entries $P_{ij}$ in terms of web page connectivities, $a_{ij}$, out-degrees $r_{j}$, total pages $n$, and teleportation parameter $p$.
 
@@ -172,12 +174,12 @@ import Base: getindex, size
 import LinearAlgebra: issymmetric, mul!
 
 # matrix element access M[i, j]
-Base.getindex(M::PageRankImP, i, j) = (i == j) - M.d[j] * M.A[j, i] - M.v[j]
+Base.getindex(M::PageRankImP, i, j) = (i == j) - M.d[i] * M.A[i, j] - M.v[j]
 LinearAlgebra.issymmetric(M::PageRankImP) = issymmetric(M.A)
 Base.size(M::PageRankImP) = size(M.A)
 ```
 
-Create an instance of `PageRankImP` using the `SNAP/web-Google` data with `p = 0.85` and display the following:
+Create an instance of `PageRankImP` using the `SNAP/web-Google` data with `p = 0.15` and display the following:
 
 - `M`
 - `issymmetric(M)`
@@ -222,11 +224,11 @@ end
 
 ## D. Check Correctness
 
-Using the code below, verify that $\mathbf{M}^{\top} \mathbf{1} = \mathbf{0}$ and $\mathbf{M} \mathbf{x} = \mathbf{0}$ whenever $\mathbf{x}$ is a stationary distribution. Make sure to download the solution file `pgrksol.csv.gz` first.
+Using the code below, verify that $\mathbf{M} \mathbf{1}_{n} = \mathbf{0}$ and $\mathbf{M}^{\top} \mathbf{x} = \mathbf{0}$ whenever $\mathbf{x}$ is a stationary distribution. Make sure to download the solution file `pgrksol.csv.gz` first.
 
 ```{julia}
 #@assert transpose(M) * ones(n) ≈ zeros(n)
-@assert norm(transpose(M) * ones(n)) < 1e-12
+@assert norm(M * ones(n)) < 1e-12
 ```
 
 ```{julia}
@@ -237,7 +239,7 @@ xsol = open(SOLUTION_FILE, "r") do io
 end
 
 #@assert M * xsol ≈ zeros(n)
-@assert norm(M * xsol) < 1e-12
+@assert norm(transpose(M) * xsol) < 1e-12
 ```
 
 
@@ -279,13 +281,13 @@ x0 ./= sum(x0)
 b = zeros(n)
 
 # warm up (compilation)
-linsolve(M, b, x0,
+linsolve(transpose(M), b, x0,
   issymmetric = false,
   isposdef = false,
   maxiter = 1)
 
 # output is complex eigenvalue/eigenvector
-(x_gmres, info), time_gmres, = @timed linsolve(M, b, x0, issymmetric = false, isposdef = false, maxiter = size(M, 2))
+(x_gmres, info), time_gmres, = @timed linsolve(transpose(M), b, x0, issymmetric = false, isposdef = false, maxiter = size(M, 2))
 ```
 
 You will lose points if the following statement throws an `AssertionError`.
@@ -294,12 +296,10 @@ You will lose points if the following statement throws an `AssertionError`.
 @assert norm(x_gmres - xsol) < 1e-6
 ```
 
-GMRES should be reasonably fast.
-
 ::: {.callout-tip}
 ### Hint
 
-Dr. Landeros' runtime is about 2 seconds.
+GMRES should be reasonably fast. Dr. Landeros' runtime is about 2 seconds.
 :::
 
 ## B. Solving the eigenproblem
@@ -308,10 +308,10 @@ The [Arnoldi Method](https://en.wikipedia.org/wiki/Arnoldi_iteration) is an iter
 
 ```{julia}
 # warm up (compilation)
-eigsolve(M, x0, 1, :SR, issymmetric = false, maxiter = 1)
+eigsolve(transpose(M), x0, 1, :SR, issymmetric = false, maxiter = 1)
 
 # output is complex eigenvalue/eigenvector
-(vals, vecs, info), time_arnoldi, = @timed eigsolve(M, x0, 1, :SR, issymmetric = false, maxiter = size(M, 2))
+(vals, vecs, info), time_arnoldi, = @timed eigsolve(transpose(M), x0, 1, :SR, issymmetric = false, maxiter = size(M, 2))
 ```
 
 You will lose points if the following statement throws an `AssertionError`.
@@ -323,12 +323,10 @@ x_arnoldi ./= sum(x_arnoldi)
 @assert norm(x_arnoldi - xsol) < 1e-6
 ```
 
-Arnoldi should be reasonably fast.
-
 ::: {.callout-tip}
 ### Hint
 
-Dr. Landeros' runtime is about 3 seconds.
+Arnoldi should be reasonably fast. Dr. Landeros' runtime is about 3 seconds.
 :::
 
 # Problem 6: Reflection {#sec-prob6}
