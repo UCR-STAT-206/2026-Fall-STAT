@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c68270c345a4789c7ee740e873df1f89.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -723,25 +723,27 @@ window.Quarto = {
 <p>Let <span class="math inline">\(\mathbf{A} \in \{0,1\}^{n \times n}\)</span> represent the connectivity matrix of <span class="math inline">\(n\)</span> web pages with entries</p>
 <p><span class="math display">\[
 a_{ij} = \begin{cases}
-1, &amp; \text{if page $j$ links to page $i$} \\
+1, &amp; \text{if page $i$ links to page $j$} \\
 0, &amp; \text{otherwise}
 \end{cases}
 \]</span></p>
-<p>Remember that <span class="math inline">\(\mathbf{A}\)</span> is not necessarily symmetric so we define <span class="math inline">\(r_{j} = \sum_{i} a_{ij}\)</span> as the <em>out-degree</em> of page <span class="math inline">\(j\)</span>, reflecting the number of outgoing links. Imagine a random (web) surfer exploring the space of <span class="math inline">\(n\)</span> pages according to the following rules:</p>
+<p>Remember that <span class="math inline">\(\mathbf{A}\)</span> is not necessarily symmetric so we define <span class="math inline">\(r_{i} = \sum_{j} a_{ij}\)</span> as the <em>out-degree</em> of page <span class="math inline">\(j\)</span>, reflecting the number of outgoing links from page <span class="math inline">\(i\)</span>. Imagine a random (web) surfer exploring the space of <span class="math inline">\(n\)</span> pages according to the following rules:</p>
 <ul>
-<li>From page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} &gt; 0\)</span>:
+<li>From page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_{i} &gt; 0\)</span>:
 <ul>
-<li>With probability <span class="math inline">\(1-p\)</span> they choose a link on a page <span class="math inline">\(j\)</span> uniformly at random and follow that link to the next page.</li>
+<li>With probability <span class="math inline">\(1-p\)</span> they choose a link on a page <span class="math inline">\(i\)</span> uniformly at random and follow that link to the next page.</li>
 <li>With probability <span class="math inline">\(p\)</span> they choose one page from the set of all <span class="math inline">\(n\)</span> pages uniformly at random and proceed to that page.</li>
 </ul></li>
-<li>From a page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} = 0\)</span> (a dangling page), they randomly choose one page from the set of <span class="math inline">\(n\)</span> pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.</li>
+<li>From page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_{i} = 0\)</span> (a dangling page), they randomly choose one page from the set of <span class="math inline">\(n\)</span> pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.</li>
 </ul>
 <p>We will refer to <span class="math inline">\(p\)</span> as the teleportation parameter, such that higher values correspond to the surfer following links and lower values allowing for more teleportation. Put together, the description above defines a Markov chain governed by its <a href="https://en.wikipedia.org/wiki/Stochastic_matrix">transition matrix</a> <span class="math inline">\(\mathbf{P}\)</span>.</p>
-<p>According to standard Markov chain theory, the (random) position of the surfer converges to the stationary distribution <span class="math inline">\(\mathbf{x} = (x_{1}, \ldots x_{n})^{\top}\)</span> of the Markov chain. Each component <span class="math inline">\(x_{i}\)</span> has the natural interpretation of the proportion of times the surfer visits page <span class="math inline">\(i\)</span> in the long run. Therefore, <span class="math inline">\(\mathbf{x}\)</span> serves as a ranking of pages: a higher <span class="math inline">\(x_{i}\)</span> means page <span class="math inline">\(i\)</span> is visited often. It is well-known that <span class="math inline">\(\mathbf{x}\)</span> is the right eigenvector corresponding to the top eigenvalue 1 of the transition matrix <span class="math inline">\(\mathbf{P}\)</span>. That is, <span class="math display">\[
-\mathbf{P}\mathbf{x} = \mathbf{x}.
-\]</span> This equation can be solved as an eigen-problem. It can also be cast as solving a linear system of equations, namely <span class="math inline">\((\mathbf{I}_{n} - \mathbf{P})\mathbf{x} = \mathbf{0}\)</span> subject to the linear equality constraint <span class="math inline">\(\sum_{i=1}^{n} x_{i} = 1\)</span>, ensuring <span class="math inline">\(\mathbf{x}\)</span> represents a probability vector. We can view this as the extended system <span class="math display">\[
+<p>According to standard Markov chain theory, the (random) position of the surfer converges to the stationary distribution <span class="math inline">\(\mathbf{x} = (x_{1}, \ldots x_{n})^{\top}\)</span> of the Markov chain. Each component <span class="math inline">\(x_{i}\)</span> has the natural interpretation of the proportion of times the surfer visits page <span class="math inline">\(i\)</span> in the long run. Therefore, <span class="math inline">\(\mathbf{x}\)</span> serves as a ranking of pages: a higher <span class="math inline">\(x_{i}\)</span> means page <span class="math inline">\(i\)</span> is visited often. It is well-known that <span class="math inline">\(\mathbf{x}^{\top}\)</span> is the left eigenvector corresponding to the top eigenvalue 1 of the transition matrix <span class="math inline">\(\mathbf{P}\)</span>. That is, <span class="math display">\[
+\mathbf{x}^{\top} \mathbf{P} = \mathbf{x}^{\top}
+\quad \text{or equivalently} \quad
+\mathbf{P}^{\top}\mathbf{x} = \mathbf{x}.
+\]</span> This equation can be solved as an eigen-problem. It can also be cast as solving a linear system of equations, namely <span class="math inline">\((\mathbf{I}_{n} - \mathbf{P}^{\top})\mathbf{x} = \mathbf{0}\)</span> subject to the linear equality constraint <span class="math inline">\(\sum_{i=1}^{n} x_{i} = 1\)</span>, ensuring <span class="math inline">\(\mathbf{x}\)</span> represents a probability vector. We can view this as the extended system <span class="math display">\[
 \begin{bmatrix}
-\mathbf{I}_{n} - \mathbf{P} \\
+\mathbf{I}_{n} - \mathbf{P}^{\top} \\
 \mathbf{1}_{n}^{\top}
 \end{bmatrix}
 \mathbf{x}
@@ -750,7 +752,7 @@ a_{ij} = \begin{cases}
 \mathbf{0}_{n} \\
 1
 \end{bmatrix},
-\]</span> which has full column rank (the original system <span class="math inline">\(\mathbf{I}_{n} - \mathbf{P}\)</span> is rank deficient due to the column-stochastic property <span class="math inline">\(\mathbf{1}_{n}^{\top}\mathbf{P} = \mathbf{1}_{n}^{\top}\)</span>). The insight we gain from this analysis is that, for an iterative solver, we can seed the initial guess with a vector with all positive entries to guarantee we recover a valid solution to the PageRank problem <em>without</em> directly enforcing <span class="math inline">\(\sum_{i=1}^{n} x_{i} = 1\)</span>. The <a href="https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem">Perron-Frobenius Theorem</a> guarantees existence and uniqueness here.</p>
+\]</span> which has full column rank (the original system <span class="math inline">\(\mathbf{I}_{n} - \mathbf{P}^{\top}\)</span> is rank deficient due to the row-stochastic property <span class="math inline">\(\mathbf{P} \mathbf{1}_{n} = \mathbf{1}_{n}\)</span>). The insight we gain from this analysis is that, for an iterative solver, we can seed the initial guess with a vector with all positive entries to guarantee we recover a valid solution to the PageRank problem <em>without</em> directly enforcing <span class="math inline">\(\sum_{i=1}^{n} x_{i} = 1\)</span>. The <a href="https://en.wikipedia.org/wiki/Perron%E2%80%93Frobenius_theorem">Perron-Frobenius Theorem</a> guarantees existence and uniqueness here.</p>
 </section>
 <section id="sec-prob1" class="level1">
 <h1>Problem 1: Data Exploration</h1>
@@ -775,8 +777,8 @@ a_{ij} = \begin{cases}
 <h1>Problem 2: Understanding the Transition Matirx <span class="math inline">\(\mathbf{P}\)</span></h1>
 <p>Let <span class="math inline">\(X_{k} \in \{1,2,\ldots,n\}\)</span> denote the page visited by the surfer after <span class="math inline">\(k\)</span> steps. Let <span class="math inline">\(Z\)</span> denote the event that the surfer teleports (with probability <span class="math inline">\(\Pr(Z) = p\)</span>), and <span class="math inline">\(Z^{c}\)</span> denote the event that the surfer follows a link (with probability <span class="math inline">\(\Pr(Z^{c}) = 1-p\)</span>).</p>
 <p>By the Law of Total Probability and the Markov property, the one-step transition probability from page <span class="math inline">\(j\)</span> to page <span class="math inline">\(i\)</span>, which we represent with notation <span class="math inline">\(P_{ij} = \Pr(X_{k+1}=i \mid X_{k} = j)\)</span>, is given by <span class="math display">\[
-P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j,Z^{c})\Pr(Z^{c}).
-\]</span> These one-step probabilities only depend on the previous state, <span class="math inline">\(X_{k} = j\)</span>.</p>
+P_{ij} = \Pr(X_{k+1} = j \mid X_{k} = i, Z)\Pr(Z) + \Pr(X_{k+1} = j \mid X_{k}=i,Z^{c})\Pr(Z^{c}).
+\]</span> These one-step probabilities only depend on the previous state, <span class="math inline">\(X_{k} = i\)</span>.</p>
 <p>Use the relation above to enumerate all possible entries <span class="math inline">\(P_{ij}\)</span> in terms of web page connectivities, <span class="math inline">\(a_{ij}\)</span>, out-degrees <span class="math inline">\(r_{j}\)</span>, total pages <span class="math inline">\(n\)</span>, and teleportation parameter <span class="math inline">\(p\)</span>.</p>
 </section>
 <section id="sec-prob3" class="level1">
@@ -819,11 +821,11 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 <span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="im">import</span> <span class="bu">LinearAlgebra</span>: issymmetric, mul!</span>
 <span id="cb4-3"><a href="#cb4-3" aria-label="3"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-label="4"></a><span class="co"># matrix element access M[i, j]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="bu">Base</span>.<span class="fu">getindex</span>(M<span class="op">::</span><span class="dt">PageRankImP</span>, i, j) <span class="op">=</span> (i <span class="op">==</span> j) <span class="op">-</span> M.d[j] <span class="op">*</span> M.A[j, i] <span class="op">-</span> M.v[j]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-label="5"></a><span class="bu">Base</span>.<span class="fu">getindex</span>(M<span class="op">::</span><span class="dt">PageRankImP</span>, i, j) <span class="op">=</span> (i <span class="op">==</span> j) <span class="op">-</span> M.d[i] <span class="op">*</span> M.A[i, j] <span class="op">-</span> M.v[j]</span>
 <span id="cb4-6"><a href="#cb4-6" aria-label="6"></a><span class="bu">LinearAlgebra</span>.<span class="fu">issymmetric</span>(M<span class="op">::</span><span class="dt">PageRankImP</span>) <span class="op">=</span> <span class="fu">issymmetric</span>(M.A)</span>
 <span id="cb4-7"><a href="#cb4-7" aria-label="7"></a><span class="bu">Base</span>.<span class="fu">size</span>(M<span class="op">::</span><span class="dt">PageRankImP</span>) <span class="op">=</span> <span class="fu">size</span>(M.A)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Create an instance of <code>PageRankImP</code> using the <code>SNAP/web-Google</code> data with <code>p = 0.85</code> and display the following:</p>
+<p>Create an instance of <code>PageRankImP</code> using the <code>SNAP/web-Google</code> data with <code>p = 0.15</code> and display the following:</p>
 <ul>
 <li><code>M</code></li>
 <li><code>issymmetric(M)</code></li>
@@ -861,10 +863,10 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 </section>
 <section id="d.-check-correctness" class="level2">
 <h2 class="anchored" data-anchor-id="d.-check-correctness">D. Check Correctness</h2>
-<p>Using the code below, verify that <span class="math inline">\(\mathbf{M}^{\top} \mathbf{1} = \mathbf{0}\)</span> and <span class="math inline">\(\mathbf{M} \mathbf{x} = \mathbf{0}\)</span> whenever <span class="math inline">\(\mathbf{x}\)</span> is a stationary distribution. Make sure to download the solution file <code>pgrksol.csv.gz</code> first.</p>
+<p>Using the code below, verify that <span class="math inline">\(\mathbf{M} \mathbf{1}_{n} = \mathbf{0}\)</span> and <span class="math inline">\(\mathbf{M}^{\top} \mathbf{x} = \mathbf{0}\)</span> whenever <span class="math inline">\(\mathbf{x}\)</span> is a stationary distribution. Make sure to download the solution file <code>pgrksol.csv.gz</code> first.</p>
 <div id="12" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="co">#@assert transpose(M) * ones(n) ≈ zeros(n)</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a><span class="pp">@assert</span> <span class="fu">norm</span>(<span class="fu">transpose</span>(M) <span class="op">*</span> <span class="fu">ones</span>(n)) <span class="op">&lt;</span> <span class="fl">1e-12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a><span class="pp">@assert</span> <span class="fu">norm</span>(M <span class="op">*</span> <span class="fu">ones</span>(n)) <span class="op">&lt;</span> <span class="fl">1e-12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="14" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>SOLUTION_FILE <span class="op">=</span> <span class="st">"pgrksol.csv.gz"</span></span>
@@ -874,7 +876,7 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 <span id="cb7-5"><a href="#cb7-5" aria-label="5"></a><span class="cf">end</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-label="6"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-label="7"></a><span class="co">#@assert M * xsol ≈ zeros(n)</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a><span class="pp">@assert</span> <span class="fu">norm</span>(M <span class="op">*</span> xsol) <span class="op">&lt;</span> <span class="fl">1e-12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-8"><a href="#cb7-8" aria-label="8"></a><span class="pp">@assert</span> <span class="fu">norm</span>(<span class="fu">transpose</span>(M) <span class="op">*</span> xsol) <span class="op">&lt;</span> <span class="fl">1e-12</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="e.-benchmark" class="level2">
@@ -916,19 +918,18 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 <span id="cb10-6"><a href="#cb10-6" aria-label="6"></a>b <span class="op">=</span> <span class="fu">zeros</span>(n)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-label="7"></a></span>
 <span id="cb10-8"><a href="#cb10-8" aria-label="8"></a><span class="co"># warm up (compilation)</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-label="9"></a><span class="fu">linsolve</span>(M, b, x0,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-label="9"></a><span class="fu">linsolve</span>(<span class="fu">transpose</span>(M), b, x0,</span>
 <span id="cb10-10"><a href="#cb10-10" aria-label="10"></a>  issymmetric <span class="op">=</span> <span class="cn">false</span>,</span>
 <span id="cb10-11"><a href="#cb10-11" aria-label="11"></a>  isposdef <span class="op">=</span> <span class="cn">false</span>,</span>
 <span id="cb10-12"><a href="#cb10-12" aria-label="12"></a>  maxiter <span class="op">=</span> <span class="fl">1</span>)</span>
 <span id="cb10-13"><a href="#cb10-13" aria-label="13"></a></span>
 <span id="cb10-14"><a href="#cb10-14" aria-label="14"></a><span class="co"># output is complex eigenvalue/eigenvector</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-label="15"></a>(x_gmres, info), time_gmres, <span class="op">=</span> <span class="pp">@timed</span> <span class="fu">linsolve</span>(M, b, x0, issymmetric <span class="op">=</span> <span class="cn">false</span>, isposdef <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fu">size</span>(M, <span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-15"><a href="#cb10-15" aria-label="15"></a>(x_gmres, info), time_gmres, <span class="op">=</span> <span class="pp">@timed</span> <span class="fu">linsolve</span>(<span class="fu">transpose</span>(M), b, x0, issymmetric <span class="op">=</span> <span class="cn">false</span>, isposdef <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fu">size</span>(M, <span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You will lose points if the following statement throws an <code>AssertionError</code>.</p>
 <div id="22" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="pp">@assert</span> <span class="fu">norm</span>(x_gmres <span class="op">-</span> xsol) <span class="op">&lt;</span> <span class="fl">1e-6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>GMRES should be reasonably fast.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -939,7 +940,7 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dr.&nbsp;Landeros’ runtime is about 2 seconds.</p>
+<p>GMRES should be reasonably fast. Dr.&nbsp;Landeros’ runtime is about 2 seconds.</p>
 </div>
 </div>
 </section>
@@ -948,10 +949,10 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 <p>The <a href="https://en.wikipedia.org/wiki/Arnoldi_iteration">Arnoldi Method</a> is an iterative method for solving eigenproblems.</p>
 <div id="24" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="co"># warm up (compilation)</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="fu">eigsolve</span>(M, x0, <span class="fl">1</span>, <span class="op">:</span>SR, issymmetric <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fl">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a><span class="fu">eigsolve</span>(<span class="fu">transpose</span>(M), x0, <span class="fl">1</span>, <span class="op">:</span>SR, issymmetric <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fl">1</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-label="3"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-label="4"></a><span class="co"># output is complex eigenvalue/eigenvector</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>(vals, vecs, info), time_arnoldi, <span class="op">=</span> <span class="pp">@timed</span> <span class="fu">eigsolve</span>(M, x0, <span class="fl">1</span>, <span class="op">:</span>SR, issymmetric <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fu">size</span>(M, <span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>(vals, vecs, info), time_arnoldi, <span class="op">=</span> <span class="pp">@timed</span> <span class="fu">eigsolve</span>(<span class="fu">transpose</span>(M), x0, <span class="fl">1</span>, <span class="op">:</span>SR, issymmetric <span class="op">=</span> <span class="cn">false</span>, maxiter <span class="op">=</span> <span class="fu">size</span>(M, <span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You will lose points if the following statement throws an <code>AssertionError</code>.</p>
 <div id="26" class="cell" data-execution_count="0">
@@ -960,7 +961,6 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 <span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>x_arnoldi <span class="op">./=</span> <span class="fu">sum</span>(x_arnoldi)</span>
 <span id="cb13-4"><a href="#cb13-4" aria-label="4"></a><span class="pp">@assert</span> <span class="fu">norm</span>(x_arnoldi <span class="op">-</span> xsol) <span class="op">&lt;</span> <span class="fl">1e-6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Arnoldi should be reasonably fast.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -971,7 +971,7 @@ P_{ij} = \Pr(X_{k+1} = i \mid X_{k} = j, Z)\Pr(Z) + \Pr(X_{k+1} = i \mid X_{k}=j
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dr.&nbsp;Landeros’ runtime is about 3 seconds.</p>
+<p>Arnoldi should be reasonably fast. Dr.&nbsp;Landeros’ runtime is about 3 seconds.</p>
 </div>
 </div>
 </section>

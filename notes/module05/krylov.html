@@ -64,7 +64,7 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-42984134f797fdc8b1dddc8d1d96fd6e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-c68270c345a4789c7ee740e873df1f89.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -739,14 +739,14 @@ window.Quarto = {
 <p>Graphs can be <em>directed</em> or <em>undirected</em>, depending on whether the underlying relation is asymmetric or symmetric, respectively. As such, a graph can be specified using a (weighted) adjacency matrix <span class="math inline">\(\mathbf{A}\)</span> with entries</p>
 <p><span class="math display">\[
 a_{ij} = \begin{cases}
-1 &amp; \text{if $(j,i) \in E$} \\
+1 &amp; \text{if $(i,j) \in E$} \\
 0 &amp; \text{otherwise}
 \end{cases}.
 \]</span></p>
-<p>Here <span class="math inline">\((j,i)\)</span> is a directed edge so that <span class="math inline">\(a_{ij}\)</span> indicates whether node <span class="math inline">\(j\)</span> (source) connects to node <span class="math inline">\(i\)</span> (destination). Various important quantities can be derived from <span class="math inline">\(\mathbf{A}\)</span></p>
+<p>Here <span class="math inline">\((i,j)\)</span> is a directed edge so that <span class="math inline">\(a_{ij}\)</span> indicates whether node <span class="math inline">\(i\)</span> (source) connects to node <span class="math inline">\(j\)</span> (destination). Various important quantities can be derived from <span class="math inline">\(\mathbf{A}\)</span></p>
 <ul>
-<li>Out Degree: <span class="math inline">\(d_{j}^{+} = \sum_{i} a_{ij} = [\mathbf{1}^{\top}\mathbf{A}]_{j}\)</span> (if we treat rows of <span class="math inline">\(\mathbf{A}\)</span> as the originating nodes)</li>
-<li>In Degree: <span class="math inline">\(d_{j}^{-} = \sum_{i} a_{ji} = [\mathbf{A} \mathbf{1}]_{j}\)</span></li>
+<li>Out Degree: <span class="math inline">\(d_{i}^{+} = \sum_{j} a_{ij} = [\mathbf{A} \mathbf{1}]_{i}\)</span> (if we treat rows of <span class="math inline">\(\mathbf{A}\)</span> as the originating nodes).</li>
+<li>In Degree: <span class="math inline">\(d_{i}^{-} = \sum_{j} a_{ji} = [\mathbf{1}^{\top}\mathbf{A}]_{i}\)</span>.</li>
 <li>If <span class="math inline">\(\mathbf{A}\)</span> is symmetric, the graph is undirected and so we only speak of the degree <span class="math inline">\(d_{i} = d_{i}^{+} = d_{i}^{-}\)</span>.</li>
 </ul>
 <p>Spectral graph theory relates eigenvalues/eigenvectors of <span class="math inline">\(\mathbf{A}\)</span> or its Laplacian to properties of graphs, and has important applications to high dimensional statistics and machine learning.</p>
@@ -760,16 +760,16 @@ a_{ij} = \begin{cases}
 </div>
 <p><a href="https://en.wikipedia.org/wiki/PageRank">Larry Page</a> imagines a random surfer wandering on internet according to following rules:</p>
 <ul>
-<li>From page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} &gt; 0\)</span>:
+<li>From page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_{i} &gt; 0\)</span>:
 <ul>
-<li>With probability <span class="math inline">\(1-p\)</span> they choose a link on a page <span class="math inline">\(j\)</span> uniformly at random and follow that link to the next page.</li>
+<li>With probability <span class="math inline">\(1-p\)</span> they choose a link on a page <span class="math inline">\(i\)</span> uniformly at random and follow that link to the next page.</li>
 <li>With probability <span class="math inline">\(p\)</span> they choose one page from the set of all <span class="math inline">\(n\)</span> pages uniformly at random and proceed to that page.</li>
 </ul></li>
-<li>From a page <span class="math inline">\(j\)</span> with <span class="math inline">\(r_{j} = 0\)</span> (a dangling page), they randomly choose one page from the set of <span class="math inline">\(n\)</span> pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.</li>
+<li>From a page <span class="math inline">\(i\)</span> with <span class="math inline">\(r_{i} = 0\)</span> (a dangling page), they randomly choose one page from the set of <span class="math inline">\(n\)</span> pages uniformly at random, thus avoiding getting stuck at a page without outgoing links.</li>
 </ul>
-<p>Here <span class="math inline">\(r_j\)</span> is the <em>out-degree</em> of page <span class="math inline">\(j\)</span> and <span class="math inline">\(\mathbf{A}  \in \{0,1\}^{n \times n}\)</span> the connectivity matrix of webpages with entries <span class="math display">\[
+<p>Here <span class="math inline">\(r_i\)</span> is the <em>out-degree</em> of page <span class="math inline">\(i\)</span> and <span class="math inline">\(\mathbf{A}  \in \{0,1\}^{n \times n}\)</span> the connectivity matrix of webpages with entries <span class="math display">\[
 a_{ij} = \begin{cases}
-1 &amp;  \text{if page $j$ links to page $i$} \\
+1 &amp;  \text{if page $i$ links to page $j$} \\
 0 &amp; \text{otherwise}
 \end{cases}.
 \]</span></p>
@@ -778,9 +778,9 @@ a_{ij} = \begin{cases}
 </ul>
 <p>The description above defines a Markov chain on the space of <span class="math inline">\(n\)</span> pages. Markov chain theory tells us that the <em>stationary distribution</em> of this Markov chain gives the ranks (probabilities) of each page.</p>
 <ul>
-<li><p>A vector <span class="math inline">\(\mathbf{x}\)</span> is a stationary distribution if it is a top right eigenvector of the transition matrix <span class="math inline">\(\mathbf{P}\)</span> corresponding to eigenvalue 1.</p></li>
+<li><p>A vector <span class="math inline">\(\mathbf{x}^{\top}\)</span> is a stationary distribution if it is a top left eigenvector of the transition matrix <span class="math inline">\(\mathbf{P}\)</span> corresponding to eigenvalue 1.</p></li>
 <li><p>Equivalently it can be cast as the solution to the linear equation <span class="math display">\[
-(\mathbf{I}_{n} - \mathbf{P}) \mathbf{x} = \mathbf{0}.
+(\mathbf{I}_{n} - \mathbf{P}^{\top}) \mathbf{x} = \mathbf{0}.
 \]</span></p></li>
 <li><p>GE/LU will take <span class="math inline">\(2 \times (10^9)^3/3/10^{12} \approx 6.66 \times 10^{14}\)</span> seconds <span class="math inline">\(\approx 20\)</span> million years on a tera-flop supercomputer!</p></li>
 <li><p>Numerical analyst <a href="https://en.wikipedia.org/wiki/Gene_H._Golub">Gene Golub</a> called this the largest matrix computation in world.</p></li>
