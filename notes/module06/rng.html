@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>RNG and PRNG</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0dc1e8188feb0d475c79e47387ad4ecc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module06/rng.html">Module 6 (Simulation)</a></li><li class="breadcrumb-item"><a href="../../notes/module06/rng.html">RNG and PRNG</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Module 1 (Fundamentals)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Module 2 (Programming)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/dispatch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Dispatch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Module 3 (Best Practices)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">Module 4 (Numerical Basics)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Linear Algebra Introduction</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">Module 5 (Linear Systems)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">Module 6 (Simulation)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rng.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">RNG and PRNG</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributions.jl</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/inverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inverse Method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rejection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rejection Sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">Module 7 (Resampling)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">Module 8 (Optimization)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">First-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Second-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Automatic Differentiation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-controls="quarto-sidebar-section-9" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-9-label">Module 9 (Data Technologies)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-9" aria-labelledby="quarto-sidebar-section-9-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-controls="quarto-sidebar-section-10" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-10-label">Labs</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-10" aria-labelledby="quarto-sidebar-section-10-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5 (Code Review)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-controls="quarto-sidebar-section-11" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-11-label">Homework</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-11" aria-labelledby="quarto-sidebar-section-11-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-controls="quarto-sidebar-section-12" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-12-label">How to…</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-12" aria-labelledby="quarto-sidebar-section-12-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#the-random-interface" id="toc-the-random-interface" class="nav-link" data-scroll-target="#the-random-interface">The <code>Random</code> Interface</a>
+  <ul class="collapse">
+  <li><a href="#the-rand-function" id="toc-the-rand-function" class="nav-link" data-scroll-target="#the-rand-function">The <code>rand()</code> function</a></li>
+  <li><a href="#shuffling" id="toc-shuffling" class="nav-link" data-scroll-target="#shuffling">Shuffling</a></li>
+  <li><a href="#setting-seeds" id="toc-setting-seeds" class="nav-link" data-scroll-target="#setting-seeds">Setting seeds</a></li>
+  <li><a href="#about-the-global-rng" id="toc-about-the-global-rng" class="nav-link" data-scroll-target="#about-the-global-rng">About the Global RNG</a></li>
+  <li><a href="#other-distributions" id="toc-other-distributions" class="nav-link" data-scroll-target="#other-distributions">Other distributions</a></li>
+  </ul></li>
+  <li><a href="#linear-congruential-generator" id="toc-linear-congruential-generator" class="nav-link" data-scroll-target="#linear-congruential-generator">Linear Congruential Generator</a></li>
+  <li><a href="#how-to-distinguish-non-randomness" id="toc-how-to-distinguish-non-randomness" class="nav-link" data-scroll-target="#how-to-distinguish-non-randomness">How to distinguish non-randomness?</a></li>
+  <li><a href="#choosing-a-random-device-optional" id="toc-choosing-a-random-device-optional" class="nav-link" data-scroll-target="#choosing-a-random-device-optional">Choosing a random device (Optional)</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module06/rng.html">Module 6 (Simulation)</a></li><li class="breadcrumb-item"><a href="../../notes/module06/rng.html">RNG and PRNG</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">RNG and PRNG</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Understand that random numbers on computers are almost always deterministic.</li>
+<li>Become familiar with the Random package interface for working with random devices.</li>
+<li>Understand the principles underlying the LCG and appreciate the universality of the standard uniform distribution.</li>
+</ol>
+</section>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<ul>
+<li>What is randomness? Humans talk about randomness in terms of absence of certain qualities, namely <em>discernable patterns</em> or <em>predictability</em>.</li>
+<li>Without a <em>physical source of randomness</em>, truly random numbers are expensive.</li>
+<li>Computers use PRNG, deterministic algorithms, to simulate different patterns of randomness.</li>
+<li>Pseudo-Random Number Generation (PRNG). Sometimes referred to RNG; the Pseudo is implicit.</li>
+</ul>
+</section>
+<section id="the-random-interface" class="level2">
+<h2 class="anchored" data-anchor-id="the-random-interface">The <code>Random</code> Interface</h2>
+<p>Random number generation on a computer is, with few exceptions, an entirely deterministic procedure. Starting from a particular state, different PRNG algorithms yield reproducible streams of seemingly random numbers. The <a href="https://docs.julialang.org/en/v1.12/stdlib/Random/">Random</a> package in the standard library provides an interface for PRNG in Julia.</p>
+<div id="2" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">using</span> <span class="bu">Random</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Julia allows us to create our own <em>random devices</em> for PRNG. The default in Julia is now <a href="https://prng.di.unimi.it/"><code>Xoshiro</code></a>, but there are others such as <code>MersenneTwister</code> that are used in R.</p>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>myrng <span class="op">=</span> <span class="fu">Xoshiro</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>Xoshiro(0x77cc36fdc7287cc8, 0x852e760767f2a5bb, 0x3d4edd63249979b1, 0x4adf59bf300f9efb, 0x45fd603e066d274b)</code></pre>
+</div>
+</div>
+<p>Different PRNGs will use different abstractions to represent state. The state of this particular PRNG appears to be based on a few different variables:</p>
+<div id="6" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a>myrng.s0</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>myrng.s1 <span class="co"># and so on...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="the-rand-function" class="level3">
+<h3 class="anchored" data-anchor-id="the-rand-function">The <code>rand()</code> function</h3>
+<p>To sample from a PRNG we again use <code>rand()</code>. This is the only sampling function we need in most cases. There is a non-allocation version, <code>rand!()</code> which can be used to store data in an array.</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">rand</span>(myrng)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.8370334533183617</code></pre>
+</div>
+</div>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="fu">rand</span>(myrng, <span class="dt">Int</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>6492078976843192865</code></pre>
+</div>
+</div>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">rand</span>(myrng, <span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Float64}:
+ 0.7723494887683179
+ 0.30271079139217405
+ 0.33672314302294826
+ 0.2620061958929294
+ 0.7205413700148333
+ 0.6775456947266262
+ 0.599110459001042
+ 0.30338607765124415
+ 0.7371629163844574
+ 0.6728538820710198</code></pre>
+</div>
+</div>
+</section>
+<section id="shuffling" class="level3">
+<h3 class="anchored" data-anchor-id="shuffling">Shuffling</h3>
+<p>The <code>randperm()</code> and <code>randperm!()</code> functions generates a random permutation. It can be used to shuffle multiple collections (e.g.&nbsp;arrays) <em>in the exact same manner</em>.</p>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a>x <span class="op">=</span> <span class="fu">collect</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>y <span class="op">=</span> <span class="fu">collect</span>(<span class="fl">101</span><span class="op">:</span><span class="fl">110</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a>idx <span class="op">=</span> <span class="fu">randperm</span>(myrng, <span class="fl">10</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>idx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Int64}:
+  4
+  2
+  6
+  8
+  7
+  3
+  5
+  1
+ 10
+  9</code></pre>
+</div>
+</div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>x[idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Int64}:
+  4
+  2
+  6
+  8
+  7
+  3
+  5
+  1
+ 10
+  9</code></pre>
+</div>
+</div>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>y[idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Int64}:
+ 104
+ 102
+ 106
+ 108
+ 107
+ 103
+ 105
+ 101
+ 110
+ 109</code></pre>
+</div>
+</div>
+<p>Alternatively, <code>shuffle()</code> and <code>shuffle!()</code> can be used if there is only one array and we don’t need to track how the shuffle happens.</p>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a><span class="fu">shuffle</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Int64}:
+  8
+  7
+  5
+ 10
+  1
+  2
+  6
+  3
+  9
+  4</code></pre>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="fu">shuffle!</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Int64}:
+ 106
+ 108
+ 104
+ 107
+ 101
+ 102
+ 103
+ 105
+ 110
+ 109</code></pre>
+</div>
+</div>
+</section>
+<section id="setting-seeds" class="level3">
+<h3 class="anchored" data-anchor-id="setting-seeds">Setting seeds</h3>
+<p>In the past, we’ve seen <code>Random.seed!()</code> calls to set the state of <em>the global PRNG</em>. The following always produces the same output (except perhaps on different hardware):</p>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1234</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a><span class="fu">rand</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.32597672886359486</code></pre>
+</div>
+</div>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">1234</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a><span class="fu">rand</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.32597672886359486</code></pre>
+</div>
+</div>
+<p>This works just as well with random devices like <code>Xoshiro</code>.</p>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>myrng <span class="op">=</span> <span class="fu">Xoshiro</span>(<span class="fl">206</span>) <span class="co"># seed at construction</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-label="3"></a>  <span class="bu">Random</span>.<span class="fu">seed!</span>(myrng, <span class="fl">206</span>) <span class="co"># seed explicitly</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-label="4"></a>  <span class="fu">display</span>(<span class="fu">rand</span>(myrng, <span class="fl">3</span>))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-label="5"></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>3-element Vector{Float64}:
+ 0.7751940871883816
+ 0.6929390030093477
+ 0.07939115512290973</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>3-element Vector{Float64}:
+ 0.7751940871883816
+ 0.6929390030093477
+ 0.07939115512290973</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>3-element Vector{Float64}:
+ 0.7751940871883816
+ 0.6929390030093477
+ 0.07939115512290973</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>3-element Vector{Float64}:
+ 0.7751940871883816
+ 0.6929390030093477
+ 0.07939115512290973</code></pre>
+</div>
+</div>
+</section>
+<section id="about-the-global-rng" class="level3">
+<h3 class="anchored" data-anchor-id="about-the-global-rng">About the Global RNG</h3>
+<p>In some cases, we do not need to manage our own random devices and can instead rely on the global one. This is how R typically handles randomness.</p>
+<p>If we ever need to inspect the glboal RNG we can retrieve it with <code>Random.default_rng()</code></p>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a><span class="bu">Random</span>.<span class="fu">default_rng</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>TaskLocalRNG()</code></pre>
+</div>
+</div>
+<p>If you’re on a system with multiple cores and have multi-threading support, then you’ll likely see <code>TaskLocalRNG()</code>. This is a specialized random device that works in parallel computing contexts by default.</p>
+</section>
+<section id="other-distributions" class="level3">
+<h3 class="anchored" data-anchor-id="other-distributions">Other distributions</h3>
+<p>By default, <code>rand()</code> corresponds to sampling from a Uniform distribution on <span class="math inline">\([0,1]\)</span>.</p>
+<p>It also supports sampling from discrete sample spaces:</p>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="fu">rand</span>([<span class="ch">'a'</span>, <span class="ch">'b'</span>, <span class="ch">'c'</span>], <span class="fl">10</span>) <span class="co"># with replacement</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>10-element Vector{Char}:
+ 'b': ASCII/Unicode U+0062 (category Ll: Letter, lowercase)
+ 'a': ASCII/Unicode U+0061 (category Ll: Letter, lowercase)
+ 'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+ 'b': ASCII/Unicode U+0062 (category Ll: Letter, lowercase)
+ 'b': ASCII/Unicode U+0062 (category Ll: Letter, lowercase)
+ 'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+ 'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+ 'b': ASCII/Unicode U+0062 (category Ll: Letter, lowercase)
+ 'c': ASCII/Unicode U+0063 (category Ll: Letter, lowercase)
+ 'b': ASCII/Unicode U+0062 (category Ll: Letter, lowercase)</code></pre>
+</div>
+</div>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="fu">rand</span>((<span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>), <span class="fl">3</span>) <span class="co"># Rademacher</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Int64}:
+  1
+ -1
+ -1</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb36-1"><a href="#cb36-1" aria-label="1"></a><span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5</code></pre>
+</div>
+</div>
+<p>For other distributions we have <code>randn()</code> for standard Normal, and <code>randexp()</code> for the unit Exponential distribution.</p>
+<div id="38" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb38-1"><a href="#cb38-1" aria-label="1"></a><span class="fu">randn</span>(<span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ -0.6902401060010828
+ -0.9364151410134179
+ -0.6177963903743136</code></pre>
+</div>
+</div>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb40-1"><a href="#cb40-1" aria-label="1"></a><span class="fu">randexp</span>(<span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ 0.34510742794620436
+ 0.5667837195829294
+ 2.135837462752255</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="linear-congruential-generator" class="level2">
+<h2 class="anchored" data-anchor-id="linear-congruential-generator">Linear Congruential Generator</h2>
+<p>Derrick Lehmer first published the Lehmer RNG in 1951 (LCG with <span class="math inline">\(c = 0\)</span>), followed by the Linear Congruential Generator, attributed to William E. Thomson (1958) and Aubey Rotenberg (1960).</p>
+<ul>
+<li>Simple to implement</li>
+<li>Fast: uses modular arithmetic which is fast on computers</li>
+<li><em>Don’t use in practice unless you need full reproducibility.</em> Julia implements this through the <a href="https://github.com/JuliaRandom/StableRNGs.jl">StableRNGs</a> package.</li>
+</ul>
+<p>Defined by the recipe (and variations thereof)</p>
+<p><span class="math display">\[
+X_{n+1} = (aX_{n} + c)~\mathrm{mod}~m,
+\]</span></p>
+<p>in which the sequence <span class="math inline">\(\{X_{n}\}\)</span> is a sequence of pseudorandom numbers. Let’s implement it in Julia:</p>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-21"><pre class="sourceCode numberSource julia code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode julia"><a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-21-1" class="code-annotation-target"><a href="#annotated-cell-21-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">linear_congruential</span>(state; a <span class="op">=</span> <span class="fl">5</span>, c <span class="op">=</span> <span class="fl">12</span>, m <span class="op">=</span> <span class="fl">16</span>)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-21-2" class="code-annotation-target"><a href="#annotated-cell-21-2" aria-label="2"></a>  x <span class="op">=</span> (a <span class="op">*</span> state <span class="op">+</span> c) <span class="op">%</span> m</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="3" onclick="event.preventDefault();">3</a><span id="annotated-cell-21-3" class="code-annotation-target"><a href="#annotated-cell-21-3" aria-label="3"></a>  <span class="cf">return</span> x</span>
+<span id="annotated-cell-21-4"><a href="#annotated-cell-21-4" aria-label="4"></a><span class="kw">end</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="1" data-code-annotation="1">Implement as a function. Here <code>state</code> is the last number <span class="math inline">\(X_{n}\)</span>. <code>a</code>, <code>c</code>, and <code>m</code> are parameters defining a particular LCG. <code>state</code> is a required positional argument, and everything after the semicolon <code>;</code> is an optional keyword argument.</span>
+</dd>
+<dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="2" data-code-annotation="2">The implementation. Easy stuff.</span>
+</dd>
+<dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="3" data-code-annotation="3">Return <code>x</code>, which reperesents <span class="math inline">\(X_{n+1}\)</span>.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>linear_congruential (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1" aria-label="1"></a>x <span class="op">=</span> <span class="dt">Int</span>[]</span>
+<span id="cb43-2"><a href="#cb43-2" aria-label="2"></a><span class="fu">push!</span>(x, <span class="fl">10</span>) <span class="co"># starting value</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-label="3"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">99</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-label="4"></a>  <span class="fu">push!</span>(x, <span class="fu">linear_congruential</span>(x[i], a <span class="op">=</span> <span class="fl">5</span>, c <span class="op">=</span> <span class="fl">12</span>, m <span class="op">=</span> <span class="fl">16</span>))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-label="5"></a><span class="cf">end</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-label="6"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-label="7"></a><span class="fu">first</span>(x, <span class="fl">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>12-element Vector{Int64}:
+ 10
+ 14
+  2
+  6
+ 10
+ 14
+  2
+  6
+ 10
+ 14
+  2
+  6</code></pre>
+</div>
+</div>
+<p>Notice anything? Unfortunately, this LCG has a period of 4. We can achieve a period of length <code>m</code> by choosing <code>a</code> and <code>c</code> <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator#m_a_power_of_2,_c_%E2%89%A0_0">appropriately</a>. Dividing by <code>m</code> maps the values onto <span class="math inline">\([0,1]\)</span>.</p>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1" aria-label="1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-label="2"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-label="3"></a>x <span class="op">=</span> <span class="dt">Int</span>[]</span>
+<span id="cb45-4"><a href="#cb45-4" aria-label="4"></a><span class="fu">push!</span>(x, <span class="fl">10</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-label="5"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>(<span class="fl">10</span><span class="op">^</span><span class="fl">3</span> <span class="op">-</span> <span class="fl">1</span>)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-label="6"></a>  <span class="fu">push!</span>(x, <span class="fu">linear_congruential</span>(x[i], a <span class="op">=</span> <span class="fl">1664545</span>, c <span class="op">=</span> <span class="fl">1013904223</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">^</span><span class="fl">32</span>))</span>
+<span id="cb45-7"><a href="#cb45-7" aria-label="7"></a><span class="cf">end</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-label="8"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-label="9"></a><span class="fu">histogram</span>(x <span class="op">./</span> (<span class="fl">2</span><span class="op">^</span><span class="fl">32</span>); legend <span class="op">=</span> <span class="cn">false</span>, bins <span class="op">=</span> <span class="fl">32</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQoAAAOYCAIAAAASQVl9AAAABmJLR0QA/wD/AP+gvaeTAAAgAElEQVR4nOzdeZiV9X3w4e+sLA67QhgUWaS4FMQlxIRYFXFBFNRL4wrq5QrGpanV1LaSpKktrfu4a4k0BhBRYiTVJKCIC7xBEBcEFxBBQRmYgYGZYRk47x8nnWs6DKtneI5w3394HX7PjzNfZvUzzznPyUmlUgEAAAD7ttykBwAAAIDkyWMAAACQxwAAACCPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAARGPk8caNGx999NFTTz21c+fOxcXFRx999PDhw998882td37yySfXXHPNoYce2r59+z59+owcObKioiLj8wAAAMAO5aRSqQze3ZIlS84444x58+al/9ikSZMNGzZExLBhw8aMGVN359SpU4cMGVJZWbnffvu1b99+6dKlNTU13bt3f/311zt27JjBkQAAAGCHMnn2uKKi4uSTT543b95xxx33yiuv1NTUVFdXf/HFF//93/993HHH1d25atWqH/3oR5WVlcOHD1+xYsWiRYsWL178gx/8YOHChZdcckkGRwIAAICdkcmzxzfccMODDz7Yt2/fadOmNWvWbDs7//mf//mXv/zlUUcdNWvWrLy8vPTismXLDjnkkOrq6qlTp/bv3z9TUwEAAMAOZezscXl5+X/9139FxL333rv9No6ICRMmRMS1115b28YRUVxcfM4559QeBQAAgD0mY3n8+9//vrq6ukuXLj/4wQ+2v3PlypUff/xxRPzN3/xNvUPplQav4wUAAACNJ2N5PGvWrIg47rjjFi9efOmll7Zu3TonJ+c73/nO0KFDFyxYUHdn7R87depU704OPPDAiPjkk0+2bNmSqcEAAABgh/IzdUdffvllRKxdu/boo48uLy/v0qVL165dP/zww6effnrSpEm/+93vap9OXFZWFhEFBQUtW7asdyft2rWLiA0bNlRWVrZo0WJXZ6ioqHjwwQe7d++em9tA9rdo0aJ///6FhYW7ercAAADs9TKWx+mXLP7973/fvn37P//5z9/97ncjory8/NJLL/2f//mfCy+8cOHCheniraqqiojWrVtvfSe1i+vWrduNPL7iiiuef/757Wy4//77r7nmml29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xOznkx4CANh3uTQXAAAAyGMAAACQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAAiIj8pAcAAGAHKisrZ86cmUqlkh5km3Jzc/v169ekSZOkBwHYffIYACDb3XbbbQ899FDSU+zAyJEjf/aznyU9BcDuk8cAANmuvLw8IqL3GdG6OOlZGlK6KOa/8pchAb615DEAwLfEgBvisJOTHqIhsybE/FeSHgLgm3JpLgAAAJDHAAAAII8BAAAgMvvc49tvv33VqlVbrzdv3vzee+/dev3zzz+/9957p02bVlFR0bFjx8GDB99www3NmzfP4EgAAACwMzKZx+PGjVu8ePHW623atNk6j994440zzzxzzZo1hYWF7dq1mzlz5ltvvTVmzJjXXnvtgAMOyOBUAAAAsEOZv3L1Y4891q1bt7orBQUF9fasXr363HPPXbNmzeWXX37fffe1atVq0aJFF1xwwdtvvz106NCXX34541MBAADAdmQ+j4877rjevXtvf8/9999fWlraq1evJ554Ij8/PyK6dev23HPP9ezZ8w9/+MPrr79+/PHHZ3wwAAAA2JZkLs31zDPPRMR1112XbuO0zp07DxkyJCLGjx+fyFQAAADssxLI41WrVs2fPz8iTjjhhHqHTjzxxIh444039vxUAAAA7Msyn8dXXHFF27Ztmzdv3rVr18svv3z27Nn1NixYsCB946CDDqp36MADD4yIjz/+eMuWLRkfDAAAALYl8889njNnTps2bTZt2rR48eLFixc//fTT//7v/37LLbfUbki/+FNBQUGLFi3q/d127dpFxPr16ysrK7c+ukPpqF6wYMGUKVO2PlpQUNCvX7+6D+cGINuUlZU1+D08Sxx88ME9evRIeoqGbdiw4Y033mjZsmXSgzRs7ty5SY+wI6nU5s2bs/bT76uvvkp6BIC9XyZb8YorrjjxxBP79u3btGnTTZs2ffDB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1rBhw1KpVElJySOPPFJ3c2Vl5eDBg7/66quzzz57yZIlGzdunDVr1qGHHjpz5swrr7wyUyMBAADATsrY2eP27du//PLLdVc6duz4/e9/v6amZuzYsaNHj77++utrDz300ENLly7t0aPH+PHjmzRpEhHHHnvsb3/72169ek2cOHHWrFnf/e53MzUYAAAA7FCjX5pr4MCBESSqjDUAACAASURBVLF8+fK6i2PHjo2IESNGpNs4rWfPnoMGDYqIcePGNfZUAAAAUFej5/HSpUsjokePHrUrq1evfvfddyOif//+9TanV6ZNm9bYUwEAAEBdjZvHr7766n/8x3/k5OTccssttYsLFixI3+jcuXO9/V26dImIjz76KJVKNepgAAAAUFfmX0XptttumzNnzoYNG5YsWfL555937979iSeeOOuss2o3lJaWRkR+fn6rVq3q/d127dpFRFVVVWVlZVFR0a6+6XRUL1myZPbs2VsfLSgo6NWrV05Ozq7eLQAAAHu9zOfxO++8M2XKlPTtnJycI488slOnTnU3VFVVRUTr1q23LtU2bdqkb6RfNnk33nREjBo1atSoUQ1uKCkpufjii3f1bvewDRs2JD0CAACwD6msrCwrK0t6im+kqKiosLDwG95J5vN4zJgx1dXVmzZtWrJkya9+9atnnnlm8uTJ48aNO/fcc//yJvPzI2L9+vVb/93axd37hx100EER0bNnz3pBnlZUVHT88cfvt99+u3HPe1L6/QMAALBnNGnSJPtDafsyklGZL7GOHTumb/Ts2fOUU0455phjbrnlluuvv37gwIHNmjWLiBYtWkTEunXrNm7cWC+D07+xyMnJ2Y1TxxFxwAEHRMSNN944YsSIb/ivSFBeXl7SIwAAAPuQ/Pz8ui8qtM9q9CtXX3311bm5uV999dX777+fXunatWv6xsqVK+ttTq8UFxd/89PiAAAAsPMaPY9btmyZPhVcG8PdunVLn0BOv7xTXeknDx955JGNPRUAAADU1eh5/P7771dUVESdk8Z5eXmnn356REycOLHuzlQq9fzzz0fEmWee2dhTAQAAQF0Zy+OXXnpp8eLF9RY//vjjyy67LCL69Olz2GGH1a7feOONEfHrX/96xowZtYt33333J5980q5du0suuSRTUwEAAMDOyNiluV544YVBgwb16tWre/funTt3Xrdu3cKFC6dPn75ly5bWrVuPHj267uYf/vCH11577WOPPTZgwIDLLrusW7duM2bMmDRpUk5OzkMPPdSyZctMTQUAAAA7I2N53K9fvzfeeOO999577733ahcLCwvPOeecO++8s1u3bvX2P/jggwcccMDdd9/9yCOPpFc6dux4//33n3/++ZkaCQAAAHZSxvJ46NChQ4cO/frrrxcuXPj1119HRMeOHXv16rWtl8/Kz8//l3/5l1tvvXXWrFnl5eXFxcV9+/b1mkYAAAAkIsOve9yhQ4cOHTrs/P4WLVr0798/szMAAADArmr0K1cDAABA9pPHAAAAII8BAABAHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAiMjP4H1VVFRMnjx55syZn3322Zo1azp06HDCCSdceumlrVu3bnD/6tWrR48ePW3atDVr1nTs2HHIkCEXXHBBbq5iBwAAYE/LWB4/8MADt95664YNG+ouTpw48Re/+MW4ceNOPvnkevvnzZs3cODApUuX1q4888wzjz/++IsvvlhUVJSpqQAAAGBnZOxU7eeff15TU3P++edPmDBh/vz5H3744dixY3v06FFaWjpkyJDFixfX3VxdXT148OClS5eefvrpCxYs2Lhx4/Tp07t37z5t2rRrr702UyMBAADATspYHp911lmffvrphAkTzj///EMPPfSwww676KKLXn/99Q4dOlRWVj700EN1Nz/yyCOLFi3q1q3bc88917Nnz4KCguOPP/6FF17Iz88fN27cO++8k6mpAAAAYGdkLI9PPPHELl261Fvs0KHDOeecExFz586tuz527NiIGD58ePPmzWsXjzjiiIEDB6ZSqfRRAAAA2GMa/TpYLVu2jIi8vLzalYqKijlz5kTEgAED6m1Or7z66quNPRUAAADU1bh5nEqlXnrppYg47rjjahfnz5+fSqUiYuuzzemVBQsWpDcAAADAnpHJF3ba2uOPP/7+++/vt99+dS+4VVpaGhH5+fmtWrWqt79du3YRUVlZWVVVtd9+++3eG125cuWiRYu2Xs/Pz+/cufPu3ScAAAB7t0bM45kzZ958880Rcd9993Xs2LF2vbKyMiJat26dk5NT76+0bds2fWPt2rW7kcfpa3qNHDly5MiRDW54+OGHL7zwwl292z2s3otjAQAANKqqqqry8vKkp/hGioqKCgoKvuGdNFYev/fee2eeeeb69etvvvnmq6666v+8yfz82EYErl+/Pn1j9/5hxcXFEdGzZ89OnTptfbSgoKBv3751LwaWndLvHwAAgD2jsLAw+0Np++pe7mq3NUqJzZ8//5RTTlm1atVVV111zz331DtaVFQUEWvXrt24cWNhYWHdQ7W/sUjv2VUdOnSIiBtvvHHEiBG7M3d2yMjHFQAAYCfl5+c3adIk6SmSl/lLc3366acDBgxYsWLF0KFDH3vssa0fQV17Ra6ysrJ6h1auXBkRxcXFPjYAAADsSRnO488///yUU05ZtmzZeeedN3r06NzcBu6/e/fu6ecVv/vuu/UOpVd69+6d2akAAABg+zKZ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ItUUm9dFz37Z7kfbNq2JHr0jP2uv1N22mg3/exPi86yoqGj+/PkHHnjgrjSShT9Sly5dIqKxsbH1ooaG/70en5+/MycfJ5xwwty5cwsLC/Py8lovzcvLGzx48E7flO40GzZsWL169dB99u7aNVfPsHNdDmeniJzvXq77+OOaHt1TAwfm7Clsjv99c7x7ETEo2x1oX07/B1ZVdfvss8+G7r13YWGunmHnupz+++Z893LdkiU1RUWNgwbl7JeMv+8u2ivbHWhfTv99q6urV6xYv++oUd265eoFuO1TUlKSPIy8K7Jw93jWrFmnnXZaXl5eXV1diwT4u9/97sQTT4yI2traz/ufBwAAgM+RLEzNVVFRERHpdHrdunUtFq1duzYiBgwYIBsDAADQmbIQj/fbb78k/b733nstFi1YsCAiRo8e3fm9AgAAYE+WhXhcWFh40kknRcTMmTNbLHr22WcjYvz48Z3fKwAAAPZkWYjHEfGtb30rIu677773338/U/joo4/Onz+/pKTkoosuykqvAAAA2GNlYWquxF//9V/PmDGjf//+3/72t4cMGfLGG29MnTq1oaHhrrvumjx5cla6BAAAwB4ra/F48+bNkyZNeuihhzIl3bp1mzJlyvXXX5+V/gAAALAny1o8Tnz00UezZ89et27dPvvsc8opp/Tu3TuLnQEAAGCPleV4DAAAALkgO1NzAQAAQE4RjwEAAEA8BgAAAPEYAAAAIqIg2x34YpozZ85tt9325ptvbtq0aciQIeeee+4NN9zQvXv37fx4Op2ePn36tGnTFi9enJ+fP2rUqKuvvvq8887bauUPP/zw1ltvfemll9avXz9gwIDTTz/9+9///oABAzpua6CDPfLII7/4xS8WLVqUTqdHjhw5YcKEiy++OC8vb5sfrK+vf/nll59++un58+cvWbKkvr4+mfT+uuuu23fffVtUnj59+qxZs7bazi233HLAAQd0wJZAR3vrrbduu+22OXPmVFVVDR48+Jxzzvn7v//7kpKS7fnsD37wg/fff3+rix5++OGioqIWhcuWLZsyZcqLL764du3avn37nnbaaTfffPPee++9q9sAu82vfvWrqVOnLliwoLGx8YADDrj88suvvPLKLl22fbPn3nvv/e1vf9tOhenTp2cOtMcee2zGjBlbrfb973//y1/+8k70HHafVCr1/vvvz507d968eZ9++mlEXH/99UccccQONbJy5copU6Y8//zzq1evLi8vP+mkk26++ebhw4dvtfJjjz12zz33LFy4MJVKjRw58sorr7z00ku350Tu8yFNR7vvvvvy8/MjYsCAAaNHj+7atWtEjB07dsOGDdvz8aampr/5m79J/jojRowYNmxY8u9Jkya1rvzKK68UFxdHRFlZ2ZgxY5J/Dxgw4P333+/ozYIOkEqlLr/88mSXHj58+P7775/8+5vf/GYqldrmx8ePH5/57urZs2fmdL9nz56zZs1qUfnaa69t63vv1Vdf3T3bB7vkscceKygoiIi+ffuOHj062cMPOOCANWvWbM/HjzrqqLb2+erq6haV33zzzdLS0ogoLS0dM2ZMz549I6K8vPydd97ZDVsGHWDy5MnJ/jxkyJARI0Yk5+JnnXVWU1PTNj/7rW99q52T4V69etXV1WUqf+9732ur5gsvvLA7NxF2xogRI1rsqE8++eQOtbBo0aJ+/fpFRHFx8ZgxY3r16hURJSUlr732WuvKV111VbKWYcOGZU7kLrjggu05kftcEI872IIFC5I8fOeddybf10uWLBk9enREXHjhhdvTwp133hkRffr0yZzBP//880nuffTRR5vX3LhxY//+/SPiqquuqqmpSafT69evP/300yPioIMO2p7RAjrZfffdFxE9e/Z88cUXk5Lf//73ZWVlEXH33Xdv8+Pjxo0bNWrUf/zHf3z22WfpdLqpqWnOnDljx45NTm5WrVrVvHISj6+55pq5rWzatGl3bB3sio8++qhbt24RccsttzQ0NKTT6U8++eQv/uIvIuKMM87YnhaSeHzXXXe13udbjAg1NTUVFRURcdFFFyXJuaqqKrkyu//++9fX1++ODYRd8fjjj0dE9+7dZ86cmZS8/vrryQn97bffvs2PL1u2rPVxMXfu3OQMbeLEic0rJ/H40ksvbV1/48aNu2XzYBdUVFTsu+++Z5111pQpU3r37r2j8bixsXHUqFER8bWvfS25mVdTU3PllVdGxF577dXilOmBBx5IknPmtsTs2bPLy8sj4qc//WkHblQWiccd7Pzzz4+Ic845p3nhu+++m5eX16VLl8WLF7f/8bq6ur59+0bE9OnTm5f/y7/8S0SMGDGieeGPf/zjiBg5cmRyIpXYsGFDnz59duK6EexuTU1NyRn5T37yk+bld999d0QMGjSosbGx/RYWLVrU+trkJ598ktz4+tnPfta8PInHU6ZM6ZDOw+42YcKEiDj11FObF3700UfJ/eS5c+dus4UkHj/33HPbrPnzn/88uQVXW1ubKayurh40aFBE3H///Tvefdi9DjzwwIj40Y9+1LzwkUceSZ56aL4nb7+PP/44eTD7zTffbF6exOObbrppl3oMnaX5A6rJD2R2KAX88pe/jIi+ffs2b6e+vj456O64445MYSqVGjp0aIvC9P/d/BgwYMAX4+qqqbk60pYtW379619HxMSJE5uXjx49+uijj06lUr/61a/ab+F3v/tdZWVlaWnpN77xmgX7igAADxBJREFUjeblEyZMKCgo+OCDD+bPn58pfPLJJyPiyiuvTE6eEr169Uoi+hNPPLHLGwQd6c0331y+fHlhYWHm+erExRdf3KNHj08//fTVV19tv4UDDzyw9S9b9t5778MPPzwiPvjgg47tMHSapqamZ555JiJaPAI6bNiwcePGxf994XeUpLVLL700uV+dKC4uvvjii8PwQe5ZsGDB4sWLu3TpknmqM3HuueeWl5evW7fupZde2olmp02blkqlRo8efeihh3ZQTyELkmehd1oyIlxwwQXN2+natesVV1wR//+IMG/evCVLlhQUFCSLMi688MKePXuuWrVq9uzZu9KTHCEed6R33nmnurq6S5cuf/mXf9li0THHHBMRr7/+evstzJkzJyIOO+ywFnOo9O7dO3n+J6kQEbW1tUlUPvroo3duXdDJkr137Nixyc3ejB49eiRPkGZ27x3V0NAQEckPKbdqw4YNO9cydI4PPvigsrIyOugrvampadOmTe0sfeONNzpqXdAJktFhxIgRydPUGV27dj3yyCNjp4aPVCr10EMPRUTyEGlbDB984SXf+W2NCG+//XZdXV1SkhxoY8aMSX4Wl9GtW7fDDjssduFELqeIxx0pmTK0rKysR48eLRYljzosXrx4e1rYa6+9Wi9KnnnLzEr64YcfplKpTHnrda1YsaK6unrHNwJ2l2Tvbb3HRqvde4csX778tddei4iTTjqp9dKpU6f26NGjd+/eXbt2Peyww37+858nWRpySrLzFxYWJr+vaW47h4+Ma665plu3bqWlpT169DjppJOeeuqpFhWWLVu2ZcuWaHv42LBhw6pVq3Z8I2B32R3Dx6xZs/785z8XFha2eF4v44EHHigpKendu3dBQcEhhxzyb//2b8mBA18kGzdu/Oyzz6LtEaGxsfGjjz5KSnbTiVyuEY870rp16yIi+elvC0nh+vXrt6eF1qdHrVtIam51dUlJOp3e5uqgM+36AdJaKpWaOHFiY2Pjsccee8IJJ7SusGbNmv79+1dUVDQ1Nb311lt/+7d/e/zxx1dVVe1492E36sCjY9WqVUOHDu3fv39tbe3LL798zjnnXHLJJcnl1Obriq2NNZkOZOpALtgdw8f06dMj4swzz2xxRzqjsrKyvLx8yJAh6XT67bffvv7664866iiHBl8wOzQi7I4jMQeJxx2ptrY22vgBQPIQwubNm9tvIbkwudVnRJOZ6DItJOsqLCxs/TrlzAMP21wddKZk997qAdJi995+N91006xZs8rKypKpFJs7+eSTX3zxxdra2qVLly5btmzTpk133XVXt27d5syZM2nSpJ3ZANhttjl8NDQ01NfXt9/IZZdd9tZbb9XU1HzwwQerVq1avXr1d77znYh46KGHknciNF9XbG2sMXyQm9oZPrbz/KqFtWvXJpPFtPgJZeKYY455/vnnN2/evHz58iVLllRXV99zzz3FxcVvv/32ZZddtjMbALmqnRGhe/fuyY89M8dXhx+JuUk87kjJPrTVR5qTn4E1nwRlqwoLC6ONfatFC8m66uvrW58wZX5yts3VQWdKdu9dOUBa+Nd//dfbbrutR48ezz77bDKVYnNnnnnmuHHjkpeQR0RxcfHkyZOTWbJ/+ctfLl++fCc2AXaTbQ4fXbp0Sd4a2I4rrrgi+Rl/ol+/fnfcccff/d3fRcTtt9+euYGcmdui9Vhj+CA3tTN8JIU7usc++OCDdXV1++yzz8knn9x66fjx40877bTMEde9e/eJEyc++OCDETFz5sxFixbtaP8hZ7UzImRSRub46vATudwkHnek5LrLVh+8SQrbmTqoeQtr167dZguZf7ReXaZkFyeyg4616wdIc3feeecNN9xQVFQ0Y8aMY489djs/9c1vfrO8vDyVSm1zlmzoTNs8Onr16tV62vbtcd1110XE6tWrMz8Jyxxorccawwe5qZ0DJNmNd2j4iIgk61522WWZS6jbdPbZZw8ePDgi/vCHP+zQuiCXtT8ipNPpaDYidOyJXM4SjzvSfvvtFxHr1q1rbGxssWj1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">
+</div>
+</div>
+<p>Once we have a way of simulating uniform random numbers we can simulate virtually any distribution. We’ll see why in the upcoming notes.</p>
+</section>
+<section id="how-to-distinguish-non-randomness" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-distinguish-non-randomness">How to distinguish non-randomness?</h2>
+<ul>
+<li>Look for a period in data.</li>
+<li>Are there any values missing systematically from a random stream? Or more rare than you might have expected?</li>
+<li>Look for a proper distribution in the limit.</li>
+<li>Check for autocorrelation.</li>
+<li>Gets harder for higher dimensions…</li>
+</ul>
+</section>
+<section id="choosing-a-random-device-optional" class="level2">
+<h2 class="anchored" data-anchor-id="choosing-a-random-device-optional">Choosing a random device (Optional)</h2>
+<ul>
+<li>The random devices in the standard library are chosen for two reasons: they’re incredibly fast and have suitably long periods.</li>
+<li>However, they are subject to buf fixes and performance improvements over time. That means there are no guarantees that <code>Xoshiro(206)</code> produces exactly the same sequence in Julia 1.99 as it did in Julia 1.12.</li>
+<li>In practice, we never rely on exact statistical reproducibility because our results should not hold for specific seeds!</li>
+<li>If you truly need full reproducibility, use <a href="https://github.com/JuliaRandom/StableRNGs.jl">StableRNGs</a> in Julia. The only supported PRNG is the LCG.</li>
+<li>PRNGs for computational applications are rarely cryptographically secure. If you need security, search the Julia package ecosystem for the slower but secure PRNGs.</li>
+</ul>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb46-1"><a href="#cb46-1" aria-label="1"></a><span class="im">using</span> <span class="bu">StableRNGs</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-label="2"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-label="3"></a><span class="co"># This is guaranteed to always produce the same sequences.</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-label="4"></a>x <span class="op">=</span> <span class="fu">randn</span>(<span class="fu">StableRNG</span>(<span class="fl">111</span>), <span class="fl">1000</span>)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-label="5"></a><span class="fu">histogram</span>(x; legend <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<img src="data:image/png;base64,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jzwyIj788MP6+vrsSvYyUTU1NR2PFWebOefXkQIAAKB32o3yuLGxMXuj9X0LY8aMycvLy2Qya9asabc5++HhsWPH7soJAQAA6Kl2ozxesmRJRIwaNapPnz7ZlcrKyi9/+csRsWjRorY7W1paFi9eHNu7HjIAAAB0QgJ5vGrVqm3btrVb/O1vfztnzpyIOOuss9quz5w5MyLmzZu3cePG1sUf/ehHb7zxxqBBg6ZNm9b18wIAANDz5ezUXHV1dd/61reyt998882IeOedd1pPfFVdXd2asrfddtuTTz45ZcqU/fbbb6+99tqwYcOKFSsee+yx5ubmAw888PLLL2/7tOedd94DDzzwhz/84dhjj7388surqqp+85vf3H777RFxyy239O/fP1fzAwAA0JvlLI/T6fTChQvbrtTU1LSujBs3rjWPBwwY8NFHHz344INtN+fn51dXV//7v/97u+ItKip64oknzj777GXLlp133nnZxT59+tx6663ZA8sAAACw83KWx/369VuxYsUn3VtVVdV6+z/+4z++973vLV++fP369Rs3biwpKdl7772PP/74TzoN9dChQ5955pnf//73v//97z/66KN99tln0qRJQ4cOzdXkAAAAkLM8LigoOPTQQz/j5qqqqjPPPPNzPf/RRx999NFHf/65AAAA4NPtRmeuBgAAgKTIYwAAAJDHAAAAII8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAACEPAYAAICQxwAAABDyGAAAAEIeAwAAQMhjAAAACHkMAAAAIY8BAAAg5DEAAABERGHSAwAAdFZTY0QsX778iiuuSHqUrvLxxx+ffPLJp512WtKDAPR88hgA6LbW/TEiVq5cuXLlyqRH6UJPP/20PAbYBeQxANBtZZojIr741Th8etKjdI2P62LB7KampqTnAOgV5DEA0M1VjYmvzEx6iK6R2hQLZic9BEBv4dRcAAAAII8BAABAHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAkMcAAAAQ8hgAAABCHgMAAEDIYwAAAAh5DAAAACGPAQAAIOQxAAAAhDwGAACAiChMegAAdl9r1qzZtGlTcXFx0oN0lW3btiU9AgCwu5DHAGzfxo0bxx93XFM6nfQgAAC7gjwGYPu2bt3alE5H34r44leTnqXLrHwkWlqSHgIA2C3IYwB2qHL/OP9nSQ/RZS4oi+ampIcAAHYLTs0FAAAA8hgAAADkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAAhjwEAACDkMQAAAIQ8BgAAgJDHAAAAEPIYAAAAQh4DAABAyGMAAAAIeQwAAAARUZj0AADd2AcffFBfX5/0FF1l3bp1SY8AALDr5DiPW1paXnvttVWrVm3dunXQoEFnnnnmDjb/+c9/XrBgwRtvvFFWVnbooYdOnz59jz322O7OhoaGhx9++IUXXvjoo49Gjhw5bdq0L3/5y7mdHODzWrp06SmnnNLS0pL0IAAA5EDO8vi55567+uqrV61aVVNTk10ZN27cDvL4xhtvvOaaa5qbm1tXrrvuuocffviII45ot/PVV1+dMmXKn//859aVm2+++aKLLrrzzjvz8vJyNT/A57V27dqWlpboPywGDEt6lq7RUBsbXkt6CACAXSRnebxmzZpnn302Ivbaa69+/fq1rdmOfvzjH//rv/5rcXHxTTfddPrpp9fU1Nx0002PP/745MmTX3zxxaFDh7burKurmzRp0uuvv37cccddf/31w4YN+81vfvOd73znrrvuGjp06FVXXZWr+QE6afy34uvXJj1E11jz25hzUtJDAADsIjk7NddRRx21aNGi999//913373kkkt2sLO+vv7KK6+MiNtvv/273/3uF7/4xSOPPPLRRx899thjP/zwwxtvvLHt5rvuuuv111/ff//9n3rqqeOPP/6AAw6YNWvWT37yk4i46aabNmzYkKv5AQAA6M1ylsdjxoyZNGnSnnvu+ak7n3rqqQ8++GDIkCGzZs36/3Pk519xxRUR8ZOf/CSdTreuP/jggxFxySWXlJaWti6efvrp48aNq6+vX7BgQa7mBwAAoDdL4MJOTz/9dESceOKJxcXFbddPPPHEoqKiLVu2rFixIrvy7rvvZt+kfcopp7R7klNPPbX1qQAAAGAnJZDHL7/8ckTsv//+7dbLysqGDx8eEa+88krbnQUFBaNGjWq3efTo0W13AgAAwM5I4LrH77//fkRUVFR0vGvQoEFr167NbmjdOXDgwPz89hmffXjrzs6pq6vbsmVLx/Xy8vJ2R7YBAADo2RLI4/r6+ogYOHBgx7uy0ZtKpbK/rKuri4hBgwZ90s76+vrm5uaCgoLPO0P2uPSMGTNmzJjR8d6ioqLHH3/82GOP/bxPS26lUqmWlhb/VNF9pdPpVCrVg1/BhoaGpEcAeoXm5uba2tqkp6CTMplMKpVqexodup1UKpWfn5/JZJIehB0pLS0tLNzZvE0gj7O2++WVvQxy67Hi7GWN214bud3OvLy8zl36uLy8PCIqKyuzN9rp06dPRUVFJ6qb3Cr4q6QHoZMymUzPfgU7vrEFoCvk5eX14J+lPV725fMKdmsFBQW+DXd/nQvDdhLI4379+kXEpk2bOt61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mpqaOq7379+/urq643p9ff2CBQuef/75VCo1fPjwadOmHXXUUV0/JrBTrrrqqttvvz3pKQAA4DNJJo//6Z/+qa6uruP66NGjO+bx6tWrTz/99Ndff711Zc6cORdccMHdd9+dn+/N4bD7evvttyMiho6Okn5Jz9I1Nr4VdZuTHgIAgNxI8s3VF154Yd++fduuDB48uN2eVCo1adKktWvXnnDCCddff31VVdWzzz576aWX/ud//ueee+55zTXX7MJ5gU75xj3xheOTHqJr3P/NeOH/JD0EAAC5kWQeX3XVVcOGDdvxnjvvvHPt2rUHHHDAr371q5KSkogYNWrU0KFDv/a1r91yyy2zZs361GcAAACAT7W7vzn5oYceioh//ud/zrZx1qRJkw4++OBt27YtWLAgudEAAADoOXbrPF63bt2rr74aEaecckq7u7IrzzzzTAJjAQAA0OMk+ebq66677u233/74449HjBjx1a9+9ayzziotLW274eWXX46IgoKCffbZp91j999//4h45ZVXdtWwAAAA9GRJ5vEPf/jD1tsPPfTQNddcs2DBgrZXbPrggw8iYtCgQR3PUJ09iVd2Q6fV1dVt2bKl43pxcXF5efnOPDMAAADdSzJ5fNRRR02aNOmwww7bc889N2zYsHLlyttuu23dunUTJ05cuXLlvvvum92WvfjTwIEDOz7DoEGDIqK+vr65ubmgoODzDvDSSy9FxIwZM2bMmNHx3sLCwl/+8pfjx4//vE9Lbm3durW5ubm4uDjpQeikdDqd9AgAdA+1tbU1NTVJT9ElMpnM1q1b+/Tpk/QgdF4qlcrPz29qakp6EHakrKysqKhoJ58kmTx++umnW2+PHj16/PjxZ5111hFHHPHOO+9cf/318+fPz96VPWjc3Nzc8RmyX515eXmdu/Rxv379IqKysnK7R4kHDBiw55577vz/XHZS0V8lPQid5MrkAHxGhYWFPfVP/Ewm4+8z3V1RUVFeXp4XcTeXk795Jvnm6raGDh165ZVX/sM//MOiRYtaF7Ptunnz5o77s4vl5eV5eXmd+O323nvviLjrrrumT5/eyYnpeg0NDWVlZY4ed1+deGcHAL1TaWlpWVlZ0lN0iUwmU19f31P/63qJ5ubm/Px8L2JvsBsd2zn88MMjYuPGjdn3VEfEyJEjI6KmpqbjOxk2bdrUugEAAAB2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pFPkSlNT07hx4/r06ZN0EHJOPQYAAA7WtvUR8eyzz+ZxPY6IcePGvfHGG0mnIOfUYwAA4GA11kVE9B8e/+3EpKPkRiYTry3Zvn170jnoDOoxAABwaI46LS5bkHSI3GhvjSt6Jx2CTqIe03Vt2rSpqampuLg46SC50tramnQEAADgP9RjuqhNmzadeNJJrel00kFyrNB7EAAAugRDc7qo7du3t6bTUdY/qo5LOkvOrFmadAIAAOA/1GO6tpFfjv/5VNIhcuZ7JUknAADgwDKZTNIR6AzqcTe2adOmPP7xqqnzAQDoInbs2JF0BDpD96jH9fX1Dz744AsvvFBfX19VVfXNb37z1FNPTTpUwh588MFp06YlnQIAAPJfW1tb0hHoDN2gHr/11lsXXHDBhg0bdi+ZP3/+5Zdf/vvf/76wsDDBYMnavHlzRMSg0dF/RNJZciNVE1veSjoEAADwedHV6/HOnTvPP//8jRs3Tpw48bbbbhs2bNiyZcuuueaae++9t7Ky8tZbb006YNK+OiPOvS7pELnxj4fij/8j6RAAAMDnRVevx3feeefGjRvHjBnz1FNPlZSURMT06dMHDBjwta997Ve/+tXMmTMrKyuTzggAAOS5d999N+kIOdSvX79+/folnSJ5Xb0eL1y4MCJmzZqV7cZZkydPPv7441euXLlo0aJZs2Yllw4AAMhrmUxEtLW1HXnkkUlHyaE+ZWXvbdgwYMCApIMkrEvX402bNq1bty4iJk2atNeqSZMmrVy5cunSpeoxAACQK5m2iIgexTFsXNJRcuaDdQ31O7dt26Yed+l6vHr16ojo0aPHyJEj91o1evTo3S8AAADIofIB8eMVSYfImXkTY+3ypEN0CV26HldXV0dERUVFQUHBXqv69+8fETU1NYey/W3btu05IfZuxcXFffr0OZQtd4LGxsaIiHRj7KpNOktutDRERLSl83YHd8vjHcy0R0Q01eftPra2ROT127BpZ0REe2ve7mBEZCIiorEu2loSTpIj2YsezQ15exBbmyIi0k15u4NNqYiI9ra83cH4f2/DXXXRs1fCSXKkrTUiomVX3h7EdPZt2JznO5jJ5O0ORkRbOiJSqVRtbTfex5KSkt69ex/iRgoymcxnkiYX7r777quvvvqoo45au3btXquef/75008/vaCgIJ1O9+jR49Nu+aijjsrett299TosevVNOkTOtKWjsS7K8voGj9QHUT4o9jn7kz921UZxryguTTpHzrTsirZ09Dos6Rw5094WDTuifGDSOXIptS3KBkQePyawsS56FEfPQx0udF3pxkg3R+/Dk86RM5n22Pnv6Ds46Ry5tHN79D48enTpazaHpCkVBT2ipKtfejl4rc3R3BB9KpLOkUt1NXHYEUmHyLHUB/85799tlZSUvP7662PGjDmUjXTpT6LsY40/9hnc6XQ6IgoKCg7u0cennHLK+vXrS0pK9r0und3syJEjS0vzd0zfHbS3t69fv6tfeWFe/wRiUNIBcmvHjqLt27ePqqosKurSHzXsTyaTWb++oW+fGDQoj/+v5vGuRUTU1ZXU1NSMGja0uLg46SwcpHff3dWrtG3IkCFJB8mdPH8b7tzZa+vWrSMrK/ecaJbu5b33dhUXp4cOHZp0kJzq9u/EsrKyiopDPU3TpcesZWVlEfHhhx/uu2rHjh0R0adPn4/ttwe0YMGCBQsWHGI8AAAA8kaXvp1s+PDhEVFXV9fa2rrXqu3bt+9+AQAAAByiLl2Pjz322MLCwkwms+8M1W+++WZEjBuXv7OrAwAA0Im6dD3u37//iSeeGBFPPvnknsvb2tr+/Oc/R8R5552XTDIAAADyS5euxxExc+bMiJg/f/6WLVt2L7zrrrs2bdo0ePDgiy66KLloAAAA5I8u/WCniGhrazv77LOXL19eVVU1a9asIUOGLF++/A9/+EMmk3nggQe+/e1vJx0QAACAfNDV63FE1NbWXnbZZY8//vjuJWVlZXfeeedll12WYCoAAADySTeox1mrV69+6aWX6urqRowYMWnSpPLy8qQTAQAAkD+6TT0GAACA3OnqU3MBAABAJ1CPAQAAQD0GAAAA9RgAAAAioijpANBRf/rTn1566aV//vOfNTU1H330UZ8+fY455pipU6fOmDGjuLg46XQcWDqdfu655xYvXrxy5coNGzY0NTUNGzbsnHPOmTVr1qhRo5JOR0fV1NS89tprr7766ttvv93W1jZhwoTrrrsu6VB8jFWrVv3iF79Yvnx5KpUaOnTohRdeeOONNx5++OFJ56JD0un0v/71r1dfffW1116rra2NiF//+tdDhw5NOhcd1dLSsmzZssWLF69atWrDhg0tLS1VVVWTJk2aNWvW8OHDk07HgWUymQULFrz44osrV67cPfI89thjv/Wtb11++eVFRTpU3jJzNd1DJpMpLPzPzQ49e/bs1atXXV1d9p8nn3zy008/bczX9U2ZMuWxxx7L/l1eXp5Op5uamiKid+/eDz300AUXXJBoOjrkJz/5ya233rrnkosvvviRRx5JKg/78+STT06dOrW5ubmiomLo0KHr1q1ramoaOXLkCy+8UFlZmXQ6DqC+vn7AgAHNzc17LlyzZs2YMWOSisSnNXny5GeeeSb7d3l5eUtLS/aAlpeXL168eOLEiYmm48BaW1t3X33p2bNnaWlpKpXK/nPChAlPP/30YYcdllw6csjN1XQbV1555eLFi6urq5ubmz/66KOdO3fefffdpaWl//jHP2644Yak03Fg6XR67Nixv/vd77Zu3ZpKpRoaGl5++eUTTjhh165d06ZN27p1a9IBObCmpqa+ffueccYZs2fPPuecc5KOw8errq6+9NJLm5ubb7jhhurq6jfeeGPjxo2nnXbae++9N3369KTTcWDt7e3pdProo4+eNm3aXiek6C7S6fS4ceP++Mc/1tTUpFKpXbt2vfjii+PHj9+5c+fUqVO3b9+edEAOoKCg4Pvf//6SJUtqamqam5vr6upSqdRdd91VUlKyYsWKm266KemA5Iqrx3RvP//5z2+66aaKiooPP/ww6SwcwNtvv3300UcXFBTsufCDDz4YO3ZsbW3tvHnzZs+enVQ2OiiVSpWXl2cP4g9+8IPbb7/d1eMuaPbs2Xfccccpp5zyt7/9bfc7buvWraNHj25sbHzuuedOP/30ZBPyydrb2xsaGsrLyyOitra2oqIiXD3ubrLHa6+vvPfff3/s2LH19fX33HPPlVdemVQ2DsVtt902Z86cgQMHbtu2Leks5ISrx3RvJ598ckTs3Lmzvb096SwcwL4DhYgYPHjwKaecEhHvvPNOEqH4dPr27bvvQaRLyWQyjz76aERcccUVex6sysrK7E8YFi1alFg4OqawsDDbjem+xo4du++n5bBhw0466aTwldedZUeeqVTKJcZ8pR7Tvb3xxhsRMW7cuN2/TKbbSafTEdG3b9+kg0A+2LJly6ZNmyLi1FNP3WvVaaedFhEvvfRSArGAiPCV1/2tWrUqIsaPH+9kcb4y6xrdVVNT06OPPjpnzpyioqK5c+cmHYeDVF1d/dxzz0XE2WefnXQWyAdr167N/rHvFFzZeY93vwDoZO+99172/JSvvO6oqalp0aJFt9xyi5FnfnPBjW5m9uzZRx555JAhQ3r16vWd73zny1/+8l//+tfzzjsv6VwcjEwmc+WVVzY3N0+YMOHcc89NOg7kgx07dkREWVlZSUnJXqv69+8fEbt27cpOGg90pvb29pkzZ7a2tp555plf/epXk45DR82aNWv3yPO73/3uySefvHTpUoOWPObqMZ1t9erVLS0tHXnlyJEj931cU0NDQ21tbWNjY/af77///urVq88444zPNiSfoKWlZfXq1R188THHHPMJT6W+5ZZbnnjiifLy8oULF7pJqTNt2LBh96PRPtmgQYM8B6h7yX48fuwTR3Z/ojY0NJSWlnZqLPjcu/7665955pl+/fotWLAg6Sx8CnuNPDdv3vzWW285wZHPMtC5snf3dcQDDzzwCdvZsmXLHXfckR3t3XjjjZ2Wn/Xr13f8E2bz5s372878+fMjomfPnk8//XRn5ieTyXzjG9/o4BG87rrr9reR7EzjF198cWcm54AeeuihiDjssMP2XfX3v/89e1jr6+s7PxgHJ3s7QESsWbMm6SwcvOwDunr37v38888nnYWDtGXLlnnz5mVPPv74xz9OOg654uoxnW3ixIkdfNzfsGHDPmFtZWXltddee9xxx5111lnz5s2bOXPm8OHDP6OMfJI+ffp8/etf7+CLe/Xq9bHL77nnnmuvvbZnz55Llixxh1LnO+mkkzo42fsxxxyT6zB8trJT/qRSqdbW1qKi/+9bPlu0iouLe/funUw4+Fy6/fbbb7755tLS0ieeeCI7Qx7dUWVl5ezZs7/0pS9NnDjxl7/85RVXXPHJI1W6KfWYzvbZ3lN05pln9u/f/8MPP3zllVfU484xePDgp5566lC2cO+991599dVFRUUPPvjg+eef/1kFo+N+9KMfJR2BXBk9enREZDKZf//730OGDNlzVfYpnUceeaTfMkCn+c1vfvPDH/6wpKRk8eLF55xzTtJxOFRnn312RUXFjh07Xn31VfU4L5mai24ve391fX190kHokPvvv/973/teYWHhfffdN2XKlKTjQL4ZNWpUv379IuKVV17Za9XLL78cESeccEICseBz6d57773mmmuKiooefvhh04jmh4KCguxNOkae+Uo9pntbs2bNu+++GxFjxoxJOgsHtmjRohkzZkTEfffdN23atKTjQB7q0aNH9ucPDzzwwJ7LGxsblyxZEhEXXnhhMsngc2bBggXZ08ELFy70vssbb7755saNG8PIM3+px3QPjzzyyGOPPbbXw0iWLVt20UUXZTKZ8ePHn3jiiUllo4MeffTRSy+9tK2t7be//e306dOTjgN5a/bs2YWFhY888sjixYuzS9rb26+55prt27d/4QtfuOiii5KNB58H999//4wZMwoKChYuXHjJJZckHYdP7eGHH3788cebm5v3XLh06dIpU6ZkMpnjjz/enTj5qiCTySSdAQ7slltu+elPf1paWjpixIiqqqqmpqaNGzdu3rw5Io444oilS5d+8YtfTDojB3D88ce//vrr+1s7efLkv/zlL52Zh4OwYsWKr3zlK/tb+/DDD0+dOrUz87A/c+fOvfnmmwsKCs4666wRI0asWLFi9erVvXr1WrZs2YQJE5JOx4FNnDjx2Wef/dhV48ePX7VqVSfn4dM6+uij33nnnf2tnTJlyu6zV3RNc+bMue2227Ijz+HDhzc2Nu4eeQ4ZMmTZsmWuHucrU3PRPZx77rnr1q1bunTp2rVr165dm11YVVV1ySWXXH/99f379082Hh0xdOjQVCq1v7VHHHFEZ4bh4JSWlo4aNWp/a8vKyjozDJ9gzpw5w4cPnzt37tKlSyOioKDg9NNPnz9//nHHHZd0NDpkyJAh+3uvmQ2oW6iqqmptbd3f2sGDB3dmGA7C5MmT169fv9fIc/jw4dmRZ0VFRbLxyB1Xj+lmUqnUli1bMpnMwIEDBw4cmHQcgK4rk8ls3bq1trZ26NCh2fm6APhU6urqtm7dmslkBg0aNGDAgKTjkHPqMQAAAJiaCwAAANRjAAAACPUYAAAAQj0GAACAUI8BAAAg1GMAAAAI9RgAAABCPQYAAIBQjwEAACDUYwAAAAj1GAAAAEI9BgAAgFCPAQAAINRjAAAACPUYAAAAQj0GAACAUI8BAAAg1GMAAAAI9RgAAABCPQYAAIBQjwEAACDUYwAAAAj1GAAAAEI9BgAAgIj4v8plgU1AQyr3AAAAAElFTkSuQmCC">
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/UCR-STAT-206\.github\.io\/2026-Fall-STAT\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
