@@ -1,0 +1,331 @@
+---
+title: "Rejection Sampling"
+---
+
+## Goals
+
+1. Understand rejection sampling as a technique for sampling from more general distributions.
+2. Appreciate the potential of rejection sampling for writing fast samplers.
+3. Connect computation with theory. The two go hand-in-hand.
+
+## Overview
+
+The [LCG](rng.qmd) provides a recipe for simulating standard uniform random numbers, and the [inverse sampling method](inverse.qmd) allows us to sample from distributions whose CDF or PDF we can evaluate.
+In fact, the inverse sampling reduces to a root finding problem when we *only* have access to a program to evaluate the quantile function.
+
+- What can we do if the CDF is not available? Numerical integration is expensive.
+- Is inverse sampling always the fastest method? Evaluating transcendental functions is expensive.
+
+Here we investigate **rejection sampling**, a specific kind of Monte Carlo technique.
+
+- The *accept-reject algorithm* simulates sampling from a target distribution.
+- We only need probability density functions.
+- **Idea**: We may not know $F_{X}(x)$, but can (cheaply) evaluate $f_{X}(s)$ and an unrelated $f_{Y}(y)$.
+- We sample from the "wrong" distribution and correct it.
+
+```{julia}
+#| echo: false
+#| output: false
+ENV["GKSwstype"] = "100"
+```
+
+```{julia}
+using Distributions, Random
+using Plots
+
+default(format = :png, legend = false)
+```
+
+## Rejection sampling
+
+Let $X \sim f$ and $Y \sim g$ where the two *densities* have **common support**.
+Define the quantity
+$$
+M = \sup_{x} \frac{f(x)}{g(x)}.
+$$
+If $M < \infty$ then we can sample $X \sim f$ as follows:
+
+1. **Proposal**: Generate $Y \sim g$ and independently draw $U \sim \mathrm{Uniform}[0,1]$.
+2. **Rejection**: If $U \le \frac{f(Y)}{M \cdot g(Y)}$, then set $X = Y$. Otherwise, return to Step 1.
+
+### Why is $M \ge 1$?
+
+- The quantity $M$ is defined as the tightest ratio of the working densities across their support.
+- The two densities have common support so that $g(x) > 0$ whenever $f(x) > 0$. The quantity $M$ is therefore well-defined.
+- If the *proposal density* $g$ is the same as the *target density* $f$ then $M = 1$ everywhere, suggesting this special case might be a lower bound.
+
+By definition of $M$ we know that $f(x) \le M g(x)$ for any $x$ in the common support $S$.
+Now integrate both sides over their common support $S$:
+$$
+1 = \int_{S} f(x)~dx \le \int_{S} M g(x)~dx = M.
+$$
+
+### Proof that $X$ has the correct distribution
+
+The algorithm above is only useful if it produces random deviates with the correct CDF.
+Here are the facts we have from the hypothesis of the underlying theorem:
+
+- By definition, the algorithm terminates when $U \le f(Y) [M \cdot g(Y)]^{-1}$.
+- By construction, $U$ is independent of $Y$.
+
+We derive the CDF of $X$ as follows:
+
+$$
+\Pr(X \le x)
+= \Pr(Y \le x \mid \text{STOP})
+= \Pr(Y \le x \mid U \le f(Y) [M \cdot g(Y)]^{-1})
+$$
+
+Rewrite this in terms of the joint distribution of $Y$ and $U$:
+
+$$
+\Pr(X \le x)
+= \frac{\Pr(Y \le x, U \le f(Y) [M \cdot g(Y)]^{-1})}{\Pr(U \le f(Y) [M \cdot g(Y)]^{-1})}
+= \frac{A}{B}.
+$$
+
+- We cannot use independence yet because of the way $U$ and $Y$ are coupled in the inequalities.
+- Recall the Law of Total Expectation which states that $\mathbb{E}[\mathbb{E}[X \mid Y] = \mathbb{E}[X]$ (note we condition on a random variable, not an event like $\{Y = y\}$).
+- Also recall the relationship $\mathbb{E}[1\{C\}] = \Pr(C)$ for an indicator random variable on an event $C$.
+
+The numerator $A$ is a joint probability and can be expressed as
+$$
+A
+= \mathbb{E}[ \mathbb{E}\left\{1\{Y \le x, U \le f(Y) [M \cdot g(Y)]^{-1}\} \mid Y \right\}]
+= \mathbb{E}[1\{Y \le x\} \cdot \Pr(U \le f(Y) [M \cdot g(Y)]^{-1} \mid Y)].
+$$
+
+- Given $Y$, the event $\{Y \le x\}$ is completely determined so it factors out.
+- Given $Y$, we can evaluate the CDF of $U$ since the RHS is now deterministic.
+
+Applying the definition of expectation with respect to the law of $Y$, we have
+$$
+A
+= \mathbb{E}[1\{Y \le x\} \cdot f(Y) [M \cdot g(Y)]^{-1}]
+= \int_{S} 1\{y \le x\} \cdot \frac{f(y)}{M \cdot g(y)} \cdot g(y)~dy
+= \frac{1}{M} \int_{-\infty}^{x} f(y)~dy
+= \frac{1}{M} F(x).
+$$
+
+A similar argument holds for $B$.
+Skipping the intermediate steps, we obtain
+$$
+B
+= \Pr(U \le f(Y) [M \cdot g(Y)]^{-1})
+= \mathbb{E}[f(Y) [M \cdot g(Y)]^{-1}]
+= \int_{-\infty}^{\infty} \frac{f(y)}{M}~dx
+= \frac{1}{M}.
+$$
+
+Hence, $A B^{-1} = F(x)$ which is precisely the CDF of $X$.
+
+## Example: Estimating $\pi$
+
+To build some geometric intuition, let's investigate a procedure to approximate $\pi$.
+
+- A circle with radius $r$ has area equal to $\pi r^{2}$.
+- Such a circle can be inscribed within a square with sides of length $2r$, which has area $4r^{2}$.
+- The ratio of these geometric objects is $\pi / 4$.
+
+Thus, we can approximate $\pi$ by the following procedure:
+
+1. Sample a point uniformly on the square $[-r,r] \times [-r,r]$.
+2. Check if it lies inside the circle (centered at the origin) of radius $r$.
+3. Repeat Steps 1-2 $N$ times, then compute the proportion of points that lie in the circle.
+4. Correct the proportion in Step 3 by a factor of $4$.
+
+```{julia}
+function estimate_pi(r, N)
+  points = zeros(2, N)
+  is_inside = zeros(Bool, N)
+  for i in eachindex(is_inside)
+    u = view(points, :, i) # get column i
+    rand!(Uniform(-r, r), u)
+    is_inside[i] = (u[1]^2 + u[2]^2) ≤ r^2
+  end
+  n_inside = sum(is_inside)
+  return 4 * n_inside / N, points, is_inside
+end
+```
+
+```{julia}
+pi_hat, U, is_inside = @time estimate_pi(0.5, 10^5)
+colors = ifelse.(is_inside, "red", "blue")
+scatter(U[1,:], U[2,:],
+  color = colors,
+  markerstrokewidth = 0,
+  markersize = 1,
+  aspect_ratio = 1,
+  title = "Estimate = $(round(pi_hat, digits = 8))"
+)
+```
+
+## Example: Sampling from a Beta distribution
+
+The [Beta distribution](https://en.wikipedia.org/wiki/Beta_distribution) can be used to model data distributed on finite intervals, such as proportions.
+Let's apply our rejection sampling procedure to sample from $\mathrm{Beta}(3, 6)$ using only its PDF.
+
+- We use $U \sim \mathrm{Uniform}(0,1)$ as our proposal.
+- The rejection step will also use a standard uniform distribution.
+- We can calibrate the envelope $M$ to hug the target distribution as tight as possible.
+
+```{julia}
+function sample_beta(alpha, beta, N; M = 1.0)
+  # WARNING: We can't use M = 1 as the default.
+  # The best M depends on alpha and beta in general...
+  target = Beta(alpha, beta)
+  points = zeros(2, N)
+  @views rand!(Uniform(0, 1), points[1, :]) # proposal, Y
+  @views rand!(Uniform(0, M), points[2, :]) # f(Y) / [M * g(Y)]
+  selected = @. points[2, :] < pdf(target, points[1, :])
+  deviates = points[1, selected]
+  return deviates, points, selected
+end
+```
+
+```{julia}
+X, U, selected = @time sample_beta(3.0, 6.0, 10^5; M = 2.6)
+colors = ifelse.(selected, "red", "blue")
+scatter(U[1,:], U[2,:],
+  color = colors,
+  markerstrokewidth = 0,
+  markersize = 1,
+  title = "Proportion Select: $(round(sum(selected) / length(selected), digits = 4))"
+)
+```
+
+- Try increasing $M$ while keeping the shape parameters $\alpha$ and $\beta$ fixed.
+- What happens to the acceptance probability?
+
+## Ziggurat Algorithm (Optional)
+
+The inverse sampling method is easy to implement for distributions, such as the Exponential, which have a closed-form expression for their quantile functions.
+However, this is not always the fastest method for simulating from such distributions and naive rejection sampling can be inefficient.
+
+The [Ziggurat algorithm](https://en.wikipedia.org/wiki/Ziggurat_algorithm) is a fast rejection method for sampling from distributions that
+
+- have monotonically decreasing PDFs, or
+- are unimodal symmetric distributions.
+
+It was developed by [George Marsaglia](https://en.wikipedia.org/wiki/George_Marsaglia) in the 1960s.
+**The motivation is to minimize the size of a sampler's rejection region** through a clever covering of a target PDF.
+
+### Geometric intuition
+
+Consider the monotonically decreasing case first, defined on $x \ge 0$.
+The target PDF is covered by $n$ regions of equal area:
+
+- $n-1$ of these regions are rectangles that cover most of the PDF, starting from the top.
+- The first region is a base layer, is a non-rectangular, and covers the tail, which may be infinite.
+
+The construction of these regions proceeds as follows:
+
+- **Base Layer**: Rectangle with $(0, 0)$ and $(x_{1}, y_{1})$ as vertices + tail region where $x \ge x_{1}$ and $y \le y_{1}$. This layer is said to have area $A$.
+- **Next Layer**: For layer $i > 1$, add a rectangle of width $x_{i}$ and height $A / x_{i}$; this preserves the area invariant. The top of this layer is at $y_{i+1} = y_{i} + A / x_{i}$ and intersects the PDF at $(x_{i+1}, y_{i+1})$. That is, we define $x_{i+1}$ as the point such that $y_{i+1} = f(x_{i+1})$. Unlike the base layer, these layers include small rejection regions.
+- **Initialization**: One needs a procedure to choose the initial width $x_{1}$ such that all $n$ layers have equal area and satisfy $x_{n} = 0$. That is, we need to guarantee that the peak occur at $(0, f(0))$.
+
+See the [Wikipedia animation](https://en.wikipedia.org/wiki/Ziggurat_algorithm#/media/File:Ziggurat_method.gif) to get a sense of this construction.
+The efficiency of this algorithm is due to the following:
+
+- If each layer has equal area, then we can sample them uniformly.
+- If the rejection region of each layer is small, then rejection sampling can be very efficient.
+
+:::: callout-note
+
+The construction of the Ziggurat mimics how [Lebesgue integrals](https://en.wikipedia.org/wiki/Lebesgue_integral) can be computed through the [layer cake representation](https://en.wikipedia.org/wiki/Layer_cake_representation) of a function.
+That is, one partitions the $y$-axis to cover a function, rather than the $x$-axis as is done for the Reimann integral.
+
+::::
+
+### The algorithm
+
+The basic strategy is as follows:
+
+- Build a lookup table that represents all the layers. This mostly avoids evaluating expensive functions.
+- Once we have the table, the rest of the algorithm involves simple sums, standard uniform numbers, and array accesses.
+- There are two expensive, but rare exceptions:
+    + We sample the base layer and end up in the tail. The memoryless property makes this easy to sample at the cost of a single `-log(U)` call.
+    + We sample a non-base layer and end up near the small rejection region. Need to evaluate on `exp(-w)` to check for acceptance/rejection.
+
+```{julia}
+struct ExpZigguratTable
+  x::Vector{Float64}
+  y::Vector{Float64}
+  n::Int
+end
+
+function build_layers!(xs, ys, x1)
+  m = length(xs)
+  xs[1] = x1
+  ys[1] = exp(-x1)
+  A = (1 + xs[1]) * ys[1] # Area due to base rectangle + tail
+  for i in 1:(m-1)
+    ynext = ys[i] + A / xs[i]   # Preserve invariant area, A
+    ynext >= 1 && return A, Inf # Check for overshooting of peak
+    ys[i+1] = ynext
+    xs[i+1] = -log(ynext)
+  end
+  # Compute residual f(xₙ) - 1; should be small
+  r = ys[m] + A / xs[m] - 1
+  return A, r
+end
+
+function ExpZigguratTable(n::Integer = 256)
+  # Arrays for representing layers
+  x = zeros(Float64, n+1); xs = @view x[2:n]
+  y = zeros(Float64, n+1); ys = @view y[2:n]
+
+  # Bisection search to select x₁ such that f(xₙ) - 1 = 0
+  lo, hi = 1e-3, 50.0
+  A, r = Inf, Inf
+  while abs(lo - hi) > 1e-12
+    mid = (lo + hi) / 2
+    A, r = build_layers!(xs, ys, mid)
+    if r > 0   # positive residual: x₁ is too small
+      lo = mid
+    else       # negative residual: x₁ is too large
+      hi = mid
+    end
+  end
+
+  # Complete the table
+  x[1] = 1 + x[2]   # fictitious x₀ = A / f(x₁)
+  y[n+1] = 1.0      # yₙ = f(xₙ) = f(0)
+
+  return ExpZigguratTable(x, y, n)
+end
+
+function rand_unit_exp(rng::AbstractRNG, table::ExpZigguratTable)
+  x, y, n = table.x, table.y, table.n
+  while true
+    i = rand(rng, 0:n-1)    # Step 1: Choose a random layer
+    w = rand(rng) * x[i+1]  # Step 2: x = U₀ × xᵢ
+    w < x[i+2] && return w  # Step 3: Check if we're in the acceptance region
+    if iszero(i)            # Step 4: Handle the tail using memoryless property
+      return x[2] - log(rand(rng))
+    end
+    # Step 5: We're outside the inner rectangle of the layer.
+    # Need to sample a random height on this layer.
+    h = y[i+1] + rand(rng) * (y[i+2] - y[i+1])
+
+    # Step 6: Check that we're under the curve (accept).
+    h < exp(-w) && return w
+  end # Step 7: Back to the start...
+end
+```
+
+Let's test it for $\mathrm{Exponential}(1)$:
+
+```{julia}
+TABLE = ExpZigguratTable()
+rng = Xoshiro(1234)
+data = [rand_unit_exp(rng, TABLE) for _ in 1:1000]
+histogram(data, bins = 32)
+```
+
+:::: callout-note
+
+Our implementation here is not necessarily optimal, yet precomputing expensive quantities is a key ingredient in making the sampler quite fast.
+This idea is known as [memoization](https://en.wikipedia.org/wiki/Memoization), which trades some storage for savings on expensive function calls.
+
+::::

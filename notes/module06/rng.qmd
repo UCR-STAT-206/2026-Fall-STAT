@@ -1,0 +1,240 @@
+---
+title: RNG and PRNG
+---
+
+## Goals
+
+1. Understand that random numbers on computers are almost always deterministic.
+2. Become familiar with the Random package interface for working with random devices.
+3. Understand the principles underlying the LCG and appreciate the universality of the standard uniform distribution.
+
+## Overview
+
+- What is randomness? Humans talk about randomness in terms of absence of certain qualities, namely *discernable patterns* or *predictability*.
+- Without a *physical source of randomness*, truly random numbers are expensive.
+- Computers use PRNG, deterministic algorithms, to simulate different patterns of randomness.
+- Pseudo-Random Number Generation (PRNG). Sometimes referred to RNG; the Pseudo is implicit.
+
+## The `Random` Interface
+
+Random number generation on a computer is, with few exceptions, an entirely deterministic procedure.
+Starting from a particular state, different PRNG algorithms yield reproducible streams of seemingly random numbers.
+The [Random](https://docs.julialang.org/en/v1.12/stdlib/Random/) package in the standard library provides an interface for PRNG in Julia.
+
+```{julia}
+using Random
+```
+
+Julia allows us to create our own *random devices* for PRNG.
+The default in Julia is now [`Xoshiro`](https://prng.di.unimi.it/), but there are others such as `MersenneTwister` that are used in R.
+
+```{julia}
+myrng = Xoshiro()
+```
+
+Different PRNGs will use different abstractions to represent state.
+The state of this particular PRNG appears to be based on a few different variables:
+
+```{julia}
+#| eval: false
+myrng.s0
+myrng.s1 # and so on...
+```
+
+### The `rand()` function
+
+To sample from a PRNG we again use `rand()`.
+This is the only sampling function we need in most cases.
+There is a non-allocation version, `rand!()` which can be used to store data in an array.
+
+```{julia}
+rand(myrng)
+```
+
+```{julia}
+rand(myrng, Int)
+```
+
+```{julia}
+rand(myrng, 10)
+```
+
+### Shuffling
+
+The `randperm()` and `randperm!()` functions generates a random permutation.
+It can be used to shuffle multiple collections (e.g. arrays) *in the exact same manner*.
+
+```{julia}
+x = collect(1:10)
+y = collect(101:110)
+
+idx = randperm(myrng, 10)
+idx
+```
+
+```{julia}
+x[idx]
+```
+
+```{julia}
+y[idx]
+```
+
+Alternatively, `shuffle()` and `shuffle!()` can be used if there is only one array and we don't need to track how the shuffle happens.
+
+```{julia}
+shuffle(x)
+```
+
+```{julia}
+shuffle!(y)
+```
+
+### Setting seeds
+
+In the past, we've seen `Random.seed!()` calls to set the state of *the global PRNG*.
+The following always produces the same output (except perhaps on different hardware):
+
+```{julia}
+Random.seed!(1234)
+rand()
+```
+
+```{julia}
+Random.seed!(1234)
+rand()
+```
+
+This works just as well with random devices like `Xoshiro`.
+
+```{julia}
+myrng = Xoshiro(206) # seed at construction
+for i in 1:4
+  Random.seed!(myrng, 206) # seed explicitly
+  display(rand(myrng, 3))
+end
+```
+
+### About the Global RNG
+
+In some cases, we do not need to manage our own random devices and can instead rely on the global one.
+This is how R typically handles randomness.
+
+If we ever need to inspect the glboal RNG we can retrieve it with `Random.default_rng()`
+
+```{julia}
+Random.default_rng()
+```
+
+If you're on a system with multiple cores and have multi-threading support, then you'll likely see `TaskLocalRNG()`.
+This is a specialized random device that works in parallel computing contexts by default.
+
+### Other distributions
+
+By default, `rand()` corresponds to sampling from a Uniform distribution on $[0,1]$.
+
+It also supports sampling from discrete sample spaces:
+
+```{julia}
+rand(['a', 'b', 'c'], 10) # with replacement
+```
+
+```{julia}
+rand((-1, 0, 1), 3) # Rademacher
+```
+
+
+```{julia}
+rand(1:10)
+```
+
+For other distributions we have `randn()` for standard Normal, and `randexp()` for the unit Exponential distribution.
+
+
+```{julia}
+randn(3)
+```
+
+
+```{julia}
+randexp(3)
+```
+
+## Linear Congruential Generator
+
+Derrick Lehmer first published the Lehmer RNG in 1951 (LCG with $c = 0$), followed by the Linear Congruential Generator, attributed to William E. Thomson (1958) and Aubey Rotenberg (1960).
+
+- Simple to implement
+- Fast: uses modular arithmetic which is fast on computers
+- *Don't use in practice unless you need full reproducibility.* Julia implements this through the [StableRNGs](https://github.com/JuliaRandom/StableRNGs.jl) package.
+
+Defined by the recipe (and variations thereof)
+
+$$
+X_{n+1} = (aX_{n} + c)~\mathrm{mod}~m,
+$$
+
+in which the sequence $\{X_{n}\}$ is a sequence of pseudorandom numbers. Let's implement it in Julia:
+
+```{julia}
+function linear_congruential(state; a = 5, c = 12, m = 16) # <1>
+  x = (a * state + c) % m # <2>
+  return x # <3>
+end
+```
+
+1. Implement as a function. Here `state` is the last number $X_{n}$. `a`, `c`, and `m` are parameters defining a particular LCG. `state` is a required positional argument, and everything after the semicolon `;` is an optional keyword argument.
+2. The implementation. Easy stuff.
+3. Return `x`, which reperesents $X_{n+1}$.
+
+```{julia}
+x = Int[]
+push!(x, 10) # starting value
+for i in 1:99
+  push!(x, linear_congruential(x[i], a = 5, c = 12, m = 16))
+end
+
+first(x, 12)
+```
+
+Notice anything? Unfortunately, this LCG has a period of 4. We can achieve a period of length `m` by choosing `a` and `c` [appropriately](https://en.wikipedia.org/wiki/Linear_congruential_generator#m_a_power_of_2,_c_%E2%89%A0_0).
+Dividing by `m` maps the values onto $[0,1]$.
+
+```{julia}
+using Plots
+
+x = Int[]
+push!(x, 10)
+for i in 1:(10^3 - 1)
+  push!(x, linear_congruential(x[i], a = 1664545, c = 1013904223, m = 2^32))
+end
+
+histogram(x ./ (2^32); legend = false, bins = 32)
+```
+
+Once we have a way of simulating uniform random numbers we can simulate virtually any distribution.
+We'll see why in the upcoming notes.
+
+## How to distinguish non-randomness?
+
+- Look for a period in data.
+- Are there any values missing systematically from a random stream? Or more rare than you might have expected?
+- Look for a proper distribution in the limit.
+- Check for autocorrelation.
+- Gets harder for higher dimensions...
+
+## Choosing a random device (Optional)
+
+- The random devices in the standard library are chosen for two reasons: they're incredibly fast and have suitably long periods.
+- However, they are subject to buf fixes and performance improvements over time. That means there are no guarantees that `Xoshiro(206)` produces exactly the same sequence in Julia 1.99 as it did in Julia 1.12.
+- In practice, we never rely on exact statistical reproducibility because our results should not hold for specific seeds!
+- If you truly need full reproducibility, use [StableRNGs](https://github.com/JuliaRandom/StableRNGs.jl) in Julia. The only supported PRNG is the LCG.
+- PRNGs for computational applications are rarely cryptographically secure. If you need security, search the Julia package ecosystem for the slower but secure PRNGs.
+
+```{julia}
+using StableRNGs
+
+# This is guaranteed to always produce the same sequences.
+x = randn(StableRNG(111), 1000)
+histogram(x; legend = false)
+```

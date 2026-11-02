@@ -1,0 +1,481 @@
+---
+title: "Distributions.jl"
+---
+
+## Goal
+
+1. Become familiar with Distributions.jl as a package for flexible probabilistic simulation with probability distributions.
+2. Explore applications of simulation in statistics.
+
+## Overview
+
+[Distributions.jl](https://juliastats.org/Distributions.jl/stable/) implements a programming interface for working with probabilistic distributions.
+
+- This builds on the existing `rand()` function.
+- Provides several types to represent different probability distributions.
+- Additional interface for evaluating densities (PDFs), cumulative distribution functions (CDFs), log-likelihoods, moments, and other statistics.
+- Highly extensible: Provides advanced interface for controlling how sampling is carried out and algorithms for fitting distributions to data.
+
+```{julia}
+#| echo: false
+#| output: false
+ENV["GKSwstype"] = "100"
+```
+
+```{julia}
+using Distributions, Statistics, LinearAlgebra, Random
+using Plots, StatsPlots, DataFrames
+
+gr()
+default(format = :svg, legend = false, show = false)
+```
+
+### Random Variables
+
+Suppose we want to sample 10 data points from $\mathcal{N}(\mu, \sigma^{2})$.
+How is this done on a computer?
+In Julia, we first create a `Normal` object to represent target distribution.
+The following is equivalent to writing $X \sim \mathcal{N}(0, 4)$
+
+```{julia}
+rv = Normal(0, 2) # mean, standard deviation
+```
+
+We can query the *parameters* of an *instance* of a distribution.
+
+```{julia}
+params(rv) # mean, standard deviation
+```
+
+Certain moments are readily implemented and accessed with descriptive function names. For example, the mean can be recovered using
+
+```{julia}
+mean(rv)
+```
+
+Ditto for other quantities of interest:
+
+```{julia}
+var(rv)
+```
+
+
+```{julia}
+median(rv)
+```
+
+```{julia}
+quantile(rv, 0.25) # the 0.25 quantile
+```
+
+```{julia}
+quantile(rv, 0.5) # same as median
+```
+
+### Sampling
+
+Back to sampling 10 deviates from the distribution.
+You only need to know about `rand()`.
+
+```{julia}
+rand(rv, 10) # what to sample from, how many samples
+```
+
+In fact, `rand()` works for all sorts of objects
+
+```{julia}
+rand(1:10, 3) # sample from numbers 1 through 10 uniformly with replacement
+```
+
+```{julia}
+rand((-1, 1), 3) # sample from a collection
+```
+
+```{julia}
+rand() # sample from Uniform [0,1]
+```
+
+```{julia}
+rand(Uniform(0, 10)) # Uniform [0, 10]
+```
+
+By implementing types for distinct distributions, Julia (and other languages that do this!) provides a powerful abstraction for building up simulations.
+The example below creates a *random vector* $\mathbf{Z} \in \mathbb{R}^{4}$, with each component $Z_{i}$ following a different distribution.
+
+```{julia}
+z = [Normal(u, 1) for u in 1:4] # array comprehension syntax
+```
+
+Now, broadcasting can be used to extract different quantities of interest:
+
+```{julia}
+mean.(z)
+```
+
+
+```{julia}
+var.(z)
+```
+
+Sample from each distribution, taking 10 data points from each:
+
+```{julia}
+ragged_data = rand.(z, 10) # vector of vectors
+```
+
+Combine into a single matrix, $10 \times 4$:
+
+```{julia}
+hcat(ragged_data...) # horizontal concatenation
+```
+
+- What do the columns represent?
+- What about the rows?
+- Are the components $Z_{1}$, $Z_{2}$, $Z_{3}$, $Z_{4}$ independent?
+
+### Plotting
+
+In the Plots.jl ecosystem, [StatsPlots.jl](https://docs.juliaplots.org/dev/generated/statsplots/) implements recipes for plotting distributions.
+It is quite flexible, allowing users to plot PDFs, CDFs, and quantile-quantile (QQ) plots.
+
+```{julia}
+plot(Normal())
+```
+
+```{julia}
+plot(Normal(), func = cdf)
+```
+
+```{julia}
+plot(Normal(), func = logpdf)
+```
+
+```{julia}
+plot(Poisson(10))
+```
+
+```{julia}
+plot(Poisson(10), func = cdf)
+```
+
+```{julia}
+x = rand(Normal(), 100)
+y = rand(Cauchy(), 100)
+
+plot(
+ qqplot(x, y, qqline = :fit), # qqplot of two samples, show a fitted regression line
+ qqplot(Cauchy, y),           # compare with a Cauchy distribution fitted to y; pass an instance (e.g. Normal(0,1)) to compare with a specific distribution
+ qqnorm(x, qqline = :R),      # the :R default line passes through the 1st and 3rd quartiles of the distribution
+ layout = grid(1, 3),
+ size = (900, 300),
+)
+```
+
+## Univariate Distributions
+
+- [Common Interface](https://juliastats.org/Distributions.jl/stable/univariate/#Common-Interface)
+- [Continuous Distributions](https://juliastats.org/Distributions.jl/stable/univariate/#Continuous-Distributions)
+- [Discrete Distributions](https://juliastats.org/Distributions.jl/stable/univariate/#Discrete-Distributions)
+
+Most of the "textbook distributions" are implemented here, in a single package.
+You can easily extend the package to implement your own distributions.
+
+## Multivariate Distributions
+
+- [Common Interface](https://juliastats.org/Distributions.jl/stable/multivariate/#Common-Interface)
+- [Distributions](https://juliastats.org/Distributions.jl/stable/multivariate/#Distributions)
+
+The interface is mostly similar to the univariate case.
+
+There are more distribution types other than univariate and multivariate, such matrix-variate, truncated, and more.
+
+## Mixtures
+
+Suppose you have a finite collection of probability densities $\{f_{i}(x)\}_{i=1}^{K}$.
+In general, the linear combination $\sum_{i=1}^{K} f_{i}(x)$ does not define a probability density; that is, there is no guarantee that
+$$
+\int_{-\infty}^{+\infty}~\sum_{i=1}^{K} f_{i}(x)~dx = 1.
+$$
+This can be amended if we replace the linear combination with a *convex combination*.
+Given weights $p_{i} \ge 0$ such that $\sum_{i=1}^{K} p_{i} = 1$, we define
+$$
+h(x) = \sum_{i=1}^{K} p_{i} \cdot f_{i}(x).
+$$
+Using linearity of summation and integration, write
+$$
+\int_{-\infty}^{+\infty}~\sum_{i=1}^{K} p_{i} \cdot f_{i}(x)~dx = \sum_{i=1}^{K} p_{i} = 1,
+$$
+where the last equality follows by definition of the $p_{i}$.
+[Finite mixture models](https://en.wikipedia.org/wiki/Mixture_model) and [mixture distributions](https://en.wikipedia.org/wiki/Mixture_distribution) are versatile modeling tools in statistics and machine learning.
+
+Mixture distributions are easy to work with through [Distributions.jl](https://juliastats.org/Distributions.jl/stable/mixture/).
+
+```{julia}
+X = MixtureModel(
+  [Normal(-5.0, 1.0), Normal(0.0, 2.0), Normal(5.0, 1.0)],
+  [0.25, 0.4, 0.35]
+)
+```
+
+A mixture model works just like any other random variable defined in the Distributions.jl ecosystem.
+
+```{julia}
+histogram(rand(X, 1000), bins = 32)
+```
+
+```{julia}
+xs = range(-10, 10, 101)
+ys = pdf.(X, xs)
+plot(xs, ys)
+```
+
+```{julia}
+plot(X)
+```
+
+```{julia}
+plot(X, func = cdf)
+```
+
+## Fitting a distribution to data
+
+When number of trials in Binomial is large, data starts to look normally distributed
+
+```{julia}
+mydata = rand(Binomial(10^2, 0.5), 10^3) .+ 0.0 # coerce into Float64
+```
+
+```{julia}
+histogram(mydata,
+  xlabel = "X",
+  ylabel = "Frequency",
+  title = "Binomial(100, 0.5), sample of size 1000"
+)
+```
+
+```{julia}
+mean(mydata)
+```
+
+`fit()` will use Maximum Likelihood Estimation (MLE) or Method of Moments (MoM) to fit a distribution.
+
+```{julia}
+fitted_rv = fit(Normal, mydata)
+```
+
+
+```{julia}
+plot(fitted_rv, # using StatsPlots recipe
+  linewidth = 3,
+  xlabel = "X",
+  ylabel = "Density",
+  title = "Fitted Normal Distribution to Binomial Data"
+)
+```
+
+
+```{julia}
+p1 = histogram(mydata, label = "Data")
+p2 = plot(fitted_rv, label = "model fit")
+plot(p1, p2)
+```
+
+
+## Examples
+
+### 1. Multiple regression with IID errors
+
+```{julia}
+function simulate_reg_instance(n, p; noise = 1.0, seed = 206)
+  # Simulation model
+  σ = noise
+  rng = Xoshiro(seed)
+  X_dist = Uniform(-1, 1)
+  b_dist = Beta()
+  ϵ_dist = Normal(0, σ)
+
+  # y = Xβ + ϵ
+  X = rand(rng, X_dist, n, p)
+  b = rand(rng, b_dist, 3)
+  y = X*b + rand(rng, ϵ_dist, n)
+
+  # Store simulation data in a NamedTuple
+  ground_truth = (;
+    nobs     = n,
+    nvar     = p,
+    noise,
+    response = y,   noise_dist  = ϵ_dist,
+    design   = X,   design_dist = X_dist, 
+    coeff    = b,   coeff_dist  = b_dist,
+  )
+
+  return ground_truth
+end
+```
+
+- Function definition cleanly documents the simulation model.
+- Since it is a simulated problem instance, we can record the ground truth.
+- We use a separate random device. If this were part of a larger simulation study, we isolate random streams from other components of the simulation.
+
+```{julia}
+n, p = 200, 3
+gt = simulate_reg_instance(n, p; noise = 0.1)
+y, X, b0 = gt.response, gt.design, gt.coeff;
+```
+
+We estimate $\beta$ using least squares; i.e. we minimize $\|y - X\beta\|_{2}^{2}$.
+Let's compare the estimator derived using a QR decomposition against the result derived using a Cholesky decomposition.
+Mathematically, the choice of algorithm does not affect the result.
+Since the simulation conditions are "mild", we do not anticipate numerical discrepancies.
+
+```{julia}
+Xt = transpose(X)
+b_qr   = qr(X) \ y
+b_chol = cholesky!(Symmetric(Xt * X)) \ (Xt * y)
+```
+
+How well do we estimate $\beta$ and predict $y$?
+We compare using the mean squared error and norm of residuals.
+
+```{julia}
+mse(x, y) = mean(abs2, x - y)
+
+models = (b_qr, b_chol)
+model_names = ("QR", "CHOL")
+
+results = DataFrame()
+for (b, name) in zip(models, model_names)
+  yhat = X*b
+  push!(results, (;
+    algorithm = name,
+    MSE_y = mse(y, yhat),
+    MSE_b = mse(b0, b),
+    rnorm = norm(y - yhat),
+  ))
+end
+results
+```
+
+### 2. Correlated features
+
+To benchmark a method in a scenario with correlated features/covariates, we can use a Multivariate Gaussian distribution.
+The *Toeplitz* covariance model is commonly used:
+
+```{julia}
+ρ = 0.25
+Σ = [ρ ^ abs(i -j) for i in 1:p, j in 1:p]
+```
+
+- This covariance matrix is `{julia} p` by `{julia} p` because we have 3 features/covariates.
+- If $\rho = 0$ then $\Sigma = I_{p \times p}$; reduces to IID features/covariates.
+- If $\rho = 1$ then $\Sigma = \boldsymbol{1} \boldsymbol{1}^{\top}$; not a proper covariance matrix! (Why? Check eigenvalues/positive definiteness).
+
+```{julia}
+function simulate_reg_correlated(n, p; noise = 1.0, corr = 0.0, seed = 206)
+  # Simulation model
+  σ = noise
+  ρ = corr
+  Σ = [ρ^abs(i - j) for i in 1:p, j in 1:p]
+  rng = Xoshiro(seed)
+  X_dist = MvNormal(zeros(p), Σ)
+  b_dist = Beta()
+  ϵ_dist = Normal(0, σ)
+
+  # y = Xβ + ϵ
+  X = rand(rng, X_dist, n) |> transpose # X_dist is trivariate; don't need p
+  b = rand(rng, b_dist, p)
+  y = X*b + rand(rng, ϵ_dist, n)
+
+  # Store simulation data in a NamedTuple
+  ground_truth = (;
+    nobs     = n,
+    nvar     = p,
+    noise,
+    corr,
+    response = y,   noise_dist  = ϵ_dist,
+    design   = X,   design_dist = X_dist, 
+    coeff    = b,   coeff_dist  = b_dist,
+  )
+
+  return ground_truth
+end
+```
+
+We repeat the benchmark.
+
+```{julia}
+n, p = 200, 10
+gt = simulate_reg_correlated(n, p; noise = 0.1, corr = 0.95)
+y, X, b0 = gt.response, gt.design, gt.coeff
+
+Xt = transpose(X)
+b_qr   = qr(X) \ y
+b_chol = cholesky!(Symmetric(Xt * X)) \ (Xt * y)
+
+models = (b_qr, b_chol)
+model_names = ("QR", "CHOL")
+
+results = DataFrame()
+for (b, name) in zip(models, model_names)
+  yhat = X*b
+  push!(results, (;
+    algorithm = name,
+    MSE_y = mse(y, yhat),
+    MSE_b = mse(b0, b),
+    rnorm = norm(y - yhat),
+  ))
+end
+results
+```
+
+- Very little noise in $y$, and $10 \times 10$ matrix $\boldsymbol{X}^{\top} \boldsymbol{X}$ is still likely well-conditioned.
+- $\mathrm{MSE}(y)$ is roughly the same.
+- $\mathrm{MSE}(\beta)$ has clearly increased in this extreme setting.
+- Why is it relatively more difficult to recover $\beta$? Simulation helps us tell part of the story; still need theory to parse the results. 
+
+### 3. Kernel Density Estimation
+
+In the univariate case, **kernel density estimation** seeks an estimate of a probability density given data.
+Assuming IID data, we can express the estimator of the unknown density $f(x)$ as
+$$
+\hat{f}(x) = \frac{1}{n} \sum_{i=1}^{n} \mathcal{K}_{h}(x, x_{i}),
+$$
+where $\mathcal{K}_{h}(\cdot, \cdot)$ is a [kernel](https://en.wikipedia.org/wiki/Kernel_(statistics)#Kernel_functions_in_common_use) and $h$ is a bandwidth parameter to controls the degree of smoothing.
+From the mixture perspective, we can approximate the unknown density as
+$$
+\hat{f}(x) = \sum_{i=1}^{n} \frac{1}{n} \cdot f(x \mid x_{i}, h),
+$$
+where each component has distribution $\mathcal{N}(x_{i}, h)$ and weight $n^{-1}$.
+
+```{julia}
+n = 100
+dist = Laplace(10.0)
+data = rand(Xoshiro(206), dist, n) # location = 10, scale = 1
+plot(dist, xlims = (0, 20), title = "Laplace PDF")
+```
+
+```{julia}
+function kde_example(data, h)
+  n = length(data)
+  fhat = MixtureModel(
+    [Normal(x, sqrt(h)) for x in data],
+    1 / n * ones(n)
+  )
+
+  xs = range(0, 20, length = 101)
+  ys = pdf.(fhat, xs)
+  return plot(xs, ys; title = "KDE with Gaussian basis (h = $(h))")
+end
+```
+
+```{julia}
+plot(
+  kde_example(data, 0.05),
+  kde_example(data, 0.5),
+  layout = grid(1, 2),
+  size = (800, 300)
+)
+```
+
+Calibrating $h$ can improve the approximation.
+Swapping out the Gaussian kernel for the Epanechnikov kernel can also improve *efficiency*.

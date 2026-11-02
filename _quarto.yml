@@ -80,11 +80,14 @@ website:
             href: notes/module05/krylov.qmd
       - section: Module 6 (Simulation)
         contents:
-          - text: RNG and PRNGs
-          - text: Inverse Method
-          - text: Rejection Sampling
-          - text: Monte Carlo Methods
+          - text: RNG and PRNG
+            href: notes/module06/rng.qmd
           - text: Distributions.jl
+            href: notes/module06/distributions.qmd
+          - text: Inverse Method
+            href: notes/module06/inverse.qmd
+          - text: Rejection Sampling
+            href: notes/module06/rejection.qmd
       - section: Module 7 (Resampling)
         contents:
           - text: Bootstrap
@@ -120,10 +123,10 @@ website:
             href: labs/lab5-codereview.qmd
           # - text: Lab 6 (TBD)
           #   href: labs/lab6-tbd.qmd
-          # - text: Lab 7 (Simulation)
-          #   href: labs/lab7-simulation.qmd
-          # - text: Lab 8 (Collaboration using Git)
+          # - text: Lab 7 (Collaboration using Git)
           #   href: labs/lab8-collab.qmd
+          # - text: Lab 8 (Simulation)
+          #   href: labs/lab7-simulation.qmd
       - section: "Homework"
         contents:
           - text: Homework 1

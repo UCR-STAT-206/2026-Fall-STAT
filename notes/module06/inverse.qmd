@@ -1,0 +1,222 @@
+---
+title: "The Inverse Method"
+---
+
+## Goals
+
+1. Understand the inverse sampling method as a device that extends PRNGs to a wider class of distributions.
+2. Appreciate the fact that some computable functions do not have closed form expressions, and can only be evaluated programs that terminate in a finite number of steps.
+
+## Overview
+
+We introduced the LCG in [the RNG notes](rng.qmd) and constructed an algorithm for simulating standard uniform random numbers on computers.
+What if we want to simulate $X$ with CDF $F_{X}(x)$ instead?
+Let's restrict ourselves to the continuous, univariate case.
+The inverse (sampling) method provides a general recipe for this task.
+
+```{julia}
+using Distributions, Random, Statistics
+using Plots, StatsPlots
+
+default(format = :svg, legend = false)
+```
+
+## Background
+
+Given a random variate $X$ with CDF $F_{X}(x)$, we define $Y = F_{X}(X)$.
+
+- The quantity $Y$ is also a random variable.
+- The range of $Y$ is $[0,1]$ because the image of $F_{X}(x)$ is the unit interval in $\mathbb{R}$.
+
+We can derive the distribution of $Y$ by computing its CDF:
+
+$$
+F_{Y}(y)
+= \Pr(Y \le y)
+= \Pr(F_{X}(X) \le y)
+= \Pr(X \le F_{X}^{-1}(y))
+= [F_{X} \circ F_{X}^{-1}](y)
+= y.
+$$
+
+Here the composition $F_{X} \circ F_{X}^{-1}$ (read as "$F_{X}$ after $F_{X}^{-1}$") reduces to the identity function.
+We recognize the resulting CDF as the uniform CDF on $[0, 1]$.
+The last detail to resolve is the following: What is $F_{X}^{-1}$?
+
+- If the CDF $F_{X}(x)$ is strictly monotonically increasing and continuous, then its inverse function $F_{X}^{-1}(u)$ exists.
+- More generally, probability theory defines the *right-continuous generalized inverse* $F_{X}^{-1}(u) = \inf~\{x \in \mathbb{R} : F(x) \ge u\}$; i.e. it is the smallest number $x$ such that the CDF is bounded by $u$ from below.
+- In either case, we refer to this object as the distribution's **quantile function**.
+    + The quantile function may be set-valued if the underlying distribution is not monotonic or continuous.
+
+Thus, knowing the quantile function of a distribution is enough to simulate from it.
+
+## The Recipe
+
+- **Inputs**: A random device that samples from $[0,1]$ uniformly, the quantile function $Q_{X}(u)$ of the target distribution.
+- **Output**: A random deviate $X$ with law $F_{X}(x)$.
+
+1. Generate $U \sim \mathrm{Uniform}(0, 1)$.
+2. Evaluate $Q_{X}(U)$.
+
+:::: callout-note
+
+We actually don't need to know $Q_{X}(u)$. We merely need a program that can evaluate the quantile function.
+
+::::
+
+## Examples
+
+### Exponential
+
+The Exponential distribution with *rate* parameter $\lambda$ has PDF and CDF
+
+$$
+f_{X}(x) = \lambda e^{-\lambda x} \cdot 1\{x \ge 0\},
+\qquad
+F_{X}(x) = 1 - e^{-\lambda x} \cdot 1\{x \ge 0\}.
+$$
+
+Since $e^{x}$ has inverse $\log(x)$, we can easily solve for the quantile function.
+Fix $u = F_{X}(x)$.
+It follows that:
+$$
+1 - u = e^{-\lambda x}
+\iff
+x = - \frac{1}{\lambda} \log(1 - u).
+$$
+Hence, $Q_{X}(u) = - \lambda^{-1} \log(1 - u)$.
+
+We can save a FLOP by noticing that $1 - U$ is uniform on $[0,1]$ whenever $U$ is uniform on the same interval.
+Let's verify using Distributions.jl:
+
+```{julia}
+quantile_exp(u, λ) = -inv(λ) * log(u)
+
+n = 1000
+λ = 0.5
+rng = Xoshiro(1234)
+
+X = quantile_exp.(rand(rng, n), λ)
+
+# Note: Distributions using the *scale* parameterization, not *rate*.
+xs = range(minimum(X), maximum(X), 101)
+plot(
+  density(X, title = "Sample (n = $n)"),
+  plot(xs, Exponential(inv(λ)), func = pdf, title = "Theoretical"),
+  size = (800, 300),
+  xlims = extrema(X),
+  ylims = (0, 0.5),
+)
+```
+
+It is better to compare their quantiles:
+
+```{julia}
+qqplot(Exponential(inv(λ)), X) # compare sample to theoretical quantiles
+```
+
+The `randexp()` function samples from the unit Exponential distribution, though the underlying sampling algorithm is very different.
+
+- Evaluating transcendental functions like $\log(x)$ or $\sin(x)$ is generally expensive.
+    + Lookup tables, approximation algorithms, bit twidling tricks...
+    + Whatever the algorithm, also need to account for floating point errors.
+- The Ziggurat method is designed to avoid $\log(x)$ altogether; see [notes on Rejection Sampling](rejection.qmd).
+
+### Sampling from tails
+
+Continuing our Exponential example, suppose we are interested in sampling values that occur at the right tail.
+These are relatively rare values, so even generating $10^{9}$ samples may yield very few values greater than $10$, for example.
+In this case, we can leverage additional properties of the exponential distribution, namely the *memoryless property* which states that
+$$
+\Pr(X > a \mid X \ge b) = \Pr(X > a); \quad a > b.
+$$
+
+```{julia}
+X = quantile_exp.(rand(rng, n), λ) .+ 10
+histogram(X)
+```
+
+### Distributions without explicit quantile functions
+
+The Gaussian, Gamma, and Beta distributions are examples of distributions that do not have a closed form expression for their quantile functions.
+In such cases, we reformulate the problem as follows:
+
+- The standard uniform CDF has unique property that $F(x) = x$.
+- Given a more general CDF $F(x)$, we have $F(X)$ as a standard normal deviate whenever $X$ has law $F(x)$.
+- Thus, the general problem is finding a number $x$ such that $F(x) = U$, where $U$ is a standard uniform deviate.
+- Equivalently, think of this as finding a root of the function $Q(x \mid u) = F(x) - u$; i.e. solve $F(x) - u = 0$ for $x$.
+
+In these cases, the only required ingredients are the CDF and/or the PDF of the distribution we want to sample.
+
+Consider the PDF given by
+
+$$
+f(x) = [1 - \cos(2 \pi x)] \cdot 1\{0 \le x \le 1\},
+$$
+which has CDF
+$$
+\int_{0}^{x} 1 - \cos(2 \pi t)~dt = [x - \frac{1}{2\pi} \sin(2 \pi x)] \cdot 1\{0 \le x \le 1\} + 1\{x > 1\}.
+$$
+
+We can compute a root of our $Q(x \mid u)$ function using iterative algorithms.
+For example, the following implements a Newton-Raphson algorithm:
+
+```{julia}
+function quantile_root(u; tol = 1e-6, maxiter = 10)
+  # Helper functions
+  F(x) = (x - inv(2*π) * sin(2*π*x)) * (0 ≤ x ≤ 1) + (x > 1)
+  f(x) = (1 - cos(2*π*x)) * (0 ≤ x ≤ 1)
+
+  # Initialize algorithm
+  v = min(u, 1-u) # exploit symmetry
+  x = 0.5         # start to the right of the root
+  iter = 0
+  converged = abs(F(x) - u) ≤ tol
+
+  # Main loop
+  while !converged && iter < maxiter
+    iter += 1
+
+    # Compute the Newton direction: g(x) / [dg(x)/dx].
+    # We add a safeguard in case the derivative is 0.
+    Fx, fx = F(x), f(x)
+    num = fx > 0 ? Fx - v : zero(x)
+    den = fx > 0 ? fx : one(x)
+    Δ = num / den
+
+    # Newton step
+    x = x - Δ
+
+    converged = abs(Δ) ≤ tol
+  end
+
+  return u <= 0.5 ? x : 1 - x
+end
+```
+
+```{julia}
+n = 1000
+rng = Xoshiro(1234)
+X = quantile_root.(rand(rng, n); tol = 1e-8, maxiter = 100)
+
+xs = range(0, 1, 101)
+plot(
+  density(X, title = "Sample (n = $n)"),
+  plot(xs, x -> 1 - cos(2*π*x), title = "Theoretical"),
+  size = (800, 300),
+  xlims = extrema(X),
+)
+```
+
+## Generalization in multivariate case (Optional)
+
+Sampling from multivariate distributions is challenging, particularly in the high dimensional setting.
+One way to generalize inverse sampling is to leverage [Sklar's Theorem](https://en.wikipedia.org/wiki/Copula_(statistics)#Sklar's_theorem), which relates the CDF of a random vector $\boldsymbol{X}$ to the marginal CDFs of its components.
+Under certain regularity conditions, the vector
+$$
+(F_{1}(x_{1}), F_{2}(x_{2}), \ldots, F_{d}(x_{d}))^{\top},
+$$
+where $F_{i}(x)$ is the CDF of component $X_{i}$, encodes the entire dependence structure of the random vector $\mathbf{X}$.
+We know that $F_{i}(X_{i})$ has a standard uniform distribution from before.
+The joint CDF of the random vector $(F_{i}(X_{i}))$ is known as the [copula](https://en.wikipedia.org/wiki/Copula_(statistics)#Definition) of the random vector $\mathbf{X}$.
+The inverse sampling method therefore lets us sample from the multivariate distribution via the marginals.
