@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-0dc1e8188feb0d475c79e47387ad4ecc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-b74315ed01d22c90707a95761ec924a0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -330,9 +330,6 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Linear Algebra Introduction</span>
-  </li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">BLAS/LAPACK</span></a>
@@ -422,9 +419,47 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="false">
- <span class="menu-text" id="quarto-sidebar-section-7-label">Module 7 (Resampling)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+ <span class="menu-text" id="quarto-sidebar-section-7-label">Module 7 (Optimization)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
       <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/optim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">First-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Second-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/autodiff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automatic Differentiation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Problem Classes</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">Module 8 (Resampling)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
           <li class="sidebar-item">
  <span class="menu-text">Bootstrap</span>
   </li>
@@ -433,26 +468,6 @@ window.Quarto = {
   </li>
           <li class="sidebar-item">
  <span class="menu-text">Cross Validation</span>
-  </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false">
- <span class="menu-text" id="quarto-sidebar-section-8-label">Module 8 (Optimization)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
-      </div>
-      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
- <span class="menu-text">First-Order Methods</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Second-Order Methods</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Zero-Order Methods</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">Automatic Differentiation</span>
   </li>
       </ul>
   </li>
@@ -520,6 +535,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Lab 5 (Code Review)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab6-collab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 6 (Collaboration Using Git)</span></a>
   </div>
 </li>
       </ul>
@@ -1139,46 +1160,46 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>A <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">3</span>, <span class="fl">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3×3 Matrix{Float64}:
- 0.0580627  0.145544  0.602862
- 0.580632   0.884387  0.00965256
- 0.26738    0.782085  0.834666</code></pre>
+ 0.998347  0.0501941  0.328925
+ 0.755748  0.24494    0.660686
+ 0.4952    0.597211   0.0280085</code></pre>
 </div>
 </div>
 <div id="34" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">rand</span>(<span class="fl">3</span>) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>100-element Vector{Vector{Float64}}:
- [0.5809388054949481, 0.8620350078465033, 0.10200116578914031]
- [0.8743546669238941, 0.6339708318180186, 0.20458852701835162]
- [0.3278663862254594, 0.8290935613352993, 0.9909521657992202]
- [0.21297683264698786, 0.45695545454465225, 0.41266280782506204]
- [0.2306465207098668, 0.7650502032122289, 0.4472760551418721]
- [0.3533331288988929, 0.15234862330376464, 0.09352590657043924]
- [0.6277893614532507, 0.1754611905685446, 0.2407877265992977]
- [0.5047208776782041, 0.9736493076758549, 0.9941062861934583]
- [0.11378328487080436, 0.517853749720087, 0.4449840201970844]
- [0.6931700769891537, 0.7348655073426572, 0.7790955579389042]
+ [0.49763568459552343, 0.83086589873317, 0.736838324165579]
+ [0.019401419278167964, 0.5878155910010732, 0.8269009991727293]
+ [0.8782179657028376, 0.23059761050271477, 0.982578877696782]
+ [0.4855965184161951, 0.9756184218678564, 0.444195171418459]
+ [0.4536725827993625, 0.23427885036758678, 0.8909830370021911]
+ [0.6017446241822081, 0.1712812941364248, 0.7890757358493421]
+ [0.8177765418152197, 0.17772976840282118, 0.7472253443572745]
+ [0.7988007973647662, 0.04715294709919904, 0.9738760279831097]
+ [0.9601005756186344, 0.5458483118284457, 0.5423483004592375]
+ [0.6593028912756466, 0.8341070950730263, 0.7595905522544069]
  ⋮
- [0.5280461048426055, 0.29029420458752075, 0.21947964939115194]
- [0.7069896279228178, 0.06833491017025395, 0.6097810057571567]
- [0.4966093001535099, 0.43783487255161846, 0.3706178832251308]
- [0.19315230356873037, 0.06461148629094382, 0.1007859382957641]
- [0.20520619117925698, 0.7632059450392903, 0.04130374446291252]
- [0.18605735244164123, 0.5009118081325327, 0.3062731991933242]
- [0.32496823678922093, 0.2878274567347312, 0.5225505383087812]
- [0.9594339614279719, 0.00033209274206136286, 0.8038321364541574]
- [0.015213717066330457, 0.5640057302410916, 0.2951418293468906]</code></pre>
+ [0.7079156223455484, 0.8831572004370422, 0.8993168477963204]
+ [0.9263838667843189, 0.5911159637534789, 0.3586343474228134]
+ [0.029234430986399107, 0.05157945195137392, 0.14231236886203114]
+ [0.14875343685338727, 0.47672119781233635, 0.5979604440188007]
+ [0.9329859786550688, 0.6375071054113924, 0.6619338882751485]
+ [0.02159684965106734, 0.3024811542198005, 0.2876535538169068]
+ [0.8717934934422352, 0.6546038455565977, 0.8129646504243121]
+ [0.9435324117693223, 0.9173978818821578, 0.7613720157543383]
+ [0.5872625456450916, 0.43013356427344995, 0.5588323055594235]</code></pre>
 </div>
 </div>
 <div id="36" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.050566 seconds (224.08 k allocations: 11.006 MiB, 99.92% compilation time)
-  0.000010 seconds (201 allocations: 7.828 KiB)</code></pre>
+<pre><code>  0.066937 seconds (224.08 k allocations: 11.006 MiB, 99.92% compilation time)
+  0.000018 seconds (201 allocations: 7.828 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>126.45621007276712</code></pre>
+<pre><code>124.59803918997781</code></pre>
 </div>
 </div>
 <p>Now let’s implement a specialized version for <code>OneHotVector</code>:</p>
@@ -1202,26 +1223,26 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a>vs <span class="op">=</span> [<span class="fu">OneHotVector</span>(<span class="fl">3</span>, <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fl">3</span>)) for _ <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>100-element Vector{OneHotVector}:
- [1, 0, 0]
- [0, 1, 0]
  [0, 0, 1]
- [1, 0, 0]
- [0, 1, 0]
+ [0, 0, 1]
+ [0, 0, 1]
  [0, 0, 1]
  [0, 1, 0]
+ [1, 0, 0]
  [0, 0, 1]
- [1, 0, 0]
- [1, 0, 0]
+ [0, 1, 0]
+ [0, 1, 0]
+ [0, 0, 1]
  ⋮
- [1, 0, 0]
- [0, 0, 1]
  [0, 0, 1]
  [1, 0, 0]
- [0, 0, 1]
  [1, 0, 0]
+ [1, 0, 0]
+ [0, 0, 1]
  [0, 0, 1]
  [0, 1, 0]
- [0, 0, 1]</code></pre>
+ [1, 0, 0]
+ [0, 1, 0]</code></pre>
 </div>
 </div>
 <p>The following is using our generic code.</p>
@@ -1229,11 +1250,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.075919 seconds (311.33 k allocations: 15.422 MiB, 99.97% compilation time)
-  0.000007 seconds (201 allocations: 7.828 KiB)</code></pre>
+<pre><code>  0.098700 seconds (311.33 k allocations: 15.422 MiB, 99.96% compilation time)
+  0.000010 seconds (201 allocations: 7.828 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>51.464850299430815</code></pre>
+<pre><code>37.66555689333929</code></pre>
 </div>
 </div>
 <p>We can improve performance by writing a custom matrix-vector multiplication algorithm specialized to <code>OneHotVector</code>:</p>
@@ -1247,11 +1268,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb39-2"><a href="#cb39-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.034463 seconds (60.58 k allocations: 2.993 MiB, 99.96% compilation time: 100% of which was recompilation)
-  0.000004 seconds (101 allocations: 4.703 KiB)</code></pre>
+<pre><code>  0.044378 seconds (60.58 k allocations: 2.993 MiB, 99.95% compilation time: 100% of which was recompilation)
+  0.000008 seconds (101 allocations: 4.703 KiB)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>51.464850299430815</code></pre>
+<pre><code>37.66555689333929</code></pre>
 </div>
 </div>
 <p>Even better: specialize the <code>inner()</code> function:</p>
@@ -1265,11 +1286,11 @@ Body<span class="ansi-cyan-fg">::Float64</span>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb44-1"><a href="#cb44-1" aria-label="1"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span>
 <span id="cb44-2"><a href="#cb44-2" aria-label="2"></a><span class="pp">@time</span> <span class="fu">inner_sum</span>(A, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.009445 seconds (9.52 k allocations: 471.078 KiB, 99.86% compilation time: 100% of which was recompilation)
-  0.000002 seconds (1 allocation: 16 bytes)</code></pre>
+<pre><code>  0.012446 seconds (9.52 k allocations: 471.078 KiB, 99.83% compilation time: 100% of which was recompilation)
+  0.000006 seconds (1 allocation: 16 bytes)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>51.464850299430815</code></pre>
+<pre><code>37.66555689333929</code></pre>
 </div>
 </div>
 </section>

@@ -1,211 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/intro.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/collections.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/control.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/dispatch.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module03/pkg.html</loc>
-    <lastmod>2026-11-02T20:01:12.763Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/algorithms.html</loc>
-    <lastmod>2026-11-02T20:01:12.764Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/computers.html</loc>
-    <lastmod>2026-11-02T20:01:12.774Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/rejection.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/checks.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/easy.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/lu.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/condition.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/unix.html</loc>
-    <lastmod>2026-11-02T20:01:12.759Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/filesystem.html</loc>
-    <lastmod>2026-11-02T20:01:12.759Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/office_hours.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw2.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw4.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/index.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab0-setup.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab3-io.html</loc>
-    <lastmod>2026-11-02T20:01:12.758Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/schedule.html</loc>
+    <lastmod>2026-11-12T20:23:44.677Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab5-codereview.html</loc>
-    <lastmod>2026-11-02T20:01:12.758Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_vscode.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/submit_hw.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_revise.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/setup_github.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/configure_git.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/schedule.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_git.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_plots.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_docker.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_pkg.html</loc>
-    <lastmod>2026-11-02T20:01:12.737Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab3-io.html</loc>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab4-reproducibility.html</loc>
-    <lastmod>2026-11-02T20:01:12.758Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab1-submit.html</loc>
-    <lastmod>2026-11-02T20:01:12.758Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/index.html</loc>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab2-debug.html</loc>
-    <lastmod>2026-11-02T20:01:12.758Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/office_hours.html</loc>
+    <lastmod>2026-11-12T20:23:44.677Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/project/project.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_revise.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw1.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_plots.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/setup_github.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/submit_hw.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw4.html</loc>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw3.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw5.html</loc>
-    <lastmod>2026-11-02T20:01:12.757Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw1.html</loc>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/quarto.html</loc>
-    <lastmod>2026-11-02T20:01:12.759Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/control.html</loc>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/git.html</loc>
-    <lastmod>2026-11-02T20:01:12.759Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/dispatch.html</loc>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
   </url>
   <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/cholesky.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/qr.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/krylov.html</loc>
-    <lastmod>2026-11-02T20:01:12.776Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/rng.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/inverse.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/distributions.html</loc>
-    <lastmod>2026-11-02T20:01:12.777Z</lastmod>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/collections.html</loc>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/blas.html</loc>
-    <lastmod>2026-11-02T20:01:12.774Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.662Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/numbers.html</loc>
-    <lastmod>2026-11-02T20:01:12.774Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.663Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/easy.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/qr.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/krylov.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/git.html</loc>
+    <lastmod>2026-11-12T20:23:44.645Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/quarto.html</loc>
+    <lastmod>2026-11-12T20:23:44.645Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module03/pkg.html</loc>
+    <lastmod>2026-11-12T20:23:44.650Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module07/order1.html</loc>
+    <lastmod>2026-11-12T20:23:44.677Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module07/order2.html</loc>
+    <lastmod>2026-11-12T20:23:44.677Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/rejection.html</loc>
+    <lastmod>2026-11-12T20:23:44.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/inverse.html</loc>
+    <lastmod>2026-11-12T20:23:44.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/distributions.html</loc>
+    <lastmod>2026-11-12T20:23:44.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/checks.html</loc>
+    <lastmod>2026-11-12T20:23:44.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module06/rng.html</loc>
+    <lastmod>2026-11-12T20:23:44.666Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module07/autodiff.html</loc>
+    <lastmod>2026-11-12T20:23:44.676Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module07/optim.html</loc>
+    <lastmod>2026-11-12T20:23:44.676Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module03/refactoring.html</loc>
-    <lastmod>2026-11-02T20:01:12.763Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.650Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/filesystem.html</loc>
+    <lastmod>2026-11-12T20:23:44.645Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module01/unix.html</loc>
+    <lastmod>2026-11-12T20:23:44.645Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/condition.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/cholesky.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module05/lu.html</loc>
+    <lastmod>2026-11-12T20:23:44.665Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/algorithms.html</loc>
+    <lastmod>2026-11-12T20:23:44.652Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module04/computers.html</loc>
+    <lastmod>2026-11-12T20:23:44.662Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/functions.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
-  </url>
-  <url>
-    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/types.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
   </url>
   <url>
     <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/basics.html</loc>
-    <lastmod>2026-11-02T20:01:12.761Z</lastmod>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/intro.html</loc>
+    <lastmod>2026-11-12T20:23:44.647Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/notes/module02/types.html</loc>
+    <lastmod>2026-11-12T20:23:44.648Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw5.html</loc>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/hw/hw2.html</loc>
+    <lastmod>2026-11-12T20:23:44.642Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_pkg.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_docker.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_git.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/configure_git.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/howto/use_vscode.html</loc>
+    <lastmod>2026-11-12T20:23:44.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/project/project.html</loc>
+    <lastmod>2026-11-12T20:23:44.677Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab2-debug.html</loc>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab6-collab.html</loc>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab1-submit.html</loc>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
+  </url>
+  <url>
+    <loc>https://UCR-STAT-206.github.io/2026-Fall-STAT/labs/lab0-setup.html</loc>
+    <lastmod>2026-11-12T20:23:44.644Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>First-Order Methods</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b74315ed01d22c90707a95761ec924a0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module07/optim.html">Module 7 (Optimization)</a></li><li class="breadcrumb-item"><a href="../../notes/module07/order1.html">First-Order Methods</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Module 1 (Fundamentals)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Module 2 (Programming)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/dispatch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Dispatch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Module 3 (Best Practices)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">Module 4 (Numerical Basics)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">Module 5 (Linear Systems)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Eigen-Decomposition and SVD</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">Module 6 (Simulation)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rng.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RNG and PRNG</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributions.jl</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/inverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inverse Method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rejection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rejection Sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">Module 7 (Optimization)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/optim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">First-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Second-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Zero-Order Methods</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/autodiff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automatic Differentiation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Problem Classes</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">Module 8 (Resampling)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Bootstrap</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Permutation</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Cross Validation</span>
+  </li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-controls="quarto-sidebar-section-9" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-9-label">Module 9 (Data Technologies)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-9" aria-labelledby="quarto-sidebar-section-9-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-controls="quarto-sidebar-section-10" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-10-label">Labs</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-10" aria-labelledby="quarto-sidebar-section-10-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5 (Code Review)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab6-collab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 6 (Collaboration Using Git)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-controls="quarto-sidebar-section-11" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-11-label">Homework</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-11" aria-labelledby="quarto-sidebar-section-11-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-controls="quarto-sidebar-section-12" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-12-label">How to…</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-12" aria-labelledby="quarto-sidebar-section-12-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#gradient-descent" id="toc-gradient-descent" class="nav-link" data-scroll-target="#gradient-descent">Gradient Descent</a>
+  <ul class="collapse">
+  <li><a href="#naive-approach" id="toc-naive-approach" class="nav-link" data-scroll-target="#naive-approach">Naive Approach</a></li>
+  <li><a href="#fixed-step-size" id="toc-fixed-step-size" class="nav-link" data-scroll-target="#fixed-step-size">Fixed Step Size</a></li>
+  <li><a href="#lipschitz-continuity-and-smoothness" id="toc-lipschitz-continuity-and-smoothness" class="nav-link" data-scroll-target="#lipschitz-continuity-and-smoothness">Lipschitz Continuity and Smoothness</a></li>
+  </ul></li>
+  <li><a href="#line-searches" id="toc-line-searches" class="nav-link" data-scroll-target="#line-searches">Line Searches</a>
+  <ul class="collapse">
+  <li><a href="#exact" id="toc-exact" class="nav-link" data-scroll-target="#exact">Exact</a></li>
+  <li><a href="#backtracking" id="toc-backtracking" class="nav-link" data-scroll-target="#backtracking">Backtracking</a></li>
+  <li><a href="#other-descent-conditions" id="toc-other-descent-conditions" class="nav-link" data-scroll-target="#other-descent-conditions">Other Descent Conditions</a></li>
+  </ul></li>
+  <li><a href="#example-gradient-descent-backtracking" id="toc-example-gradient-descent-backtracking" class="nav-link" data-scroll-target="#example-gradient-descent-backtracking">Example: Gradient Descent + Backtracking</a></li>
+  <li><a href="#stochastic-gradient-descent" id="toc-stochastic-gradient-descent" class="nav-link" data-scroll-target="#stochastic-gradient-descent">Stochastic Gradient Descent</a>
+  <ul class="collapse">
+  <li><a href="#implementation" id="toc-implementation" class="nav-link" data-scroll-target="#implementation">Implementation</a></li>
+  </ul></li>
+  <li><a href="#example-linear-regression" id="toc-example-linear-regression" class="nav-link" data-scroll-target="#example-linear-regression">Example: Linear Regression</a>
+  <ul class="collapse">
+  <li><a href="#step-1-define-the-loss" id="toc-step-1-define-the-loss" class="nav-link" data-scroll-target="#step-1-define-the-loss">Step 1: Define the Loss</a></li>
+  <li><a href="#step-2-define-the-sampling-procedure" id="toc-step-2-define-the-sampling-procedure" class="nav-link" data-scroll-target="#step-2-define-the-sampling-procedure">Step 2: Define the Sampling Procedure</a></li>
+  <li><a href="#step-3-ensure-compatibility" id="toc-step-3-ensure-compatibility" class="nav-link" data-scroll-target="#step-3-ensure-compatibility">Step 3: Ensure compatibility</a></li>
+  <li><a href="#step-4-test-it" id="toc-step-4-test-it" class="nav-link" data-scroll-target="#step-4-test-it">Step 4: Test It</a></li>
+  </ul></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module07/optim.html">Module 7 (Optimization)</a></li><li class="breadcrumb-item"><a href="../../notes/module07/order1.html">First-Order Methods</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">First-Order Methods</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Understand gradient descent as linearization of an unconstrained minimization problem.</li>
+<li>Become familiar with line search techniques as a means of controlling gradient descent.</li>
+<li>Examine how the stochastic generalization can be used to solve a minimization problem through batching.</li>
+</ol>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span>, <span class="bu">Random</span>, <span class="bu">Statistics</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="im">using</span> <span class="bu">ForwardDiff</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a><span class="im">using</span> <span class="bu">Plots</span>, <span class="bu">LaTeXStrings</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>Plots.<span class="fu">default</span>(dpi <span class="op">=</span> <span class="fl">300</span>, legend <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>One approach to solving an <em>unconstrained optimization problem</em></p>
+<p><span class="math display">\[
+\min_{\boldsymbol{x}}~f(\boldsymbol{x}),
+\]</span></p>
+<p>is to find <span class="math inline">\(\boldsymbol{x}_{\ast}\)</span> such that the gradient vanishes; i.e.&nbsp;<span class="math inline">\(\nabla f(\boldsymbol{x}_{\ast}) = \boldsymbol{0}\)</span>. <em>This requires that the optimization model <span class="math inline">\(f(\boldsymbol{x})\)</span> is, at a minimum, once differentiable</em>. We will refer to the condition above as a <strong>stationary condition</strong>, <strong>first-order condition</strong>, or <strong>necessary condition</strong>.</p>
+<ul>
+<li>The term <em>necessary condition</em> is a reminder. A differentiable function <em>must</em> satisfy the stationary condition <span class="math inline">\(\nabla f(\boldsymbol{x}) = \boldsymbol{0}\)</span> whenever <span class="math inline">\(\boldsymbol{x}\)</span> is a minimizer. However, not every stationary point is a minimizer.</li>
+<li>Some of the examples here use automatic differentiation through the ForwardDiff.jl package. We’ll treat this as a black-box that evaluates a Julia function’s derivative at a specific point and expand on it in the <a href="../../notes/module07/autodiff.html">automatic differentiation notes</a>.</li>
+</ul>
+</section>
+<section id="gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="gradient-descent">Gradient Descent</h2>
+<p>To minimize <span class="math inline">\(f(\boldsymbol{x})\)</span>, we construct a <em>local</em> linear model to approximate the objective function near our current estimate <span class="math inline">\(\boldsymbol{x}_{k}\)</span>:</p>
+<p><span class="math display">\[
+f(\boldsymbol{x}_{k} + \boldsymbol{d}) \approx f(\boldsymbol{x}_{k}) + df(\boldsymbol{x}_{k})[\boldsymbol{d}],
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{d}\)</span> denotes the <strong>search direction</strong>. Think of the linear term as an inner product, <span class="math inline">\(\langle \nabla f(\boldsymbol{x}_{k}), \boldsymbol{d} \rangle\)</span>. We’d like for <span class="math inline">\(f(\boldsymbol{x}_{k} + \boldsymbol{d}) &lt; f(\boldsymbol{x}_{k})\)</span>; that is, the update should be an improvement. That indicates that we should choose <span class="math inline">\(\boldsymbol{d}\)</span> to make the linear term <strong>as negative as possible</strong>.</p>
+<p>Unfortunately, this formulation is ill-defined. If <span class="math inline">\(\langle \nabla f(\boldsymbol{x}_{k}), \boldsymbol{d} \rangle\)</span> is negative, then <span class="math inline">\(\langle \nabla f(\boldsymbol{x}_{k}), 2\boldsymbol{d} \rangle\)</span> is twice as negative.</p>
+<p>We only care about <em>direction</em>, not magnitude, so we formulate the search problem as</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{d} : \|\boldsymbol{d}\| \le 1}~df(\boldsymbol{x}_{k})[\boldsymbol{d}],
+\]</span></p>
+<p>which is a <em>constrained</em> minimization problem. We only need a <em>unit vector</em> to tell us the direction, then we can figure out how much to move in that direction. This is the <strong>method of steepest descent</strong>; we seek descent directions that move along the most negative directional derivative.</p>
+<ul>
+<li>If we take <span class="math inline">\(\|\cdot\|\)</span> to mean the Euclidean norm, <span class="math inline">\(\|\cdot\|_{2}\)</span>, then one can show that the best search direction is <span class="math inline">\(\boldsymbol{d} \equiv -\nabla f(\boldsymbol{x}_{k})\)</span> (unnormalized). This is the usual understanding of <em>gradient descent</em>.</li>
+<li>Other choices lead to interesting results. Taking <span class="math inline">\(\|\cdot\|_{1}\)</span> instead suggests <span class="math inline">\(\boldsymbol{d} \equiv - D_{i} f(\boldsymbol{x}_{k}) \boldsymbol{e}_{i}\)</span> where <span class="math inline">\(|D_{i} f(\boldsymbol{x}_{k})| = \max_{j} | D_{j} f(\boldsymbol{x}_{k}) | = \|\nabla f(\boldsymbol{x}_{k})\|_{\infty}\)</span>. That is, we move in the direction with largest partial derivative (in absolute value). When applied to linear regression analysis, this happens to be <a href="https://jmlr.org/papers/volume16/tibshirani15a/tibshirani15a.pdf">forward stagewise regression</a>!</li>
+</ul>
+<p>Once we have a recipe for <span class="math inline">\(\boldsymbol{d}\)</span>, we update our estimates via the rule</p>
+<p><span class="math display">\[
+\boldsymbol{x}_{k+1} = \boldsymbol{x}_{k} + \boldsymbol{d}.
+\]</span></p>
+<section id="naive-approach" class="level3">
+<h3 class="anchored" data-anchor-id="naive-approach">Naive Approach</h3>
+<p>The (naive) gradient descent approach is simply</p>
+<p><span class="math display">\[
+\boldsymbol{x}_{k+1} = \boldsymbol{x}_{k} - \nabla f(\boldsymbol{x}_{k}).
+\]</span></p>
+<p>Without any restrictions on the step length, it becomes possible for the method to <strong>overshoot</strong> and thus fail to converge, even when the underlying function is <em>easy to minimize</em>.</p>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="fu">myfun</span>(x) <span class="op">=</span> (x <span class="op">-</span> <span class="fl">1</span>)<span class="op">^</span><span class="fl">2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a><span class="kw">function</span> <span class="fu">gradient_descent_example</span>(x0, t<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1.0</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>  x <span class="op">=</span> x0</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a>  history_x <span class="op">=</span> [x0]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a>    x <span class="op">=</span> x <span class="op">-</span> t <span class="op">*</span> ForwardDiff.<span class="fu">derivative</span>(myfun, x)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a>    <span class="fu">push!</span>(history_x, x)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a>  <span class="cf">end</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-label="10"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-label="11"></a>  <span class="pp">@show</span> history_x</span>
+<span id="cb2-12"><a href="#cb2-12" aria-label="12"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-label="13"></a>  fig <span class="op">=</span> <span class="fu">plot</span>(<span class="fu">range</span>(<span class="op">-</span><span class="fl">3</span>, <span class="fl">4</span>, step <span class="op">=</span> <span class="fl">0.25</span>), myfun, label <span class="op">=</span> L<span class="st">"f(x)"</span>, lw <span class="op">=</span> <span class="fl">3</span>, legend <span class="op">=</span> <span class="cn">true</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-label="14"></a>  <span class="fu">plot!</span>(history_x, <span class="fu">myfun</span>.(history_x), label <span class="op">=</span> <span class="st">"History"</span>, lw <span class="op">=</span> <span class="fl">3</span>, ls <span class="op">=</span> <span class="op">:</span>dash)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-label="15"></a>  <span class="cf">return</span> fig</span>
+<span id="cb2-16"><a href="#cb2-16" aria-label="16"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>gradient_descent_example (generic function with 2 methods)</code></pre>
+</div>
+</div>
+<p>Starting from <span class="math inline">\(x_{0} = 3.0\)</span>:</p>
+<div id="8" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">gradient_descent_example</span>(<span class="fl">3.0</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>history_x = [3.0, -1.0, 3.0, -1.0, 3.0, -1.0, 3.0, -1.0, 3.0, -1.0, 3.0]</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/gd_step=1.0.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+<p>Using a step length <span class="math inline">\(t = 1\)</span>, we see the iterates alternate between <span class="math inline">\(x_{k} = -1\)</span> and <span class="math inline">\(x_{k} = 3\)</span> without end. The algorithm is stuck in a cycle because neither update achieves a decrease.</p>
+</section>
+<section id="fixed-step-size" class="level3">
+<h3 class="anchored" data-anchor-id="fixed-step-size">Fixed Step Size</h3>
+<p>Amend the gradient descent updates with a <strong>step size</strong> that indicates how far along to move in the direction <span class="math inline">\(\boldsymbol{d}\)</span>:</p>
+<p><span class="math display">\[
+\boldsymbol{x}_{k+1} = \boldsymbol{x}_{k} - t \nabla f(\boldsymbol{x}_{k}).
+\]</span></p>
+<p>The search direction <span class="math inline">\(\boldsymbol{d}\)</span> is determined as before; we simply take <span class="math inline">\(t\)</span> to be a fixed value.</p>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="fu">gradient_descent_example</span>(<span class="fl">3.0</span>, <span class="fl">0.9</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>history_x = [3.0, -0.6000000000000001, 2.2800000000000002, -0.024000000000000465, 1.8192000000000004, 0.3446399999999996, 1.5242880000000003, 0.5805695999999997, 1.3355443200000003, 0.7315645439999997, 1.2147483648000001]</code></pre>
+</div>
+</div>
+<p><img src="assets/gd_step=0.9.png" class="img-fluid"></p>
+<ul>
+<li>Using a smaller step length <span class="math inline">\(t = 0.9\)</span>, we see the iterates overshoot the minimum point after each iteration.</li>
+<li>Unlike the previous example with <span class="math inline">\(t = 1\)</span>, each iterate achieves a small decrease in the objective.</li>
+<li>Eventually, the magnitude of overshooting becomes small and gradient descent converges to the optimal point.</li>
+</ul>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">gradient_descent_example</span>(<span class="fl">3.0</span>, <span class="fl">0.5</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>history_x = [3.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</code></pre>
+</div>
+</div>
+<p><img src="assets/gd_step=0.5.png" class="img-fluid"></p>
+<ul>
+<li>Why does the choice <span class="math inline">\(t = 0.5\)</span> lead to an algorithm that converges in one step?</li>
+</ul>
+</section>
+<section id="lipschitz-continuity-and-smoothness" class="level3">
+<h3 class="anchored" data-anchor-id="lipschitz-continuity-and-smoothness">Lipschitz Continuity and Smoothness</h3>
+<section id="lipschitz-continuity" class="level4">
+<h4 class="anchored" data-anchor-id="lipschitz-continuity">Lipschitz Continuity</h4>
+<p>There exists <span class="math inline">\(L &gt; 0\)</span> such that for every <span class="math inline">\(\boldsymbol{x},\boldsymbol{y}\)</span> the following inequality holds:</p>
+<p><span class="math display">\[
+\|f(\boldsymbol{x}) - f(\boldsymbol{y})\| \le L \|\boldsymbol{x} - \boldsymbol{y}\|.
+\]</span></p>
+<p>This is a statement about <em>how large derivatives can become</em> and defines a <em>global</em> property of a function. To see this, rearrange:</p>
+<p><span class="math display">\[
+\frac{\|f(\boldsymbol{x}) - f(\boldsymbol{y})\|}{\|\boldsymbol{x} - \boldsymbol{y}\|} \le L
+\]</span></p>
+</section>
+<section id="lipschitz-smoothness" class="level4">
+<h4 class="anchored" data-anchor-id="lipschitz-smoothness">Lipschitz Smoothness</h4>
+<p>This is an application of Lipschitz continuity to <em>gradients</em> of functions.</p>
+<p><span class="math display">\[
+\|\nabla f(\boldsymbol{x}) - \nabla f(\boldsymbol{y})\| \le L \|\boldsymbol{x} - \boldsymbol{y}\|
+\]</span></p>
+<p>The gradient of a Lipschitz smooth function cannot change faster than the rate <span class="math inline">\(L\)</span>. This property illuminates why gradient descent succeeds or fails.</p>
+<ul>
+<li>Choosing a step length <span class="math inline">\(t \le 1 / L\)</span> guarantees a decrease in objective values after a gradient descent update.</li>
+<li>If a function has a small Lipschitz constant <span class="math inline">\(L\)</span>, then its gradient changes slowly as one moves across the optimization landscape defined by <span class="math inline">\(f(\boldsymbol{x})\)</span>. The step length can be relatively large.</li>
+<li>On the other hand, if <span class="math inline">\(L\)</span> is large then the gradient changes rapidly even for small perturbations within a local neighborhood. Safe step lengths must be kept relatively small.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="line-searches" class="level2">
+<h2 class="anchored" data-anchor-id="line-searches">Line Searches</h2>
+<p>Once we’ve fixed the search direction <span class="math inline">\(\boldsymbol{d}\)</span>, we might ask, “How should we choose the step size, <span class="math inline">\(t\)</span>?” This motivates the notion of <em>line searches</em>.</p>
+<section id="exact" class="level3">
+<h3 class="anchored" data-anchor-id="exact">Exact</h3>
+<p>The <em>exact line search</em> problem is</p>
+<p><span class="math display">\[
+\min_{t,~t \ge 0}~f(\boldsymbol{x} + t \boldsymbol{d}),
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{x}\)</span> and <span class="math inline">\(\boldsymbol{d}\)</span> are fixed beforehand. The goal is to have <span class="math inline">\(f(\boldsymbol{x} + t \boldsymbol{d}) &lt; f(\boldsymbol{x})\)</span>. This problem is intractable except in the simplest of problems; e.g.&nbsp;for a quadratic.</p>
+</section>
+<section id="backtracking" class="level3">
+<h3 class="anchored" data-anchor-id="backtracking">Backtracking</h3>
+<p>Exact line searches rarely have closed form solutions. Even when the problem is tractable, it may be expensive to compute the step size exactly.</p>
+<p>What is done in practice is a <strong>backtracking line search</strong>. The idea is simple:</p>
+<ol type="1">
+<li>Propose an initial step size <span class="math inline">\(t \leftarrow 1\)</span>.</li>
+<li>Propose a candidate point using a gradient descent update, <span class="math inline">\(\boldsymbol{x}_{\text{new}} \leftarrow \boldsymbol{x} + t\boldsymbol{d}\)</span>.</li>
+<li>Check that a <em>descent condition</em> holds; for example, <span class="math inline">\(f(\boldsymbol{x}_{\text{new}}) &lt; f(\boldsymbol{x})\)</span>.
+<ul>
+<li>If the descent condition fails, reject the candidate and set <span class="math inline">\(t \leftarrow \alpha t\)</span> for <span class="math inline">\(\alpha \in (0, 1)\)</span>. Go back to Step 2 with the new step size.</li>
+</ul></li>
+<li>Accept the candidate, <span class="math inline">\(\boldsymbol{x} \leftarrow \boldsymbol{x}_{\text{new}}\)</span>, and continue with gradient descent.</li>
+</ol>
+<p>A common choice for <span class="math inline">\(\alpha\)</span> is <span class="math inline">\(\alpha = \frac{1}{2}\)</span>. This flavor of backtracking is known as <em>step halving</em>.</p>
+</section>
+<section id="other-descent-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="other-descent-conditions">Other Descent Conditions</h3>
+<p>Knowledge of more complex descent conditions can improve convergence behavior of a first-order method. Requires some additional background to understand.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Backtracking_line_search#Algorithm">Armijo</a>: Defines <em>sufficient decrease</em>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Wolfe_conditions#Armijo_rule_and_curvature">Wolfe</a>: Armijo + <em>curvature</em> condition.</li>
+</ul>
+</section>
+</section>
+<section id="example-gradient-descent-backtracking" class="level2">
+<h2 class="anchored" data-anchor-id="example-gradient-descent-backtracking">Example: Gradient Descent + Backtracking</h2>
+<p>The Rosenbrock function is a classic test problem for optimization algorithms:</p>
+<p><span class="math display">\[
+f(x_{1}, x_{2}) = (1 - x_{1})^{2} + 100 (x_{2} - x_{1}^{2})^{2}.
+\]</span></p>
+<ul>
+<li>The unique minimizer is <span class="math inline">\(\boldsymbol{x}_{\ast} = (1, 1)\)</span> with <span class="math inline">\(f(\boldsymbol{x}_{\ast}) = 0\)</span>.</li>
+<li>The minimizer sits inside a long, narrow, curved valley.</li>
+<li>The contour plot below shows <span class="math inline">\(\log_{10} f(\boldsymbol{x})\)</span>.</li>
+</ul>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">rosenbrock</span>(x)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>  <span class="cf">return</span> (<span class="fl">1</span> <span class="op">-</span> x[<span class="fl">1</span>]) <span class="op">^</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">100</span> <span class="op">*</span> (x[<span class="fl">2</span>] <span class="op">-</span> x[<span class="fl">1</span>] <span class="op">^</span> <span class="fl">2</span>) <span class="op">^</span> <span class="fl">2</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>rosenbrock (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>xs <span class="op">=</span> <span class="fu">range</span>(<span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, step <span class="op">=</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>ys <span class="op">=</span> <span class="fu">range</span>(<span class="op">-</span><span class="fl">1</span>, <span class="fl">3</span>, step <span class="op">=</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a><span class="fu">contourf</span>(xs, ys, (x, y) <span class="op">-&gt;</span> <span class="fu">log10</span>(<span class="fl">1e-6</span> <span class="op">+</span> <span class="fu">rosenbrock</span>([x,y])), color <span class="op">=</span> <span class="op">:</span>plasma, levels <span class="op">=</span> <span class="fl">64</span>, lw <span class="op">=</span> <span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="assets/rosenbrock.png" class="img-fluid"></p>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">gradient_descent</span>(f, x0; maxiter<span class="op">::</span><span class="dt">Int </span><span class="op">=</span> <span class="fl">10</span>, tol<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1e-3</span>, backtracking<span class="op">::</span><span class="dt">Bool </span><span class="op">=</span> <span class="cn">false</span>, t<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">0.1</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>  <span class="co"># initialize our workspace</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>  x <span class="op">=</span> <span class="fu">copy</span>(x0)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>  ∇f <span class="op">=</span> <span class="fu">similar</span>(x)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>  <span class="co"># initial function + gradient values</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-label="7"></a>  f_old <span class="op">=</span> <span class="fu">f</span>(x)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-label="8"></a>  ForwardDiff.<span class="fu">gradient!</span>(∇f, f, x)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-label="9"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-label="10"></a>  <span class="co"># start the minimization loop</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-label="11"></a>  not_converged <span class="op">=</span> <span class="fu">norm</span>(∇f) <span class="op">&gt;</span> tol</span>
+<span id="cb13-12"><a href="#cb13-12" aria-label="12"></a>  iter <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-label="13"></a>  <span class="cf">while</span> not_converged <span class="op">&amp;&amp;</span> iter <span class="op">&lt;</span> maxiter</span>
+<span id="cb13-14"><a href="#cb13-14" aria-label="14"></a>    iter <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-label="15"></a>    <span class="cf">if</span> backtracking</span>
+<span id="cb13-16"><a href="#cb13-16" aria-label="16"></a>      <span class="co"># try a full step</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-label="17"></a>      t <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-label="18"></a>      @. x <span class="op">=</span> x <span class="op">-</span> t <span class="op">*</span> ∇f</span>
+<span id="cb13-19"><a href="#cb13-19" aria-label="19"></a>      <span class="cf">while</span> <span class="fu">f</span>(x) <span class="op">&gt;=</span> f_old <span class="op">&amp;&amp;</span> t <span class="op">&gt;</span> <span class="fu">eps</span>() <span class="co"># backtracking; give up once t is negligible</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-label="20"></a>        @. x <span class="op">=</span> x <span class="op">+</span> t <span class="op">*</span> ∇f</span>
+<span id="cb13-21"><a href="#cb13-21" aria-label="21"></a>        t <span class="op">=</span> t <span class="op">/</span> <span class="fl">2</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-label="22"></a>        @. x <span class="op">=</span> x <span class="op">-</span> t <span class="op">*</span> ∇f</span>
+<span id="cb13-23"><a href="#cb13-23" aria-label="23"></a>      <span class="cf">end</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-label="24"></a>      f_old <span class="op">=</span> <span class="fu">f</span>(x)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-label="25"></a>    <span class="cf">else</span> <span class="co"># fixed step size</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-label="26"></a>      @. x <span class="op">=</span> x <span class="op">-</span> t <span class="op">*</span> ∇f</span>
+<span id="cb13-27"><a href="#cb13-27" aria-label="27"></a>    <span class="cf">end</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-label="28"></a>    <span class="co"># check convergence</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-label="29"></a>    ForwardDiff.<span class="fu">gradient!</span>(∇f, f, x)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-label="30"></a>    not_converged <span class="op">=</span> <span class="fu">norm</span>(∇f) <span class="op">&gt;</span> tol</span>
+<span id="cb13-31"><a href="#cb13-31" aria-label="31"></a>  <span class="cf">end</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-label="32"></a>  <span class="cf">return</span> iter, x, <span class="fu">f</span>(x), <span class="fu">norm</span>(∇f)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-label="33"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>gradient_descent (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="28" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="fu">gradient_descent</span>(rosenbrock, [<span class="fl">1.5</span>, <span class="fl">1.5</span>], maxiter <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span>, backtracking <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(6, [Inf, Inf], NaN, NaN)</code></pre>
+</div>
+</div>
+<div id="30" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a><span class="fu">gradient_descent</span>(rosenbrock, [<span class="fl">1.5</span>, <span class="fl">1.5</span>], maxiter <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span>, backtracking <span class="op">=</span> <span class="cn">true</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(5686, [1.0007792391187107, 1.0015606554667889], 6.074600990787522e-7, 0.000981562810554882)</code></pre>
+</div>
+</div>
+<ul>
+<li>This is a difficult function to minimize. Without backtracking, gradient descent diverges after 6 iterations.</li>
+<li>Backtracking improves convergence, albeit in a slow fashion.</li>
+</ul>
+</section>
+<section id="stochastic-gradient-descent" class="level2">
+<h2 class="anchored" data-anchor-id="stochastic-gradient-descent">Stochastic Gradient Descent</h2>
+<p>Problems in modern statistics and machine learning heavily favor <em>stochastic algorithms</em> due to</p>
+<ol type="1">
+<li>the problem’s training data being “big”, and</li>
+<li>function evaluation (and therefore gradient evaluation) being “expensive”.</li>
+</ol>
+<p>In this setting, it is enough to approximate gradients with batches of the data. <em>However, this requires that the batches be representative of the full data!</em></p>
+<p>Specifically, suppose the objective is an average over <span class="math inline">\(n\)</span> observations, where <span class="math inline">\(f_{i}\)</span> is the loss on observation <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[
+f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
+\]</span></p>
+<p>A batch <span class="math inline">\(B \subset \{1, \ldots, n\}\)</span> of size <span class="math inline">\(m\)</span> gives the approximation</p>
+<p><span class="math display">\[
+\nabla f(\boldsymbol{x}) \approx \frac{1}{m} \sum_{i \in B} \nabla f_{i}(\boldsymbol{x}).
+\]</span></p>
+<ul>
+<li>Each gradient evaluation costs <span class="math inline">\(m\)</span> observations instead of <span class="math inline">\(n\)</span>.</li>
+<li>If batches are sampled uniformly at random, then the approximation is <em>unbiased</em>; i.e.&nbsp;it equals <span class="math inline">\(\nabla f(\boldsymbol{x})\)</span> on average. This is what we mean by “representative”.</li>
+</ul>
+<section id="implementation" class="level3">
+<h3 class="anchored" data-anchor-id="implementation">Implementation</h3>
+<ul>
+<li><code>f(params, data)</code>: Assumed to be a function-like object that accepts two arguments: a vector of parameters <code>params</code> and <code>data</code>, a batch returned by <code>batchfun</code>.</li>
+<li><code>x0</code>: Starting estimate.</li>
+<li><code>batchfun(batchsize)</code>: A one-argument function that returns a random batch of the given size from the problem’s training data.</li>
+</ul>
+<div id="32" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">sgd</span>(f, x0, batchfun; maxiter<span class="op">::</span><span class="dt">Int </span><span class="op">=</span> <span class="fl">10</span>, tol<span class="op">::</span><span class="dt">Real </span><span class="op">=</span> <span class="fl">1e-3</span>, batchsize<span class="op">::</span><span class="dt">Int </span><span class="op">=</span> <span class="fl">10</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a>  <span class="co"># initialize our workspace</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-label="3"></a>  x <span class="op">=</span> <span class="fu">copy</span>(x0)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-label="4"></a>  ∇f <span class="op">=</span> <span class="fu">similar</span>(x)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-label="5"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-label="6"></a>  <span class="co"># helper function to evaluate gradient on mini-batch</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-label="7"></a>  <span class="co"># note the variables folded into the function definition</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-label="8"></a>  <span class="kw">function</span> <span class="fu">eval_gradient!</span>(x, batch)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-label="9"></a>    ForwardDiff.<span class="fu">gradient!</span>(∇f, params <span class="op">-&gt;</span> <span class="fu">f</span>(params, batch), x)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-label="10"></a>    <span class="cf">return</span> ∇f</span>
+<span id="cb19-11"><a href="#cb19-11" aria-label="11"></a>  <span class="kw">end</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-label="12"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-label="13"></a>  <span class="co"># initial batch + gradient values</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-label="14"></a>  batch <span class="op">=</span> <span class="fu">batchfun</span>(batchsize)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-label="15"></a>  <span class="fu">eval_gradient!</span>(x, batch)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-label="16"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-label="17"></a>  <span class="co"># start the minimization loop</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-label="18"></a>  not_converged <span class="op">=</span> <span class="fu">norm</span>(∇f) <span class="op">&gt;</span> tol</span>
+<span id="cb19-19"><a href="#cb19-19" aria-label="19"></a>  iter <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-label="20"></a>  <span class="cf">while</span> not_converged <span class="op">&amp;&amp;</span> iter <span class="op">&lt;</span> maxiter</span>
+<span id="cb19-21"><a href="#cb19-21" aria-label="21"></a>    iter <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-label="22"></a>    t <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> iter</span>
+<span id="cb19-23"><a href="#cb19-23" aria-label="23"></a>    @. x <span class="op">=</span> x <span class="op">-</span> t <span class="op">*</span> ∇f</span>
+<span id="cb19-24"><a href="#cb19-24" aria-label="24"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-label="25"></a>    <span class="co"># draw a new batch and evaluate the gradient at the new point</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-label="26"></a>    batch <span class="op">=</span> <span class="fu">batchfun</span>(batchsize)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-label="27"></a>    <span class="fu">eval_gradient!</span>(x, batch)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-label="28"></a></span>
+<span id="cb19-29"><a href="#cb19-29" aria-label="29"></a>    <span class="co"># check convergence</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-label="30"></a>    not_converged <span class="op">=</span> <span class="fu">norm</span>(∇f) <span class="op">&gt;</span> tol</span>
+<span id="cb19-31"><a href="#cb19-31" aria-label="31"></a>  <span class="cf">end</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-label="32"></a>  <span class="cf">return</span> iter, x, <span class="fu">f</span>(x, batch), <span class="fu">norm</span>(∇f)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-label="33"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>sgd (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Choosing the Step Size
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This implementation uses <em>diminishing step sizes</em>, <span class="math inline">\(1 / k\)</span>. Lots of other schemes in literature; fixed step sizes only converge to a neighborhood of the solution.</p>
+<ul>
+<li>The scale matters. A schedule <span class="math inline">\(a / k\)</span> may stall if <span class="math inline">\(a\)</span> is too small.</li>
+<li>The stopping rule checks the gradient on a batch, which is noisy. Expect the algorithm to run until <code>maxiter</code>.</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="example-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="example-linear-regression">Example: Linear Regression</h2>
+<p>We simulate <span class="math inline">\(n = 10^{4}\)</span> observations from a simple linear regression model with intercept <span class="math inline">\(0.5\)</span>, slope <span class="math inline">\(-3\)</span>, and noise standard deviation <span class="math inline">\(1/\sqrt{2}\)</span>.</p>
+<div id="34" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">simulate_linreg_problem</span>(n, β<span class="fl">0</span>, σ; rng <span class="op">=</span> <span class="bu">Random</span>.<span class="fu">default_rng</span>())</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>  X <span class="op">=</span> <span class="fu">Matrix</span><span class="dt">{Float64}</span>(<span class="cn">undef</span>, n, <span class="fl">2</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>  <span class="pp">@views</span> <span class="cf">begin</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>    <span class="fu">fill!</span>(X[<span class="op">:</span>, <span class="fl">1</span>], <span class="fl">1</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-label="5"></a>    <span class="fu">randn!</span>(rng, X[<span class="op">:</span>, <span class="fl">2</span>])</span>
+<span id="cb21-6"><a href="#cb21-6" aria-label="6"></a>  <span class="cf">end</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-label="7"></a>  y <span class="op">=</span> X <span class="op">*</span> β<span class="fl">0</span> <span class="op">.+</span> σ <span class="op">*</span> <span class="fu">randn</span>(rng, n)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-label="8"></a>  <span class="cf">return</span> y, X</span>
+<span id="cb21-9"><a href="#cb21-9" aria-label="9"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>simulate_linreg_problem (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="36" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>y, X <span class="op">=</span> <span class="fu">simulate_linreg_problem</span>(<span class="fl">10</span> <span class="op">^</span> <span class="fl">4</span>, [<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">3.0</span>], <span class="fl">1</span><span class="op">/</span><span class="fu">sqrt</span>(<span class="fl">2</span>));</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-label="3"></a>fig <span class="op">=</span> <span class="fu">scatter</span>(X[<span class="op">:</span>, <span class="fl">2</span>], y,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-label="4"></a>  xlabel <span class="op">=</span> <span class="st">"X (Independent)"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-label="5"></a>  ylabel <span class="op">=</span> <span class="st">"y (Dependent)"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-label="6"></a>  label <span class="op">=</span> <span class="st">"Data"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-label="7"></a>  legend <span class="op">=</span> <span class="cn">true</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-label="8"></a>  alpha <span class="op">=</span> <span class="fl">0.25</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-label="9"></a>  markerstrokewidth <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-label="10"></a>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><img src="assets/linreg_data.png" class="img-fluid"></p>
+<section id="step-1-define-the-loss" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-define-the-loss">Step 1: Define the Loss</h3>
+<p>ForwardDiff asks that the functions we differentiate only have one argument. If we have multiple parameters, they must be packed into a <code>Vector</code>.</p>
+<p>With this in mind, let’s make the coefficients <code>b</code> the first argument below.</p>
+<div id="40" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">linreg_loss</span>(b, y, X<span class="op">::</span><span class="dt">AbstractMatrix</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a>  r <span class="op">=</span> y <span class="op">-</span> X<span class="op">*</span>b</span>
+<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>  <span class="cf">return</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span> <span class="op">*</span> <span class="fu">mean</span>(abs2, r)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>linreg_loss (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="42" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="fu">linreg_loss</span>([<span class="fl">0.0</span>, <span class="fl">0.0</span>], y, X) <span class="co"># make sure it works!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>4.853756644855166</code></pre>
+</div>
+</div>
+<div id="44" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a><span class="fu">linreg_loss</span>([<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">3.0</span>], y, X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.24826731323441126</code></pre>
+</div>
+</div>
+<p>For compatibility with ForwardDiff, we just use an anonymous function</p>
+<div id="46" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, y, X), <span class="fu">zeros</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -0.4914458500092405
+  2.9901254435256455</code></pre>
+</div>
+</div>
+</section>
+<section id="step-2-define-the-sampling-procedure" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-define-the-sampling-procedure">Step 2: Define the Sampling Procedure</h3>
+<p>Let’s use a batch of fixed size. The following function explicitly requires 3 arguments to sample from <code>(y, X)</code>.</p>
+<div id="48" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a href="#cb32-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">mybatchfun</span>(y, X, batchsize)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-label="2"></a>  idx <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(y), batchsize)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-label="3"></a>  <span class="cf">return</span> y[idx], X[idx, <span class="op">:</span>]</span>
+<span id="cb32-4"><a href="#cb32-4" aria-label="4"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>mybatchfun (generic function with 1 method)</code></pre>
+</div>
+</div>
+<div id="50" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb34-1"><a href="#cb34-1" aria-label="1"></a>yb, Xb <span class="op">=</span> <span class="fu">mybatchfun</span>(y, X, <span class="fl">10</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-label="2"></a><span class="fu">display</span>(yb)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-label="3"></a><span class="fu">display</span>(Xb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>10-element Vector{Float64}:
+  0.04138441168738624
+  4.286525233110716
+  1.7220981461804905
+  1.7615827291494184
+ -1.629818551105585
+ -2.749448894549657
+ -3.7266721308639315
+ -1.1083782530524344
+ -0.2778587737521703
+  5.433031603154268</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>10×2 Matrix{Float64}:
+ 1.0   0.0805354
+ 1.0  -1.37252
+ 1.0  -0.475719
+ 1.0  -0.194864
+ 1.0   0.474403
+ 1.0   1.14692
+ 1.0   1.6098
+ 1.0   0.751969
+ 1.0   0.30913
+ 1.0  -1.58737</code></pre>
+</div>
+</div>
+<p>Other possible schemes:</p>
+<ul>
+<li>Sample a single observation</li>
+<li>Cyclic: Shuffle data, then iterate over data using a fixed sized window.</li>
+</ul>
+</section>
+<section id="step-3-ensure-compatibility" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-ensure-compatibility">Step 3: Ensure compatibility</h3>
+<p>To make the output of <code>batchfun()</code> compatible with our loss function, add a <em>method</em> that expands the second argument to <code>y</code> and <code>X</code>.</p>
+<div id="52" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb37-1"><a href="#cb37-1" aria-label="1"></a><span class="fu">linreg_loss</span>(b, data<span class="op">::</span><span class="dt">Tuple</span>) <span class="op">=</span> <span class="fu">linreg_loss</span>(b, data[<span class="fl">1</span>], data[<span class="fl">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>linreg_loss (generic function with 2 methods)</code></pre>
+</div>
+</div>
+<p>Make sure it works:</p>
+<div id="54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="fu">linreg_loss</span>(<span class="fu">zeros</span>(<span class="fl">2</span>), <span class="fu">mybatchfun</span>(y, X, <span class="fl">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>5.854241952609469</code></pre>
+</div>
+</div>
+<p>Need compatibility with <code>ForwardDiff.gradient()</code>, too:</p>
+<div id="56" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb41-1"><a href="#cb41-1" aria-label="1"></a>abatch <span class="op">=</span> <span class="fu">mybatchfun</span>(y, X, <span class="fl">10</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-label="2"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, abatch), <span class="fu">zeros</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>2-element Vector{Float64}:
+ -0.2824271293252177
+  2.37268617095027</code></pre>
+</div>
+</div>
+</section>
+<section id="step-4-test-it" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-test-it">Step 4: Test It</h3>
+<div id="58" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb43-1"><a href="#cb43-1" aria-label="1"></a>iter, β, loss, grad <span class="op">=</span> <span class="pp">@time</span> <span class="fu">gradient_descent</span>(</span>
+<span id="cb43-2"><a href="#cb43-2" aria-label="2"></a>  b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, y, X), <span class="co"># function of parameters; using full data</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-label="3"></a>  <span class="fu">zeros</span>(<span class="fl">2</span>);</span>
+<span id="cb43-4"><a href="#cb43-4" aria-label="4"></a>  maxiter <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">3</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-label="5"></a>  tol <span class="op">=</span> <span class="fl">1e-6</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-label="6"></a>  backtracking <span class="op">=</span> <span class="cn">true</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-label="7"></a>)</span>
+<span id="cb43-8"><a href="#cb43-8" aria-label="8"></a><span class="fu">println</span>(<span class="st">"""</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-label="9"></a><span class="st">Gradient Descent</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-label="10"></a><span class="st">  - Iterations: </span><span class="sc">$</span>(iter)</span>
+<span id="cb43-11"><a href="#cb43-11" aria-label="11"></a><span class="st">  - Estimate: </span><span class="sc">$</span>(β)</span>
+<span id="cb43-12"><a href="#cb43-12" aria-label="12"></a><span class="st">  - Loss: </span><span class="sc">$</span>(loss)</span>
+<span id="cb43-13"><a href="#cb43-13" aria-label="13"></a><span class="st">  - Gradient Norm: </span><span class="sc">$</span>(grad)</span>
+<span id="cb43-14"><a href="#cb43-14" aria-label="14"></a><span class="st">"""</span>)</span>
+<span id="cb43-15"><a href="#cb43-15" aria-label="15"></a><span class="fu">plot!</span>(fig, <span class="fu">range</span>(<span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>), x <span class="op">-&gt;</span> β[<span class="fl">1</span>] <span class="op">+</span> x<span class="op">*</span>β[<span class="fl">2</span>], color <span class="op">=</span> <span class="op">:</span>black, label <span class="op">=</span> <span class="st">"GD"</span>, lw <span class="op">=</span> <span class="fl">3</span>, ls <span class="op">=</span> <span class="op">:</span>dash);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.643168 seconds (1.49 M allocations: 75.964 MiB, 99.89% compilation time)
+Gradient Descent
+  - Iterations: 3
+  - Estimate: [0.49669915755119964, -2.9988339864434375]
+  - Loss: 0.24826119449177858
+  - Gradient Norm: 1.2325104218554015e-7
+</code></pre>
+</div>
+</div>
+<div id="60" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb45-1"><a href="#cb45-1" aria-label="1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">206</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-label="2"></a>iter, β, loss, grad <span class="op">=</span> <span class="pp">@time</span> <span class="fu">sgd</span>(</span>
+<span id="cb45-3"><a href="#cb45-3" aria-label="3"></a>  linreg_loss,              <span class="co"># function of parameters + data</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-label="4"></a>  <span class="fu">zeros</span>(<span class="fl">2</span>),</span>
+<span id="cb45-5"><a href="#cb45-5" aria-label="5"></a>  b <span class="op">-&gt;</span> <span class="fu">mybatchfun</span>(y, X, b); <span class="co"># function of batch size</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-label="6"></a>  maxiter <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">4</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-label="7"></a>  tol <span class="op">=</span> <span class="fl">1e-3</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-label="8"></a>  batchsize <span class="op">=</span> <span class="fl">50</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-label="9"></a>)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-label="10"></a><span class="fu">println</span>(<span class="st">"""</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-label="11"></a><span class="st">Stochastic Gradient Descent</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-label="12"></a><span class="st">  - Iterations: </span><span class="sc">$</span>(iter)</span>
+<span id="cb45-13"><a href="#cb45-13" aria-label="13"></a><span class="st">  - Estimate: </span><span class="sc">$</span>(β)</span>
+<span id="cb45-14"><a href="#cb45-14" aria-label="14"></a><span class="st">  - Loss: </span><span class="sc">$</span>(loss)</span>
+<span id="cb45-15"><a href="#cb45-15" aria-label="15"></a><span class="st">  - Gradient Norm: </span><span class="sc">$</span>(grad)</span>
+<span id="cb45-16"><a href="#cb45-16" aria-label="16"></a><span class="st">"""</span>)</span>
+<span id="cb45-17"><a href="#cb45-17" aria-label="17"></a><span class="fu">plot!</span>(fig, <span class="fu">range</span>(<span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>), x <span class="op">-&gt;</span> β[<span class="fl">1</span>] <span class="op">+</span> x<span class="op">*</span>β[<span class="fl">2</span>], color <span class="op">=</span> <span class="op">:</span>red, label <span class="op">=</span> <span class="st">"SGD"</span>, lw <span class="op">=</span> <span class="fl">3</span>, ls <span class="op">=</span> <span class="op">:</span>dot);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.745197 seconds (2.41 M allocations: 154.600 MiB, 5.08% gc time, 94.59% compilation time)
+Stochastic Gradient Descent
+  - Iterations: 10000
+  - Estimate: [0.497167129495728, -2.997351355660092]
+  - Loss: 0.2614613451690186
+  - Gradient Norm: 0.16698625066771186
+</code></pre>
+</div>
+</div>
+<p><img src="assets/linreg_fit.png" class="img-fluid"></p>
+<p>The loss and gradient norm reported by <code>sgd</code> are based on the last batch. Evaluate both on the full data at the SGD estimate:</p>
+<div id="64" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-label="1"></a><span class="fu">linreg_loss</span>(β, y, X) <span class="co"># full data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.24826240156705107</code></pre>
+</div>
+</div>
+<div id="66" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1" aria-label="1"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, y, X), β) <span class="op">|&gt;</span> norm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>0.0015526914736647501</code></pre>
+</div>
+</div>
+<ul>
+<li>Both estimates are close to the true coefficients <span class="math inline">\((0.5, -3)\)</span>.</li>
+<li>SGD is less accurate than gradient descent on the full data, but each iteration is much cheaper.</li>
+</ul>
+</section>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<ul>
+<li>Gradient descent moves along the direction of steepest descent of a local linear model.</li>
+<li>Fixed step sizes work when they are small relative to <span class="math inline">\(1/L\)</span>; otherwise the iterates may cycle or diverge.</li>
+<li>Backtracking chooses the step size adaptively by checking a descent condition.</li>
+<li>Stochastic gradient descent approximates gradients with batches of the data; it requires diminishing step sizes.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/UCR-STAT-206\.github\.io\/2026-Fall-STAT\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
