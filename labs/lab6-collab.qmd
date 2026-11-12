@@ -1,0 +1,121 @@
+---
+title: "Lab 6: Collaboration using Git"
+date: "2026-11-13"
+eval: false
+format:
+  html:
+    theme: cosmo
+    css: ../assets/styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+engine: markdown
+---
+
+## Goals
+
+1. Develop an understanding of branching in `git`.
+2. Practice using `git branch` to work asynchronously.
+3. Practice using `git push` and `git pull` to create pull requests and synchronize work.
+
+## Before class
+
+Working on your final projects will require collaboration with `git`.
+In [Lab 5](lab5-codereview.qmd) we practiced creating pull requests primarily as a means to review each other's work.
+This assignment closes the collaboration loop by showing you how to work asynchronously with **branches** in `git`.
+
+The following figure summarizes the various actions your team will need to collectively understand in order to collaborate effortlessly.
+
+![Credit: [*Research Software Engineering with Python*, Chapter 6, Figure 6.5](https://third-bit.com/py-rse/git-cmdline.html#fig:git-cmdline-remote); licensed under CC-BY 4.0](assets/git-workflow.png)
+
+### Review
+
+#### `git status`
+
+- Tells us the current state of the repository.
+- Reports what is tracked, what is untracked, and which tracked files have changed.
+- **When To Use This**:
+    + Starting or resuming work on your repository.
+    + Before you `git add` files.
+    + Before you `git commit` to ensure everything you need is staged.
+
+#### `git diff`
+
+- Shows changes in any tracked files. That means (i) file was staged and part of a commit at some point, and (ii) you modified that file again but have not staged or commited it yet.
+- Also have `git diff --staged` if you need to compare after you `git add` files.
+- **When To Use This**:
+    + After modifying a file that was staged.
+    + Before you `git commit` to quickly check your changes.
+    + To compare differences across commits.
+
+#### `git add`
+
+- This stages a file prior to a commit.
+- Remember that editing a file merely changes your working tree (the directory). Staging prepares files(s) to be part of a commit; a discrete change in the repository itself.
+- **When To Use This**:
+    + After completing changes to a file or set of files.
+    + After making additional changes to already staged files; i.e. you continued editing after `git add` because you forgot something.
+    + To prepare the next commit.
+
+#### `git commit`
+
+- This moves staged changes (anything touched by `git add`) to your repository's commit history.
+- Always include a succinct and informative message as part of your commits. **This will be important for your collaborators**.
+- Make small changes based on discrete tasks and commit them. Several students have been diligent about making a commit after solving a problem on the assignments.
+- **When To Use This**:
+    + After completing a particular task.
+    + Whenever you need to prepare and share your work with your collaborators.
+
+#### `git log`
+
+- This lets us review a repository's commit history.
+- `git log` has been sufficient for our purposes. Now we need to use its various options.
+- `git log --stat --summary`: Condensed overview of each commit, which lists the files that were changed in addition to the usual commit information.
+- `git log --oneline --decorate --graph --all`: Displays commit history, including different branches, in a graph-like display. Might be fairly linear in the beginning.
+- **When To Use This**:
+    + When you need to track down a specific change. 
+    + When you need to find who committed a specific change.
+    + When you need to keep track of a feature/implementation that someone else is working on.
+
+### New `git` commands
+
+By default, you have been working on a `main` branch for your personal repository.
+
+- This branch exists *locally*; your own directory (within the container environment) has these files.
+- This branch also exists *remotely* on GitHub's servers.
+- Since you have been the only one making changes (presumably from the Docker container), all the commits have flowed from *local copy* to *remote copy on GitHub*. No need to synchronize any work.
+
+Now that you are collaborating on a project with others, we will need to adapt our workflow as follows:
+
+- Treat `main` *on the remote* as a heavily guarded ground truth.
+    + Only put changes in here by merging commits through *pull requests*.
+    + Keep this in a working state as much as possible. That means others should be able to use it as a *branching point* to implement a new feature or discrete task.
+    + This branch represents your final product.
+- Each individual member works on a separate branch to avoid conflicts on `main`.
+    + You work locally, not directly on GitHub, so make sure everyone starts with a `git pull` to retrieve the copy on GitHub.
+    + Now that you own a copy of `main` on your machine, you can `git branch` to create your own working version to develop.
+    + Make commits on your own branch, push it to GitHub, then create a pull request to merge your work onto `main`.
+
+#### `git pull`
+
+- The `git push` command moves commits from your *local repository* to a *remote repository*.
+- The `git pull` command does the opposite; moves from the *remote* to your *local* repository.
+- If you make commits on the *remote* and *local* separately, you're going to have a bad time... Be disciplined and only make edits on your machine (don't use the GitHub interface).
+- **When To Use This**:
+    + This should be the very first thing you do each time you sit down to work on your project.
+    + Use it periodically during a session if you need to keep track of other changes.
+    + When you need to see your collaborator's changes to test locally.
+
+#### `git branch`
+
+- See what the available branches are with `git branch`.
+- To create a new branch *locally*, use `git branch my-branch-name`.
+    + Until you push it to GitHub, that branch exists exclusively on your machine. No one can see that work yet.
+- To work on your branch, you must `git checkout my-branch-name`.
+    + Verify the branch you're on before making any edits or commits; e.g. `git branch` or `git status`.
+    + If you make edits on the wrong branch, use `git stash` to safely store them away (before creating a commit), switch to the correct branch, then `git stash pop`.
+- Avoid `git merge` to synchronize your work to `main`! Use pull requests instead.
+    + If you use an AI tool to help you with `git`, let it know that you're using a branching model and only synchronize work through pull requests.
+
+## Class Exercise
+

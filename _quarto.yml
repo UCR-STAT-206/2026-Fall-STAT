@@ -58,8 +58,6 @@ website:
             href: notes/module04/computers.qmd
           - text: Algorithms Introduction
             href: notes/module04/algorithms.qmd
-          - text: Linear Algebra Introduction
-            # href: notes/module04/linalg.qmd
           - text: BLAS/LAPACK
             href: notes/module04/blas.qmd
       - section: Module 5 (Linear Systems)
@@ -88,17 +86,25 @@ website:
             href: notes/module06/inverse.qmd
           - text: Rejection Sampling
             href: notes/module06/rejection.qmd
-      - section: Module 7 (Resampling)
+      - section: Module 7 (Optimization)
+        contents:
+          - text: Overview
+            href: notes/module07/optim.qmd
+          - text: First-Order Methods
+            href: notes/module07/order1.qmd
+          - text: Second-Order Methods
+            href: notes/module07/order2.qmd
+          - text: Zero-Order Methods
+          #  href: notes/module07/order0.qmd
+          - text: Automatic Differentiation
+            href: notes/module07/autodiff.qmd
+          - text: Problem Classes
+          #   href: notes/module07/problems.qmd
+      - section: Module 8 (Resampling)
         contents:
           - text: Bootstrap
           - text: Permutation
           - text: Cross Validation
-      - section: Module 8 (Optimization)
-        contents:
-          - text: First-Order Methods
-          - text: Second-Order Methods
-          - text: Zero-Order Methods
-          - text: Automatic Differentiation
       - section: Module 9 (Data Technologies)
         contents:
           - text: Plaintext and Binary Formats
@@ -121,8 +127,8 @@ website:
             href: labs/lab4-reproducibility.qmd
           - text: Lab 5 (Code Review)
             href: labs/lab5-codereview.qmd
-          # - text: Lab 6 (TBD)
-          #   href: labs/lab6-tbd.qmd
+          - text: Lab 6 (Collaboration Using Git)
+            href: labs/lab6-collab.qmd
           # - text: Lab 7 (Collaboration using Git)
           #   href: labs/lab8-collab.qmd
           # - text: Lab 8 (Simulation)
