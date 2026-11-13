@@ -117,5 +117,65 @@ Now that you are collaborating on a project with others, we will need to adapt o
 - Avoid `git merge` to synchronize your work to `main`! Use pull requests instead.
     + If you use an AI tool to help you with `git`, let it know that you're using a branching model and only synchronize work through pull requests.
 
-## Class Exercise
+## Class Exercises
 
+### Getting Started
+
+1. Create a new repo.
+    + Only one person needs to do this.
+    + Add your partners as collaborators using the GitHub interface.
+2. Clone the repository using `git clone`.
+2. Each person should create a new local branch (use different names!)
+    + Be sure to switch to the new branch.
+3. Add a file or two to your branch and practice merging to the main branch.
+    + Use a pull request for merging only!
+4. Test what happens when your remote repository is ahead of your local repository, but you already staged new changes.
+
+### Merge Conflicts
+
+1. One team member adds a file `team.md` containing the line `Our project is about: TBD` and merges it into `main` through a pull request.
+    + Everyone else should `git checkout main` and `git pull` to retrieve the file.
+2. On your own branch, replace `TBD` with your own description of the project. Commit and push your branch.
+    + Each team member should write something different on the *same line*.
+3. Each team member opens a pull request into `main`. Merge only one of them.
+    + Check the remaining pull requests on GitHub. Each should now report a conflict.
+4. Each team member with a conflicting pull request resolves it locally on their own branch:
+    a. Retrieve the updated `main` with `git checkout main` and `git pull`.
+    b. Switch back with `git checkout my-branch-name`, then bring in the changes with `git merge main`.
+    c. Run `git status` to see which files are in conflict, then open `team.md`.
+    d. Edit the file to the version your team wants and delete the `<<<<<<<`, `=======`, and `>>>>>>>` marker lines.
+    e. `git add team.md`, `git commit`, and `git push`.
+5. Refresh your pull request on GitHub and merge it.
+    + Merge pull requests one at a time. Each merge may create a new conflict for the pull requests still open; repeat step 4 as needed.
+    + Merging `main` *into your branch* is fine. Changes only go *into `main`* through pull requests.
+6. Use `git log --oneline --decorate --graph --all` to find where the branches were joined.
+
+### Forgetting to pull first
+
+1. One team member creates a file on their branch and merges it into `main` through a pull request.
+2. Everyone else does **not** `git pull`. Instead, each edits `README.md` on their local `main`, commits, and tries `git push`.
+    + Read the error message. Why does `git` reject the push?
+3. Recover by moving the commit onto a branch:
+    a. `git branch readme-fix-yourname` to save your commit on a new branch.
+    b. `git fetch`, then `git reset --hard origin/main` so local `main` matches GitHub.
+    c. `git checkout readme-fix-yourname` and `git merge main` to bring in the newly merged work.
+    d. `git push -u origin readme-fix-yourname` and open a pull request.
+    + Only use `git reset --hard` after your commits are saved on another branch. It discards uncommitted changes.
+4. Repeat with a different team member merging first, but this time the others create a new branch from their out-of-date `main` and push it.
+    + Check whether the newly merged file appears on the new branch.
+5. Always start a new task with `git checkout main`, `git pull`, and then `git branch new-branch-name`.
+
+### Using stash
+
+1. On `main`, edit a file but do not commit. Use `git status` to confirm you are on the wrong branch.
+    a. `git stash` to set your changes aside. Verify with `git status` that the working tree is clean.
+    b. `git checkout my-branch-name`, then `git stash pop` to restore the changes.
+    c. Commit the changes on your branch.
+2. One team member merges a pull request that changes `README.md`. Meanwhile, everyone else edits the same file on their local `main` without committing, then runs `git pull`.
+    a. Note the error. `git` will not overwrite your uncommitted changes.
+    b. `git stash`, `git pull`, then `git stash pop`.
+    c. If `git stash pop` reports a conflict, resolve it as in the Merge Conflicts exercise, then run `git stash drop`. After a conflict, `git` keeps the stash until you drop it.
+3. Practice managing several stashes:
+    a. Create a new, untracked file and run `git stash`. Check whether the new file was stashed, then try `git stash -u`.
+    b. Make two labeled stashes with `git stash push -m "first"` and `git stash push -m "second"`.
+    c. View them with `git stash list` and restore one with `git stash pop stash@{1}`.
