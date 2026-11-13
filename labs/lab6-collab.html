@@ -593,7 +593,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#review" id="toc-review" class="nav-link" data-scroll-target="#review">Review</a></li>
   <li><a href="#new-git-commands" id="toc-new-git-commands" class="nav-link" data-scroll-target="#new-git-commands">New <code>git</code> commands</a></li>
   </ul></li>
-  <li><a href="#class-exercise" id="toc-class-exercise" class="nav-link" data-scroll-target="#class-exercise">Class Exercise</a></li>
+  <li><a href="#class-exercises" id="toc-class-exercises" class="nav-link" data-scroll-target="#class-exercises">Class Exercises</a>
+  <ul class="collapse">
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#merge-conflicts" id="toc-merge-conflicts" class="nav-link" data-scroll-target="#merge-conflicts">Merge Conflicts</a></li>
+  <li><a href="#forgetting-to-pull-first" id="toc-forgetting-to-pull-first" class="nav-link" data-scroll-target="#forgetting-to-pull-first">Forgetting to pull first</a></li>
+  <li><a href="#using-stash" id="toc-using-stash" class="nav-link" data-scroll-target="#using-stash">Using stash</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -771,10 +777,109 @@ ul.task-list li input[type="checkbox"] {
 </section>
 </section>
 </section>
-<section id="class-exercise" class="level2">
-<h2 class="anchored" data-anchor-id="class-exercise">Class Exercise</h2>
+<section id="class-exercises" class="level2">
+<h2 class="anchored" data-anchor-id="class-exercises">Class Exercises</h2>
+<section id="getting-started" class="level3">
+<h3 class="anchored" data-anchor-id="getting-started">Getting Started</h3>
+<ol type="1">
+<li>Create a new repo.
+<ul>
+<li>Only one person needs to do this.</li>
+<li>Add your partners as collaborators using the GitHub interface.</li>
+</ul></li>
+<li>Clone the repository using <code>git clone</code>.</li>
+<li>Each person should create a new local branch (use different names!)
+<ul>
+<li>Be sure to switch to the new branch.</li>
+</ul></li>
+<li>Add a file or two to your branch and practice merging to the main branch.
+<ul>
+<li>Use a pull request for merging only!</li>
+</ul></li>
+<li>Test what happens when your remote repository is ahead of your local repository, but you already staged new changes.</li>
+</ol>
+</section>
+<section id="merge-conflicts" class="level3">
+<h3 class="anchored" data-anchor-id="merge-conflicts">Merge Conflicts</h3>
+<ol type="1">
+<li>One team member adds a file <code>team.md</code> containing the line <code>Our project is about: TBD</code> and merges it into <code>main</code> through a pull request.
+<ul>
+<li>Everyone else should <code>git checkout main</code> and <code>git pull</code> to retrieve the file.</li>
+</ul></li>
+<li>On your own branch, replace <code>TBD</code> with your own description of the project. Commit and push your branch.
+<ul>
+<li>Each team member should write something different on the <em>same line</em>.</li>
+</ul></li>
+<li>Each team member opens a pull request into <code>main</code>. Merge only one of them.
+<ul>
+<li>Check the remaining pull requests on GitHub. Each should now report a conflict.</li>
+</ul></li>
+<li>Each team member with a conflicting pull request resolves it locally on their own branch:
+<ol type="a">
+<li>Retrieve the updated <code>main</code> with <code>git checkout main</code> and <code>git pull</code>.</li>
+<li>Switch back with <code>git checkout my-branch-name</code>, then bring in the changes with <code>git merge main</code>.</li>
+<li>Run <code>git status</code> to see which files are in conflict, then open <code>team.md</code>.</li>
+<li>Edit the file to the version your team wants and delete the <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code>, and <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> marker lines.</li>
+<li><code>git add team.md</code>, <code>git commit</code>, and <code>git push</code>.</li>
+</ol></li>
+<li>Refresh your pull request on GitHub and merge it.
+<ul>
+<li>Merge pull requests one at a time. Each merge may create a new conflict for the pull requests still open; repeat step 4 as needed.</li>
+<li>Merging <code>main</code> <em>into your branch</em> is fine. Changes only go <em>into <code>main</code></em> through pull requests.</li>
+</ul></li>
+<li>Use <code>git log --oneline --decorate --graph --all</code> to find where the branches were joined.</li>
+</ol>
+</section>
+<section id="forgetting-to-pull-first" class="level3">
+<h3 class="anchored" data-anchor-id="forgetting-to-pull-first">Forgetting to pull first</h3>
+<ol type="1">
+<li>One team member creates a file on their branch and merges it into <code>main</code> through a pull request.</li>
+<li>Everyone else does <strong>not</strong> <code>git pull</code>. Instead, each edits <code>README.md</code> on their local <code>main</code>, commits, and tries <code>git push</code>.
+<ul>
+<li>Read the error message. Why does <code>git</code> reject the push?</li>
+</ul></li>
+<li>Recover by moving the commit onto a branch:
+<ol type="a">
+<li><code>git branch readme-fix-yourname</code> to save your commit on a new branch.</li>
+<li><code>git fetch</code>, then <code>git reset --hard origin/main</code> so local <code>main</code> matches GitHub.</li>
+<li><code>git checkout readme-fix-yourname</code> and <code>git merge main</code> to bring in the newly merged work.</li>
+<li><code>git push -u origin readme-fix-yourname</code> and open a pull request.</li>
+</ol>
+<ul>
+<li>Only use <code>git reset --hard</code> after your commits are saved on another branch. It discards uncommitted changes.</li>
+</ul></li>
+<li>Repeat with a different team member merging first, but this time the others create a new branch from their out-of-date <code>main</code> and push it.
+<ul>
+<li>Check whether the newly merged file appears on the new branch.</li>
+</ul></li>
+<li>Always start a new task with <code>git checkout main</code>, <code>git pull</code>, and then <code>git branch new-branch-name</code>.</li>
+</ol>
+</section>
+<section id="using-stash" class="level3">
+<h3 class="anchored" data-anchor-id="using-stash">Using stash</h3>
+<ol type="1">
+<li>On <code>main</code>, edit a file but do not commit. Use <code>git status</code> to confirm you are on the wrong branch.
+<ol type="a">
+<li><code>git stash</code> to set your changes aside. Verify with <code>git status</code> that the working tree is clean.</li>
+<li><code>git checkout my-branch-name</code>, then <code>git stash pop</code> to restore the changes.</li>
+<li>Commit the changes on your branch.</li>
+</ol></li>
+<li>One team member merges a pull request that changes <code>README.md</code>. Meanwhile, everyone else edits the same file on their local <code>main</code> without committing, then runs <code>git pull</code>.
+<ol type="a">
+<li>Note the error. <code>git</code> will not overwrite your uncommitted changes.</li>
+<li><code>git stash</code>, <code>git pull</code>, then <code>git stash pop</code>.</li>
+<li>If <code>git stash pop</code> reports a conflict, resolve it as in the Merge Conflicts exercise, then run <code>git stash drop</code>. After a conflict, <code>git</code> keeps the stash until you drop it.</li>
+</ol></li>
+<li>Practice managing several stashes:
+<ol type="a">
+<li>Create a new, untracked file and run <code>git stash</code>. Check whether the new file was stashed, then try <code>git stash -u</code>.</li>
+<li>Make two labeled stashes with <code>git stash push -m "first"</code> and <code>git stash push -m "second"</code>.</li>
+<li>View them with <code>git stash list</code> and restore one with <code>git stash pop stash@{1}</code>.</li>
+</ol></li>
+</ol>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
