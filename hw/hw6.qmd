@@ -1,0 +1,169 @@
+---
+title: "Homework 6"
+subtitle: "Due 10am on November 30, 2026"
+---
+
+## Instructions
+
+In this assignment you will practice fitting statistical models by implementing an optimization algorithm.
+
+- You must derive the required ingredients,
+- decide how to implement your procedure as an algorithm, and
+- provide evidence that your implementation is correct.
+
+You will also be practicing how to implement a package in Julia.
+Keep in mind the following themes of this course:
+
+- The way a mathematical expression is written and the way it ought to be evaluated are often entirely different.
+- Shun matrix inversion at all costs. Instead, use problem information to formulate the correct linear solves.
+- A numerical result is only as good as the evidence that it is correct.
+
+## Rules
+
+### Allowed packages
+
+- LinearAlgebra, Random, Statistics, and anything else in Julia's standard library.
+- Distributions.jl and SpecialFunctions.jl, for densities, distribution functions, and special functions.
+- ForwardDiff.jl and FiniteDifferences.jl, to *check* derivatives.
+- Plots.jl for any graphics, DataFrames.jl for tables, and BenchmarkTools.jl for timing.
+
+To use a package not already listed in `Project.toml`, add it with `Pkg.add()` while the `HW6` environment is active.
+This applies to standard library packages too; e.g. `using Statistics` inside your package fails until Statistics is added.
+
+### Not allowed
+
+- Packages that fit the model or carry out the optimization for you (e.g. Optim.jl, GLM.jl) may not be used for your main results. You may use them as an *additional* check if you wish; say so in your report.
+- Shun matrix inversion unless absolutely necessary. Instead, use problem information to formulate the correct linear solves.
+
+You may reuse code from the course notes, with attribution; e.g. the `nelder_mead` function from the notes on zero-order methods.
+
+## What to Submit
+
+1. Your `HW6` package, developed from the template described below.
+    + Leave `src/simulate.jl` unmodified.
+    + Put your own code in new files under `src/` (e.g. `src/ztp.jl`).
+2. A report written as a Quarto document, placed in the top-level folder of the package, together with the rendered output. Your report should load your implementation with `using HW6`. Do not paste long function definitions into the report; short calls and snippets that illustrate a point are fine.
+
+Derivations may be typeset in LaTeX or handwritten. Handwritten derivations must be legible and inserted as images at the appropriate place in the report.
+
+Your report must render from start to finish without code cells containing errors, except where the errors are intentional.
+Set the random seeds as instructed so that your results are reproducible.
+
+
+
+### Package Template
+
+You will implement your work as a small Julia package named `HW6`.
+The template contains three files.
+
+- `Project.toml` describes the package: its name, a unique identifier, its dependencies, and the versions of those dependencies it is compatible with. Replace the `[[authors]]` entry with your own name and email. Let `Pkg` edit the rest of this file for you.
+- `src/HW6.jl` defines the module.
+    + It loads packages with `using` in one place, and pulls in code with `include`.
+    + Be sure to `include` the new files you create here in the module definition.
+    + Nothing is exported, so call functions with the package name; e.g. `HW6.simulate_ztp(10, [1.0, 0.5, -0.5])`. You may add `export` statements if you prefer.
+- `src/simulate.jl` contains the simulation functions for this assignment. Read the docstrings; e.g. type `?HW6.simulate_ztp` at the REPL.
+
+We recommend developing with Revise.jl, which reloads your package whenever you save a file under `src/`, so you rarely need to restart Julia.
+Load Revise *before* your package:
+
+```julia
+using Revise
+using Pkg
+Pkg.activate("path/to/HW6")
+using HW6
+```
+
+Install Revise in your default environment, not in `HW6`, so that it is available in every session.
+
+### Report Template
+
+Start your report from the following header, with the report saved in the top-level folder of the package.
+
+```yaml
+---
+title: HOMEWORK/LAB
+author: SOMEONE
+engine: julia
+julia:
+  exeflags:
+    - "+1.12"
+    - "--project=."
+error: true
+---
+```
+
+The two flags start Julia 1.12 and activate the `HW6` environment, so `using HW6` works in your first code cell.
+
+## General Expectations
+
+The following apply to each problem. The individual parts point out where they are assessed.
+
+- **Derivations.** Define your notation and show the steps. State clearly which function you are minimizing.
+- **Numerical care.** Identify expressions that should not be evaluated the way they are written. Show that the naive evaluation fails or degrades, and explain your remedy.
+- **Starting values.** Starting values must be computed from the data by a rule you can justify. Do not use the true parameter values from the simulation.
+- **Stopping.** State your stopping rule and tolerance. Your algorithm must include a safeguard (e.g. backtracking) and an iteration limit, and it must report whether it converged.
+- **Verification.** Provide evidence that your results are correct: derivative checks, agreement between independent methods, and behavior on simulated data with known parameters.
+- **Communication.** Tables and figures should have labels and a sentence or two of interpretation. Explain your design choices briefly.
+
+
+
+## Problem 1: Zero-Truncated Poisson Regression
+
+Some count data naturally exclude zeros.
+For example, the length of a hospital stay in days and the number of items in a customer's order are both necessarily greater than $0$.
+One possible model for such data is the [zero-truncated Poisson distribution](https://en.wikipedia.org/wiki/Zero-truncated_Poisson_distribution), which is a Poisson distribution conditioned on being positive:
+
+$$
+\Pr(Y = k) = \frac{\lambda^{k} e^{-\lambda}}{k! \, (1 - e^{-\lambda})}, \qquad k = 1, 2, \ldots
+$$
+
+In a regression setting, we observe $(y_{i}, \boldsymbol{x}_{i})$ with $i = 1, \ldots, n$, and model $\log \lambda_{i} = \boldsymbol{x}_{i}^{\top} \boldsymbol{\beta}$.
+Thus, zero-truncated Poisson regression can be viewed from the perspective of generalized linear models with a log link function.
+
+Data are generated with `simulate_ztp` from `src/simulate.jl`, which returns a named tuple.
+The data are the fields `y` and `X`; the remaining fields should be used only to evaluate your results.
+The first column of `X` is an intercept, and the remaining columns are scaled so that $|\boldsymbol{x}_{i}^{\top} \boldsymbol{\beta} - \beta_{1}| \le 3$; see the docstring for details.
+Use the following settings.
+
+- *Easy*: `HW6.simulate_ztp(500, [1.0, 0.5, -0.5]; rng = Xoshiro(206))`.
+- *Hard*: `HW6.simulate_ztp(500, [-2.0, 0.5, -0.5]; rng = Xoshiro(207))`.
+
+### Part A: Derivations
+
+1. Write the negative log-likelihood $f(\boldsymbol{\beta})$.
+2. Derive its gradient and Hessian. Express both in terms of the conditional mean $\mu_{i} = E[Y_{i} \mid \boldsymbol{x}_{i}]$ and the conditional variance $\mathrm{Var}(Y_{i} \mid \boldsymbol{x}_{i})$.
+3. Is Newton's method the same as Fisher scoring for this model? Is the problem convex? Explain.
+
+### Part B: Evaluating the Objective
+
+The quantities in [Part A](#part-a-derivations) involve $1 - e^{-\lambda}$.
+
+1. Explain what goes wrong when $\lambda$ is small, and demonstrate it numerically.
+2. Give expressions for the objective, the mean, and the weights in the Hessian that can be evaluated accurately for small $\lambda$. Demonstrate the improvement.
+3. Are there any other values of $\boldsymbol{x}_{i}^{\top} \boldsymbol{\beta}$ for which your code might run into trouble? How do you guard against them? Note that the simulation bounds $\boldsymbol{x}_{i}^{\top} \boldsymbol{\beta}$ at the true coefficients, but your iterates are not bounded, so your code should not rely on this.
+
+### Part C: Fitting Algorithm
+
+1. Show that an iteration of Newton's method can be written as a weighted least squares problem, and identify the weights and the working response.
+2. Implement the algorithm with step-halving. State how you solve the weighted least squares problem and justify that approach.
+3. State your stopping rule.
+
+### Part D: Initialization
+
+Propose starting values as a function of the data $(\boldsymbol{y}, \boldsymbol{X})$ and justify them.
+
+### Part E: Experiments
+
+1. Fit the model in both settings. Report the estimates, the number of iterations, the final objective value, and the final gradient norm.
+2. In both settings, also fit an ordinary Poisson regression that ignores the truncation. Compare the two sets of estimates with the true coefficients and explain the differences. Fit the ordinary Poisson model with your own code (e.g. by adapting your algorithm); GLM.jl may be used only as an additional check.
+3. Compare the easy and hard settings. What makes the hard setting hard? Refer to the data and to the Hessian at the solution.
+
+### Part F: Check and Compare
+
+Verify your gradient and Hessian against automatic differentiation.
+Then minimize the same objective with a second method of your choice from the course notes (e.g. gradient descent with backtracking, or Nelder-Mead) and compare the solutions and the amount of work required.
+
+### Part G: Uncertainty (Optional)
+
+1. Compute standard errors for $\hat{\boldsymbol{\beta}}$ from the Hessian at the solution, using a Cholesky factorization of the Hessian rather than an explicit inverse. Report approximate 95% confidence intervals in both settings.
+2. Carry out a small simulation study in the easy setting: generate 100 data sets, fit the model to each, and report the proportion of confidence intervals that cover the true value for each coefficient. Report the number of fits that failed to converge, if any. Create a single generator `Xoshiro(2026)` once and pass it to every call to `simulate_ztp`.

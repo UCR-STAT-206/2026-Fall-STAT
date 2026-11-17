@@ -95,17 +95,12 @@ website:
           - text: Second-Order Methods
             href: notes/module07/order2.qmd
           - text: Zero-Order Methods
-          #  href: notes/module07/order0.qmd
+            href: notes/module07/order0.qmd
           - text: Automatic Differentiation
             href: notes/module07/autodiff.qmd
           - text: Problem Classes
-          #   href: notes/module07/problems.qmd
-      - section: Module 8 (Resampling)
-        contents:
-          - text: Bootstrap
-          - text: Permutation
-          - text: Cross Validation
-      - section: Module 9 (Data Technologies)
+            href: notes/module07/problems.qmd
+      - section: Module 8 (Data Technologies)
         contents:
           - text: Plaintext and Binary Formats
           - text: Tabular Data
@@ -129,10 +124,6 @@ website:
             href: labs/lab5-codereview.qmd
           - text: Lab 6 (Collaboration Using Git)
             href: labs/lab6-collab.qmd
-          # - text: Lab 7 (Collaboration using Git)
-          #   href: labs/lab8-collab.qmd
-          # - text: Lab 8 (Simulation)
-          #   href: labs/lab7-simulation.qmd
       - section: "Homework"
         contents:
           - text: Homework 1
@@ -145,12 +136,8 @@ website:
             href: hw/hw4.qmd
           - text: Homework 5
             href: hw/hw5.qmd
-          # - text: Homework 6
-          #   href: hw/hw6.qmd
-          # - text: Homework 7
-          #   href: hw/hw7.qmd
-          # - text: Homework 8
-          #   href: hw/hw8.qmd
+          - text: Homework 6
+            href: hw/hw6.qmd
       - text: "Final Project"
         href: project/project.qmd
       - text: "---"
@@ -170,9 +157,6 @@ website:
             href: howto/submit_hw.qmd
           - text: Use Revise.jl
             href: howto/use_revise.qmd
-          # - text: Plot in Julia
-          #   href: howto/use_plots.qmd
-            
 
 format:
   html:
