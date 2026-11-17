@@ -377,9 +377,6 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Eigen-Decomposition and SVD</span>
-  </li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Iterative Methods</span></a>
@@ -445,7 +442,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notes/module07/order0.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module07/order0.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Zero-Order Methods</span></a>
   </div>
 </li>
@@ -457,7 +454,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notes/module07/problems.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module07/problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Problem Classes</span></a>
   </div>
 </li>
@@ -713,7 +710,7 @@ window.Quarto = {
 <div id="4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>myrng <span class="op">=</span> <span class="fu">Xoshiro</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>Xoshiro(0xabd0bd01c4feea96, 0x508dce295301d70e, 0x28cfee0ab1f9411e, 0x755762fd2e9d2c58, 0x9eed829f7e2eebbe)</code></pre>
+<pre><code>Xoshiro(0x8f2d6943af336d8e, 0xcae0505d67f23dbd, 0xc404d63c72e418e5, 0x955722d9ca571e76, 0xd9487d7eade07878)</code></pre>
 </div>
 </div>
 <p>Different PRNGs will use different abstractions to represent state. The state of this particular PRNG appears to be based on a few different variables:</p>
@@ -727,29 +724,29 @@ window.Quarto = {
 <div id="8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">rand</span>(myrng)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.6691061885176718</code></pre>
+<pre><code>0.6168545805133109</code></pre>
 </div>
 </div>
 <div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="fu">rand</span>(myrng, <span class="dt">Int</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>-2985446583157863381</code></pre>
+<pre><code>-5795412295507978232</code></pre>
 </div>
 </div>
 <div id="12" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">rand</span>(myrng, <span class="fl">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Float64}:
- 0.9244079779003674
- 0.5844288308122119
- 0.6407052832506165
- 0.9378599743966738
- 0.7983352223973115
- 0.7438309079844954
- 0.10474208859286815
- 0.1833406464810785
- 0.2579137220738643
- 0.7465871248811383</code></pre>
+ 0.22568466768556905
+ 0.7926164983604224
+ 0.7022929431763635
+ 0.6062746918891005
+ 0.10072736079934919
+ 0.302273875673867
+ 0.3363150882809388
+ 0.8946975874127855
+ 0.21539621064309666
+ 0.0324149860766052</code></pre>
 </div>
 </div>
 </section>
@@ -764,15 +761,15 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>idx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Int64}:
-  6
-  7
-  2
-  4
-  9
-  8
- 10
   1
+ 10
+  2
   3
+  8
+  6
+  4
+  7
+  9
   5</code></pre>
 </div>
 </div>
@@ -780,15 +777,15 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>x[idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Int64}:
-  6
-  7
-  2
-  4
-  9
-  8
- 10
   1
+ 10
+  2
   3
+  8
+  6
+  4
+  7
+  9
   5</code></pre>
 </div>
 </div>
@@ -796,15 +793,15 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>y[idx]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Int64}:
- 106
- 107
- 102
- 104
- 109
- 108
- 110
  101
+ 110
+ 102
  103
+ 108
+ 106
+ 104
+ 107
+ 109
  105</code></pre>
 </div>
 </div>
@@ -814,14 +811,14 @@ window.Quarto = {
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Int64}:
   9
-  1
-  3
   7
-  6
   5
+  3
   4
   8
+  1
  10
+  6
   2</code></pre>
 </div>
 </div>
@@ -829,16 +826,16 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a><span class="fu">shuffle!</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>10-element Vector{Int64}:
- 106
- 110
- 102
- 101
- 103
  109
- 108
+ 101
+ 102
+ 107
  105
+ 106
+ 108
  104
- 107</code></pre>
+ 103
+ 110</code></pre>
 </div>
 </div>
 </section>

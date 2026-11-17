@@ -377,9 +377,6 @@ window.Quarto = {
   </div>
 </li>
           <li class="sidebar-item">
- <span class="menu-text">Eigen-Decomposition and SVD</span>
-  </li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Iterative Methods</span></a>
@@ -445,7 +442,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notes/module07/order0.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module07/order0.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Zero-Order Methods</span></a>
   </div>
 </li>
@@ -457,7 +454,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../notes/module07/problems.qmd" class="sidebar-item-text sidebar-link">
+  <a href="../../notes/module07/problems.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Problem Classes</span></a>
   </div>
 </li>
@@ -1096,13 +1093,13 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <div id="42" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-label="1"></a><span class="fu">linreg_loss</span>([<span class="fl">0.0</span>, <span class="fl">0.0</span>], y, X) <span class="co"># make sure it works!</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>4.919517435180639</code></pre>
+<pre><code>4.846350430292994</code></pre>
 </div>
 </div>
 <div id="44" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1" aria-label="1"></a><span class="fu">linreg_loss</span>([<span class="fl">0.5</span>, <span class="op">-</span><span class="fl">3.0</span>], y, X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.25396431046464496</code></pre>
+<pre><code>0.2542212097132096</code></pre>
 </div>
 </div>
 <p>For compatibility with ForwardDiff, we just use an anonymous function</p>
@@ -1110,8 +1107,8 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a href="#cb30-1" aria-label="1"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, y, X), <span class="fu">zeros</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>2-element Vector{Float64}:
- -0.4385894449798348
-  3.0374110084425205</code></pre>
+ -0.5229427593202
+  2.9740269851809535</code></pre>
 </div>
 </div>
 </section>
@@ -1133,29 +1130,29 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <span id="cb34-3"><a href="#cb34-3" aria-label="3"></a><span class="fu">display</span>(Xb)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <pre><code>10-element Vector{Float64}:
- -7.705449062489492
- -0.32065279402994473
-  2.877744691912838
- -2.4498365360422243
-  1.888089183714845
-  4.5599651878507075
- -0.5676195327830005
- -4.219822157393587
-  0.3430198408833782
- -4.045984682910073</code></pre>
+ -4.464996424085563
+  4.611848022755905
+ -1.2556381199750133
+ -6.755721212808819
+ -3.0802122681878887
+ -0.6338258047106771
+  0.20428953153928764
+  2.84905252662414
+ -4.395473436024387
+  1.2194670420587919</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <pre><code>10×2 Matrix{Float64}:
- 1.0   2.57226
- 1.0   0.014278
- 1.0  -1.12668
- 1.0   0.592961
- 1.0  -0.277095
- 1.0  -0.953831
- 1.0   0.193792
- 1.0   1.50394
- 1.0  -0.428036
- 1.0   1.57014</code></pre>
+ 1.0   1.57846
+ 1.0  -1.31972
+ 1.0   0.706747
+ 1.0   1.99707
+ 1.0   0.739743
+ 1.0  -0.179556
+ 1.0  -0.11855
+ 1.0  -0.39142
+ 1.0   1.3242
+ 1.0  -0.326168</code></pre>
 </div>
 </div>
 <p>Other possible schemes:</p>
@@ -1177,7 +1174,7 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <div id="54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb39-1"><a href="#cb39-1" aria-label="1"></a><span class="fu">linreg_loss</span>(<span class="fu">zeros</span>(<span class="fl">2</span>), <span class="fu">mybatchfun</span>(y, X, <span class="fl">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>1.808315890913604</code></pre>
+<pre><code>3.1585313577068197</code></pre>
 </div>
 </div>
 <p>Need compatibility with <code>ForwardDiff.gradient()</code>, too:</p>
@@ -1186,8 +1183,8 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <span id="cb41-2"><a href="#cb41-2" aria-label="2"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, abatch), <span class="fu">zeros</span>(<span class="fl">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>2-element Vector{Float64}:
- -0.6186118726980999
-  5.145692652153865</code></pre>
+ -0.1628693586331731
+  2.6675853224729904</code></pre>
 </div>
 </div>
 </section>
@@ -1210,12 +1207,12 @@ f(\boldsymbol{x}) = \frac{1}{n} \sum_{i=1}^{n} f_{i}(\boldsymbol{x}).
 <span id="cb43-14"><a href="#cb43-14" aria-label="14"></a><span class="st">"""</span>)</span>
 <span id="cb43-15"><a href="#cb43-15" aria-label="15"></a><span class="fu">plot!</span>(fig, <span class="fu">range</span>(<span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>), x <span class="op">-&gt;</span> β[<span class="fl">1</span>] <span class="op">+</span> x<span class="op">*</span>β[<span class="fl">2</span>], color <span class="op">=</span> <span class="op">:</span>black, label <span class="op">=</span> <span class="st">"GD"</span>, lw <span class="op">=</span> <span class="fl">3</span>, ls <span class="op">=</span> <span class="op">:</span>dash);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.541644 seconds (1.49 M allocations: 77.494 MiB, 99.87% compilation time)
+<pre><code>  0.457686 seconds (1.49 M allocations: 76.729 MiB, 99.81% compilation time)
 Gradient Descent
-  - Iterations: 5
-  - Estimate: [0.49978683318395983, -2.9998920679072985]
-  - Loss: 0.2539642822985662
-  - Gradient Norm: 5.35559383710744e-8
+  - Iterations: 4
+  - Estimate: [0.5066747964481624, -2.9990789512215312]
+  - Loss: 0.25419854654609864
+  - Gradient Norm: 4.762803078753974e-8
 </code></pre>
 </div>
 </div>
@@ -1238,12 +1235,12 @@ Gradient Descent
 <span id="cb45-16"><a href="#cb45-16" aria-label="16"></a><span class="st">"""</span>)</span>
 <span id="cb45-17"><a href="#cb45-17" aria-label="17"></a><span class="fu">plot!</span>(fig, <span class="fu">range</span>(<span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>), x <span class="op">-&gt;</span> β[<span class="fl">1</span>] <span class="op">+</span> x<span class="op">*</span>β[<span class="fl">2</span>], color <span class="op">=</span> <span class="op">:</span>red, label <span class="op">=</span> <span class="st">"SGD"</span>, lw <span class="op">=</span> <span class="fl">3</span>, ls <span class="op">=</span> <span class="op">:</span>dot);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  0.806503 seconds (2.41 M allocations: 154.594 MiB, 33.17% gc time, 68.35% compilation time)
+<pre><code>  0.800694 seconds (2.41 M allocations: 154.605 MiB, 38.00% gc time, 65.19% compilation time)
 Stochastic Gradient Descent
   - Iterations: 10000
-  - Estimate: [0.5007782392379173, -2.9988559951326037]
-  - Loss: 0.208739056665993
-  - Gradient Norm: 0.0018546009574748681
+  - Estimate: [0.5080487445333591, -3.000237511998002]
+  - Loss: 0.2104816600998715
+  - Gradient Norm: 0.14472641226418578
 </code></pre>
 </div>
 </div>
@@ -1252,13 +1249,13 @@ Stochastic Gradient Descent
 <div id="64" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb47-1"><a href="#cb47-1" aria-label="1"></a><span class="fu">linreg_loss</span>(β, y, X) <span class="co"># full data</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.2539653398798654</code></pre>
+<pre><code>0.25420016393477374</code></pre>
 </div>
 </div>
 <div id="66" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb49-1"><a href="#cb49-1" aria-label="1"></a>ForwardDiff.<span class="fu">gradient</span>(b <span class="op">-&gt;</span> <span class="fu">linreg_loss</span>(b, y, X), β) <span class="op">|&gt;</span> norm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.0014751046850528583</code></pre>
+<pre><code>0.0017999041085225269</code></pre>
 </div>
 </div>
 <ul>

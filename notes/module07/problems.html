@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Convex Optimization Problems</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-b74315ed01d22c90707a95761ec924a0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../assets/styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module07/optim.html">Module 7 (Optimization)</a></li><li class="breadcrumb-item"><a href="../../notes/module07/problems.html">Problem Classes</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../assets/UC_Riverside_Horiz_WhtBG.png" alt="UC Riverside monogram logo" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">STAT 206</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../office_hours.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Office Hours</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../schedule.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schedule</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Module 1 (Fundamentals)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/unix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The Unix Shell</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/filesystem.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">The File System</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/quarto.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Quarto</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module01/git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Git</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Module 2 (Programming)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intro to Julia</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Basic Operations</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Control Flow</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Functions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module02/dispatch.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Multiple Dispatch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Module 3 (Best Practices)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/pkg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Package Management</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+ <span class="menu-text">Error Handling</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Debugging</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Testing</span>
+  </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module03/refactoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Refactoring</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-controls="quarto-sidebar-section-4" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-4-label">Module 4 (Numerical Basics)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-4" aria-labelledby="quarto-sidebar-section-4-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Arithmetic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/computers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Computer Architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/algorithms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Algorithms Introduction</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module04/blas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">BLAS/LAPACK</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-controls="quarto-sidebar-section-5" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-5-label">Module 5 (Linear Systems)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-5" aria-labelledby="quarto-sidebar-section-5-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/easy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Easy Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/condition.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Condition Numbers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/qr.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">QR</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/cholesky.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cholesky</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/lu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">LU</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module05/krylov.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Iterative Methods</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-controls="quarto-sidebar-section-6" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-6-label">Module 6 (Simulation)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-6" aria-labelledby="quarto-sidebar-section-6-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rng.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">RNG and PRNG</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributions.jl</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/inverse.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inverse Method</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module06/rejection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rejection Sampling</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-controls="quarto-sidebar-section-7" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-7-label">Module 7 (Optimization)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-7" aria-labelledby="quarto-sidebar-section-7-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/optim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">First-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Second-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/order0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Zero-Order Methods</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/autodiff.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automatic Differentiation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module07/problems.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Problem Classes</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-controls="quarto-sidebar-section-8" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-8-label">Module 8 (Data Technologies)</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-8" aria-labelledby="quarto-sidebar-section-8-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+ <span class="menu-text">Plaintext and Binary Formats</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Tabular Data</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DataFrames.jl</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB and DuckDB.jl</span>
+  </li>
+      </ul>
+  </li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-controls="quarto-sidebar-section-9" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-9-label">Labs</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-9" aria-labelledby="quarto-sidebar-section-9-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0 (Getting Started)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1 (Submitting Assignments)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-debug.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2 (Errors and Debugging)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-io.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3 (File I/O)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab4-reproducibility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 4 (Reproducibility)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5 (Code Review)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab6-collab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 6 (Collaboration Using Git)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-controls="quarto-sidebar-section-10" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-10-label">Homework</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-10" aria-labelledby="quarto-sidebar-section-10-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 2</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 3</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 4</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 5</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../hw/hw6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Homework 6</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../project/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Final Project</span></a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-controls="quarto-sidebar-section-11" aria-expanded="false">
+ <span class="menu-text" id="quarto-sidebar-section-11-label">How to…</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-11" aria-labelledby="quarto-sidebar-section-11-label" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_docker.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Docker</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use VSCode with a Container</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/configure_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configure Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/setup_github.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Set Up Your GitHub Account</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_git.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Git</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/submit_hw.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Submit Assignments</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../howto/use_revise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Use Revise.jl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#goals" id="toc-goals" class="nav-link active" data-scroll-target="#goals">Goals</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#convexity" id="toc-convexity" class="nav-link" data-scroll-target="#convexity">Convexity</a>
+  <ul class="collapse">
+  <li><a href="#convex-sets" id="toc-convex-sets" class="nav-link" data-scroll-target="#convex-sets">Convex Sets</a></li>
+  <li><a href="#convex-functions" id="toc-convex-functions" class="nav-link" data-scroll-target="#convex-functions">Convex Functions</a></li>
+  <li><a href="#example-absolute-value" id="toc-example-absolute-value" class="nav-link" data-scroll-target="#example-absolute-value">Example: Absolute Value</a></li>
+  <li><a href="#closure-properties" id="toc-closure-properties" class="nav-link" data-scroll-target="#closure-properties">Closure Properties</a></li>
+  <li><a href="#jensens-inequality" id="toc-jensens-inequality" class="nav-link" data-scroll-target="#jensens-inequality">Jensen’s Inequality</a></li>
+  <li><a href="#why-convexity-matters" id="toc-why-convexity-matters" class="nav-link" data-scroll-target="#why-convexity-matters">Why Convexity Matters</a></li>
+  <li><a href="#convex-optimization-problems" id="toc-convex-optimization-problems" class="nav-link" data-scroll-target="#convex-optimization-problems">Convex Optimization Problems</a></li>
+  </ul></li>
+  <li><a href="#linear-programs" id="toc-linear-programs" class="nav-link" data-scroll-target="#linear-programs">Linear Programs</a>
+  <ul class="collapse">
+  <li><a href="#application-least-absolute-deviations" id="toc-application-least-absolute-deviations" class="nav-link" data-scroll-target="#application-least-absolute-deviations">Application: Least Absolute Deviations</a></li>
+  </ul></li>
+  <li><a href="#quadratic-programs" id="toc-quadratic-programs" class="nav-link" data-scroll-target="#quadratic-programs">Quadratic Programs</a>
+  <ul class="collapse">
+  <li><a href="#application-nonnegative-least-squares" id="toc-application-nonnegative-least-squares" class="nav-link" data-scroll-target="#application-nonnegative-least-squares">Application: Nonnegative Least Squares</a></li>
+  </ul></li>
+  <li><a href="#second-order-cone-programs" id="toc-second-order-cone-programs" class="nav-link" data-scroll-target="#second-order-cone-programs">Second-Order Cone Programs</a>
+  <ul class="collapse">
+  <li><a href="#application-group-lasso" id="toc-application-group-lasso" class="nav-link" data-scroll-target="#application-group-lasso">Application: Group Lasso</a></li>
+  </ul></li>
+  <li><a href="#semidefinite-programs" id="toc-semidefinite-programs" class="nav-link" data-scroll-target="#semidefinite-programs">Semidefinite Programs</a>
+  <ul class="collapse">
+  <li><a href="#application-knockoffs" id="toc-application-knockoffs" class="nav-link" data-scroll-target="#application-knockoffs">Application: Knockoffs</a></li>
+  </ul></li>
+  <li><a href="#takeaway-message" id="toc-takeaway-message" class="nav-link" data-scroll-target="#takeaway-message">Takeaway Message</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../notes/module07/optim.html">Module 7 (Optimization)</a></li><li class="breadcrumb-item"><a href="../../notes/module07/problems.html">Problem Classes</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Convex Optimization Problems</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="goals" class="level2">
+<h2 class="anchored" data-anchor-id="goals">Goals</h2>
+<ol type="1">
+<li>Appreciate convex optimization as a technology for understanding and solving various optimization problems.</li>
+<li>Become familiar with different problem classes in optimization that are related to statistical models and methodologies.</li>
+</ol>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>Plots.<span class="fu">default</span>(dpi <span class="op">=</span> <span class="fl">300</span>, legend <span class="op">=</span> <span class="cn">false</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="convexity" class="level2">
+<h2 class="anchored" data-anchor-id="convexity">Convexity</h2>
+<p>Our previous notes dealt with unconstrained problems, and the algorithms there could only promise stationary points. Convexity is the property that lets us say more.</p>
+<section id="convex-sets" class="level3">
+<h3 class="anchored" data-anchor-id="convex-sets">Convex Sets</h3>
+<p>A set <span class="math inline">\(C \subset \mathbb{R}^{d}\)</span> is <strong>convex</strong> if it contains the line segment between any two of its points; that is,</p>
+<p><span class="math display">\[
+\lambda \boldsymbol{x} + (1 - \lambda) \boldsymbol{y} \in C
+\quad \text{for all}~\boldsymbol{x}, \boldsymbol{y} \in C~\text{and}~\lambda \in [0, 1].
+\]</span></p>
+<p>A few examples:</p>
+<ul>
+<li>A halfspace, <span class="math inline">\(\{\boldsymbol{x} : \boldsymbol{a}^{\top} \boldsymbol{x} \le b\}\)</span>.</li>
+<li>A Euclidean ball, <span class="math inline">\(\{\boldsymbol{x} : \|\boldsymbol{x}\|_{2} \le r\}\)</span>.</li>
+<li>The set of positive semidefinite (psd) matrices.</li>
+<li>The intersection of convex sets is convex.</li>
+</ul>
+</section>
+<section id="convex-functions" class="level3">
+<h3 class="anchored" data-anchor-id="convex-functions">Convex Functions</h3>
+<p>The <strong>epigraph</strong> of a function <span class="math inline">\(f : \mathbb{R}^{d} \longrightarrow \mathbb{R}\)</span> is the set of points on or above its graph,</p>
+<p><span class="math display">\[
+\mathrm{epi}(f) = \{(\boldsymbol{x}, t) : f(\boldsymbol{x}) \le t\} \subset \mathbb{R}^{d+1}.
+\]</span></p>
+<p>A function is <strong>convex</strong> if its epigraph is a convex set.</p>
+<p>You may know convexity from calculus: a twice differentiable function is convex when <span class="math inline">\(f^{\prime\prime}(x) \ge 0\)</span> everywhere (in several variables, when the Hessian is psd everywhere). The definition in terms of the epigraph is more general because it does not require derivatives.</p>
+</section>
+<section id="example-absolute-value" class="level3">
+<h3 class="anchored" data-anchor-id="example-absolute-value">Example: Absolute Value</h3>
+<p>Consider <span class="math inline">\(f(x) = |x|\)</span>. This function is not differentiable at <span class="math inline">\(x = 0\)</span>, so we cannot verify convexity with the second derivative. Its epigraph is</p>
+<p><span class="math display">\[
+\{(x, t) : |x| \le t\} = \{(x, t) : x \le t\} \cap \{(x, t) : -x \le t\},
+\]</span></p>
+<p>the intersection of two halfspaces. Halfspaces are convex and intersections preserve convexity, so <span class="math inline">\(|x|\)</span> is convex.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/epigraph_abs.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:60.0%"></p>
+</figure>
+</div>
+</section>
+<section id="closure-properties" class="level3">
+<h3 class="anchored" data-anchor-id="closure-properties">Closure Properties</h3>
+<p>We rarely check the definition directly. Instead, we build convex functions from simple pieces using operations that preserve convexity.</p>
+<ul>
+<li>If <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are convex, then <span class="math inline">\(f + g\)</span> is convex.</li>
+<li>If <span class="math inline">\(f\)</span> is convex and <span class="math inline">\(a \ge 0\)</span>, then <span class="math inline">\(a f\)</span> is convex.</li>
+<li>If <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are convex, then the pointwise maximum <span class="math inline">\(\max\{f, g\}\)</span> is convex. Its epigraph is the intersection of the two epigraphs. For example, <span class="math inline">\(|x| = \max\{x, -x\}\)</span>.</li>
+<li>If <span class="math inline">\(f\)</span> is convex, then so is <span class="math inline">\(f(\boldsymbol{A}\boldsymbol{x} + \boldsymbol{b})\)</span>.</li>
+<li>Every norm is convex.</li>
+</ul>
+<p>For example, the lasso objective <span class="math inline">\(\frac{1}{2}\|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|_{2}^{2} + \lambda \|\boldsymbol{\beta}\|_{1}\)</span> is convex by these rules, even though it is not differentiable.</p>
+</section>
+<section id="jensens-inequality" class="level3">
+<h3 class="anchored" data-anchor-id="jensens-inequality">Jensen’s Inequality</h3>
+<p>An equivalent definition: <span class="math inline">\(f\)</span> is convex if and only if</p>
+<p><span class="math display">\[
+f(\lambda \boldsymbol{x} + (1 - \lambda) \boldsymbol{y}) \le \lambda f(\boldsymbol{x}) + (1 - \lambda) f(\boldsymbol{y})
+\quad \text{for all}~\boldsymbol{x}, \boldsymbol{y}~\text{and}~\lambda \in [0, 1].
+\]</span></p>
+<p>The chord between two points on the graph lies on or above the graph.</p>
+<ul>
+<li>For <span class="math inline">\(|x|\)</span> this is just the triangle inequality.</li>
+<li>You have seen the general form in probability. If <span class="math inline">\(f\)</span> is convex and <span class="math inline">\(X\)</span> is a random variable, then <span class="math inline">\(f(E[X]) \le E[f(X)]\)</span>. The inequality above is the special case in which <span class="math inline">\(X\)</span> takes two values.</li>
+</ul>
+</section>
+<section id="why-convexity-matters" class="level3">
+<h3 class="anchored" data-anchor-id="why-convexity-matters">Why Convexity Matters</h3>
+<p>Recall the distinction between local and global minimizers from the <a href="../../notes/module07/optim.html">introduction</a>.</p>
+<ul>
+<li>If <span class="math inline">\(f\)</span> is convex, then every local minimizer is a global minimizer.</li>
+<li>If <span class="math inline">\(f\)</span> is convex and differentiable, then every stationary point is a global minimizer.</li>
+</ul>
+<p>The algorithms we have studied only search locally. For a convex problem that is enough.</p>
+</section>
+<section id="convex-optimization-problems" class="level3">
+<h3 class="anchored" data-anchor-id="convex-optimization-problems">Convex Optimization Problems</h3>
+<p>A constrained optimization problem takes the form</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{x}}~&amp; f_{0}(\boldsymbol{x}) \\
+\text{subject to}~&amp; f_{i}(\boldsymbol{x}) \le 0, \quad i = 1, \ldots, m, \\
+&amp; \boldsymbol{A}\boldsymbol{x} = \boldsymbol{b}.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>A point is <em>feasible</em> if it satisfies the constraints.</li>
+<li>This is a <strong>convex optimization problem</strong> when <span class="math inline">\(f_{0}, f_{1}, \ldots, f_{m}\)</span> are convex. The feasible set is then a convex set.</li>
+</ul>
+<p>The rest of these notes tour four classes of convex problems. Each class contains the previous one:</p>
+<p><span class="math display">\[
+\text{LP} \subset \text{QP} \subset \text{SOCP} \subset \text{SDP}.
+\]</span></p>
+<p>Problems in these classes can be solved reliably with general-purpose software. Often the work lies in recognizing that a problem belongs to one of these classes, sometimes after a reformulation.</p>
+</section>
+</section>
+<section id="linear-programs" class="level2">
+<h2 class="anchored" data-anchor-id="linear-programs">Linear Programs</h2>
+<p>A <strong>linear program (LP)</strong> has a linear objective and linear constraints:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{x}}~&amp; \boldsymbol{c}^{\top}\boldsymbol{x} \\
+\text{subject to}~&amp; \boldsymbol{G}\boldsymbol{x} \le \boldsymbol{h}, \\
+&amp; \boldsymbol{A}\boldsymbol{x} = \boldsymbol{b}.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>Inequalities between vectors hold componentwise.</li>
+<li>The feasible set is an intersection of halfspaces; i.e.&nbsp;a polyhedron.</li>
+<li>Solvers: the simplex method, interior point methods.</li>
+</ul>
+<section id="application-least-absolute-deviations" class="level3">
+<h3 class="anchored" data-anchor-id="application-least-absolute-deviations">Application: Least Absolute Deviations</h3>
+<p>Least absolute deviations (LAD) regression replaces squared residuals with absolute residuals,</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}~\sum_{i=1}^{n} |y_{i} - \boldsymbol{x}_{i}^{\top}\boldsymbol{\beta}|.
+\]</span></p>
+<p>It estimates the conditional <em>median</em> instead of the conditional mean and is less sensitive to outliers. The objective is convex but not differentiable, so the methods from our earlier notes do not apply directly.</p>
+<p>The trick is to introduce a new variable <span class="math inline">\(t_{i}\)</span> that bounds each absolute residual:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{\beta}, \boldsymbol{t}}~&amp; \sum_{i=1}^{n} t_{i} \\
+\text{subject to}~&amp; -t_{i} \le y_{i} - \boldsymbol{x}_{i}^{\top}\boldsymbol{\beta} \le t_{i}, \quad i = 1, \ldots, n.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>The objective and constraints are linear in <span class="math inline">\((\boldsymbol{\beta}, \boldsymbol{t})\)</span>. This is an LP.</li>
+<li>At a solution each <span class="math inline">\(t_{i}\)</span> equals <span class="math inline">\(|y_{i} - \boldsymbol{x}_{i}^{\top}\boldsymbol{\beta}|\)</span>; otherwise we could decrease it.</li>
+<li>This is the epigraph at work: the constraint says that <span class="math inline">\((y_{i} - \boldsymbol{x}_{i}^{\top}\boldsymbol{\beta}, t_{i})\)</span> lies in the epigraph of the absolute value.</li>
+<li>Quantile regression at other quantiles is an LP by a similar argument.</li>
+</ul>
+</section>
+</section>
+<section id="quadratic-programs" class="level2">
+<h2 class="anchored" data-anchor-id="quadratic-programs">Quadratic Programs</h2>
+<p>A <strong>quadratic program (QP)</strong> has a convex quadratic objective and linear constraints:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{x}}~&amp; \frac{1}{2}\boldsymbol{x}^{\top}\boldsymbol{P}\boldsymbol{x} + \boldsymbol{q}^{\top}\boldsymbol{x} \\
+\text{subject to}~&amp; \boldsymbol{G}\boldsymbol{x} \le \boldsymbol{h}, \\
+&amp; \boldsymbol{A}\boldsymbol{x} = \boldsymbol{b},
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{P}\)</span> is psd.</p>
+<ul>
+<li>Taking <span class="math inline">\(\boldsymbol{P} = \boldsymbol{0}\)</span> recovers an LP.</li>
+<li>Without constraints, and with <span class="math inline">\(\boldsymbol{P}\)</span> positive definite, the solution solves the linear system <span class="math inline">\(\boldsymbol{P}\boldsymbol{x} = -\boldsymbol{q}\)</span>. Ordinary least squares is the familiar example.</li>
+<li>Solvers: active set methods, interior point methods.</li>
+</ul>
+<section id="application-nonnegative-least-squares" class="level3">
+<h3 class="anchored" data-anchor-id="application-nonnegative-least-squares">Application: Nonnegative Least Squares</h3>
+<p>Nonnegative least squares (NNLS) is least squares with sign constraints on the coefficients,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{\beta}}~&amp; \frac{1}{2}\|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|_{2}^{2} \\
+\text{subject to}~&amp; \boldsymbol{\beta} \ge \boldsymbol{0}.
+\end{aligned}
+\]</span></p>
+<p>Expanding the objective,</p>
+<p><span class="math display">\[
+\frac{1}{2}\|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|_{2}^{2}
+= \frac{1}{2}\boldsymbol{\beta}^{\top}\boldsymbol{X}^{\top}\boldsymbol{X}\boldsymbol{\beta} - \boldsymbol{y}^{\top}\boldsymbol{X}\boldsymbol{\beta} + \frac{1}{2}\boldsymbol{y}^{\top}\boldsymbol{y},
+\]</span></p>
+<p>we recognize a QP with <span class="math inline">\(\boldsymbol{P} = \boldsymbol{X}^{\top}\boldsymbol{X}\)</span> (which is psd), <span class="math inline">\(\boldsymbol{q} = -\boldsymbol{X}^{\top}\boldsymbol{y}\)</span>, <span class="math inline">\(\boldsymbol{G} = -\boldsymbol{I}\)</span>, and <span class="math inline">\(\boldsymbol{h} = \boldsymbol{0}\)</span>.</p>
+<ul>
+<li>Nonnegativity is natural when coefficients represent amounts; e.g.&nbsp;concentrations, intensities, or mixing proportions.</li>
+<li>NNLS is a building block for <em>nonnegative matrix factorization</em> (NMF), which approximates a nonnegative data matrix as <span class="math inline">\(\boldsymbol{X} \approx \boldsymbol{W}\boldsymbol{H}\)</span> with <span class="math inline">\(\boldsymbol{W}, \boldsymbol{H} \ge \boldsymbol{0}\)</span>. With <span class="math inline">\(\boldsymbol{W}\)</span> fixed, solving for <span class="math inline">\(\boldsymbol{H}\)</span> is a collection of NNLS problems, and vice versa. Alternating between the two is a standard algorithm.</li>
+<li>NMF itself is <em>not</em> a convex problem in <span class="math inline">\((\boldsymbol{W}, \boldsymbol{H})\)</span> jointly. Only the subproblems are.</li>
+</ul>
+</section>
+</section>
+<section id="second-order-cone-programs" class="level2">
+<h2 class="anchored" data-anchor-id="second-order-cone-programs">Second-Order Cone Programs</h2>
+<p>A <strong>second-order cone program (SOCP)</strong> has a linear objective and constraints that bound a Euclidean norm by a linear function:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{x}}~&amp; \boldsymbol{c}^{\top}\boldsymbol{x} \\
+\text{subject to}~&amp; \|\boldsymbol{A}_{i}\boldsymbol{x} + \boldsymbol{b}_{i}\|_{2} \le \boldsymbol{c}_{i}^{\top}\boldsymbol{x} + d_{i}, \quad i = 1, \ldots, m, \\
+&amp; \boldsymbol{F}\boldsymbol{x} = \boldsymbol{g}.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>The set <span class="math inline">\(\{(\boldsymbol{u}, t) : \|\boldsymbol{u}\|_{2} \le t\}\)</span> is called the <em>second-order cone</em>. It is the epigraph of the Euclidean norm.</li>
+<li>Taking <span class="math inline">\(\boldsymbol{A}_{i} = \boldsymbol{0}\)</span> gives linear inequalities, so every LP is an SOCP.</li>
+<li>Every QP can be rewritten as an SOCP as well.</li>
+<li>Solvers: interior point methods.</li>
+</ul>
+<section id="application-group-lasso" class="level3">
+<h3 class="anchored" data-anchor-id="application-group-lasso">Application: Group Lasso</h3>
+<p>Suppose the predictors are partitioned into groups <span class="math inline">\(g = 1, \ldots, G\)</span>; e.g.&nbsp;the dummy variables that encode a single categorical predictor. The <strong>group lasso</strong> selects or removes entire groups at once:</p>
+<p><span class="math display">\[
+\min_{\boldsymbol{\beta}}~\frac{1}{2}\|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|_{2}^{2} + \lambda \sum_{g=1}^{G} w_{g} \|\boldsymbol{\beta}_{g}\|_{2},
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\beta}_{g}\)</span> collects the coefficients in group <span class="math inline">\(g\)</span> and <span class="math inline">\(w_{g} &gt; 0\)</span> are weights (a common choice is the square root of the group size).</p>
+<ul>
+<li>The penalty uses the Euclidean norm of each group, <em>not</em> its square. It is not differentiable at <span class="math inline">\(\boldsymbol{\beta}_{g} = \boldsymbol{0}\)</span>, which is what sets entire groups to zero.</li>
+<li>When every group has size 1 we recover the lasso.</li>
+</ul>
+<p>To reformulate, introduce a variable <span class="math inline">\(t_{g}\)</span> that bounds each group norm and a variable <span class="math inline">\(s\)</span> that bounds the loss:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{\beta}, \boldsymbol{t}, s}~&amp; s + \lambda \sum_{g=1}^{G} w_{g} t_{g} \\
+\text{subject to}~&amp; \|\boldsymbol{\beta}_{g}\|_{2} \le t_{g}, \quad g = 1, \ldots, G, \\
+&amp; \frac{1}{2}\|\boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\|_{2}^{2} \le s.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>The objective is linear and the first set of constraints are second-order cone constraints.</li>
+<li>The last constraint is also a second-order cone constraint in disguise. With <span class="math inline">\(\boldsymbol{r} = \boldsymbol{y} - \boldsymbol{X}\boldsymbol{\beta}\)</span>, one can check that <span class="math inline">\(\frac{1}{2}\|\boldsymbol{r}\|_{2}^{2} \le s\)</span> is equivalent to</li>
+</ul>
+<p><span class="math display">\[
+\left\| \begin{pmatrix} \boldsymbol{r} \\ s - \frac{1}{2} \end{pmatrix} \right\|_{2} \le s + \frac{1}{2}.
+\]</span></p>
+<ul>
+<li>In practice, specialized algorithms are often used for the group lasso on large problems. The SOCP formulation shows that the problem is tractable and gives a reliable baseline.</li>
+</ul>
+</section>
+</section>
+<section id="semidefinite-programs" class="level2">
+<h2 class="anchored" data-anchor-id="semidefinite-programs">Semidefinite Programs</h2>
+<p>A <strong>semidefinite program (SDP)</strong> optimizes a linear objective subject to a constraint that a matrix, depending linearly on the variables, is psd:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{x}}~&amp; \boldsymbol{c}^{\top}\boldsymbol{x} \\
+\text{subject to}~&amp; x_{1}\boldsymbol{F}_{1} + \cdots + x_{d}\boldsymbol{F}_{d} + \boldsymbol{F}_{0} \succeq \boldsymbol{0}, \\
+&amp; \boldsymbol{A}\boldsymbol{x} = \boldsymbol{b},
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{F}_{0}, \ldots, \boldsymbol{F}_{d}\)</span> are symmetric matrices.</p>
+<ul>
+<li>We write <span class="math inline">\(\boldsymbol{A} \succeq \boldsymbol{0}\)</span> when <span class="math inline">\(\boldsymbol{A}\)</span> is psd, and <span class="math inline">\(\boldsymbol{A} \succeq \boldsymbol{B}\)</span> when <span class="math inline">\(\boldsymbol{A} - \boldsymbol{B}\)</span> is psd.</li>
+<li>The set of psd matrices is convex, so this is a convex problem.</li>
+<li>When the matrices <span class="math inline">\(\boldsymbol{F}_{j}\)</span> are diagonal, the constraint reduces to linear inequalities and we recover an LP. Second-order cone constraints can also be written as psd constraints.</li>
+<li>Solvers: interior point methods. These become expensive as the size of the matrix grows.</li>
+</ul>
+<section id="application-knockoffs" class="level3">
+<h3 class="anchored" data-anchor-id="application-knockoffs">Application: Knockoffs</h3>
+<p>Consider variable selection with predictors <span class="math inline">\(X_{1}, \ldots, X_{p}\)</span>. We would like to select important predictors while controlling the <em>false discovery rate</em> (FDR). The <strong>knockoff filter</strong> of <a href="https://arxiv.org/abs/1404.5609">Barber and Candes</a> does this by manufacturing a fake copy <span class="math inline">\(\tilde{X}_{j}\)</span> of each predictor.</p>
+<ul>
+<li>The knockoffs <span class="math inline">\(\tilde{X}_{1}, \ldots, \tilde{X}_{p}\)</span> mimic the correlation structure of the original predictors.</li>
+<li>They are constructed without looking at the response, so they are known to be unimportant.</li>
+<li>A predictor is selected only if it looks clearly more important than its own knockoff. The knockoffs serve as negative controls.</li>
+</ul>
+<p>Suppose the predictors have covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span>, scaled so that <span class="math inline">\(\Sigma_{jj} = 1\)</span>. In the <a href="https://arxiv.org/abs/1610.02351">model-X</a> version of the method with Gaussian predictors, the joint covariance of the originals and the knockoffs is required to be</p>
+<p><span class="math display">\[
+\boldsymbol{G} =
+\begin{pmatrix}
+\boldsymbol{\Sigma} &amp; \boldsymbol{\Sigma} - \mathrm{diag}(\boldsymbol{s}) \\
+\boldsymbol{\Sigma} - \mathrm{diag}(\boldsymbol{s}) &amp; \boldsymbol{\Sigma}
+\end{pmatrix}.
+\]</span></p>
+<ul>
+<li>The correlation between <span class="math inline">\(X_{j}\)</span> and its own knockoff is <span class="math inline">\(1 - s_{j}\)</span>.</li>
+<li>We want <span class="math inline">\(s_{j}\)</span> to be large. If a knockoff is nearly identical to its original, we cannot tell them apart and the method has no power.</li>
+<li>But <span class="math inline">\(\boldsymbol{s}\)</span> cannot be arbitrary: <span class="math inline">\(\boldsymbol{G}\)</span> must be a valid covariance matrix; i.e.&nbsp;psd. This holds exactly when <span class="math inline">\(\boldsymbol{s} \ge \boldsymbol{0}\)</span> and <span class="math inline">\(\mathrm{diag}(\boldsymbol{s}) \preceq 2\boldsymbol{\Sigma}\)</span>.</li>
+</ul>
+<p>This leads to the optimization problem</p>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{\boldsymbol{s}}~&amp; \sum_{j=1}^{p} |1 - s_{j}| \\
+\text{subject to}~&amp; \boldsymbol{s} \ge \boldsymbol{0}, \\
+&amp; 2\boldsymbol{\Sigma} - \mathrm{diag}(\boldsymbol{s}) \succeq \boldsymbol{0}.
+\end{aligned}
+\]</span></p>
+<ul>
+<li>The matrix <span class="math inline">\(2\boldsymbol{\Sigma} - \mathrm{diag}(\boldsymbol{s})\)</span> depends linearly on <span class="math inline">\(\boldsymbol{s}\)</span>, so the last constraint is exactly the kind of constraint allowed in an SDP.</li>
+<li>The absolute values in the objective are handled with the same trick we used for LAD.</li>
+<li>A simpler alternative sets every <span class="math inline">\(s_{j}\)</span> to the same value, <span class="math inline">\(\min\{2\lambda_{\min}(\boldsymbol{\Sigma}), 1\}\)</span>. This only requires an eigenvalue computation, but typically yields less power.</li>
+<li>Solving the SDP is the computational bottleneck of the method when <span class="math inline">\(p\)</span> is large.</li>
+</ul>
+</section>
+</section>
+<section id="takeaway-message" class="level2">
+<h2 class="anchored" data-anchor-id="takeaway-message">Takeaway Message</h2>
+<ul>
+<li>Convex optimization is a technology in the present day. It provides a foundation for solving various problems within and beyond statistics.</li>
+<li>In Julia, <a href="https://jump.dev/">JuMP.jl</a> and <a href="https://jump.dev/Convex.jl/stable/">Convex.jl</a> let us state a problem in a form close to the mathematics and pass it to a solver.</li>
+<li>Boyd and Vandenberghe have an excellent textbook on convex optimization: <a href="https://stanford.edu/~boyd/cvxbook/">https://stanford.edu/~boyd/cvxbook/</a>.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/UCR-STAT-206\.github\.io\/2026-Fall-STAT\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
