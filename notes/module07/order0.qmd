@@ -185,10 +185,35 @@ Bayesian optimization uses two ingredients.
 
 The algorithm alternates: fit the surrogate, maximize the acquisition function to choose the next point, evaluate $f$ there, and repeat.
 
+### The Bayesian Update
+
+Bayesian optimization gets its name from Bayes' rule.
+We treat the unknown function $f$ as random, place a *prior* distribution on it, and update that prior with the observed data $\boldsymbol{y}$ using Bayes' rule:
+
+$$
+p(f \mid \boldsymbol{y}) = \frac{p(\boldsymbol{y} \mid f) \, p(f)}{p(\boldsymbol{y})} \propto p(\boldsymbol{y} \mid f) \, p(f).
+$$
+
+- The *prior* $p(f)$ describes what we believe about $f$ before evaluating it.
+- The *likelihood* $p(\boldsymbol{y} \mid f)$ describes how the observations are generated from $f$; here, $f$ plus noise.
+- The *posterior* $p(f \mid \boldsymbol{y})$ describes what we believe about $f$ after seeing the data. This is the surrogate.
+
+Each new evaluation repeats the update: the current posterior acts as the prior for the next observation.
+
+In general, the posterior is hard to compute because the normalizing constant $p(\boldsymbol{y})$ is an integral.
+When the prior is normal and the noise is normal, the posterior is also normal, and the update reduces to conditioning a multivariate normal distribution.
+We never need all of $f$, only its values at the evaluated points and at a candidate point $x$.
+The number of evaluation points is finite, so every distribution described below is an ordinary multivariate normal.
+
 ### Surrogate: Gaussian Process
 
 A common surrogate is a *Gaussian process* (GP).
-We model the values of $f$ at any finite set of points as jointly normal, with covariance determined by a *kernel*.
+A GP prior with mean $m$ and *kernel* $k$ says that the values of $f$ at any finite set of points are jointly normal, with
+
+$$
+E[f(x)] = m, \qquad \mathrm{Cov}(f(x), f(x^{\prime})) = k(x, x^{\prime}).
+$$
+
 Here we use the squared-exponential kernel with length scale $\ell$,
 
 $$
@@ -196,9 +221,26 @@ k(x, x^{\prime}) = \exp\left( -\frac{(x - x^{\prime})^{2}}{2 \ell^{2}} \right),
 $$
 
 so that nearby points have highly correlated function values.
-Observations are noisy, $y_{i} = f(x_{i}) + \varepsilon_{i}$ with $\varepsilon_{i} \sim N(0, \sigma^{2})$.
+Note that $k(x, x) = 1$; i.e. the prior variance of $f(x)$ is 1 at every point.
+We treat each observation as a noisy measurement, $y_{i} = f(x_{i}) + \varepsilon_{i}$ with $\varepsilon_{i} \sim N(0, \sigma^{2})$, independent of $f$.
 
-Given observations $\boldsymbol{y}$ at points $x_{1}, \ldots, x_{n}$, the value $f(x)$ at a new point is normal with mean and variance
+#### Prior Mean
+
+We use a constant prior mean, $m(x) = m$ for all $x$.
+In our implementation we set $m = \bar{y}$, the average of the observations.
+
+- Choosing $m$ from the data is a *plug-in* (empirical Bayes) choice; a fully specified prior would not depend on $\boldsymbol{y}$. This is a common practice.
+- A more principled choice is the MLE under $\boldsymbol{y} \sim N(m \boldsymbol{1}, \boldsymbol{K} + \sigma^{2} \boldsymbol{I})$, which is a generalized least squares estimate:
+
+$$
+\hat{m} = \frac{\boldsymbol{1}^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} \boldsymbol{y}}{\boldsymbol{1}^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} \boldsymbol{1}}.
+$$
+
+- Far from the data, the surrogate mean reverts to $m$ (see below). The prior mean is the surrogate's guess in regions we have not explored.
+
+#### Posterior Mean and Variance
+
+Given observations $\boldsymbol{y}$ at points $x_{1}, \ldots, x_{n}$, the value $f(x)$ at a new point is, conditional on $\boldsymbol{y}$, normal with mean and variance
 
 $$
 \begin{aligned}
@@ -207,9 +249,48 @@ s^{2}(x) &= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} \bol
 \end{aligned}
 $$
 
-where $\boldsymbol{K}_{ij} = k(x_{i}, x_{j})$, $\boldsymbol{k}(x)_{i} = k(x, x_{i})$, and $m$ is the prior mean.
+where $\boldsymbol{K}_{ij} = k(x_{i}, x_{j})$ and $\boldsymbol{k}(x)_{i} = k(x, x_{i})$.
 
-- This is just the formula for conditioning in a multivariate normal distribution.
+We can derive this starting from the joint distribution.
+Write $\boldsymbol{K}_{y} = \boldsymbol{K} + \sigma^{2} \boldsymbol{I}$.
+Under the prior,
+
+$$
+\begin{bmatrix} f(x) \\ \boldsymbol{y} \end{bmatrix}
+\sim N\left(
+\begin{bmatrix} m \\ m \boldsymbol{1} \end{bmatrix},
+\begin{bmatrix} k(x, x) & \boldsymbol{k}(x)^{\top} \\ \boldsymbol{k}(x) & \boldsymbol{K}_{y} \end{bmatrix}
+\right).
+$$
+
+The off-diagonal block is $\boldsymbol{k}(x)$ because $\mathrm{Cov}(f(x), y_{i}) = \mathrm{Cov}(f(x), f(x_{i})) + \mathrm{Cov}(f(x), \varepsilon_{i})$ and the second term is zero (by independence).
+The noise $\epsilon$ only appears in the $\boldsymbol{y}$ block.
+
+Next, we try identifying a $Z$ that is uncorrelated with $y$ to yield a convenient expression for $f(x)$.
+Define $Z = f(x) - \boldsymbol{a}^{\top} \boldsymbol{y}$ and choose $\boldsymbol{a}$ so that $Z$ is uncorrelated with $\boldsymbol{y}$:
+
+$$
+\mathrm{Cov}(Z, \boldsymbol{y}) = \boldsymbol{k}(x)^{\top} - \boldsymbol{a}^{\top} \boldsymbol{K}_{y} = \boldsymbol{0}^{\top}
+\quad \Longrightarrow \quad
+\boldsymbol{a} = \boldsymbol{K}_{y}^{-1} \boldsymbol{k}(x).
+$$
+
+Since $Z$ and $\boldsymbol{y}$ are jointly normal and uncorrelated, they are independent.
+
+Now we condition on $\boldsymbol{y}$. Write $f(x) = Z + \boldsymbol{a}^{\top} \boldsymbol{y}$. Given $\boldsymbol{y}$, the second term is a constant and $Z$ is unaffected, so
+
+$$
+\begin{aligned}
+\mu(x) &= E[Z] + \boldsymbol{a}^{\top} \boldsymbol{y} = m + \boldsymbol{a}^{\top} (\boldsymbol{y} - m \boldsymbol{1}), \\
+s^{2}(x) &= \mathrm{Var}(Z) = k(x, x) - 2 \boldsymbol{a}^{\top} \boldsymbol{k}(x) + \boldsymbol{a}^{\top} \boldsymbol{K}_{y} \boldsymbol{a} = k(x, x) - \boldsymbol{k}(x)^{\top} \boldsymbol{K}_{y}^{-1} \boldsymbol{k}(x).
+\end{aligned}
+$$
+
+A few remarks:
+
+- The posterior mean is the prior mean plus a weighted sum of residuals. The posterior variance is the prior variance minus what the data explain; it depends on where we sampled, but not on the values $\boldsymbol{y}$.
+- Far from the data, $\boldsymbol{k}(x) \approx \boldsymbol{0}$, so $\mu(x) \approx m$ and $s^{2}(x) \approx k(x, x) = 1$.
+- $s^{2}(x)$ is the variance of $f(x)$, not of a new observation at $x$. The latter is $s^{2}(x) + \sigma^{2}$. Expected improvement (below) is defined in terms of $f(x)$, so we use $s^{2}(x)$.
 - The matrix $\boldsymbol{K} + \sigma^{2} \boldsymbol{I}$ is positive definite. We factor it once with a Cholesky decomposition and reuse the factor for both solves.
 - The cost of fitting grows like $n^{3}$ in the number of evaluations. This is fine when evaluations are scarce.
 
@@ -268,6 +349,9 @@ function gp_posterior(X, y, Xs)
 end
 ```
 
+A prior variance of 1 is wide relative to the range of the objective.
+This widens the uncertainty bands away from the data and encourages exploration.
+
 ### Step 2: Acquisition
 
 ```{julia}
@@ -284,7 +368,7 @@ end
 Each iteration fits the surrogate, picks the grid point with the largest expected improvement, and evaluates the objective there.
 
 ```{julia}
-function run_bo(rng, X, y, grid, niter)
+function run_bayesopt(rng, X, y, grid, niter)
   for it in 1:niter
     mu, sd = gp_posterior(X, y, grid)
     ei = expected_improvement(mu, sd, minimum(y))
@@ -303,7 +387,7 @@ end
 The following helper plots the surrogate (top) and the acquisition function (bottom).
 
 ```{julia}
-function plot_bo(X, y, grid)
+function plot_bayesopt(X, y, grid)
   mu, sd = gp_posterior(X, y, grid)
   ei = expected_improvement(mu, sd, minimum(y))
 
@@ -331,48 +415,48 @@ grid = collect(range(0.0, 1.0, length = 801))
 X = rand(rng, 3)                       # initial random probes
 y = [noisy_f(rng, x) for x in X]
 
-fig = plot_bo(X, y, grid);
+fig = plot_bayesopt(X, y, grid);
 ```
 
 ```{julia}
 #| echo: false
 #| output: false
-savefig(fig, "assets/bo_start.png")
+savefig(fig, "assets/bayesopt_start.png")
 ```
 
-![](assets/bo_start.png){fig-align="center"}
+![](assets/bayesopt_start.png){fig-align="center"}
 
 The shaded band is the posterior mean plus or minus 2 standard deviations. The dotted line marks the next probe.
 
 After 4 iterations:
 
 ```{julia}
-X, y = run_bo(rng, X, y, grid, 4)
-fig = plot_bo(X, y, grid);
+X, y = run_bayesopt(rng, X, y, grid, 4)
+fig = plot_bayesopt(X, y, grid);
 ```
 
 ```{julia}
 #| echo: false
 #| output: false
-savefig(fig, "assets/bo_iter04.png")
+savefig(fig, "assets/bayesopt_iter04.png")
 ```
 
-![](assets/bo_iter04.png){fig-align="center"}
+![](assets/bayesopt_iter04.png){fig-align="center"}
 
 After 12 iterations:
 
 ```{julia}
-X, y = run_bo(rng, X, y, grid, 8)
-fig = plot_bo(X, y, grid);
+X, y = run_bayesopt(rng, X, y, grid, 8)
+fig = plot_bayesopt(X, y, grid);
 ```
 
 ```{julia}
 #| echo: false
 #| output: false
-savefig(fig, "assets/bo_iter12.png")
+savefig(fig, "assets/bayesopt_iter12.png")
 ```
 
-![](assets/bo_iter12.png){fig-align="center"}
+![](assets/bayesopt_iter12.png){fig-align="center"}
 
 ```{julia}
 best = X[argmin(y)]
@@ -398,4 +482,4 @@ Disadvantages:
 - Nelder-Mead is a local heuristic with no convergence guarantee in general.
 - Bayesian optimization has substantial overhead per iteration, and it has tuning parameters of its own (the kernel, the length scale, the acquisition function).
 
-As a rule of thumb, if derivatives are available (e.g. through [automatic differentiation](autodiff.qmd)), use them.
+Leveraging more problem information (e.g. through [automatic differentiation](autodiff.qmd)) tends to yield a better optimization algorithm.

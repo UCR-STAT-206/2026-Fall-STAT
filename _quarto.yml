@@ -101,10 +101,12 @@ website:
       - section: Module 8 (Data Technologies)
         contents:
           - text: Plaintext and Binary Formats
+          - text: Databases and SQL
+          - text: DuckDB
           - text: Tabular Data
           - text: DataFrames.jl
-          - text: Databases and SQL
-          - text: DuckDB and DuckDB.jl
+          - text: Online Algorithms
+            href: notes/module08/online.qmd
       - text: "---"
       - section: "Labs"
         contents:
