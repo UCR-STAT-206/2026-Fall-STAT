@@ -467,17 +467,23 @@ window.Quarto = {
  <span class="menu-text">Plaintext and Binary Formats</span>
   </li>
           <li class="sidebar-item">
+ <span class="menu-text">Databases and SQL</span>
+  </li>
+          <li class="sidebar-item">
+ <span class="menu-text">DuckDB</span>
+  </li>
+          <li class="sidebar-item">
  <span class="menu-text">Tabular Data</span>
   </li>
           <li class="sidebar-item">
  <span class="menu-text">DataFrames.jl</span>
   </li>
           <li class="sidebar-item">
- <span class="menu-text">Databases and SQL</span>
-  </li>
-          <li class="sidebar-item">
- <span class="menu-text">DuckDB and DuckDB.jl</span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../../notes/module08/online.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Online Algorithms</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="px-0"><hr class="sidebar-divider hi "></li>
@@ -652,6 +658,7 @@ window.Quarto = {
   <li><a href="#example-maximum-likelihood" id="toc-example-maximum-likelihood" class="nav-link" data-scroll-target="#example-maximum-likelihood">Example: Maximum Likelihood</a></li>
   <li><a href="#bayesian-optimization" id="toc-bayesian-optimization" class="nav-link" data-scroll-target="#bayesian-optimization">Bayesian Optimization</a>
   <ul class="collapse">
+  <li><a href="#the-bayesian-update" id="toc-the-bayesian-update" class="nav-link" data-scroll-target="#the-bayesian-update">The Bayesian Update</a></li>
   <li><a href="#surrogate-gaussian-process" id="toc-surrogate-gaussian-process" class="nav-link" data-scroll-target="#surrogate-gaussian-process">Surrogate: Gaussian Process</a></li>
   <li><a href="#acquisition-expected-improvement" id="toc-acquisition-expected-improvement" class="nav-link" data-scroll-target="#acquisition-expected-improvement">Acquisition: Expected Improvement</a></li>
   </ul></li>
@@ -877,26 +884,87 @@ Parameters:
 <li>An <strong>acquisition function</strong>: a cheap criterion, computed from the surrogate, that scores how useful it would be to evaluate <span class="math inline">\(f\)</span> at a new point.</li>
 </ol>
 <p>The algorithm alternates: fit the surrogate, maximize the acquisition function to choose the next point, evaluate <span class="math inline">\(f\)</span> there, and repeat.</p>
+<section id="the-bayesian-update" class="level3">
+<h3 class="anchored" data-anchor-id="the-bayesian-update">The Bayesian Update</h3>
+<p>Bayesian optimization gets its name from Bayes’ rule. We treat the unknown function <span class="math inline">\(f\)</span> as random, place a <em>prior</em> distribution on it, and update that prior with the observed data <span class="math inline">\(\boldsymbol{y}\)</span> using Bayes’ rule:</p>
+<p><span class="math display">\[
+p(f \mid \boldsymbol{y}) = \frac{p(\boldsymbol{y} \mid f) \, p(f)}{p(\boldsymbol{y})} \propto p(\boldsymbol{y} \mid f) \, p(f).
+\]</span></p>
+<ul>
+<li>The <em>prior</em> <span class="math inline">\(p(f)\)</span> describes what we believe about <span class="math inline">\(f\)</span> before evaluating it.</li>
+<li>The <em>likelihood</em> <span class="math inline">\(p(\boldsymbol{y} \mid f)\)</span> describes how the observations are generated from <span class="math inline">\(f\)</span>; here, <span class="math inline">\(f\)</span> plus noise.</li>
+<li>The <em>posterior</em> <span class="math inline">\(p(f \mid \boldsymbol{y})\)</span> describes what we believe about <span class="math inline">\(f\)</span> after seeing the data. This is the surrogate.</li>
+</ul>
+<p>Each new evaluation repeats the update: the current posterior acts as the prior for the next observation.</p>
+<p>In general, the posterior is hard to compute because the normalizing constant <span class="math inline">\(p(\boldsymbol{y})\)</span> is an integral. When the prior is normal and the noise is normal, the posterior is also normal, and the update reduces to conditioning a multivariate normal distribution. We never need all of <span class="math inline">\(f\)</span>, only its values at the evaluated points and at a candidate point <span class="math inline">\(x\)</span>. The number of evaluation points is finite, so every distribution described below is an ordinary multivariate normal.</p>
+</section>
 <section id="surrogate-gaussian-process" class="level3">
 <h3 class="anchored" data-anchor-id="surrogate-gaussian-process">Surrogate: Gaussian Process</h3>
-<p>A common surrogate is a <em>Gaussian process</em> (GP). We model the values of <span class="math inline">\(f\)</span> at any finite set of points as jointly normal, with covariance determined by a <em>kernel</em>. Here we use the squared-exponential kernel with length scale <span class="math inline">\(\ell\)</span>,</p>
+<p>A common surrogate is a <em>Gaussian process</em> (GP). A GP prior with mean <span class="math inline">\(m\)</span> and <em>kernel</em> <span class="math inline">\(k\)</span> says that the values of <span class="math inline">\(f\)</span> at any finite set of points are jointly normal, with</p>
+<p><span class="math display">\[
+E[f(x)] = m, \qquad \mathrm{Cov}(f(x), f(x^{\prime})) = k(x, x^{\prime}).
+\]</span></p>
+<p>Here we use the squared-exponential kernel with length scale <span class="math inline">\(\ell\)</span>,</p>
 <p><span class="math display">\[
 k(x, x^{\prime}) = \exp\left( -\frac{(x - x^{\prime})^{2}}{2 \ell^{2}} \right),
 \]</span></p>
-<p>so that nearby points have highly correlated function values. Observations are noisy, <span class="math inline">\(y_{i} = f(x_{i}) + \varepsilon_{i}\)</span> with <span class="math inline">\(\varepsilon_{i} \sim N(0, \sigma^{2})\)</span>.</p>
-<p>Given observations <span class="math inline">\(\boldsymbol{y}\)</span> at points <span class="math inline">\(x_{1}, \ldots, x_{n}\)</span>, the value <span class="math inline">\(f(x)\)</span> at a new point is normal with mean and variance</p>
+<p>so that nearby points have highly correlated function values. Note that <span class="math inline">\(k(x, x) = 1\)</span>; i.e.&nbsp;the prior variance of <span class="math inline">\(f(x)\)</span> is 1 at every point. We treat each observation as a noisy measurement, <span class="math inline">\(y_{i} = f(x_{i}) + \varepsilon_{i}\)</span> with <span class="math inline">\(\varepsilon_{i} \sim N(0, \sigma^{2})\)</span>, independent of <span class="math inline">\(f\)</span>.</p>
+<section id="prior-mean" class="level4">
+<h4 class="anchored" data-anchor-id="prior-mean">Prior Mean</h4>
+<p>We use a constant prior mean, <span class="math inline">\(m(x) = m\)</span> for all <span class="math inline">\(x\)</span>. In our implementation we set <span class="math inline">\(m = \bar{y}\)</span>, the average of the observations.</p>
+<ul>
+<li>Choosing <span class="math inline">\(m\)</span> from the data is a <em>plug-in</em> (empirical Bayes) choice; a fully specified prior would not depend on <span class="math inline">\(\boldsymbol{y}\)</span>. This is a common practice.</li>
+<li>A more principled choice is the MLE under <span class="math inline">\(\boldsymbol{y} \sim N(m \boldsymbol{1}, \boldsymbol{K} + \sigma^{2} \boldsymbol{I})\)</span>, which is a generalized least squares estimate:</li>
+</ul>
+<p><span class="math display">\[
+\hat{m} = \frac{\boldsymbol{1}^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} \boldsymbol{y}}{\boldsymbol{1}^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} \boldsymbol{1}}.
+\]</span></p>
+<ul>
+<li>Far from the data, the surrogate mean reverts to <span class="math inline">\(m\)</span> (see below). The prior mean is the surrogate’s guess in regions we have not explored.</li>
+</ul>
+</section>
+<section id="posterior-mean-and-variance" class="level4">
+<h4 class="anchored" data-anchor-id="posterior-mean-and-variance">Posterior Mean and Variance</h4>
+<p>Given observations <span class="math inline">\(\boldsymbol{y}\)</span> at points <span class="math inline">\(x_{1}, \ldots, x_{n}\)</span>, the value <span class="math inline">\(f(x)\)</span> at a new point is, conditional on <span class="math inline">\(\boldsymbol{y}\)</span>, normal with mean and variance</p>
 <p><span class="math display">\[
 \begin{aligned}
 \mu(x) &amp;= m + \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} (\boldsymbol{y} - m \boldsymbol{1}), \\
 s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} \boldsymbol{I})^{-1} \boldsymbol{k}(x),
 \end{aligned}
 \]</span></p>
-<p>where <span class="math inline">\(\boldsymbol{K}_{ij} = k(x_{i}, x_{j})\)</span>, <span class="math inline">\(\boldsymbol{k}(x)_{i} = k(x, x_{i})\)</span>, and <span class="math inline">\(m\)</span> is the prior mean.</p>
+<p>where <span class="math inline">\(\boldsymbol{K}_{ij} = k(x_{i}, x_{j})\)</span> and <span class="math inline">\(\boldsymbol{k}(x)_{i} = k(x, x_{i})\)</span>.</p>
+<p>We can derive this starting from the joint distribution. Write <span class="math inline">\(\boldsymbol{K}_{y} = \boldsymbol{K} + \sigma^{2} \boldsymbol{I}\)</span>. Under the prior,</p>
+<p><span class="math display">\[
+\begin{bmatrix} f(x) \\ \boldsymbol{y} \end{bmatrix}
+\sim N\left(
+\begin{bmatrix} m \\ m \boldsymbol{1} \end{bmatrix},
+\begin{bmatrix} k(x, x) &amp; \boldsymbol{k}(x)^{\top} \\ \boldsymbol{k}(x) &amp; \boldsymbol{K}_{y} \end{bmatrix}
+\right).
+\]</span></p>
+<p>The off-diagonal block is <span class="math inline">\(\boldsymbol{k}(x)\)</span> because <span class="math inline">\(\mathrm{Cov}(f(x), y_{i}) = \mathrm{Cov}(f(x), f(x_{i})) + \mathrm{Cov}(f(x), \varepsilon_{i})\)</span> and the second term is zero (by independence). The noise <span class="math inline">\(\epsilon\)</span> only appears in the <span class="math inline">\(\boldsymbol{y}\)</span> block.</p>
+<p>Next, we try identifying a <span class="math inline">\(Z\)</span> that is uncorrelated with <span class="math inline">\(y\)</span> to yield a convenient expression for <span class="math inline">\(f(x)\)</span>. Define <span class="math inline">\(Z = f(x) - \boldsymbol{a}^{\top} \boldsymbol{y}\)</span> and choose <span class="math inline">\(\boldsymbol{a}\)</span> so that <span class="math inline">\(Z\)</span> is uncorrelated with <span class="math inline">\(\boldsymbol{y}\)</span>:</p>
+<p><span class="math display">\[
+\mathrm{Cov}(Z, \boldsymbol{y}) = \boldsymbol{k}(x)^{\top} - \boldsymbol{a}^{\top} \boldsymbol{K}_{y} = \boldsymbol{0}^{\top}
+\quad \Longrightarrow \quad
+\boldsymbol{a} = \boldsymbol{K}_{y}^{-1} \boldsymbol{k}(x).
+\]</span></p>
+<p>Since <span class="math inline">\(Z\)</span> and <span class="math inline">\(\boldsymbol{y}\)</span> are jointly normal and uncorrelated, they are independent.</p>
+<p>Now we condition on <span class="math inline">\(\boldsymbol{y}\)</span>. Write <span class="math inline">\(f(x) = Z + \boldsymbol{a}^{\top} \boldsymbol{y}\)</span>. Given <span class="math inline">\(\boldsymbol{y}\)</span>, the second term is a constant and <span class="math inline">\(Z\)</span> is unaffected, so</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mu(x) &amp;= E[Z] + \boldsymbol{a}^{\top} \boldsymbol{y} = m + \boldsymbol{a}^{\top} (\boldsymbol{y} - m \boldsymbol{1}), \\
+s^{2}(x) &amp;= \mathrm{Var}(Z) = k(x, x) - 2 \boldsymbol{a}^{\top} \boldsymbol{k}(x) + \boldsymbol{a}^{\top} \boldsymbol{K}_{y} \boldsymbol{a} = k(x, x) - \boldsymbol{k}(x)^{\top} \boldsymbol{K}_{y}^{-1} \boldsymbol{k}(x).
+\end{aligned}
+\]</span></p>
+<p>A few remarks:</p>
 <ul>
-<li>This is just the formula for conditioning in a multivariate normal distribution.</li>
+<li>The posterior mean is the prior mean plus a weighted sum of residuals. The posterior variance is the prior variance minus what the data explain; it depends on where we sampled, but not on the values <span class="math inline">\(\boldsymbol{y}\)</span>.</li>
+<li>Far from the data, <span class="math inline">\(\boldsymbol{k}(x) \approx \boldsymbol{0}\)</span>, so <span class="math inline">\(\mu(x) \approx m\)</span> and <span class="math inline">\(s^{2}(x) \approx k(x, x) = 1\)</span>.</li>
+<li><span class="math inline">\(s^{2}(x)\)</span> is the variance of <span class="math inline">\(f(x)\)</span>, not of a new observation at <span class="math inline">\(x\)</span>. The latter is <span class="math inline">\(s^{2}(x) + \sigma^{2}\)</span>. Expected improvement (below) is defined in terms of <span class="math inline">\(f(x)\)</span>, so we use <span class="math inline">\(s^{2}(x)\)</span>.</li>
 <li>The matrix <span class="math inline">\(\boldsymbol{K} + \sigma^{2} \boldsymbol{I}\)</span> is positive definite. We factor it once with a Cholesky decomposition and reuse the factor for both solves.</li>
 <li>The cost of fitting grows like <span class="math inline">\(n^{3}\)</span> in the number of evaluations. This is fine when evaluations are scarce.</li>
 </ul>
+</section>
 </section>
 <section id="acquisition-expected-improvement" class="level3">
 <h3 class="anchored" data-anchor-id="acquisition-expected-improvement">Acquisition: Expected Improvement</h3>
@@ -953,6 +1021,7 @@ s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} 
 <pre><code>gp_posterior (generic function with 1 method)</code></pre>
 </div>
 </div>
+<p>A prior variance of 1 is wide relative to the range of the objective. This widens the uncertainty bands away from the data and encourages exploration.</p>
 </section>
 <section id="step-2-acquisition" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-acquisition">Step 2: Acquisition</h3>
@@ -972,7 +1041,7 @@ s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} 
 <h3 class="anchored" data-anchor-id="step-3-the-loop">Step 3: The Loop</h3>
 <p>Each iteration fits the surrogate, picks the grid point with the largest expected improvement, and evaluates the objective there.</p>
 <div id="20" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">run_bo</span>(rng, X, y, grid, niter)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">run_bayesopt</span>(rng, X, y, grid, niter)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>  <span class="cf">for</span> it <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>niter</span>
 <span id="cb16-3"><a href="#cb16-3" aria-label="3"></a>    mu, sd <span class="op">=</span> <span class="fu">gp_posterior</span>(X, y, grid)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-label="4"></a>    ei <span class="op">=</span> <span class="fu">expected_improvement</span>(mu, sd, <span class="fu">minimum</span>(y))</span>
@@ -987,12 +1056,12 @@ s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} 
 <span id="cb16-13"><a href="#cb16-13" aria-label="13"></a>  <span class="cf">return</span> X, y</span>
 <span id="cb16-14"><a href="#cb16-14" aria-label="14"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>run_bo (generic function with 1 method)</code></pre>
+<pre><code>run_bayesopt (generic function with 1 method)</code></pre>
 </div>
 </div>
 <p>The following helper plots the surrogate (top) and the acquisition function (bottom).</p>
 <div id="22" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">plot_bo</span>(X, y, grid)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a><span class="kw">function</span> <span class="fu">plot_bayesopt</span>(X, y, grid)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-label="2"></a>  mu, sd <span class="op">=</span> <span class="fu">gp_posterior</span>(X, y, grid)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-label="3"></a>  ei <span class="op">=</span> <span class="fu">expected_improvement</span>(mu, sd, <span class="fu">minimum</span>(y))</span>
 <span id="cb18-4"><a href="#cb18-4" aria-label="4"></a></span>
@@ -1008,7 +1077,7 @@ s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} 
 <span id="cb18-14"><a href="#cb18-14" aria-label="14"></a>  <span class="cf">return</span> <span class="fu">plot</span>(p1, p2; layout <span class="op">=</span> (<span class="fl">2</span>, <span class="fl">1</span>))</span>
 <span id="cb18-15"><a href="#cb18-15" aria-label="15"></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>plot_bo (generic function with 1 method)</code></pre>
+<pre><code>plot_bayesopt (generic function with 1 method)</code></pre>
 </div>
 </div>
 </section>
@@ -1022,18 +1091,18 @@ s^{2}(x) &amp;= k(x, x) - \boldsymbol{k}(x)^{\top} (\boldsymbol{K} + \sigma^{2} 
 <span id="cb20-4"><a href="#cb20-4" aria-label="4"></a>X <span class="op">=</span> <span class="fu">rand</span>(rng, <span class="fl">3</span>)                       <span class="co"># initial random probes</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-label="5"></a>y <span class="op">=</span> [<span class="fu">noisy_f</span>(rng, x) for x <span class="kw">in</span> X]</span>
 <span id="cb20-6"><a href="#cb20-6" aria-label="6"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-label="7"></a>fig <span class="op">=</span> <span class="fu">plot_bo</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-7"><a href="#cb20-7" aria-label="7"></a>fig <span class="op">=</span> <span class="fu">plot_bayesopt</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/bo_start.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="assets/bayesopt_start.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <p>The shaded band is the posterior mean plus or minus 2 standard deviations. The dotted line marks the next probe.</p>
 <p>After 4 iterations:</p>
 <div id="28" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>X, y <span class="op">=</span> <span class="fu">run_bo</span>(rng, X, y, grid, <span class="fl">4</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>fig <span class="op">=</span> <span class="fu">plot_bo</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>X, y <span class="op">=</span> <span class="fu">run_bayesopt</span>(rng, X, y, grid, <span class="fl">4</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>fig <span class="op">=</span> <span class="fu">plot_bayesopt</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>probe x=0.076  observed=+1.136  best so far=+0.329
 probe x=1.000  observed=+0.577  best so far=+0.329
@@ -1043,13 +1112,13 @@ probe x=0.258  observed=+0.691  best so far=+0.329</code></pre>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/bo_iter04.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="assets/bayesopt_iter04.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <p>After 12 iterations:</p>
 <div id="32" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>X, y <span class="op">=</span> <span class="fu">run_bo</span>(rng, X, y, grid, <span class="fl">8</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a>fig <span class="op">=</span> <span class="fu">plot_bo</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>X, y <span class="op">=</span> <span class="fu">run_bayesopt</span>(rng, X, y, grid, <span class="fl">8</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a>fig <span class="op">=</span> <span class="fu">plot_bayesopt</span>(X, y, grid);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>probe x=0.914  observed=+0.372  best so far=+0.329
 probe x=0.430  observed=+0.328  best so far=+0.328
@@ -1063,7 +1132,7 @@ probe x=0.415  observed=+0.290  best so far=+0.283</code></pre>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="assets/bo_iter12.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+<p><img src="assets/bayesopt_iter12.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
 </figure>
 </div>
 <div id="36" class="cell" data-execution_count="1">
@@ -1095,7 +1164,7 @@ Total evaluations            = 15</code></pre>
 <li>Nelder-Mead is a local heuristic with no convergence guarantee in general.</li>
 <li>Bayesian optimization has substantial overhead per iteration, and it has tuning parameters of its own (the kernel, the length scale, the acquisition function).</li>
 </ul>
-<p>As a rule of thumb, if derivatives are available (e.g.&nbsp;through <a href="../../notes/module07/autodiff.html">automatic differentiation</a>), use them.</p>
+<p>Leveraging more problem information (e.g.&nbsp;through <a href="../../notes/module07/autodiff.html">automatic differentiation</a>) tends to yield a better optimization algorithm.</p>
 
 
 </section>
