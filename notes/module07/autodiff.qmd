@@ -20,6 +20,7 @@ ENV["GKSwstype"] = "100"
 using LinearAlgebra
 using FiniteDifferences, DualNumbers, ForwardDiff, ReverseDiff
 using Plots, LaTeXStrings
+Plots.default(dpi = 300, legend = false)
 ```
 
 ## Overview
@@ -60,17 +61,34 @@ How well does this work in practice? Let's look at $f(x) = \cos(x)$
 ```{julia}
 #| fig-align: center
 xs = range(-2*pi, 2*pi, step = pi/32)
-plot(xs, cos; lw = 3, label = "f(x) = cos(x)")
+fig = plot(xs, cos; lw = 3, label = "f(x) = cos(x)", legend = true);
 ```
+
+```{julia}
+#| echo: false
+#| output: false
+savefig(fig, "assets/fdcos1.png")
+```
+
+![](assets/fdcos1.png){fig-align="center" width="80%"}
+
 
 ```{julia}
 #| fig-align: center
 Dx = forward_fdm(2, 1) # first derivative, using 2 grid points; forward difference
 Dx_cos(x) = Dx(cos, x) # evaluate derivative of cos at x
-fig = plot(xs, Dx_cos; lw = 3, label = "Finite Difference")
+fig = plot(xs, Dx_cos; lw = 3, label = "Finite Difference", legend = true)
 plot!(xs, x -> -sin(x); lw = 3, ls = :dash, label = "f'(x)")
-fig
+fig;
 ```
+
+```{julia}
+#| echo: false
+#| output: false
+savefig(fig, "assets/fdcos2.png")
+```
+
+![](assets/fdcos2.png){fig-align="center" width="80%"}
 
 ```{julia}
 Dx
@@ -187,8 +205,6 @@ A few tools for computing derivatives:
 - [Symbolics](https://github.com/JuliaSymbolics/Symbolics.jl); Computer Algebra System (CAS). Derivatives are obtained by manipulating symbolic expressions. The results are exact, but this approach is slow.
 - [TaylorDiff](https://github.com/JuliaDiff/TaylorDiff.jl); Taylor-mode AD similar to that which appeared in the JAX post above.
 
-<!-- FLAG: Add a section here summarizing the cost of FWD vs REV mode, and when to use each. -->
-
 ## Dual Numbers
 
 Let's examine a curious extension of the real line $\mathbb{R}$, the **dual numbers**. This is the machinery behind forward mode.
@@ -241,15 +257,23 @@ end
 xs = ys = range(-3, 3, length = 101)
 tv = -4:4
 tl = [L"10^{%$i}" for i in tv]
-contourf(xs, ys, (x, y) -> log10(rosenbrock([x, y]));
+fig = contourf(xs, ys, (x, y) -> log10(rosenbrock([x, y]));
   levels = 16,
   color = :plasma,
   xlabel = L"x_{1}",
   ylabel = L"x_{2}",
   colorbar_ticks = (tv, tl),
   title = "Rosenbrock Function"
-)
+);
 ```
+
+```{julia}
+#| echo: false
+#| output: false
+savefig(fig, "assets/fdrosenbrock.png")
+```
+
+![](assets/fdrosenbrock.png){fig-align="center" width="80%"}
 
 Forward mode, using ForwardDiff:
 
