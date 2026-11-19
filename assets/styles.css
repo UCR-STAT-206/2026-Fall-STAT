@@ -11,15 +11,15 @@ CREDIT: Cristopher Paciorek for the starting point
 .label-Lab { background-color: #FFB81C}
 .label-Assignment { background-color: #919D9D}
 
-th {
+.schedule th {
     width: 20%;
 }
 
-td:first-of-type {
+.schedule td:first-of-type {
     width: 60%;
 }
 
-td:last-of-type {
+.schedule td:last-of-type {
     width: 20%;
 }
 
